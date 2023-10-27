@@ -1,0 +1,35 @@
+name: "[Dev] Daon Frontend CI/CD"
+
+# Event Trigger
+on:
+  push:
+    branches: ["dev"]
+
+permissions:
+  contents: read
+
+jobs:
+  # 작업 식별자 입력
+  build-and-deploy:
+    # 실행 환경 : ubuntu
+    runs-on: ubuntu-latest
+    # Task의 순서 명시
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.CONFIG_REPO_GITHUB_TOKEN }}
+          submodules: true
+      - name: Check Node v
+        run: node -v
+      - name: Install dependencies
+        run: npm install
+      # 프로젝트 빌드
+      - name: Build
+        run: npm run build
+      - name: S3-Deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws s3 sync --region ap-northeast-2 build s3://${{ secrets.S3_FRONT_BUCKET }} --delete
