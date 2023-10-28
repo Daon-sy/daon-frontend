@@ -1,0 +1,3 @@
+[submodule "envs"]
+	path = src/config
+	url = https://github.com/Daon-sy/daon-frontend-env.git

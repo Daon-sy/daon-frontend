@@ -29,10 +29,12 @@
     "zustand": "^4.4.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "craco start",
+    "start:local": "craco start --mode local",
+    "build": "craco build",
+    "build:dev": "craco build --mode dev",
+    "test": "craco test",
+    "eject": "craco eject",
     "format": "prettier --check ./src",
     "format:fix": "prettier --write ./src",
     "lint": "eslint src/**/*.{js,jsx,ts,tsx,json}",
@@ -57,8 +59,10 @@
     ]
   },
   "devDependencies": {
+    "@craco/types": "^7.1.0",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
+    "craco-plugin-env": "^1.0.5",
     "eslint": "^8.52.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.1.0",
