@@ -28,12 +28,29 @@
     }
   },
   "rules": {
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
     "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "react/jsx-filename-extension": [
       2,
-      { "extensions": [".js", ".jsx", ".ts", ".tsx", ".tsx"] }
+      { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
     ],
-
+    // 기명 함수 선언식 컴포넌트, 기명 화살표 함수 컴포넌트
+    "react/function-component-definition":[
+      2,
+      { "namedComponents": [
+        "arrow-function",
+        "function-declaration"
+      ] }
+    ],
     // var는 사용할 수 없다
     "no-var": ["error"],
     // 세미콜론은 사용하지 않겠다(타입스크립트 프로젝트에서 권장)
