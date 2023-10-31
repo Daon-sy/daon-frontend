@@ -17,11 +17,9 @@ function App() {
       ) : (
         <Routes>
           <Route path="/" element={<Landing />} />
+          <Route path="/sign-up" element={<SignUp />} />
         </Routes>
       )}
-      <Routes>
-        <Route path="/sign-up" element={<SignUp />} />
-      </Routes>
     </BrowserRouter>
   )
 }
