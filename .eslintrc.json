@@ -41,7 +41,7 @@
     "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "react/jsx-filename-extension": [
       2,
-      { "extensions": [".js", ".jsx", ".ts", ".tsx", ".tsx"] }
+      { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
     ],
     // 기명 함수 선언식 컴포넌트, 기명 화살표 함수 컴포넌트
     "react/function-component-definition":[
