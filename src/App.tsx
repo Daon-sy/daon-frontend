@@ -1,23 +1,23 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom"
+import React from "react"
 import Home from "pages/Home"
 import Landing from "pages/Landing"
-
-import React from "react"
-import { BrowserRouter, Route, Routes } from "react-router-dom"
+import UserLayout from "Layouts/UserLayout"
 
 function App() {
-  const isLogin = false
+  const isLogin = true
 
   return (
     <BrowserRouter>
-      {isLogin ? (
-        <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
-      ) : (
-        <Routes>
+      <Routes>
+        {isLogin ? (
+          <Route element={<UserLayout />}>
+            <Route path="/" element={<Home />} />
+          </Route>
+        ) : (
           <Route path="/" element={<Landing />} />
-        </Routes>
-      )}
+        )}
+      </Routes>
     </BrowserRouter>
   )
 }
