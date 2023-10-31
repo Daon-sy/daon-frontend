@@ -1,5 +1,6 @@
 import Home from "pages/Home"
 import Landing from "pages/Landing"
+import SignUp from "pages/SignUp"
 
 import React from "react"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
@@ -18,6 +19,9 @@ function App() {
           <Route path="/" element={<Landing />} />
         </Routes>
       )}
+      <Routes>
+        <Route path="/sign-up" element={<SignUp />} />
+      </Routes>
     </BrowserRouter>
   )
 }
