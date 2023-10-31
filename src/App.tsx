@@ -4,13 +4,16 @@ import SignUp from "pages/SignUp"
 
 import React from "react"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { useTokenStore } from "store/store"
 
 function App() {
-  const isLogin = false
+  const tokenState = useTokenStore()
+
+  const isLoggedIn = () => !!tokenState.token
 
   return (
     <BrowserRouter>
-      {isLogin ? (
+      {isLoggedIn() ? (
         <Routes>
           <Route path="/" element={<Home />} />
         </Routes>
