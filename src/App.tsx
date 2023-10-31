@@ -1,8 +1,9 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom"
 import React from "react"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { Reset } from "styled-reset"
 import Home from "pages/Home"
 import Landing from "pages/Landing"
-import { Reset } from "styled-reset"
+import SignUp from "pages/SignUp"
 import UserLayout from "Layouts/UserLayout"
 
 function App() {
@@ -12,15 +13,18 @@ function App() {
     <>
       <Reset />
       <BrowserRouter>
-        <Routes>
-          {isLogin ? (
+        {isLogin ? (
+          <Routes>
             <Route element={<UserLayout />}>
               <Route path="/" element={<Home />} />
             </Route>
-          ) : (
+          </Routes>
+        ) : (
+          <Routes>
             <Route path="/" element={<Landing />} />
-          )}
-        </Routes>
+            <Route path="/sign-up" element={<SignUp />} />
+          </Routes>
+        )}
       </BrowserRouter>
     </>
   )
