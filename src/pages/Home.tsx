@@ -3,7 +3,7 @@ import { Button } from "@mui/material"
 import { useTokenStore } from "store/store"
 import { useAlert } from "hooks/useAlert"
 
-function Home() {
+const Home = () => {
   const tokenState = useTokenStore()
   const { addInfo } = useAlert()
 
