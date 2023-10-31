@@ -25,7 +25,8 @@
         "paths": ["src"],
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
-    }
+    },
+    "import/core-modules": ["notistack", "styled-reset"]
   },
   "rules": {
     "import/extensions": [
