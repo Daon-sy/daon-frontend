@@ -1,0 +1,46 @@
+.sidebar_sc {
+  box-sizing: border-box;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-bottom: 3px solid black;
+  padding: 16px 0;
+}
+.sidebar_title {
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.ws_sc {
+  cursor: pointer;
+}
+
+.mytask_list_box {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.mytask_list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.mytask_icon {
+  width: 48px;
+  height: 48px;
+  background-color: black;
+}
+.mytask_title {
+  margin-top: 4px;
+  font-size: 10px;
+}
+
+.myproject_list {
+  padding: 16px 0px 16px 16px;
+  border: 1px solid black;
+  margin-bottom: 1px;
+  cursor: pointer;
+}
