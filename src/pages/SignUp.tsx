@@ -77,8 +77,8 @@ const SignUp = () => {
     })
       .then(res => {
         if (res.status === 201) {
-          addSuccess("회원가입 성공!")
-          navigate("/login")
+          addSuccess("회원가입 성공! 로그인 버튼을 통해 로그인 해주세요.")
+          navigate("/")
         }
       })
       .catch(err => {
