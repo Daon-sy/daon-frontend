@@ -4,7 +4,7 @@ import { Reset } from "styled-reset"
 import Home from "pages/Home"
 import Landing from "pages/Landing"
 import SignUp from "pages/SignUp"
-import { useTokenStore } from "store/store"
+import { useTokenStore } from "store/tokenStore"
 import UserLayout from "Layouts/UserLayout"
 
 function App() {
