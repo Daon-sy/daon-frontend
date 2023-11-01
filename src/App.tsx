@@ -4,16 +4,19 @@ import { Reset } from "styled-reset"
 import Home from "pages/Home"
 import Landing from "pages/Landing"
 import SignUp from "pages/SignUp"
+import { useTokenStore } from "store/store"
 import UserLayout from "Layouts/UserLayout"
 
 function App() {
-  const isLogin = true
+  const tokenState = useTokenStore()
+
+  const isLoggedIn = () => !!tokenState.token
 
   return (
     <>
       <Reset />
       <BrowserRouter>
-        {isLogin ? (
+        {isLoggedIn() ? (
           <Routes>
             <Route element={<UserLayout />}>
               <Route path="/" element={<Home />} />
