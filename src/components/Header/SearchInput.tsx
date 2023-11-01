@@ -5,7 +5,6 @@ import SearchIcon from "@mui/icons-material/Search"
 import InputBase from "@mui/material/InputBase"
 import SettingsIcon from "@mui/icons-material/Settings"
 import Menu from "@mui/material/Menu"
-import Paper from "@mui/material/Paper"
 import Button from "@mui/material/Button"
 import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
@@ -14,8 +13,6 @@ import FormControl from "@mui/material/FormControl"
 import FormGroup from "@mui/material/FormGroup"
 import FormControlLabel from "@mui/material/FormControlLabel"
 import Checkbox from "@mui/material/Checkbox"
-import Divider from "@mui/material/Divider"
-// import MenuItem from "@mui/material/MenuItem"
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
