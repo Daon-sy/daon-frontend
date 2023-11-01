@@ -1,5 +1,5 @@
 import axios from "axios"
-import env from "env"
+import { API_SERVER_URL } from "env"
 
 export interface SignInRequest {
   email: string
@@ -7,8 +7,5 @@ export interface SignInRequest {
 }
 
 export const signInApi = async (signInRequest: SignInRequest) => {
-  return axios.post(
-    `${env.REACT_APP_API_SERVER_URL}/api/sign-in`,
-    signInRequest,
-  )
+  return axios.post(`${API_SERVER_URL}/api/sign-in`, signInRequest)
 }

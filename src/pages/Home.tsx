@@ -1,6 +1,6 @@
 import React from "react"
 import { Button } from "@mui/material"
-import { useTokenStore } from "store/store"
+import { useTokenStore } from "store/tokenStore"
 import { useAlert } from "hooks/useAlert"
 
 const Home = () => {

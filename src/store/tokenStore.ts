@@ -9,7 +9,7 @@ interface TokenStore {
 export const useTokenStore = create<TokenStore>(set => ({
   token: null,
   clear: () => set({ token: null }),
-  setToken: (token: string) => set(state => ({ token })),
+  setToken: (token: string) => set(() => ({ token })),
 }))
 
 export default { useTokenStore }
