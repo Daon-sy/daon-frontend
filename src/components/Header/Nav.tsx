@@ -5,6 +5,7 @@ import Menu from "@mui/material/Menu"
 import Button from "@mui/material/Button"
 import Tooltip from "@mui/material/Tooltip"
 import MenuItem from "@mui/material/MenuItem"
+import { Link } from "react-router-dom"
 
 const myWorkspaces = ["워크스페이스1", "워크스페이스2"]
 const Nav = () => {
@@ -24,7 +25,6 @@ const Nav = () => {
         variant="h6"
         noWrap
         component="a"
-        href="#app-bar-with-responsive-menu"
         sx={{
           mr: 2,
           fontFamily: "monospace",
@@ -34,7 +34,7 @@ const Nav = () => {
           textDecoration: "none",
         }}
       >
-        LOGO
+        <Link to="/">LOGO</Link>
       </Typography>
 
       {/* 워크스페이스 */}
