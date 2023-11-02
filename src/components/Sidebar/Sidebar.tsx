@@ -3,11 +3,13 @@ import "./Sidebar.css"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 import Typography from "@mui/material/Typography"
+import ShowMember from "components/modal/showModal/ShowMemberModal"
 
-const Sidebar = () => {
+const Sidebar: React.FC = () => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null,
   )
+  const [openShowModal, setOpenShowModal] = React.useState<boolean>(false)
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     if (!anchorElUser) {
@@ -17,6 +19,15 @@ const Sidebar = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null)
+  }
+
+  const handleOpenShowModal = () => {
+    handleCloseUserMenu()
+    setOpenShowModal(true)
+  }
+
+  const handleCloseShowModal = () => {
+    setOpenShowModal(false)
   }
 
   return (
@@ -43,20 +54,23 @@ const Sidebar = () => {
           open={Boolean(anchorElUser)}
           onClick={handleCloseUserMenu}
         >
-          <MenuItem onClick={handleCloseUserMenu}>
-            <Typography textAlign="center">구성원보기</Typography>
+          <MenuItem onClick={handleOpenShowModal}>
+            <Typography textAlign="center" id="showMember">
+              구성원보기
+            </Typography>
           </MenuItem>
-          <MenuItem onClick={handleCloseUserMenu}>
+          <MenuItem>
             <Typography textAlign="center">프로필 변경</Typography>
           </MenuItem>
-          <MenuItem onClick={handleCloseUserMenu}>
+          <MenuItem>
             <Typography textAlign="center">워크스페이스 생성</Typography>
           </MenuItem>
-          <MenuItem onClick={handleCloseUserMenu}>
+          <MenuItem>
             <Typography textAlign="center">워크스페이스 변경</Typography>
           </MenuItem>
         </Menu>
       </button>
+
       <section className="sidebar_sc">
         <div className="sidebar_title">나의 할 일 모음</div>
         <ul className="mytask_list_box">
@@ -91,6 +105,8 @@ const Sidebar = () => {
           </li>
         </ul>
       </section>
+
+      <ShowMember open={openShowModal} handleClose={handleCloseShowModal} />
     </>
   )
 }
