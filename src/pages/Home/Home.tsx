@@ -1,5 +1,6 @@
 import React from "react"
 import Title from "components/Common/Title/Title"
+import { TEST_IMAGE_URL } from "env"
 import "./Home.css"
 
 interface WorkspaceData {
@@ -9,7 +10,6 @@ interface WorkspaceData {
 }
 
 interface WorkspaceItemProps {
-  id: number
   title: string
   image: string
 }
@@ -18,19 +18,18 @@ const dummyData: WorkspaceData[] = [
   {
     id: 1,
     title: "워크스페이스 1",
-    image: "이미지1.jpg",
+    image: `${TEST_IMAGE_URL}`,
   },
   {
     id: 2,
     title: "워크스페이스 2",
-    image: "이미지2.jpg",
+    image: `${TEST_IMAGE_URL}`,
   },
 ]
 
-const WorkspaceItem: React.FC<WorkspaceItemProps> = ({ id, title, image }) => {
+const WorkspaceItem: React.FC<WorkspaceItemProps> = ({ title, image }) => {
   return (
     <div className="ws_info_box">
-      <span className="ws_id">{id}</span>
       <img className="ws_img" src={image} alt={title} />
       <h3 className="ws_title">{title}</h3>
     </div>
@@ -47,7 +46,6 @@ const Home: React.FC = () => {
             <li>
               <WorkspaceItem
                 key={workspace.id}
-                id={workspace.id}
                 title={workspace.title}
                 image={workspace.image}
               />
