@@ -6,10 +6,14 @@ import Button from "@mui/material/Button"
 import Tooltip from "@mui/material/Tooltip"
 import MenuItem from "@mui/material/MenuItem"
 import { Link } from "react-router-dom"
+import CreateWorkspaceModal from "components/modal/CreateWorkspaceModal"
 
 const myWorkspaces = ["워크스페이스1", "워크스페이스2"]
+
 const Nav = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
+  const [createWorkspaceModalOpen, setCreateWorkspaceModalOpen] =
+    React.useState<boolean>(false)
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
@@ -19,12 +23,19 @@ const Nav = () => {
     setAnchorElNav(null)
   }
 
+  const openCreateWorkspaceModal = () => {
+    handleCloseNavMenu()
+    setCreateWorkspaceModalOpen(true)
+  }
+
+  const closeCreateWorkspaceModal = () => setCreateWorkspaceModalOpen(false)
+
   return (
     <>
       <Typography
         variant="h6"
         noWrap
-        component="a"
+        component="div"
         sx={{
           mr: 2,
           fontFamily: "monospace",
@@ -34,7 +45,9 @@ const Nav = () => {
           textDecoration: "none",
         }}
       >
-        <Link to="/">LOGO</Link>
+        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+          LOGO
+        </Link>
       </Typography>
 
       {/* 워크스페이스 */}
@@ -69,11 +82,15 @@ const Nav = () => {
             </MenuItem>
           ))}
           <hr />
-          <MenuItem onClick={handleCloseNavMenu}>
+          <MenuItem onClick={openCreateWorkspaceModal}>
             <Typography textAlign="center">워크스페이스 생성</Typography>
           </MenuItem>
         </Menu>
       </Box>
+      <CreateWorkspaceModal
+        open={createWorkspaceModalOpen}
+        handleClose={closeCreateWorkspaceModal}
+      />
     </>
   )
 }

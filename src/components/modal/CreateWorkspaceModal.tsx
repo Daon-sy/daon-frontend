@@ -7,11 +7,8 @@ import Button from "@mui/material/Button"
 import InputWsProfileInfo from "components/modal/InputWsProfileInfo"
 import InputWorkspaceInfo from "components/modal/InputWorkspaceInfo"
 import { AxiosResponse } from "axios"
-import {
-  createWorkspaceApi,
-  CreateWorkspaceResponse,
-} from "../../api/workspaceApi"
-import { useCreateWorkspaceStore } from "../../store/requestStore"
+import { useCreateWorkspaceStore } from "store/requestStore"
+import { createWorkspaceApi, CreateWorkspaceResponse } from "api/workspaceApi"
 
 interface RenderInputWorkspaceInfoProps {
   onCancelBtnClick: () => void
@@ -127,7 +124,6 @@ const CreateWorkspaceModal = (props: CreateWorkspaceModalProps) => {
     createWorkspaceApi(createWorkspaceState.createWorkspaceRequest)
       .then((res: AxiosResponse<CreateWorkspaceResponse>) => {
         if (res.status === 201) {
-          console.log(res.data)
           addSuccess("워크스페이스가 생성되었습니다.")
           // TODO 페이지 이동 필요
         }

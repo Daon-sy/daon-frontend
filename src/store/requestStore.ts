@@ -14,7 +14,7 @@ export const useCreateWorkspaceStore = create<CreateWorkspaceStore>(set => ({
     workspace: {
       name: "",
       imageUrl: null,
-      description: null,
+      description: "",
       subject: "",
     },
     profile: {
@@ -28,7 +28,7 @@ export const useCreateWorkspaceStore = create<CreateWorkspaceStore>(set => ({
         workspace: {
           name: "",
           imageUrl: null,
-          description: null,
+          description: "",
           subject: "",
         },
         profile: {
@@ -41,4 +41,4 @@ export const useCreateWorkspaceStore = create<CreateWorkspaceStore>(set => ({
     set(() => ({ createWorkspaceRequest })),
 }))
 
-export default { useTokenStore: useCreateWorkspaceStore }
+export default { useCreateWorkspaceStore }
