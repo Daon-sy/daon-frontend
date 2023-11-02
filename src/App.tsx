@@ -6,6 +6,7 @@ import Landing from "pages/Landing"
 import SignUp from "pages/SignUp"
 import { useTokenStore } from "store/tokenStore"
 import UserLayout from "Layouts/UserLayout"
+import AnonymousLayout from "Layouts/AnonymousLayout"
 
 function App() {
   const tokenState = useTokenStore()
@@ -24,8 +25,10 @@ function App() {
           </Routes>
         ) : (
           <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/sign-up" element={<SignUp />} />
+            <Route element={<AnonymousLayout />}>
+              <Route path="/" element={<Landing />} />
+              <Route path="/sign-up" element={<SignUp />} />
+            </Route>
           </Routes>
         )}
       </BrowserRouter>

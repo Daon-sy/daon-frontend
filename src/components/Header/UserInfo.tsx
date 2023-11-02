@@ -6,10 +6,12 @@ import Typography from "@mui/material/Typography"
 import Menu from "@mui/material/Menu"
 import Tooltip from "@mui/material/Tooltip"
 import MenuItem from "@mui/material/MenuItem"
-
-const settings = ["Profile", "Logout"]
+import { useTokenStore } from "store/tokenStore"
+import { useAlert } from "hooks/useAlert"
 
 const UserInfo = () => {
+  const tokenState = useTokenStore()
+  const { addInfo } = useAlert()
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null,
   )
@@ -21,6 +23,19 @@ const UserInfo = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null)
   }
+
+  const onLogoutButtonClick = () => {
+    tokenState.clear()
+    addInfo("로그아웃 완료")
+    // menu 닫기
+    handleCloseUserMenu()
+  }
+
+  // 각 메뉴 클릭에 해당하는 callback 함수 지정
+  const settings = [
+    { name: "Profile", onClick: handleCloseUserMenu },
+    { name: "Logout", onClick: onLogoutButtonClick },
+  ]
 
   return (
     <Box sx={{ flexGrow: 0 }}>
@@ -46,8 +61,8 @@ const UserInfo = () => {
         onClose={handleCloseUserMenu}
       >
         {settings.map(setting => (
-          <MenuItem key={setting} onClick={handleCloseUserMenu}>
-            <Typography textAlign="center">{setting}</Typography>
+          <MenuItem key={setting.name} onClick={setting.onClick}>
+            <Typography textAlign="center">{setting.name}</Typography>
           </MenuItem>
         ))}
       </Menu>
