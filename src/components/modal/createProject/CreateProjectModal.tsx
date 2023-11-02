@@ -46,11 +46,11 @@ const CreateProjectModal: React.FC<CreateProjectProps> = (
           </Typography>
           <Stack spacing={2}>
             <Typography variant="h6">프로젝트 정보 입력</Typography>
-            <TextField required label="워크스페이스 이름" variant="outlined" />
+            <TextField required label="프로젝트 이름" variant="outlined" />
             <TextField
               multiline
               rows={5}
-              label="워크스페이스 설명"
+              label="프로젝트 설명"
               variant="outlined"
             />
           </Stack>
