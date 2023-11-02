@@ -11,7 +11,7 @@ interface ShowMemberProps {
   handleClose: () => void
 }
 
-interface Participant {
+interface WorkspaceParticipant {
   id: number
   nickname: string
   imgUrl: string
@@ -19,7 +19,7 @@ interface Participant {
   permission: "wsManager" | "pjManager" | "participants"
 }
 
-const participants: Participant[] = [
+const participants: WorkspaceParticipant[] = [
   {
     id: 1,
     nickname: "User1",
