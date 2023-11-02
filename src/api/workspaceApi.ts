@@ -1,10 +1,9 @@
-import axios from "axios"
-import { API_SERVER_URL } from "env"
+import { authAxios } from "api/index"
 
 export interface WorkspaceInfo {
   name: string
   imageUrl: string | null
-  description: string | null
+  description: string
   subject: string
 }
 
@@ -23,6 +22,5 @@ export interface CreateWorkspaceResponse {
 }
 
 export const createWorkspaceApi = async (request: CreateWorkspaceRequest) => {
-  // TODO 토큰 헤더에 담기
-  return axios.post(`${API_SERVER_URL}/api/workspaces`, request)
+  return authAxios.post("/api/workspaces", request)
 }

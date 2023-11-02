@@ -1,5 +1,4 @@
-import axios from "axios"
-import { API_SERVER_URL } from "env"
+import { basicAxios } from "api/index"
 
 export interface SignUpRequest {
   email: string
@@ -8,5 +7,5 @@ export interface SignUpRequest {
 }
 
 export const signUpApi = async (signUpRequest: SignUpRequest) => {
-  return axios.post(`${API_SERVER_URL}/api/sign-up`, signUpRequest)
+  return basicAxios.post("/api/sign-up", signUpRequest)
 }
