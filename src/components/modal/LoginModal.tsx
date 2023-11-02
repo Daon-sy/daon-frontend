@@ -9,6 +9,7 @@ import { Button, Stack, TextField } from "@mui/material"
 import { signInApi, SignInRequest } from "api/signInApi"
 import { useAlert } from "hooks/useAlert"
 import { useTokenStore } from "store/tokenStore"
+import { useNavigate } from "react-router-dom"
 
 const style = {
   position: "absolute" as const,
@@ -28,6 +29,7 @@ interface LoginModalProps {
 }
 
 const LoginModal = (props: LoginModalProps) => {
+  const navigate = useNavigate()
   const { addSuccess, addError } = useAlert()
   const { open, handleClose } = props
   const tokenState = useTokenStore()
@@ -69,6 +71,7 @@ const LoginModal = (props: LoginModalProps) => {
         // TODO 로그인 성공하면 유저 정보 가져와야 한다.
 
         addSuccess("로그인에 성공하였습니다.")
+        navigate("/")
         handleClose()
       })
       .catch(err => {
@@ -83,10 +86,24 @@ const LoginModal = (props: LoginModalProps) => {
       })
   }
 
+  const onEnterKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      onLoginButtonClick()
+    }
+  }
+
+  /**
+   * 모달 닫을 때 clean-up 함수
+   */
+  const cleanUp = () => {
+    setSignInRequest({
+      email: "",
+      password: "",
+    })
+  }
+
   return (
     <Modal
-      aria-labelledby="transition-modal-title"
-      aria-describedby="transition-modal-description"
       open={open}
       onClose={handleClose}
       closeAfterTransition
@@ -96,6 +113,7 @@ const LoginModal = (props: LoginModalProps) => {
           timeout: 500,
         },
       }}
+      onTransitionExited={cleanUp}
     >
       <Fade in={open}>
         <Box sx={style}>
@@ -120,6 +138,7 @@ const LoginModal = (props: LoginModalProps) => {
                 value={signInRequest.email}
                 onChange={onEmailChanged}
                 helperText="usermail@email.com"
+                onKeyDown={onEnterKeyDown}
               />
               <TextField
                 required
@@ -129,6 +148,7 @@ const LoginModal = (props: LoginModalProps) => {
                 value={signInRequest.password}
                 onChange={onPasswordChanged}
                 helperText="6자리 이상. 영문,숫자,특수기호 조합."
+                onKeyDown={onEnterKeyDown}
               />
             </Stack>
             <Box
