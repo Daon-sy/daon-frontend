@@ -124,7 +124,6 @@ const CreateWorkspaceModal = (props: CreateWorkspaceModalProps) => {
     createWorkspaceApi(createWorkspaceState.createWorkspaceRequest)
       .then((res: AxiosResponse<CreateWorkspaceResponse>) => {
         if (res.status === 201) {
-          console.log(res.data)
           addSuccess("워크스페이스가 생성되었습니다.")
           // TODO 페이지 이동 필요
         }

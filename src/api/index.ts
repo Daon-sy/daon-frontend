@@ -44,9 +44,8 @@ authAxios.interceptors.response.use(
   },
   err => {
     console.error(err)
-    // TODO 401: 인증되지 않은 사용자 -> 토큰 재발급 시도
     if (err.response.status === 401) {
-      console.log("재발급 시도...")
+      // TODO 401: 인증되지 않은 사용자 -> 토큰 재발급 시도
     }
   },
 )
