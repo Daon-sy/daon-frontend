@@ -3,14 +3,17 @@ import "./Sidebar.css"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 import Typography from "@mui/material/Typography"
+import AddBoxIcon from "@mui/icons-material/AddBox"
 import ShowMember from "components/modal/showModal/ShowMemberModal"
+import CreateProjectModal from "components/modal/createProject/CreateProjectModal"
 
 const Sidebar: React.FC = () => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null,
   )
   const [openShowModal, setOpenShowModal] = React.useState<boolean>(false)
-
+  const [openCreateProjectModal, setCreateProjectModal] =
+    React.useState<boolean>(false)
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     if (!anchorElUser) {
       setAnchorElUser(event.currentTarget)
@@ -25,9 +28,15 @@ const Sidebar: React.FC = () => {
     handleCloseUserMenu()
     setOpenShowModal(true)
   }
-
   const handleCloseShowModal = () => {
     setOpenShowModal(false)
+  }
+
+  const handleOpenCreateProjectModal = () => {
+    setCreateProjectModal(true)
+  }
+  const handleCloseCreateProjectModal = () => {
+    setCreateProjectModal(false)
   }
 
   return (
@@ -96,6 +105,13 @@ const Sidebar: React.FC = () => {
       </section>
       <section className="sidebar_sc">
         <div className="sidebar_title">참여 프로젝트</div>
+        <button
+          type="button"
+          className="pj_add_btn"
+          onClick={handleOpenCreateProjectModal}
+        >
+          <AddBoxIcon />
+        </button>
         <ul>
           <li>
             <div className="myproject_list">프로젝트1</div>
@@ -107,6 +123,10 @@ const Sidebar: React.FC = () => {
       </section>
 
       <ShowMember open={openShowModal} handleClose={handleCloseShowModal} />
+      <CreateProjectModal
+        open={openCreateProjectModal}
+        handleClose={handleCloseCreateProjectModal}
+      />
     </>
   )
 }
