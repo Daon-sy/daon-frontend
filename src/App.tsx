@@ -1,7 +1,7 @@
 import React from "react"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { Reset } from "styled-reset"
-import Home from "pages/Home"
+import Home from "pages/Home/Home"
 import Landing from "pages/Landing"
 import SignUp from "pages/SignUp"
 import { useTokenStore } from "store/store"
