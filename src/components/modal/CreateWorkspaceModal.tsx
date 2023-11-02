@@ -7,11 +7,8 @@ import Button from "@mui/material/Button"
 import InputWsProfileInfo from "components/modal/InputWsProfileInfo"
 import InputWorkspaceInfo from "components/modal/InputWorkspaceInfo"
 import { AxiosResponse } from "axios"
-import {
-  createWorkspaceApi,
-  CreateWorkspaceResponse,
-} from "../../api/workspaceApi"
-import { useCreateWorkspaceStore } from "../../store/requestStore"
+import { useCreateWorkspaceStore } from "store/requestStore"
+import { createWorkspaceApi, CreateWorkspaceResponse } from "api/workspaceApi"
 
 interface RenderInputWorkspaceInfoProps {
   onCancelBtnClick: () => void
