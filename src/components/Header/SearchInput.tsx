@@ -59,7 +59,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   width: "95%",
 }))
 
-const SearchInput = () => {
+const SearchInput: React.FC = () => {
   const [anchorElSearch, setAnchorElSearch] =
     React.useState<null | HTMLElement>(null)
 

@@ -9,7 +9,7 @@ import MenuItem from "@mui/material/MenuItem"
 import { useTokenStore } from "store/tokenStore"
 import { useAlert } from "hooks/useAlert"
 
-const UserInfo = () => {
+const UserInfo: React.FC = () => {
   const tokenState = useTokenStore()
   const { addInfo } = useAlert()
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
