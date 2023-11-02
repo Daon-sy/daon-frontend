@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography"
 import { Box, Button } from "@mui/material"
 import LoginModal from "components/modal/LoginModal"
 import { Link } from "react-router-dom"
+import Stack from "@mui/material/Stack"
 
 const AnonymousHeader = () => {
   const [loginModalOpen, setLoginModalOpen] = React.useState<boolean>(false)
@@ -36,9 +37,17 @@ const AnonymousHeader = () => {
           </Link>
         </Typography>
         <Box>
-          <Button color="inherit" onClick={openLoginModal}>
-            로그인
-          </Button>
+          <Stack spacing={2} direction="row">
+            <Link
+              to="/sign-up"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <Button color="inherit">회원가입</Button>
+            </Link>
+            <Button color="inherit" onClick={openLoginModal}>
+              로그인
+            </Button>
+          </Stack>
           <LoginModal open={loginModalOpen} handleClose={closeLoginModal} />
         </Box>
       </Toolbar>
