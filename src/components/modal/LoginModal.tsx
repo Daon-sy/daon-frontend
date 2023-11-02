@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography"
 import { Button, Stack, TextField } from "@mui/material"
 import { signInApi, SignInRequest } from "api/signInApi"
 import { useAlert } from "hooks/useAlert"
-import { useTokenStore } from "store/store"
+import { useTokenStore } from "store/tokenStore"
 
 const style = {
   position: "absolute" as const,
