@@ -7,7 +7,7 @@ import SearchInput from "./SearchInput"
 import User from "./UserInfo"
 import Nav from "./Nav"
 
-const Header = () => {
+const Header: React.FC = () => {
   return (
     <AppBar position="static">
       <Toolbar>

@@ -4,34 +4,43 @@ import { TEST_IMAGE_URL } from "env"
 import "./Home.css"
 
 interface WorkspaceData {
-  id: number
+  workspaceId: number
   title: string
-  image: string
+  imgUrl: string
+  division: string
 }
 
 interface WorkspaceItemProps {
   title: string
-  image: string
+  imgUrl: string
+  division: string
 }
 
 const dummyData: WorkspaceData[] = [
   {
-    id: 1,
+    workspaceId: 1,
     title: "워크스페이스 1",
-    image: `${TEST_IMAGE_URL}`,
+    imgUrl: `${TEST_IMAGE_URL}`,
+    division: "개인",
   },
   {
-    id: 2,
+    workspaceId: 2,
     title: "워크스페이스 2",
-    image: `${TEST_IMAGE_URL}`,
+    imgUrl: `${TEST_IMAGE_URL}`,
+    division: "그룹",
   },
 ]
 
-const WorkspaceItem: React.FC<WorkspaceItemProps> = ({ title, image }) => {
+const WorkspaceItem: React.FC<WorkspaceItemProps> = ({
+  title,
+  imgUrl,
+  division,
+}) => {
   return (
     <div className="ws_info_box">
-      <img className="ws_img" src={image} alt={title} />
+      <img className="ws_img" src={imgUrl} alt={title} />
       <h3 className="ws_title">{title}</h3>
+      <p className="ws_division">{division}</p>
     </div>
   )
 }
@@ -45,9 +54,10 @@ const Home: React.FC = () => {
           {dummyData.map(workspace => (
             <li>
               <WorkspaceItem
-                key={workspace.id}
+                key={workspace.workspaceId}
                 title={workspace.title}
-                image={workspace.image}
+                imgUrl={workspace.imgUrl}
+                division={workspace.division}
               />
             </li>
           ))}

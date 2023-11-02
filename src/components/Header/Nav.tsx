@@ -10,7 +10,7 @@ import CreateWorkspaceModal from "components/modal/CreateWorkspaceModal"
 
 const myWorkspaces = ["워크스페이스1", "워크스페이스2"]
 
-const Nav = () => {
+const Nav: React.FC = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
   const [createWorkspaceModalOpen, setCreateWorkspaceModalOpen] =
     React.useState<boolean>(false)
