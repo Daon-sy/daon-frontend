@@ -10,10 +10,13 @@ import {
 import Typography from "@mui/material/Typography"
 import MenuItem from "@mui/material/MenuItem"
 import React from "react"
-import { TEST_IMAGE_URL } from "env"
 import { useCreateWorkspaceStore } from "store/requestStore"
+import { AxiosResponse } from "axios"
+import { imageUploadApi, ImageUploadResponse } from "api/imageApi"
+import ImageInput from "components/image/ImageInput"
 
 const InputWorkspaceInfo = () => {
+  const fileInput = React.useRef<HTMLInputElement>(null)
   const createWorkspaceState = useCreateWorkspaceStore()
   const { name, subject, description, imageUrl } =
     createWorkspaceState.createWorkspaceRequest.workspace
@@ -48,30 +51,37 @@ const InputWorkspaceInfo = () => {
     })
   }
 
+  const onImageBoxClick = () => fileInput.current?.click()
+
+  const onImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = e.target
+    const file = files?.[0]
+    if (file) {
+      imageUploadApi({ image: file }).then(
+        (res: AxiosResponse<ImageUploadResponse>) => {
+          createWorkspaceState.setCreateWorkspaceRequest({
+            ...createWorkspaceState.createWorkspaceRequest,
+            workspace: {
+              ...createWorkspaceState.createWorkspaceRequest.workspace,
+              imageUrl: res.data.imageUrl,
+            },
+          })
+        },
+      )
+    }
+  }
+
   return (
     <Box>
       <Stack spacing={2}>
         <Typography variant="h6">워크스페이스 정보 입력</Typography>
         <Box display="flex" alignItems="center">
-          <Box
-            sx={{
-              overflow: "hidden",
-              marginRight: 2,
-              border: "solid 1px",
-              borderColor: "rgba(0, 0, 0, 0.23)",
-              borderRadius: "10px",
-            }}
-          >
-            <Box
-              component="img"
-              src={!imageUrl ? `${TEST_IMAGE_URL}` : imageUrl}
-              sx={{
-                objectFit: "cover",
-              }}
-              width="100%"
-              height={120}
-            />
-          </Box>
+          <ImageInput
+            width={120}
+            height={120}
+            imageUrl={imageUrl}
+            onImageChange={onImageChange}
+          />
           <Box width="100%">
             <Stack spacing={2}>
               <TextField

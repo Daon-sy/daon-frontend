@@ -7,6 +7,7 @@ import SignUp from "pages/SignUp"
 import { useTokenStore } from "store/tokenStore"
 import UserLayout from "Layouts/UserLayout"
 import AnonymousLayout from "Layouts/AnonymousLayout"
+import { AxiosInterceptor } from "api"
 
 function App() {
   const tokenState = useTokenStore()
@@ -14,7 +15,7 @@ function App() {
   const isLoggedIn = () => !!tokenState.token
 
   return (
-    <>
+    <AxiosInterceptor>
       <Reset />
       <BrowserRouter>
         {isLoggedIn() ? (
@@ -32,7 +33,7 @@ function App() {
           </Routes>
         )}
       </BrowserRouter>
-    </>
+    </AxiosInterceptor>
   )
 }
 
