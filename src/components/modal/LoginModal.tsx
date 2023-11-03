@@ -8,7 +8,6 @@ import Typography from "@mui/material/Typography"
 import { Button, Stack, TextField } from "@mui/material"
 import { signInApi, SignInRequest } from "api/signInApi"
 import { useAlert } from "hooks/useAlert"
-import { useTokenStore } from "store/tokenStore"
 import { useNavigate } from "react-router-dom"
 
 const style = {
@@ -32,7 +31,6 @@ const LoginModal = (props: LoginModalProps) => {
   const navigate = useNavigate()
   const { addSuccess, addError } = useAlert()
   const { open, handleClose } = props
-  const tokenState = useTokenStore()
   const [signInRequest, setSignInRequest] = React.useState<SignInRequest>({
     email: "",
     password: "",
@@ -64,23 +62,16 @@ const LoginModal = (props: LoginModalProps) => {
 
     signInApi(signInRequest)
       .then(res => {
-        // TODO 토큰으로 변경되면 Bearer 제거
-        const authHeaderValue = res.headers.authorization
-
-        tokenState.setToken(authHeaderValue)
-        // TODO 로그인 성공하면 유저 정보 가져와야 한다.
-
         addSuccess("로그인에 성공하였습니다.")
         navigate("/")
         handleClose()
       })
       .catch(err => {
-        const { status } = err.response
-        if (status === 400) {
+        if (err.response.status === 400) {
           addError("이메일 또는 비밀번호가 정확하지 않습니다.")
         }
 
-        if (status >= 500) {
+        if (err.response.status >= 500) {
           addError("서버 오류입니다. 다시 시도해주세요.")
         }
       })
