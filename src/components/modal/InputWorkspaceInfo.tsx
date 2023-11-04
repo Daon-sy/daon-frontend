@@ -14,9 +14,9 @@ import { useCreateWorkspaceStore } from "store/requestStore"
 import { AxiosResponse } from "axios"
 import { imageUploadApi, ImageUploadResponse } from "api/imageApi"
 import ImageInput from "components/image/ImageInput"
+import { ApiResponse } from "../../api"
 
 const InputWorkspaceInfo = () => {
-  const fileInput = React.useRef<HTMLInputElement>(null)
   const createWorkspaceState = useCreateWorkspaceStore()
   const { name, subject, description, imageUrl } =
     createWorkspaceState.createWorkspaceRequest.workspace
@@ -51,19 +51,17 @@ const InputWorkspaceInfo = () => {
     })
   }
 
-  const onImageBoxClick = () => fileInput.current?.click()
-
   const onImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target
     const file = files?.[0]
     if (file) {
       imageUploadApi({ image: file }).then(
-        (res: AxiosResponse<ImageUploadResponse>) => {
+        (res: AxiosResponse<ApiResponse<ImageUploadResponse>>) => {
           createWorkspaceState.setCreateWorkspaceRequest({
             ...createWorkspaceState.createWorkspaceRequest,
             workspace: {
               ...createWorkspaceState.createWorkspaceRequest.workspace,
-              imageUrl: res.data.imageUrl,
+              imageUrl: res.data.data.imageUrl,
             },
           })
         },

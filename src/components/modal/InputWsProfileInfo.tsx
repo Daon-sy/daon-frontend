@@ -6,9 +6,9 @@ import { useCreateWorkspaceStore } from "store/requestStore"
 import { imageUploadApi, ImageUploadResponse } from "api/imageApi"
 import { AxiosResponse } from "axios"
 import ImageInput from "components/image/ImageInput"
+import { ApiResponse } from "../../api"
 
 const InputWsProfileInfo = () => {
-  const fileInput = React.useRef<HTMLInputElement>(null)
   const createWorkspaceState = useCreateWorkspaceStore()
   const { imageUrl, nickname } =
     createWorkspaceState.createWorkspaceRequest.profile
@@ -23,19 +23,17 @@ const InputWsProfileInfo = () => {
     })
   }
 
-  const onImageBoxClick = () => fileInput.current?.click()
-
   const onImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target
     const file = files?.[0]
     if (file) {
       imageUploadApi({ image: file }).then(
-        (res: AxiosResponse<ImageUploadResponse>) => {
+        (res: AxiosResponse<ApiResponse<ImageUploadResponse>>) => {
           createWorkspaceState.setCreateWorkspaceRequest({
             ...createWorkspaceState.createWorkspaceRequest,
             profile: {
               ...createWorkspaceState.createWorkspaceRequest.profile,
-              imageUrl: res.data.imageUrl,
+              imageUrl: res.data.data.imageUrl,
             },
           })
         },

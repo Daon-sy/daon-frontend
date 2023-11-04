@@ -4,6 +4,11 @@ import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios"
 import { API_SERVER_URL } from "env"
 import { useTokenStore } from "store/tokenStore"
 
+export interface ApiResponse<T> {
+  data: T
+  message: string
+}
+
 export const basicAxios = axios.create({
   baseURL: `${API_SERVER_URL}`,
   headers: {
