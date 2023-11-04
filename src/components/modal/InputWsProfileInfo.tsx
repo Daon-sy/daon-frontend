@@ -49,8 +49,8 @@ const InputWsProfileInfo = () => {
         <Typography variant="h6">워크스페이스 프로필 입력</Typography>
         <Box display="flex" justifyContent="center">
           <ImageInput
-            width={200}
-            height={200}
+            width={218}
+            height={218}
             imageUrl={imageUrl}
             onImageChange={onImageChange}
           />
