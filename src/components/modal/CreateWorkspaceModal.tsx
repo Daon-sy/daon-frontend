@@ -1,7 +1,6 @@
 import React from "react"
 import { useAlert } from "hooks/useAlert"
-import { Backdrop, Fade, Modal, Stack } from "@mui/material"
-import Box from "@mui/material/Box"
+import { Stack } from "@mui/material"
 import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
 import InputWsProfileInfo from "components/modal/InputWsProfileInfo"
@@ -9,6 +8,7 @@ import InputWorkspaceInfo from "components/modal/InputWorkspaceInfo"
 import { AxiosResponse } from "axios"
 import { useCreateWorkspaceStore } from "store/requestStore"
 import { createWorkspaceApi, CreateWorkspaceResponse } from "api/workspaceApi"
+import CustomModal from "components/Common/CustomModal"
 
 interface RenderInputWorkspaceInfoProps {
   onCancelBtnClick: () => void
@@ -88,18 +88,6 @@ const RenderInputWsProfileInfo = (props: RenderInputWsProfileInfoProps) => {
   )
 }
 
-const style = {
-  position: "absolute" as const,
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 500,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 10,
-}
-
 interface CreateWorkspaceModalProps {
   open: boolean
   handleClose: () => void
@@ -141,7 +129,6 @@ const CreateWorkspaceModal = (props: CreateWorkspaceModalProps) => {
     handleClose()
   }
 
-  // TODO 이미지 업로드
   const renderModalPage = () => {
     return pageNumber === 1 ? (
       <RenderInputWorkspaceInfo
@@ -165,35 +152,27 @@ const CreateWorkspaceModal = (props: CreateWorkspaceModalProps) => {
   }
 
   return (
-    <Modal
+    <CustomModal
       open={open}
-      onClose={handleClose}
-      closeAfterTransition
-      slots={{ backdrop: Backdrop }}
-      slotProps={{
-        backdrop: {
-          timeout: 500,
-        },
-      }}
-      onTransitionExited={cleanUp}
+      handleClose={handleClose}
+      cleanUp={cleanUp}
+      width={500}
+      minHeight={500}
+      maxHeight={800}
     >
-      <Fade in={open}>
-        <Box sx={style}>
-          <Stack spacing={2}>
-            <Typography
-              variant="h4"
-              align="center"
-              sx={{
-                paddingBottom: 2,
-              }}
-            >
-              워크스페이스 생성
-            </Typography>
-            {renderModalPage()}
-          </Stack>
-        </Box>
-      </Fade>
-    </Modal>
+      <Stack spacing={2}>
+        <Typography
+          variant="h4"
+          align="center"
+          sx={{
+            paddingBottom: 2,
+          }}
+        >
+          워크스페이스 생성
+        </Typography>
+        {renderModalPage()}
+      </Stack>
+    </CustomModal>
   )
 }
 
