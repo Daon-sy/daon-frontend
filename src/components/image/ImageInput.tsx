@@ -25,6 +25,9 @@ const ImageInput = (props: ImageInputProps) => {
           border: "solid 1px",
           borderColor: "rgba(0, 0, 0, 0.23)",
           borderRadius: "10px",
+          "&:hover": {
+            cursor: "pointer",
+          },
         }}
       >
         <input

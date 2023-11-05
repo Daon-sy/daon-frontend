@@ -4,6 +4,11 @@ import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios"
 import { API_SERVER_URL } from "env"
 import { useTokenStore } from "store/tokenStore"
 
+export interface ApiResponse<T = object> {
+  data: T
+  message: string
+}
+
 export const basicAxios = axios.create({
   baseURL: `${API_SERVER_URL}`,
   headers: {
@@ -66,10 +71,13 @@ export const AxiosInterceptor = ({ children }: React.PropsWithChildren) => {
         return res
       },
       err => {
-        console.error(err)
-        if (err.response.status === 401) {
-          // TODO 401: 인증되지 않은 사용자 -> 토큰 재발급 시도
+        if (axios.isAxiosError<ApiResponse>(err)) {
+          if (err.response && err.response.status === 401) {
+            // TODO 401: 인증되지 않은 사용자 -> 토큰 재발급 시도
+          }
         }
+
+        return Promise.reject(err)
       },
     )
   }, [tokenStore])
