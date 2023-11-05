@@ -75,21 +75,24 @@ const SignUp = () => {
       password: formData.password,
       name: formData.name,
     })
-      .then(res => {
-        if (res.status === 201) {
-          addSuccess("회원가입 성공! 로그인 버튼을 통해 로그인 해주세요.")
-          navigate("/")
-        }
+      .then(() => {
+        addSuccess("회원가입 성공! 로그인 버튼을 통해 로그인 해주세요.")
+        navigate("/")
       })
       .catch(err => {
-        const { status } = err.response
-        if (status === 400) {
-          // TODO
-          addError("입력값 오류...")
-        }
+        if (err.response) {
+          const { status } = err.response
+          if (status === 400) {
+            // TODO
+            addError("입력값 오류입니다. 확인해주세요.")
+          }
 
-        if (status >= 500) {
-          addError("서버 오류입니다. 다시 시도해주세요.")
+          if (status >= 500) {
+            addError("서버 오류입니다. 다시 시도해주세요.")
+          }
+        } else {
+          console.error(err)
+          addError("unknown error... 문의 부탁드립니다.")
         }
       })
   }

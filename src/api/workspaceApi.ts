@@ -1,15 +1,16 @@
-import { authAxios } from "api/index"
+import { ApiResponse, authAxios } from "api/index"
+import { AxiosResponse } from "axios"
 
 export interface WorkspaceInfo {
   name: string
-  imageUrl: string | null
+  imageUrl: string
   description: string
   subject: string
 }
 
 export interface WsProfileInfo {
-  nickname: string // profile-name으로 짓는 것은 어떤지?
-  imageUrl: string | null
+  name: string
+  imageUrl: string
 }
 
 export interface CreateWorkspaceRequest {
@@ -21,6 +22,8 @@ export interface CreateWorkspaceResponse {
   workspaceId: number
 }
 
-export const createWorkspaceApi = async (request: CreateWorkspaceRequest) => {
+export const createWorkspaceApi = async (
+  request: CreateWorkspaceRequest,
+): Promise<AxiosResponse<ApiResponse<CreateWorkspaceResponse>>> => {
   return authAxios.post("/api/workspaces", request)
 }
