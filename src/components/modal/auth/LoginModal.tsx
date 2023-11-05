@@ -47,7 +47,7 @@ const LoginModal = (props: LoginModalProps) => {
     }
 
     signInApi(signInRequest)
-      .then(res => {
+      .then(() => {
         addSuccess("로그인에 성공하였습니다.")
         navigate("/")
         handleClose()

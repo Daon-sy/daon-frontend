@@ -75,7 +75,7 @@ const SignUp = () => {
       password: formData.password,
       name: formData.name,
     })
-      .then(res => {
+      .then(() => {
         addSuccess("회원가입 성공! 로그인 버튼을 통해 로그인 해주세요.")
         navigate("/")
       })

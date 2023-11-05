@@ -23,7 +23,7 @@ const InputWorkspaceInfo: React.FC<Props> = ({ data, onChange }: Props) => {
         const { data: responseData } = await imageUploadApi({ image: file })
         changeRef(responseData.data.imageUrl)
       } catch (err) {
-        console.log(err)
+        console.error(err)
       }
     }
   }

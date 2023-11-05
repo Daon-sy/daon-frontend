@@ -142,8 +142,8 @@ const CreateWorkspaceModal = (props: CreateWorkspaceModalProps) => {
     createWorkspaceApi({ workspace, profile })
       .then(res => {
         const { workspaceId } = res.data.data
-        console.log(`workspaceId: ${workspaceId}`)
-        addSuccess("워크스페이스가 생성되었습니다.")
+        // TODO 메시지 변경, 워크스페이스 페이지로 이동
+        addSuccess(`워크스페이스가 생성되었습니다. id: ${workspaceId}`)
         handleClose()
       })
       .catch(err => {
