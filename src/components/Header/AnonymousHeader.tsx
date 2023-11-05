@@ -3,7 +3,7 @@ import AppBar from "@mui/material/AppBar"
 import Toolbar from "@mui/material/Toolbar"
 import Typography from "@mui/material/Typography"
 import { Box, Button } from "@mui/material"
-import LoginModal from "components/modal/LoginModal"
+import LoginModal from "components/modal/auth/LoginModal"
 import { Link } from "react-router-dom"
 import Stack from "@mui/material/Stack"
 

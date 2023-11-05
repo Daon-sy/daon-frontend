@@ -53,12 +53,15 @@ const LoginModal = (props: LoginModalProps) => {
         handleClose()
       })
       .catch(err => {
-        if (err.response.status === 400) {
-          addError("이메일 또는 비밀번호가 정확하지 않습니다.")
-        }
+        if (err.response) {
+          const { status } = err.response
+          if (status === 400) {
+            addError("이메일 또는 비밀번호가 정확하지 않습니다.")
+          }
 
-        if (err.response.status >= 500) {
-          addError("서버 오류입니다. 다시 시도해주세요.")
+          if (status >= 500) {
+            addError("서버 오류입니다. 다시 시도해주세요.")
+          }
         }
       })
   }
