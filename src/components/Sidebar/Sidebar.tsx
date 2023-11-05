@@ -3,9 +3,9 @@ import "./Sidebar.css"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 import Typography from "@mui/material/Typography"
-import AddBoxIcon from "@mui/icons-material/AddBox"
 import ShowMember from "components/modal/showModal/ShowMemberModal"
 import CreateProjectModal from "components/modal/createProject/CreateProjectModal"
+import CreateBtn from "components/Common/createBtn/CreateBtn"
 
 const Sidebar: React.FC = () => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
@@ -105,13 +105,10 @@ const Sidebar: React.FC = () => {
       </section>
       <section className="sidebar_sc">
         <div className="sidebar_title">참여 프로젝트</div>
-        <button
-          type="button"
-          className="pj_add_btn"
-          onClick={handleOpenCreateProjectModal}
-        >
-          <AddBoxIcon />
-        </button>
+        <CreateBtn
+          handleClick={handleOpenCreateProjectModal}
+          title="프로젝트 추가"
+        />
         <ul>
           <li>
             <div className="myproject_list">프로젝트1</div>
