@@ -1,5 +1,5 @@
 import React from "react"
-import Title from "components/Common/Title/Title"
+import Title from "components/Common/title/Title"
 import { TEST_IMAGE_URL } from "env"
 import "./Home.css"
 
