@@ -4,7 +4,48 @@ import Modal from "@mui/material/Modal"
 import ToggleButton from "@mui/material/ToggleButton"
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
 import { TEST_IMAGE_URL } from "env"
-import "./ShowMember.css"
+import styled from "styled-components"
+
+const ListWrapper = styled.ul`
+  border: 1px solid black;
+  width: 400px;
+  height: 380px;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+  align-items: center;
+`
+const ParticipantWrapper = styled.div`
+  border: 1px solid black;
+  width: 380px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: 1px 0;
+`
+
+const ParticipantImg = styled.img`
+  width: 38px;
+  height: 38px;
+  background-color: rgba(0, 0, 0, 0.3);
+`
+
+const ParticipantName = styled.p`
+  display: block;
+  width: 20%;
+  height: 20px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.4);
+`
+
+const ParticipantEmail = styled.p`
+  display: block;
+  width: 70%;
+  background-color: rgba(0, 0, 0, 0.1);
+  text-align: center;
+`
 
 interface ShowMemberProps {
   open: boolean
@@ -113,21 +154,21 @@ const ShowMember: React.FC<ShowMemberProps> = (props: ShowMemberProps) => {
           </ToggleButtonGroup>
 
           {/* 참가자들 리스트 */}
-          <ul className="list_wrapper">
+          <ListWrapper>
             {filteredParticipants.map(participant => (
               <li key={participant.id}>
-                <div className="participant_Wrapper">
-                  <img
+                <ParticipantWrapper>
+                  <ParticipantImg
                     className="participant_img"
                     src={participant.imgUrl}
                     alt={participant.nickname}
                   />
-                  <p className="participant_nick">{participant.nickname}</p>
-                  <p className="participant_email">{participant.email}</p>
-                </div>
+                  <ParticipantName>{participant.nickname}</ParticipantName>
+                  <ParticipantEmail>{participant.email}</ParticipantEmail>
+                </ParticipantWrapper>
               </li>
             ))}
-          </ul>
+          </ListWrapper>
         </Box>
       </Modal>
     </div>

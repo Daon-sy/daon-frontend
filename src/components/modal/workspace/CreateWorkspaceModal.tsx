@@ -11,7 +11,7 @@ import {
   WorkspaceInfo,
   WsProfileInfo,
 } from "api/workspaceApi"
-import CustomModal from "components/Common/CustomModal"
+import CustomModal from "components/common/CustomModal"
 import useInputs from "hooks/useInputs"
 
 interface InputWorkspaceInfoPageProps {

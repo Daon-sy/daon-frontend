@@ -1,6 +1,16 @@
 import * as React from "react"
 import AddBoxIcon from "@mui/icons-material/AddBox"
-import "./CreateBtn.css"
+import styled from "styled-components"
+
+const CreateButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 0;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+`
 
 interface CreateBtnProps {
   handleClick: () => void
@@ -10,14 +20,14 @@ interface CreateBtnProps {
 
 const CreateBtn = ({ handleClick, children, title }: CreateBtnProps) => {
   return (
-    <button
+    <CreateButton
       type="button"
       className="create_btn"
       onClick={handleClick}
       title={title}
     >
       {children}
-    </button>
+    </CreateButton>
   )
 }
 
