@@ -9,5 +9,5 @@ export interface SignInRequest {
 export const signInApi = async (
   signInRequest: SignInRequest,
 ): Promise<AxiosResponse<ApiResponse>> => {
-  return basicAxios.post("/api/sign-in", signInRequest)
+  return basicAxios.post("/api/auth/sign-in", signInRequest)
 }
