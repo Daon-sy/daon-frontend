@@ -1,7 +1,47 @@
 import React from "react"
-import Title from "components/Common/title/Title"
+import Title from "components/common/Title"
 import { TEST_IMAGE_URL } from "env"
-import "./Home.css"
+import styled from "styled-components"
+
+const WorkspaceInfoWrapper = styled.div`
+  display: flex;
+  position: relative;
+  align-items: center;
+  width: 200px;
+  height: 100px;
+  border: 1px solid black;
+  margin: 8px;
+`
+
+const WorkspaceTitle = styled.h3`
+  width: 60%;
+  height: 20%;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.3);
+`
+
+const WorkspaceImg = styled.img`
+  border-radius: 50%;
+  height: 60px;
+  width: 60px;
+  border: 1px solid black;
+  text-align: center;
+  font-size: 80px;
+  margin: 0 8px;
+`
+
+const WorkpaceDivision = styled.p`
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 4px;
+  margin: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+`
+
+const WorkspaceListWrapper = styled.ul`
+  display: flex;
+`
 
 interface WorkspaceData {
   workspaceId: number
@@ -37,11 +77,11 @@ const WorkspaceItem: React.FC<WorkspaceItemProps> = ({
   division,
 }) => {
   return (
-    <div className="ws_info_box">
-      <img className="ws_img" src={imgUrl} alt={title} />
-      <h3 className="ws_title">{title}</h3>
-      <p className="ws_division">{division}</p>
-    </div>
+    <WorkspaceInfoWrapper>
+      <WorkspaceImg src={imgUrl} alt={title} />
+      <WorkspaceTitle className="ws_title">{title}</WorkspaceTitle>
+      <WorkpaceDivision>{division}</WorkpaceDivision>
+    </WorkspaceInfoWrapper>
   )
 }
 
@@ -50,7 +90,7 @@ const Home: React.FC = () => {
     <>
       <Title title="HOME" subtitle="워크스페이스 목록" />
       <section>
-        <ul className="ws_list_wrapper">
+        <WorkspaceListWrapper>
           {dummyData.map(workspace => (
             <li>
               <WorkspaceItem
@@ -61,7 +101,7 @@ const Home: React.FC = () => {
               />
             </li>
           ))}
-        </ul>
+        </WorkspaceListWrapper>
       </section>
     </>
   )

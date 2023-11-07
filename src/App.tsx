@@ -1,12 +1,12 @@
 import React from "react"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { Reset } from "styled-reset"
-import Home from "pages/Home/Home"
+import Home from "pages/Home"
 import Landing from "pages/Landing"
 import SignUp from "pages/SignUp"
 import { useTokenStore } from "store/tokenStore"
-import UserLayout from "Layouts/UserLayout"
-import AnonymousLayout from "Layouts/AnonymousLayout"
+import UserLayout from "layouts/UserLayout"
+import AnonymousLayout from "layouts/AnonymousLayout"
 import { AxiosInterceptor } from "api"
 
 function App() {

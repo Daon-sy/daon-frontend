@@ -6,7 +6,7 @@ import { Button, Stack, TextField } from "@mui/material"
 import { signInApi, SignInRequest } from "api/signInApi"
 import { useAlert } from "hooks/useAlert"
 import { useNavigate } from "react-router-dom"
-import CustomModal from "components/Common/CustomModal"
+import CustomModal from "components/common/CustomModal"
 
 interface LoginModalProps {
   open: boolean
