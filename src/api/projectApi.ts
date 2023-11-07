@@ -10,5 +10,15 @@ export interface CreateProjectRequest {
 }
 
 export const createProjectApi = async (request: CreateProjectRequest) => {
-  return authAxios.post("/api/projects", request)
+  try {
+    const response = await authAxios.post<CreateProjectResponse>(
+      "/api/projects",
+      request,
+    )
+
+    return response
+  } catch (error) {
+    console.error("프로젝트 생성 API 오류:", error)
+    throw error
+  }
 }
