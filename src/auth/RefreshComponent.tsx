@@ -2,11 +2,11 @@
 import React from "react"
 import { AxiosResponse } from "axios"
 import { basicAxios } from "api"
-import { useTokenStore } from "store/tokenStore"
+import { getTokenStore } from "store/getTokenStore"
 
 const RefreshComponent = ({ children }: React.PropsWithChildren) => {
   const BEARER_TYPE = "Bearer "
-  const tokenStore = useTokenStore()
+  const tokenStore = getTokenStore()
 
   React.useEffect(
     () => () => {

@@ -6,11 +6,11 @@ import Typography from "@mui/material/Typography"
 import Menu from "@mui/material/Menu"
 import Tooltip from "@mui/material/Tooltip"
 import MenuItem from "@mui/material/MenuItem"
-import { useTokenStore } from "store/tokenStore"
+import { getTokenStore } from "store/getTokenStore"
 import { useAlert } from "hooks/useAlert"
 
 const UserInfo: React.FC = () => {
-  const tokenState = useTokenStore()
+  const tokenState = getTokenStore()
   const { addInfo } = useAlert()
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null,
