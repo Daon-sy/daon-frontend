@@ -8,19 +8,19 @@ export const useAlert = () => {
   }
 
   const addInfo = (message: string) => {
-    enqueueSnackbar(message, { variant: "info" })
+    addAlert(message, "info")
   }
 
   const addSuccess = (message: string) => {
-    enqueueSnackbar(message, { variant: "success" })
+    addAlert(message, "success")
   }
 
   const addError = (message: string) => {
-    enqueueSnackbar(message, { variant: "error" })
+    addAlert(message, "error")
   }
 
   const addWarning = (message: string) => {
-    enqueueSnackbar(message, { variant: "warning" })
+    addAlert(message, "warning")
   }
 
   return { addAlert, addInfo, addSuccess, addWarning, addError }

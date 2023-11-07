@@ -6,10 +6,10 @@ interface TokenStore {
   setToken: (token: string) => void
 }
 
-export const useTokenStore = create<TokenStore>(set => ({
+export const getTokenStore = create<TokenStore>(set => ({
   token: null,
   clear: () => set({ token: null }),
   setToken: (token: string) => set(() => ({ token })),
 }))
 
-export default { useTokenStore }
+export default { getTokenStore }
