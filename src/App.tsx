@@ -8,6 +8,7 @@ import { useTokenStore } from "store/tokenStore"
 import UserLayout from "layouts/UserLayout"
 import AnonymousLayout from "layouts/AnonymousLayout"
 import { AxiosInterceptor } from "api"
+import RefreshComponent from "auth/RefreshComponent"
 
 function App() {
   const tokenState = useTokenStore()
@@ -16,23 +17,25 @@ function App() {
 
   return (
     <AxiosInterceptor>
-      <Reset />
-      <BrowserRouter>
-        {isLoggedIn() ? (
-          <Routes>
-            <Route element={<UserLayout />}>
-              <Route path="/" element={<Home />} />
-            </Route>
-          </Routes>
-        ) : (
-          <Routes>
-            <Route element={<AnonymousLayout />}>
-              <Route path="/" element={<Landing />} />
-              <Route path="/sign-up" element={<SignUp />} />
-            </Route>
-          </Routes>
-        )}
-      </BrowserRouter>
+      <RefreshComponent>
+        <Reset />
+        <BrowserRouter>
+          {isLoggedIn() ? (
+            <Routes>
+              <Route element={<UserLayout />}>
+                <Route path="/" element={<Home />} />
+              </Route>
+            </Routes>
+          ) : (
+            <Routes>
+              <Route element={<AnonymousLayout />}>
+                <Route path="/" element={<Landing />} />
+                <Route path="/sign-up" element={<SignUp />} />
+              </Route>
+            </Routes>
+          )}
+        </BrowserRouter>
+      </RefreshComponent>
     </AxiosInterceptor>
   )
 }

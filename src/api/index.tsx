@@ -14,6 +14,7 @@ export const basicAxios = axios.create({
   headers: {
     "Content-type": "application/json",
   },
+  withCredentials: true,
 })
 
 export const authAxios = axios.create({
@@ -21,11 +22,32 @@ export const authAxios = axios.create({
   headers: {
     "Content-type": "application/json",
   },
+  withCredentials: true,
 })
 
 export const AxiosInterceptor = ({ children }: React.PropsWithChildren) => {
   const BEARER_TYPE = "Bearer "
   const tokenStore = useTokenStore()
+
+  const reissue = React.useCallback((config: InternalAxiosRequestConfig) => {
+    const { headers: confHeaders } = config
+    basicAxios
+      .post("/api/auth/reissue")
+      .then((res: AxiosResponse) => {
+        const { headers } = res.headers
+        const authHeader: string = headers.authorization
+        if (!!authHeader && authHeader.startsWith(BEARER_TYPE)) {
+          const accessToken = authHeader.substring(BEARER_TYPE.length)
+          tokenStore.setToken(accessToken)
+        }
+        confHeaders.Authorization = `Bearer ${tokenStore.token}`
+
+        // 재발급 성공시 기존 요청 재호출
+        return basicAxios.request(config)
+      })
+      .catch(error => error)
+    // eslint-disable-next-line
+  }, [])
 
   React.useEffect(() => {
     basicAxios.interceptors.response.use((res: AxiosResponse) => {
@@ -40,23 +62,14 @@ export const AxiosInterceptor = ({ children }: React.PropsWithChildren) => {
     })
 
     // 요청 인터셉터: 인증 헤더 자동 설정
-    authAxios.interceptors.request.use(
-      (config: InternalAxiosRequestConfig) => {
-        const { headers } = config
+    authAxios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+      const { headers } = config
+      if (tokenStore.token) {
+        headers.Authorization = `Bearer ${tokenStore.token}`
+      }
 
-        if (tokenStore.token) {
-          headers.Authorization = `Bearer ${tokenStore.token}`
-          // TODO 토큰 없을 경우 재발급 진행
-        }
-
-        return config
-      },
-      err => {
-        console.error(err)
-
-        return Promise.reject(err)
-      },
-    )
+      return config
+    })
 
     // 응답 인터셉터: 응답에 따른 callback 처리
     authAxios.interceptors.response.use(
@@ -71,16 +84,18 @@ export const AxiosInterceptor = ({ children }: React.PropsWithChildren) => {
         return res
       },
       err => {
-        if (axios.isAxiosError<ApiResponse>(err)) {
-          if (err.response && err.response.status === 401) {
-            // TODO 401: 인증되지 않은 사용자 -> 토큰 재발급 시도
-          }
+        if (
+          axios.isAxiosError<ApiResponse>(err) &&
+          err.response &&
+          err.response.status === 401
+        ) {
+          const { config } = err.request
+          // 401: 인증되지 않은 사용자 -> 토큰 재발급 시도
+          reissue(config)
         }
-
-        return Promise.reject(err)
       },
     )
-  }, [tokenStore])
+  }, [reissue, tokenStore])
 
   return <div>{children}</div>
 }
