@@ -2,6 +2,13 @@ import React from "react"
 import Title from "components/common/Title"
 import { TEST_IMAGE_URL } from "env"
 import styled from "styled-components"
+import Header from "components/header/Header"
+
+const DefaultLayout = styled.div`
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+`
 
 const WorkspaceInfoWrapper = styled.div`
   display: flex;
@@ -87,7 +94,8 @@ const WorkspaceItem: React.FC<WorkspaceItemProps> = ({
 
 const Home: React.FC = () => {
   return (
-    <>
+    <DefaultLayout>
+      <Header />
       <Title title="HOME" subtitle="워크스페이스 목록" />
       <section>
         <WorkspaceListWrapper>
@@ -103,7 +111,7 @@ const Home: React.FC = () => {
           ))}
         </WorkspaceListWrapper>
       </section>
-    </>
+    </DefaultLayout>
   )
 }
 export default Home
