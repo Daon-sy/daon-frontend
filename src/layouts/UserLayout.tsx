@@ -19,12 +19,11 @@ const SideBarWrapper = styled.div`
   width: 15%;
   min-width: 256px;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  border-right: 1px solid black;
 `
 const Page = styled.div`
   width: 85%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.2);
   padding-left: 32px;
   min-width: 1184px;
 `
