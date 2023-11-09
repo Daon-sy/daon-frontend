@@ -17,6 +17,8 @@ interface CustomModalProps {
   height?: number | null
   minHeight?: number | null
   maxHeight?: number | null
+  px?: number
+  py?: number
 }
 
 const CustomModal = ({
@@ -30,6 +32,8 @@ const CustomModal = ({
   height = null,
   minHeight = null,
   maxHeight = null,
+  px = 4,
+  py = 3,
 }: CustomModalProps) => {
   const style = {
     position: "absolute" as const,
@@ -39,8 +43,8 @@ const CustomModal = ({
     bgcolor: "background.paper",
     border: "2px solid #000",
     boxShadow: 24,
-    px: 4,
-    py: 3,
+    px,
+    py,
     minWidth,
     maxWidth,
     width,
@@ -68,8 +72,13 @@ const CustomModal = ({
         <Box sx={style}>
           <IconButton
             aria-label="close"
-            size="medium"
-            sx={{ position: "absolute", top: 0, right: 0 }}
+            sx={{
+              position: "absolute",
+              top: 5,
+              right: 5,
+              width: 32,
+              height: 32,
+            }}
             onClick={handleClose}
           >
             <CloseIcon fontSize="medium" />
