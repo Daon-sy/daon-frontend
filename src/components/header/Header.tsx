@@ -10,7 +10,7 @@ import Nav from "./Nav"
 const Header: React.FC = () => {
   return (
     <AppBar position="static">
-      <Toolbar>
+      <Toolbar sx={{ minWidth: "1440px" }}>
         {/* Nav */}
         <Nav />
         {/* 검색창 */}

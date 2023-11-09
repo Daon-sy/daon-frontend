@@ -52,7 +52,10 @@ const CreateProjectModal: React.FC<CreateProjectProps> = ({
     <div>
       <CustomModal
         open={open}
-        handleClose={handleClose}
+        handleClose={() => {
+          resetData()
+          handleClose()
+        }}
         cleanUp={cleanUp}
         width={400}
       >
