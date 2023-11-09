@@ -1,18 +1,20 @@
 import * as React from "react"
 import styled from "styled-components"
-import Menu from "@mui/material/Menu"
-import MenuItem from "@mui/material/MenuItem"
-import Typography from "@mui/material/Typography"
+import { Box, Menu, MenuItem, Typography } from "@mui/material"
+import { TEST_IMAGE_URL } from "env"
 import ShowMember from "components/modal/participant/ShowParticipantsModal"
 
 const WorkspaceProfileWrapper = styled.button`
   box-sizing: border-box;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.2);
-  border-bottom: 3px solid black;
   padding: 16px 0;
   position: relative;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4px;
+  border: none;
 `
 
 const WorkSpaceProfile: React.FC = () => {
@@ -42,7 +44,77 @@ const WorkSpaceProfile: React.FC = () => {
   return (
     <>
       <WorkspaceProfileWrapper onClick={handleOpenUserMenu}>
-        <div className="sidebar_title">워크스페이스 프로필</div>
+        <Box
+          sx={{
+            width: "90%",
+            height: 180,
+            border: 2,
+            borderRadius: 10,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Box
+              sx={{
+                borderRadius: 1,
+                width: "100%",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                fontSize: 18,
+                mb: "4px",
+              }}
+            >
+              워크스페이스 이름
+            </Box>
+            <Box
+              component="img"
+              src={`${TEST_IMAGE_URL}`}
+              sx={{
+                objectFit: "cover",
+                width: 80,
+                height: 80,
+                borderRadius: 50,
+              }}
+            />
+            <Box sx={{ width: 180, maxHeight: 140, mt: "2px" }}>
+              <Box
+                sx={{
+                  borderRadius: 1,
+                  width: "100%",
+                  fontSize: 16,
+                  fontWeight: "bold",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                닉네임
+              </Box>
+              <Box
+                sx={{
+                  borderRadius: 1,
+                  width: "100%",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  color: "rgba(0,0,0,0.6)",
+                }}
+              >
+                workspace@gmail.com
+              </Box>
+            </Box>
+          </Box>
+        </Box>
         <Menu
           sx={{ mt: "45px" }}
           id="menu-appbar"
