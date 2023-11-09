@@ -11,7 +11,7 @@ import AnonymousLayout from "layouts/AnonymousLayout"
 import RefreshComponent from "auth/RefreshComponent"
 import Workspace from "pages/Workspace"
 import Project from "pages/Project"
-import TaskView from "pages/TaskView"
+import BoardTaskView from "pages/BoardTaskView"
 import ProjectTaskView from "pages/ProjectTaskView"
 import ProjectMytaskView from "pages/ProjectMytaskView"
 import BookmarkView from "pages/BookmarkView"
@@ -33,7 +33,10 @@ function App() {
               <Route path="/workspace/:workspaceId" element={<Workspace />} />
               <Route path="/workspace/:workspaceId/project/:projectId">
                 <Route index element={<Project />} />
-                <Route path="board/:boardId/tasks" element={<TaskView />} />
+                <Route
+                  path="board/:boardId/tasks"
+                  element={<BoardTaskView />}
+                />
                 <Route path="task" element={<ProjectTaskView />} />
                 <Route path="task/my" element={<ProjectMytaskView />} />
               </Route>

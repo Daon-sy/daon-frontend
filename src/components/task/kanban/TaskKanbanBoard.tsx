@@ -1,13 +1,14 @@
 import React from "react"
 import Box from "@mui/material/Box"
 import { Chip, Divider } from "@mui/material"
-import TaskCard, { TaskProps as TaskData } from "components/task/TaskCard"
+import TaskCard from "components/task/kanban/TaskCard"
+import { TaskSummary } from "_types/TaskType"
 
 interface Props {
   title: string
   dividerColor: string | null
   style: React.CSSProperties
-  tasks: Array<TaskData>
+  tasks: Array<TaskSummary>
   // children: React.ReactNode | null
 }
 

@@ -1,8 +1,7 @@
 import React from "react"
 import Box from "@mui/material/Box"
 import { Stack } from "@mui/material"
-import TaskKanbanBoard from "components/task/TaskKanbanBoard"
-import TaskFilter from "components/task/TaskFilter"
+import TaskKanbanBoard from "components/task/kanban/TaskKanbanBoard"
 
 const tasks = [
   {
@@ -18,7 +17,7 @@ const tasks = [
     emergency: false,
     bookmark: true,
     taskManager: {
-      participantId: 1,
+      projectParticipantId: 1,
       name: "유하영",
       profileImageUrl: null,
     },
@@ -36,7 +35,7 @@ const tasks = [
     emergency: true,
     bookmark: false,
     taskManager: {
-      participantId: 1,
+      projectParticipantId: 1,
       name: "유하영",
       profileImageUrl: null,
     },
@@ -54,7 +53,7 @@ const tasks = [
     emergency: true,
     bookmark: false,
     taskManager: {
-      participantId: 1,
+      projectParticipantId: 1,
       name: "유하영",
       profileImageUrl: null,
     },
@@ -72,7 +71,7 @@ const tasks = [
     emergency: true,
     bookmark: false,
     taskManager: {
-      participantId: 1,
+      projectParticipantId: 1,
       name: "유하영",
       profileImageUrl: null,
     },
@@ -90,7 +89,7 @@ const tasks = [
     emergency: true,
     bookmark: false,
     taskManager: {
-      participantId: 1,
+      projectParticipantId: 1,
       name: "유하영",
       profileImageUrl: null,
     },
@@ -108,7 +107,7 @@ const tasks = [
     emergency: true,
     bookmark: false,
     taskManager: {
-      participantId: 1,
+      projectParticipantId: 1,
       name: "유하영",
       profileImageUrl: null,
     },
@@ -156,9 +155,9 @@ const TaskKanbansWrapper: React.FC = () => {
       sx={{
         paddingRight: 5,
         backgroundColor: "white",
+        width: "100%",
       }}
     >
-      <TaskFilter />
       <Stack
         direction="row"
         sx={{

@@ -2,6 +2,7 @@ import React from "react"
 import { Avatar, Box, Card, Chip, ToggleButton } from "@mui/material"
 import StarIcon from "@mui/icons-material/Star"
 import StarBorderIcon from "@mui/icons-material/StarBorder"
+import { TaskSummary } from "_types/TaskType"
 
 // 긴급 태그 컴포넌트
 interface EmergencyTagProps {
@@ -53,31 +54,8 @@ const BookmarkButton = ({ selected }: BookmarkButtonProps) => {
   )
 }
 
-interface BoardProps {
-  boardId: number
-  name: string
-}
-
-interface TaskManagerProps {
-  participantId: number
-  name: string
-  profileImageUrl: string | null
-}
-
-export interface TaskProps {
-  taskId: number
-  title: string
-  startDate: string
-  endDate: string
-  progressStatus: string
-  board: BoardProps
-  emergency: boolean
-  bookmark: boolean
-  taskManager: TaskManagerProps
-}
-
 interface Props {
-  task: TaskProps
+  task: TaskSummary
 }
 
 const TaskCard: React.FC<Props> = ({ task }: Props) => {
