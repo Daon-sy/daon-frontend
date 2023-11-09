@@ -41,7 +41,6 @@ interface MenuListProps {
   link: string
   listValue: string
   icon?: React.ComponentType
-  isTaskCreated?: boolean | undefined
 }
 
 interface MenuProps {
@@ -91,9 +90,6 @@ const Menu: React.FC<MenuProps> = ({ title, isProjectCreated, list }) => {
               </ListItemIcon>
               <ListItemText primary={menuItem.listValue} />
             </CommonListItem>
-            {menuItem.isTaskCreated ? (
-              <CreateBtn handleClick={handleOpenCreateProjectModal} />
-            ) : null}
           </Box>
         ))}
       </Box>
