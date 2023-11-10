@@ -1,63 +1,18 @@
 import React from "react"
-import Title from "components/common/Title"
 import { TEST_IMAGE_URL } from "env"
 import styled from "styled-components"
 import Header from "components/header/Header"
+import TitleWrapper from "components/workspace/list/TitleWrapper"
+import { Box } from "@mui/material"
+import WorkspaceCard from "components/workspace/list/WorkspaceCard"
 
 const DefaultLayout = styled.div`
   width: 100%;
   height: 100vh;
   overflow: hidden;
 `
-
-const WorkspaceInfoWrapper = styled.div`
-  display: flex;
-  position: relative;
-  align-items: center;
-  width: 200px;
-  height: 100px;
-  border: 1px solid black;
-  margin: 8px;
-`
-
-const WorkspaceTitle = styled.h3`
-  width: 60%;
-  height: 20%;
-  text-align: center;
-  background-color: rgba(255, 255, 255, 0.3);
-`
-
-const WorkspaceImg = styled.img`
-  border-radius: 50%;
-  height: 60px;
-  width: 60px;
-  border: 1px solid black;
-  text-align: center;
-  font-size: 80px;
-  margin: 0 8px;
-`
-
-const WorkpaceDivision = styled.p`
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 4px;
-  margin: 4px;
-  background-color: rgba(0, 0, 0, 0.5);
-`
-
-const WorkspaceListWrapper = styled.ul`
-  display: flex;
-`
-
 interface WorkspaceData {
   workspaceId: number
-  title: string
-  imgUrl: string
-  division: string
-}
-
-interface WorkspaceItemProps {
   title: string
   imgUrl: string
   division: string
@@ -76,42 +31,77 @@ const dummyData: WorkspaceData[] = [
     imgUrl: `${TEST_IMAGE_URL}`,
     division: "그룹",
   },
+  {
+    workspaceId: 3,
+    title: "워크스페이스 3",
+    imgUrl: `${TEST_IMAGE_URL}`,
+    division: "그룹",
+  },
+  {
+    workspaceId: 4,
+    title: "워크스페이스 4",
+    imgUrl: `${TEST_IMAGE_URL}`,
+    division: "그룹",
+  },
+  {
+    workspaceId: 5,
+    title: "워크스페이스 5",
+    imgUrl: `${TEST_IMAGE_URL}`,
+    division: "그룹",
+  },
+  {
+    workspaceId: 6,
+    title: "워크스페이스 6",
+    imgUrl: `${TEST_IMAGE_URL}`,
+    division: "그룹",
+  },
 ]
 
-const WorkspaceItem: React.FC<WorkspaceItemProps> = ({
-  title,
-  imgUrl,
-  division,
-}) => {
-  return (
-    <WorkspaceInfoWrapper>
-      <WorkspaceImg src={imgUrl} alt={title} />
-      <WorkspaceTitle className="ws_title">{title}</WorkspaceTitle>
-      <WorkpaceDivision>{division}</WorkpaceDivision>
-    </WorkspaceInfoWrapper>
-  )
-}
-
 const Home: React.FC = () => {
+  const uniqueDivisions = Array.from(
+    new Set(dummyData.map(item => item.division)),
+  )
+
   return (
     <DefaultLayout>
       <Header />
-      <Title title="HOME" subtitle="워크스페이스 목록" />
-      <section>
-        <WorkspaceListWrapper>
-          {dummyData.map(workspace => (
-            <li>
-              <WorkspaceItem
-                key={workspace.workspaceId}
-                title={workspace.title}
-                imgUrl={workspace.imgUrl}
-                division={workspace.division}
-              />
-            </li>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          mt: 6,
+        }}
+      >
+        <Box>
+          <Box
+            component="div"
+            sx={{
+              fontSize: "32px",
+            }}
+          >
+            워크스페이스 목록
+          </Box>
+
+          {uniqueDivisions.map(division => (
+            <TitleWrapper key={division} title={division}>
+              {dummyData
+                .filter(item => item.division === division)
+                .map(workspace => (
+                  <WorkspaceCard
+                    key={workspace.workspaceId}
+                    wsTitle={workspace.title}
+                    imgUrl={workspace.imgUrl}
+                    division={workspace.division}
+                    to={`/workspace/${String(workspace.workspaceId)}`}
+                  />
+                ))}
+            </TitleWrapper>
           ))}
-        </WorkspaceListWrapper>
-      </section>
+        </Box>
+      </Box>
     </DefaultLayout>
   )
 }
+
 export default Home
