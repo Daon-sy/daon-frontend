@@ -9,7 +9,7 @@ import IconButton from "@mui/material/IconButton"
 interface CustomModalProps {
   open: boolean
   handleClose: () => void
-  cleanUp: () => void | null
+  cleanUp?: () => void | null
   children: React.ReactNode
   width?: number | null
   minWidth?: number
@@ -17,6 +17,7 @@ interface CustomModalProps {
   height?: number | null
   minHeight?: number | null
   maxHeight?: number | null
+  fullHeight?: true | undefined
   px?: number
   py?: number
 }
@@ -32,6 +33,7 @@ const CustomModal = ({
   height = null,
   minHeight = null,
   maxHeight = null,
+  fullHeight,
   px = 4,
   py = 3,
 }: CustomModalProps) => {
@@ -87,6 +89,7 @@ const CustomModal = ({
             sx={{
               overflow: "hidden",
               width: "100%",
+              height: fullHeight ? "100%" : undefined,
             }}
           >
             {children}
