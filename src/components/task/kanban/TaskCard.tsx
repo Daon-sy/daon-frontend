@@ -3,6 +3,7 @@ import { Avatar, Box, Card, Chip, ToggleButton } from "@mui/material"
 import StarIcon from "@mui/icons-material/Star"
 import StarBorderIcon from "@mui/icons-material/StarBorder"
 import { TaskSummary } from "_types/TaskType"
+import TaskDetailModal from "components/modal/task/TaskDetailModal"
 
 // 긴급 태그 컴포넌트
 interface EmergencyTagProps {
@@ -59,60 +60,81 @@ interface Props {
 }
 
 const TaskCard: React.FC<Props> = ({ task }: Props) => {
+  const [detailModalOpen, setDetailModalOpen] = React.useState(false)
+
   return (
-    <Box
-      sx={{
-        m: 1,
-      }}
-      draggable
-    >
-      <EmergencyTag render={task.emergency} />
-      <Card key={task.taskId} variant="outlined" sx={{ borderRadius: 2 }}>
-        <Box
+    <>
+      <Box
+        sx={{
+          m: 1,
+        }}
+        draggable
+      >
+        <EmergencyTag render={task.emergency} />
+        <Card
+          key={task.taskId}
+          variant="outlined"
           sx={{
-            padding: 2,
+            borderRadius: 2,
+            "&:hover": {
+              cursor: "pointer",
+            },
           }}
+          onClick={() => setDetailModalOpen(true)}
         >
-          <Box sx={{ display: "flex" }}>
-            <Box flexGrow={1} key={task.board.boardId}>
-              <Chip label={task.board.name} color="primary" size="small" />
-            </Box>
-            <Box>
-              <BookmarkButton selected={task.bookmark} />
-            </Box>
-          </Box>
           <Box
             sx={{
-              paddingTop: 1.5,
-              fontSize: 16,
-              fontWeight: "bold",
+              padding: 2,
             }}
           >
-            {task.title}
-          </Box>
-          <Box
-            sx={{
-              paddingY: 1,
-              color: "gray",
-              fontSize: 12,
-            }}
-          >
-            ~ {task.endDate}
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <Box>
-              <Avatar sx={{ width: 28, height: 28 }} />
+            <Box sx={{ display: "flex" }}>
+              <Box flexGrow={1} key={task.board.boardId}>
+                <Chip label={task.board.name} color="primary" size="small" />
+              </Box>
+              <Box>
+                <BookmarkButton selected={task.bookmark} />
+              </Box>
             </Box>
-            <Box sx={{ marginLeft: 1 }}>{task.taskManager.name}</Box>
+            <Box
+              sx={{
+                paddingTop: 1.5,
+                fontSize: 16,
+                fontWeight: "bold",
+              }}
+            >
+              {task.title}
+            </Box>
+            <Box
+              sx={{
+                paddingY: 1,
+                color: "gray",
+                fontSize: 12,
+              }}
+            >
+              ~ {task.endDate}
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Box>
+                <Avatar sx={{ width: 28, height: 28 }} />
+              </Box>
+              <Box sx={{ marginLeft: 1 }}>{task.taskManager.name}</Box>
+            </Box>
           </Box>
-        </Box>
-      </Card>
-    </Box>
+        </Card>
+      </Box>
+      <TaskDetailModal
+        workspaceId={task.workspaceId}
+        projectId={task.projectId}
+        taskId={task.taskId}
+        open={detailModalOpen}
+        handleClose={() => setDetailModalOpen(false)}
+      />
+    </>
   )
 }
 

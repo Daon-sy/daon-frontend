@@ -6,6 +6,8 @@ import TaskKanbanBoard from "components/task/kanban/TaskKanbanBoard"
 const tasks = [
   {
     taskId: 1,
+    projectId: 1,
+    workspaceId: 1,
     title: "업무 관리 시스템",
     startDate: "2023-11-01",
     endDate: "2023-11-31",
@@ -24,6 +26,8 @@ const tasks = [
   },
   {
     taskId: 2,
+    projectId: 1,
+    workspaceId: 1,
     title: "업무 관리 시스템",
     startDate: "2023-11-01",
     endDate: "2023-11-31",
@@ -42,6 +46,8 @@ const tasks = [
   },
   {
     taskId: 3,
+    projectId: 1,
+    workspaceId: 1,
     title: "업무 관리 시스템",
     startDate: "2023-11-01",
     endDate: "2023-11-31",
@@ -60,6 +66,8 @@ const tasks = [
   },
   {
     taskId: 4,
+    projectId: 1,
+    workspaceId: 1,
     title: "업무 관리 시스템",
     startDate: "2023-11-01",
     endDate: "2023-11-31",
@@ -78,6 +86,8 @@ const tasks = [
   },
   {
     taskId: 5,
+    projectId: 1,
+    workspaceId: 1,
     title: "업무 관리 시스템",
     startDate: "2023-11-01",
     endDate: "2023-11-31",
@@ -96,6 +106,8 @@ const tasks = [
   },
   {
     taskId: 6,
+    projectId: 1,
+    workspaceId: 1,
     title: "업무 관리 시스템",
     startDate: "2023-11-01",
     endDate: "2023-11-31",
