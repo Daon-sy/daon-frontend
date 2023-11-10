@@ -1,6 +1,5 @@
 import React from "react"
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
-import { Reset } from "styled-reset"
 import Home from "pages/Home"
 import Landing from "pages/Landing"
 import SignUp from "pages/SignUp"
@@ -24,7 +23,6 @@ function App() {
 
   return (
     <RefreshComponent>
-      <Reset />
       <BrowserRouter>
         {isLoggedIn() ? (
           <Routes>
