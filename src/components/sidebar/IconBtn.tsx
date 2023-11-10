@@ -4,9 +4,10 @@ import Button from "@mui/material/Button"
 interface IconBtnProps {
   text: string
   icon: React.ReactNode
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
 }
 
-const IconBtn = ({ text, icon }: IconBtnProps) => {
+const IconBtn = ({ text, icon, onClick }: IconBtnProps) => {
   return (
     <Button
       variant="outlined"
@@ -21,6 +22,7 @@ const IconBtn = ({ text, icon }: IconBtnProps) => {
         mb: "4px",
         borderRadius: 3,
       }}
+      onClick={onClick}
     >
       {text}
     </Button>
