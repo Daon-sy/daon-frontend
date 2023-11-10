@@ -25,9 +25,12 @@ const CommonListItem: React.FC<CommonListItemProps> = ({
       component={RouterLink}
       to={to}
       sx={{
+        borderRadius: 4,
+        mx: 2,
+        mb: 1,
         "&.Mui-selected, &.Mui-selected:hover, &.Mui-selected:focus": {
-          backgroundColor: "#1976d2",
-          color: "white",
+          backgroundColor: "#88b4de",
+          color: "#2865f9",
         },
       }}
       selected={selected}
@@ -79,13 +82,18 @@ const Menu: React.FC<MenuProps> = ({ title, isProjectCreated, list }) => {
           ) : null}
         </ListSubheader>
         {list.map(menuItem => (
-          <Box sx={{ position: "relative" }}>
+          <Box
+            sx={{
+              position: "relative",
+              borderRadius: 2,
+            }}
+          >
             <CommonListItem
               key={menuItem.listValue}
               to={menuItem.link}
               selected={location.pathname === menuItem.link}
             >
-              <ListItemIcon>
+              <ListItemIcon sx={{ color: "inherit" }}>
                 {menuItem.icon ? <menuItem.icon /> : <CircleIcon />}
               </ListItemIcon>
               <ListItemText primary={menuItem.listValue} />
