@@ -90,7 +90,7 @@ const TaskDetailModal: React.FC<Props> = ({
                   paddingLeft: 1,
                 }}
               >
-                <BoardSelectButton current={task.board.name} />
+                <BoardSelectButton current={task.board} />
                 <Box flexGrow={1} />
                 <Box
                   sx={{
