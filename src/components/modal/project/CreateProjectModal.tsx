@@ -15,7 +15,7 @@ interface CreateProjectProps {
 
 const initialState: CreateProjectRequest = {
   projectName: "",
-  description: "",
+  projectDescription: "",
 }
 
 const CreateProjectModal: React.FC<CreateProjectProps> = ({
@@ -34,10 +34,7 @@ const CreateProjectModal: React.FC<CreateProjectProps> = ({
       return
     }
 
-    createProjectApi({
-      projectName: data.projectName,
-      description: data.description,
-    })
+    createProjectApi(data)
       .then(() => {
         addSuccess("프로젝트 생성 성공!")
       })
@@ -82,9 +79,9 @@ const CreateProjectModal: React.FC<CreateProjectProps> = ({
             multiline
             rows={5}
             label="프로젝트 설명"
-            name="description"
+            name="projectDescription"
             variant="outlined"
-            value={data.description}
+            value={data.projectDescription}
             onChange={onChange}
           />
         </Stack>

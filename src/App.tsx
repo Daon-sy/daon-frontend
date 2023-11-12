@@ -4,7 +4,7 @@ import Home from "pages/Home"
 import Landing from "pages/Landing"
 import SignUp from "pages/SignUp"
 import SignIn from "pages/SignIn"
-import { getTokenStore } from "store/getTokenStore"
+import { getTokenStore } from "store/tokenStore"
 import UserLayout from "layouts/UserLayout"
 import AnonymousLayout from "layouts/AnonymousLayout"
 import RefreshComponent from "auth/RefreshComponent"
@@ -19,7 +19,7 @@ import WorkspaceMytaskView from "pages/WorkspaceMytaskView"
 function App() {
   const tokenState = getTokenStore()
 
-  const isLoggedIn = () => !tokenState.token
+  const isLoggedIn = () => tokenState.token
 
   return (
     <RefreshComponent>

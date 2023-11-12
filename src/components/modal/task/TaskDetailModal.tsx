@@ -46,7 +46,7 @@ const TaskDetailModal: React.FC<Props> = ({
       endDate: "2023-11-30",
       board: {
         boardId: 10,
-        name: "집안일",
+        title: "집안일",
       },
       taskManager: {
         projectParticipantId: 3,
@@ -90,7 +90,11 @@ const TaskDetailModal: React.FC<Props> = ({
                   paddingLeft: 1,
                 }}
               >
-                <BoardSelectButton current={task.board} />
+                <BoardSelectButton
+                  projectId={projectId}
+                  currentBoardId={task.board.boardId}
+                  handleBoardSelect={item => console.log(item)}
+                />
                 <Box flexGrow={1} />
                 <Box
                   sx={{

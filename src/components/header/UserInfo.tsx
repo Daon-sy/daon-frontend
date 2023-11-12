@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography"
 import Menu from "@mui/material/Menu"
 import Tooltip from "@mui/material/Tooltip"
 import MenuItem from "@mui/material/MenuItem"
-import { getTokenStore } from "store/getTokenStore"
+import { getTokenStore } from "store/tokenStore"
 import { useAlert } from "hooks/useAlert"
 
 const UserInfo: React.FC = () => {

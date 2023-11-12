@@ -109,7 +109,7 @@ const TaskCell: React.FC<Props> = ({ task, borderColor }: Props) => {
               marginLeft: "-1px",
             }}
           >
-            <Chip label={task.board.name} color="primary" size="small" />
+            <Chip label={task.board.title} color="primary" size="small" />
           </Box>
           <Box
             sx={{

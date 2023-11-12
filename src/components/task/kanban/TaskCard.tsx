@@ -89,7 +89,7 @@ const TaskCard: React.FC<Props> = ({ task }: Props) => {
           >
             <Box sx={{ display: "flex" }}>
               <Box flexGrow={1} key={task.board.boardId}>
-                <Chip label={task.board.name} color="primary" size="small" />
+                <Chip label={task.board.title} color="primary" size="small" />
               </Box>
               <Box>
                 <BookmarkButton selected={task.bookmark} />
