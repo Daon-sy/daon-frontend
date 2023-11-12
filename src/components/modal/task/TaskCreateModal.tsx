@@ -33,8 +33,8 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
           }}
         >
           <Stack direction="row" spacing={2}>
-            <ProjectSelectButton current="프로젝트 선택" />
-            <BoardSelectButton current="보드 선택" />
+            <ProjectSelectButton />
+            <BoardSelectButton />
           </Stack>
           <Box flexGrow={1} />
           <Box
