@@ -1,6 +1,6 @@
 export interface Project {
   projectId: number
-  projectName: string
+  title: string
   description: string | null
 }
 

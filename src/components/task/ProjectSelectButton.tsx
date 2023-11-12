@@ -37,7 +37,7 @@ const ProjectSelectButton: React.FC<Props> = ({
       valueList={projects?.map(
         (project: Project): ProjectItemType => ({
           id: project.projectId,
-          text: project.projectName,
+          text: project.title,
           description: project.description,
         }),
       )}
