@@ -55,6 +55,7 @@ interface Props<T extends ItemType> {
   changeButtonColor?: true | false
   disableChangeButtonText?: true | false
   variant?: "outlined" | "contained"
+  clearOnListUpdated?: true | false
 }
 
 const SelectListButton = <T extends ItemType>({
@@ -69,6 +70,7 @@ const SelectListButton = <T extends ItemType>({
   changeButtonColor = false,
   disableChangeButtonText = false,
   variant = "outlined",
+  clearOnListUpdated = false,
 }: Props<T>) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -85,6 +87,10 @@ const SelectListButton = <T extends ItemType>({
     if (defaultValueId) setSelectedValue(findValueById(defaultValueId))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  React.useEffect(() => {
+    if (!defaultValueId && clearOnListUpdated) setSelectedValue(undefined)
+  }, [defaultValueId])
 
   const close = () => setAnchorEl(null)
   const handleClickedItem = (event: React.MouseEvent<HTMLElement>) => {

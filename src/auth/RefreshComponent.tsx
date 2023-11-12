@@ -1,8 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react"
 import { AxiosResponse } from "axios"
 import { basicAxios } from "api"
-import { getTokenStore } from "store/getTokenStore"
+import { getTokenStore } from "store/tokenStore"
 
 const RefreshComponent = ({ children }: React.PropsWithChildren) => {
   const BEARER_TYPE = "Bearer "

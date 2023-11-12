@@ -1,7 +1,4 @@
-export interface Board {
-  boardId: number
-  name: string
-}
+import { Board } from "_types/ProjectType"
 
 export interface TaskManager {
   projectParticipantId: number

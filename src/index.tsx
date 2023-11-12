@@ -6,7 +6,8 @@ import GlobalStyle from "./GlobalStyle"
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
+  <>
     <GlobalStyle />
     <SnackbarProvider
       maxSnack={3}
@@ -23,5 +24,6 @@ root.render(
     >
       <App />
     </SnackbarProvider>
-  </React.StrictMode>,
+  </>,
+  // </React.StrictMode>,
 )

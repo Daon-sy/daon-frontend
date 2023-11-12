@@ -7,6 +7,11 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo"
 import BoardSelectButton from "components/task/BoardSelectButton"
 import CustomModal from "components/common/CustomModal"
 import ProjectSelectButton from "components/task/ProjectSelectButton"
+import { createTaskApi } from "api/taskApi"
+import { getWorkspaceStore } from "store/userStore"
+import useInputs from "hooks/useInputs"
+import { Dayjs } from "dayjs"
+import { useAlert } from "hooks/useAlert"
 
 interface Props {
   open: boolean
@@ -14,7 +19,54 @@ interface Props {
 }
 
 const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
+  const { workspace } = getWorkspaceStore()
+  const { addSuccess, addError } = useAlert()
+  const [projectId, setProjectId] = React.useState<number | undefined>()
+  const [boardId, setBoardId] = React.useState<number | undefined>()
+  const [textFieldData, handleChangeTextFieldData] = useInputs({
+    title: "",
+    content: undefined,
+  })
+  const [startDate, setStartDate] = React.useState<string | undefined>()
+  const [endDate, setEndDate] = React.useState<string | undefined>()
+  // TODO
+  const [taskManagerId, setTaskManagerId] = React.useState<number | undefined>()
   const [emergency, setEmergency] = React.useState(false)
+
+  const handleCreate = async () => {
+    if (!projectId) {
+      addError("프로젝트를 선택해주세요")
+
+      return
+    }
+
+    if (!textFieldData.title) {
+      addError("할 일 제목을 입력해주세요")
+
+      return
+    }
+
+    const { data: responseData } = await createTaskApi(
+      workspace!.id,
+      projectId,
+      {
+        ...textFieldData,
+        boardId,
+        startDate,
+        endDate,
+        taskManagerId,
+        emergency,
+      },
+    )
+    const { taskId } = responseData.data
+    addSuccess(`할 일(#${taskId})이 생성되었습니다.`)
+    handleClose()
+  }
+
+  const cleanUp = () => {
+    setProjectId(undefined)
+    setEmergency(false)
+  }
 
   return (
     <CustomModal
@@ -25,6 +77,7 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
       fullHeight
       px={0}
       py={0}
+      cleanUp={cleanUp}
     >
       <Stack px={4} pt={4} spacing={2} height="100%">
         <Box
@@ -33,8 +86,19 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
           }}
         >
           <Stack direction="row" spacing={2}>
-            <ProjectSelectButton />
-            <BoardSelectButton />
+            <ProjectSelectButton
+              handleProjectSelect={project => {
+                setProjectId(project.id)
+                setBoardId(undefined)
+              }}
+            />
+            {projectId ? (
+              <BoardSelectButton
+                projectId={projectId}
+                currentBoardId={boardId}
+                handleBoardSelect={board => setBoardId(board.boardId)}
+              />
+            ) : null}
           </Stack>
           <Box flexGrow={1} />
           <Box
@@ -53,14 +117,27 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
           </Box>
         </Box>
         <Box mt={2}>
-          <TextField required fullWidth label="제목" />
+          <TextField
+            required
+            fullWidth
+            label="제목"
+            name="title"
+            onChange={handleChangeTextFieldData}
+          />
         </Box>
         <Box
           sx={{
             marginTop: 2,
           }}
         >
-          <TextField multiline fullWidth rows={10} label="내용" />
+          <TextField
+            multiline
+            fullWidth
+            rows={10}
+            label="내용"
+            name="content"
+            onChange={handleChangeTextFieldData}
+          />
         </Box>
         <Box>
           <Box
@@ -91,6 +168,9 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
                       sx={{
                         width: "100%",
                       }}
+                      onChange={(value: Dayjs | null) =>
+                        setStartDate(value?.format("YYYY-MM-DD"))
+                      }
                     />
                   </DemoContainer>
                 </LocalizationProvider>
@@ -115,6 +195,9 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
                       sx={{
                         width: "100%",
                       }}
+                      onChange={(value: Dayjs | null) =>
+                        setEndDate(value?.format("YYYY-MM-DD"))
+                      }
                     />
                   </DemoContainer>
                 </LocalizationProvider>
@@ -178,10 +261,20 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
             spacing={2}
             sx={{ width: "60%", minWidth: 300 }}
           >
-            <Button fullWidth variant="outlined" size="large">
+            <Button
+              fullWidth
+              variant="outlined"
+              size="large"
+              onClick={handleClose}
+            >
               취소
             </Button>
-            <Button fullWidth variant="contained" size="large">
+            <Button
+              fullWidth
+              variant="contained"
+              size="large"
+              onClick={handleCreate}
+            >
               등록
             </Button>
           </Stack>

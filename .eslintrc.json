@@ -29,6 +29,7 @@
     "import/core-modules": ["notistack", "styled-reset", "mem", "styled-components", "@mui/x-date-pickers", "@mui/x-date-pickers/AdapterDayjs", "@mui/x-date-pickers/internals/demo", "dayjs"]
   },
   "rules": {
+    "react-hooks/exhaustive-deps": "off",
     "import/extensions": [
       "error",
       "ignorePackages",

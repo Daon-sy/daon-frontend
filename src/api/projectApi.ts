@@ -1,4 +1,5 @@
-import { authAxios } from "api/index"
+import { ApiResponse, authAxios } from "api/index"
+import { Project, Board } from "_types/ProjectType"
 
 export interface CreateProjectResponse {
   projectId: number
@@ -6,19 +7,47 @@ export interface CreateProjectResponse {
 
 export interface CreateProjectRequest {
   projectName: string
-  description: string | null
+  projectDescription: string | null
 }
 
 export const createProjectApi = async (request: CreateProjectRequest) => {
-  try {
-    const response = await authAxios.post<CreateProjectResponse>(
-      "/api/projects",
-      request,
-    )
+  return authAxios.post<CreateProjectResponse>("/api/projects", request)
+}
 
-    return response
-  } catch (error) {
-    console.error("프로젝트 생성 API 오류:", error)
-    throw error
-  }
+export interface ProjectListResponse {
+  workspaceId: number
+  totalCount: number
+  projects: Array<Project>
+}
+
+export const projectListApi = async (workspaceId: number) => {
+  return authAxios.get<ApiResponse<ProjectListResponse>>(
+    `/api/workspaces/${workspaceId}/projects`,
+  )
+}
+
+export interface BoardListResponse {
+  totalCount: number
+  boards: Array<Board>
+}
+
+export const boardListApi = async (workspaceId: number, projectId: number) => {
+  return authAxios.get<ApiResponse<BoardListResponse>>(
+    `/api/workspaces/${workspaceId}/projects/${projectId}/boards`,
+  )
+}
+
+interface CreateBoardRequest {
+  title: string
+}
+
+export const createBoardApi = async (
+  workspaceId: number,
+  projectId: number,
+  request: CreateBoardRequest,
+) => {
+  return authAxios.post<ApiResponse>(
+    `/api/workspaces/${workspaceId}/projects/${projectId}`,
+    request,
+  )
 }

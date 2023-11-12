@@ -1,6 +1,6 @@
 import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios"
 import { API_SERVER_URL } from "env"
-import { getTokenStore } from "store/getTokenStore"
+import { getTokenStore } from "store/tokenStore"
 import mem from "mem"
 
 export interface ApiResponse<T = object> {

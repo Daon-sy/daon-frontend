@@ -14,7 +14,7 @@ const tasks = [
     progressStatus: "PROCEEDING",
     board: {
       boardId: 1,
-      name: "회원 기능 개발",
+      title: "회원 기능 개발",
     },
     emergency: false,
     bookmark: true,
@@ -34,7 +34,7 @@ const tasks = [
     progressStatus: "TODO",
     board: {
       boardId: 1,
-      name: "회원 기능 개발",
+      title: "회원 기능 개발",
     },
     emergency: true,
     bookmark: false,
@@ -54,7 +54,7 @@ const tasks = [
     progressStatus: "COMPLETED",
     board: {
       boardId: 1,
-      name: "회원 기능 개발",
+      title: "회원 기능 개발",
     },
     emergency: true,
     bookmark: false,
@@ -74,7 +74,7 @@ const tasks = [
     progressStatus: "PENDING",
     board: {
       boardId: 1,
-      name: "회원 기능 개발",
+      title: "회원 기능 개발",
     },
     emergency: true,
     bookmark: false,
@@ -94,7 +94,7 @@ const tasks = [
     progressStatus: "COMPLETED",
     board: {
       boardId: 1,
-      name: "회원 기능 개발",
+      title: "회원 기능 개발",
     },
     emergency: true,
     bookmark: false,
@@ -114,7 +114,7 @@ const tasks = [
     progressStatus: "TODO",
     board: {
       boardId: 1,
-      name: "회원 기능 개발",
+      title: "회원 기능 개발",
     },
     emergency: true,
     bookmark: false,
