@@ -1,5 +1,5 @@
 import { ApiResponse, authAxios } from "api/index"
-import { TASK_STATUS, TaskDetail } from "_types/TaskType"
+import { TASK_STATUS, TaskDetail, TaskSummary } from "_types/TaskType"
 
 export interface CreateTaskRequest {
   title: string
@@ -56,5 +56,16 @@ export const modifyTaskApi = async (
   return authAxios.put<ApiResponse>(
     `/api/workspaces/${workspaceId}/projects/${projectId}/tasks/${taskId}`,
     request,
+  )
+}
+
+export interface TaskListResponse {
+  totalCount: number
+  tasks: Array<TaskSummary>
+}
+
+export const taskListApi = async (workspaceId: number, projectId: number) => {
+  return authAxios.get<ApiResponse<TaskListResponse>>(
+    `/api/workspaces/${workspaceId}/projects/${projectId}/tasks`,
   )
 }
