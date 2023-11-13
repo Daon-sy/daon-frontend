@@ -88,8 +88,8 @@ const TaskCard: React.FC<Props> = ({ task }: Props) => {
             }}
           >
             <Box sx={{ display: "flex" }}>
-              <Box flexGrow={1} key={task.board.boardId}>
-                <Chip label={task.board.title} color="primary" size="small" />
+              <Box flexGrow={1} key={task.board?.boardId}>
+                <Chip label={task.board?.title} color="primary" size="small" />
               </Box>
               <Box>
                 <BookmarkButton selected={task.bookmark} />
@@ -122,15 +122,14 @@ const TaskCard: React.FC<Props> = ({ task }: Props) => {
               <Box>
                 <Avatar sx={{ width: 28, height: 28 }} />
               </Box>
-              <Box sx={{ marginLeft: 1 }}>{task.taskManager.name}</Box>
+              <Box sx={{ marginLeft: 1 }}>{task.taskManager?.name}</Box>
             </Box>
           </Box>
         </Card>
       </Box>
       <TaskDetailModal
-        workspaceId={task.workspaceId}
-        projectId={task.projectId}
-        taskId={task.taskId}
+        projectId={9}
+        taskId={2}
         open={detailModalOpen}
         handleClose={() => setDetailModalOpen(false)}
       />

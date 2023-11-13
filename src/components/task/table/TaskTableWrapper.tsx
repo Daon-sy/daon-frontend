@@ -3,6 +3,7 @@ import { Stack } from "@mui/material"
 import Box from "@mui/material/Box"
 import TaskTable from "components/task/table/TaskTable"
 import { getTaskTableStore } from "store/taskTableStore"
+import { TASK_STATUS } from "_types/TaskType"
 
 const tasks = [
   {
@@ -12,7 +13,7 @@ const tasks = [
     title: "업무 관리 시스템",
     startDate: "2023-11-01",
     endDate: "2023-11-31",
-    progressStatus: "PROCEEDING",
+    progressStatus: "PROCEEDING" as TASK_STATUS,
     board: {
       boardId: 1,
       title: "로그인 처리 및 토큰 개발ㅇ",
@@ -32,7 +33,7 @@ const tasks = [
     title: "업무 관리 시스템",
     startDate: "2023-11-01",
     endDate: "2023-11-31",
-    progressStatus: "TODO",
+    progressStatus: "TODO" as TASK_STATUS,
     board: {
       boardId: 1,
       title: "회원 기능 개발",
@@ -52,7 +53,7 @@ const tasks = [
     title: "업무 관리 시스템",
     startDate: "2023-11-01",
     endDate: "2023-11-31",
-    progressStatus: "COMPLETED",
+    progressStatus: "COMPLETED" as TASK_STATUS,
     board: {
       boardId: 2,
       title: "회의",
@@ -72,7 +73,7 @@ const tasks = [
     title: "업무 관리 시스템",
     startDate: "2023-11-01",
     endDate: "2023-11-31",
-    progressStatus: "PENDING",
+    progressStatus: "PENDING" as TASK_STATUS,
     board: {
       boardId: 1,
       title: "회원 기능 개발",
@@ -92,7 +93,7 @@ const tasks = [
     title: "업무 관리 시스템",
     startDate: "2023-11-01",
     endDate: "2023-11-31",
-    progressStatus: "COMPLETED",
+    progressStatus: "COMPLETED" as TASK_STATUS,
     board: {
       boardId: 1,
       title: "회원 기능 개발",
@@ -112,7 +113,7 @@ const tasks = [
     title: "업무 관리 시스템",
     startDate: "2023-11-01",
     endDate: "2023-11-31",
-    progressStatus: "TODO",
+    progressStatus: "TODO" as TASK_STATUS,
     board: {
       boardId: 1,
       title: "회원 기능 개발",

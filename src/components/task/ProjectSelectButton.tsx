@@ -43,7 +43,9 @@ const ProjectSelectButton: React.FC<Props> = ({
       )}
       leftMuiIcon={<DvrIcon />}
       endMuiIcon={<KeyboardArrowDownIcon />}
-      onValueChange={handleProjectSelect}
+      onValueChange={project =>
+        project ? handleProjectSelect(project) : undefined
+      }
     />
   )
 }
