@@ -62,6 +62,7 @@ const TaskKanbanBoard: React.FC<Props> = ({
           paddingY: 0.1,
           backgroundColor: "rgba(242, 246, 252)",
           borderRadius: 2,
+          height: "100%",
         }}
       >
         {renderTaskCards()}

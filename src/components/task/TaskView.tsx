@@ -19,7 +19,7 @@ const TaskView = () => {
   }
 
   return (
-    <Box>
+    <Box sx={{ height: "100%" }}>
       <TaskHeader viewType={viewType} setViewType={setViewType} />
       {renderView()}
     </Box>
