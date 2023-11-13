@@ -18,5 +18,5 @@
     "baseUrl": "./src",
     "allowImportingTsExtensions": true
   },
-  "include": ["src", "craco.config.js", "craco.config.js", "craco.config.js"]
+  "include": ["src", "craco.config.cjs"]
 }
