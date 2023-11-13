@@ -39,7 +39,6 @@ const SidebarMenu: React.FC = () => {
       ],
     },
   ]
-  console.log("test")
 
   return (
     <>
