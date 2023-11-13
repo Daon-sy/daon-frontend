@@ -111,7 +111,7 @@
     "no-alert": ["warn"],
     // console.log 는 사용할 수 없다
     "no-console": [
-      "warn",
+      "error",
       {
         "allow": ["warn", "error"]
       }
