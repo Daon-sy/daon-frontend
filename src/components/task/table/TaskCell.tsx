@@ -96,7 +96,7 @@ const TaskCell: React.FC<Props> = ({ task, borderColor }: Props) => {
             </Box>
           </Box>
           <Box
-            key={task.board.boardId}
+            key={task.board?.boardId}
             sx={{
               width: boardCellWidth,
               paddingX: 1,
@@ -109,7 +109,7 @@ const TaskCell: React.FC<Props> = ({ task, borderColor }: Props) => {
               marginLeft: "-1px",
             }}
           >
-            <Chip label={task.board.title} color="primary" size="small" />
+            <Chip label={task.board?.title} color="primary" size="small" />
           </Box>
           <Box
             sx={{
@@ -146,13 +146,12 @@ const TaskCell: React.FC<Props> = ({ task, borderColor }: Props) => {
               <Avatar sx={{ width: 26, height: 26 }} />
             </Box>
             <Box sx={{ marginLeft: 1, fontSize: 14 }}>
-              {task.taskManager.name}
+              {task.taskManager?.name}
             </Box>
           </Box>
         </Stack>
       </Box>
       <TaskDetailModal
-        workspaceId={task.workspaceId}
         projectId={task.projectId}
         taskId={task.taskId}
         open={detailModalOpen}

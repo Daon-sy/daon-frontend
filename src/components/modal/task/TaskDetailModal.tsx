@@ -1,5 +1,5 @@
-import React, { useEffect } from "react"
-import { TaskDetail } from "_types/TaskType"
+import React from "react"
+import { TASK_STATUS, TaskDetail } from "_types/TaskType"
 import CustomModal from "components/common/CustomModal"
 import { Avatar, Chip, Divider, Stack, ToggleButton } from "@mui/material"
 import Box from "@mui/material/Box"
@@ -11,9 +11,12 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo"
 import dayjs from "dayjs"
+import TextFieldBox from "components/common/TextFieldBox"
+import { modifyTaskApi, ModifyTaskRequest, taskDetailApi } from "api/taskApi"
+import { getWorkspaceStore } from "store/userStore"
+import { useAlert } from "hooks/useAlert"
 
 interface Props {
-  workspaceId: number
   projectId: number
   taskId: number
   open: boolean
@@ -21,47 +24,49 @@ interface Props {
 }
 
 const TaskDetailModal: React.FC<Props> = ({
-  workspaceId,
   projectId,
   taskId,
   open,
   handleClose,
 }: Props) => {
+  const { addSuccess, addError } = useAlert()
+  const { workspace } = getWorkspaceStore()
   const [task, setTask] = React.useState<TaskDetail | null>()
-  const [emergency, setEmergency] = React.useState(false)
-  const [bookmark, setBookmark] = React.useState(false)
 
-  useEffect(() => {
-    const em = true
-    const bookmarked = true
-    setTask({
-      taskId,
+  const fetchData = async () => {
+    const { data: responseData } = await taskDetailApi(
+      workspace!.id,
       projectId,
-      workspaceId,
-      title: "초롱이 밥 먹이기",
-      content:
-        "저녁시간에 늦지않게 초롱이 밥주고 물주고 나도 저녁밥 먹기 저녁시간에 늦지않게 초롱이 밥주고 물주고 나도 저녁밥 먹기 저녁시간에 늦지않게 초롱이 밥주고 물주고 나도 저녁밥 먹기 저녁시간에 늦지않게 초롱이 밥주고 물주고 나도 저녁밥 먹기 저녁시간에 늦지않게 초롱이 밥주고 물주고 나도 저녁밥 먹기\n저녁시간에 늦지않게 초롱이 밥주고 물주고 나도 저녁밥 먹기저녁시간에 늦지않게 초롱이 밥주고 물주고 나도 저녁밥 먹기",
-      progressStatus: "TODO",
-      startDate: "2023-11-01",
-      endDate: "2023-11-30",
-      board: {
-        boardId: 10,
-        title: "집안일",
-      },
-      taskManager: {
-        projectParticipantId: 3,
-        name: "유하영",
-        profileImageUrl:
-          "https://daon-dev.s3.ap-northeast-2.amazonaws.com/image.jpeg",
-      },
-      emergency: em,
-      bookmark: bookmarked,
-    })
+      taskId,
+    )
+    const { data: fetchedTask } = responseData
+    setTask(fetchedTask)
+  }
 
-    setEmergency(em)
-    setBookmark(bookmarked)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  React.useEffect(() => {
+    if (open) {
+      fetchData()
+    }
+  }, [open])
+
+  const modifyTask = async (modifiedTask: TaskDetail) => {
+    if (workspace && task) {
+      const request: ModifyTaskRequest = {
+        title: modifiedTask.title,
+        content: modifiedTask.content,
+        boardId: modifiedTask.board?.boardId,
+        startDate: modifiedTask.startDate,
+        endDate: modifiedTask.endDate,
+        taskManagerId: modifiedTask.taskManager?.projectParticipantId,
+        emergency: modifiedTask.emergency,
+        progressStatus: modifiedTask.progressStatus,
+      }
+      await modifyTaskApi(workspace.id, projectId, taskId, request)
+      addSuccess("할 일을 수정했습니다.")
+
+      fetchData()
+    }
+  }
 
   return (
     <CustomModal
@@ -92,8 +97,18 @@ const TaskDetailModal: React.FC<Props> = ({
               >
                 <BoardSelectButton
                   projectId={projectId}
-                  currentBoardId={task.board.boardId}
-                  handleBoardSelect={item => console.log(item)}
+                  currentBoardId={task.board?.boardId}
+                  handleBoardSelect={item => {
+                    modifyTask({
+                      ...task,
+                      board: item
+                        ? {
+                            boardId: item.boardId,
+                            title: item.title,
+                          }
+                        : undefined,
+                    })
+                  }}
                 />
                 <Box flexGrow={1} />
                 <Box
@@ -106,8 +121,13 @@ const TaskDetailModal: React.FC<Props> = ({
                   <Chip
                     label="긴급"
                     size="small"
-                    color={emergency ? "error" : "default"}
-                    onClick={() => setEmergency(!emergency)}
+                    color={task.emergency ? "error" : "default"}
+                    onClick={() => {
+                      modifyTask({
+                        ...task,
+                        emergency: !task?.emergency,
+                      })
+                    }}
                   />
                 </Box>
                 <Box
@@ -118,14 +138,21 @@ const TaskDetailModal: React.FC<Props> = ({
                 >
                   <ToggleButton
                     value="check"
-                    selected={bookmark}
+                    selected={task.bookmark}
                     size="small"
                     sx={{
                       marginLeft: 1,
                       padding: 0.5,
                     }}
+                    // TODO 북마크
+                    onClick={() => {
+                      setTask({
+                        ...task,
+                        bookmark: !task?.bookmark,
+                      })
+                    }}
                   >
-                    {bookmark ? (
+                    {task.bookmark ? (
                       <StarIcon fontSize="small" />
                     ) : (
                       <StarBorderIcon fontSize="small" />
@@ -134,23 +161,23 @@ const TaskDetailModal: React.FC<Props> = ({
                 </Box>
               </Box>
               <Box>
-                <Box
-                  sx={{
-                    borderRadius: 1,
-                    display: "flex",
-                    alignItems: "center",
-                    fontSize: 24,
-                    fontWeight: 500,
-                    marginTop: 2,
-                    paddingX: 1.5,
-                    paddingY: 1,
-                    "&:hover": {
-                      backgroundColor: "rgb(242,242,242)",
-                    },
+                {/* title */}
+                <TextFieldBox
+                  enterComplete
+                  text={task.title}
+                  fontSize={24}
+                  handleTextChange={v => {
+                    if (!v) {
+                      addError("제목은 비워둘 수 없습니다")
+
+                      return
+                    }
+                    modifyTask({
+                      ...task,
+                      title: v,
+                    })
                   }}
-                >
-                  {task.title}
-                </Box>
+                />
               </Box>
               <Box
                 sx={{
@@ -160,27 +187,24 @@ const TaskDetailModal: React.FC<Props> = ({
                 <Box
                   sx={{
                     paddingX: 1.5,
-                    paddingY: 0.5,
                     fontWeight: 700,
                   }}
                 >
                   내용
                 </Box>
-                <Box
-                  sx={{
-                    borderRadius: 1,
-                    display: "flex",
-                    alignItems: "center",
-                    paddingX: 1.5,
-                    paddingY: 1.5,
-                    lineHeight: 1.4,
-                    whiteSpace: "pre-wrap",
-                    "&:hover": {
-                      backgroundColor: "rgb(242,242,242)",
-                    },
-                  }}
-                >
-                  {task.content}
+                <Box>
+                  <TextFieldBox
+                    multiline
+                    text={task.content}
+                    fontSize={16}
+                    handleTextChange={v =>
+                      modifyTask({
+                        ...task,
+                        content: v,
+                      })
+                    }
+                    paddingX={1.5}
+                  />
                 </Box>
               </Box>
             </Box>
@@ -204,7 +228,15 @@ const TaskDetailModal: React.FC<Props> = ({
             }}
           >
             <Box>
-              <ProgressSelectButton current={task.progressStatus} />
+              <ProgressSelectButton
+                current={task.progressStatus}
+                handleStatusSelect={status =>
+                  modifyTask({
+                    ...task,
+                    progressStatus: status.value,
+                  })
+                }
+              />
               <Box
                 sx={{
                   display: "flex",
@@ -235,6 +267,12 @@ const TaskDetailModal: React.FC<Props> = ({
                           sx={{
                             width: "100%",
                           }}
+                          onChange={value => {
+                            modifyTask({
+                              ...task,
+                              startDate: value?.format("YYYY-MM-DD"),
+                            })
+                          }}
                         />
                       </DemoContainer>
                     </LocalizationProvider>
@@ -259,6 +297,18 @@ const TaskDetailModal: React.FC<Props> = ({
                           defaultValue={dayjs(task.endDate)}
                           sx={{
                             width: "100%",
+                          }}
+                          slotProps={{
+                            field: {
+                              // readOnly: true,
+                              clearable: true,
+                            },
+                          }}
+                          onChange={value => {
+                            modifyTask({
+                              ...task,
+                              endDate: value?.format("YYYY-MM-DD"),
+                            })
                           }}
                         />
                       </DemoContainer>
@@ -308,7 +358,7 @@ const TaskDetailModal: React.FC<Props> = ({
                   <Box>
                     <Avatar sx={{ width: 24, height: 24 }} />
                   </Box>
-                  <Box sx={{ marginLeft: 1 }}>{task.taskManager.name}</Box>
+                  <Box sx={{ marginLeft: 1 }}>{task.taskManager?.name}</Box>
                 </Box>
               </Box>
             </Box>

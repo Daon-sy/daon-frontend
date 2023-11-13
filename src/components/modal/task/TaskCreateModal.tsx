@@ -96,7 +96,7 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
               <BoardSelectButton
                 projectId={projectId}
                 currentBoardId={boardId}
-                handleBoardSelect={board => setBoardId(board.boardId)}
+                handleBoardSelect={board => setBoardId(board?.boardId)}
               />
             ) : null}
           </Stack>

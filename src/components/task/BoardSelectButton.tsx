@@ -9,7 +9,7 @@ import { boardListApi } from "api/projectApi"
 interface Props {
   projectId?: number
   currentBoardId?: number
-  handleBoardSelect: (board: Board) => void
+  handleBoardSelect: (board: Board | undefined) => void
 }
 
 const BoardSelectButton: React.FC<Props> = ({
@@ -48,7 +48,9 @@ const BoardSelectButton: React.FC<Props> = ({
       leftMuiIcon={<FolderIcon />}
       endMuiIcon={<KeyboardArrowDownIcon />}
       onValueChange={item =>
-        handleBoardSelect({ boardId: item.id, title: item.text })
+        handleBoardSelect(
+          item ? { boardId: item.id, title: item.text } : undefined,
+        )
       }
       clearOnListUpdated
     />

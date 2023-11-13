@@ -1,13 +1,10 @@
 import React from "react"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import SelectListButton, { ItemType } from "components/common/SelectListButton"
+import { TASK_STATUS } from "_types/TaskType"
 
 interface Status extends ItemType {
-  value: string
-}
-
-interface Props {
-  current: string
+  value: TASK_STATUS
 }
 
 const TODO: Status = {
@@ -35,7 +32,15 @@ const PENDING: Status = {
   color: "warning",
 }
 
-const ProgressSelectButton: React.FC<Props> = ({ current }: Props) => {
+interface Props {
+  current: TASK_STATUS
+  handleStatusSelect: (status: Status) => void
+}
+
+const ProgressSelectButton: React.FC<Props> = ({
+  current,
+  handleStatusSelect,
+}: Props) => {
   const listItems = [TODO, PROCEEDING, COMPLETED, PENDING]
 
   const foundData = listItems.find(item => item.value === current)
@@ -47,7 +52,9 @@ const ProgressSelectButton: React.FC<Props> = ({ current }: Props) => {
       defaultValueId={foundData?.id || TODO.id}
       valueList={listItems}
       endMuiIcon={<KeyboardArrowDownIcon />}
-      onValueChange={selectedValue => console.log(selectedValue.value)}
+      onValueChange={status =>
+        status ? handleStatusSelect(status) : undefined
+      }
       variant="contained"
     />
   )

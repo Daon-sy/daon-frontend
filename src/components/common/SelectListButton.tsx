@@ -50,7 +50,7 @@ interface Props<T extends ItemType> {
   showClearListItem?: true | false
   leftMuiIcon?: React.ReactNode | undefined
   endMuiIcon?: React.ReactNode | undefined
-  onValueChange?: (selectedValue: T) => void | undefined
+  onValueChange?: (selectedValue: T | undefined) => void | undefined
   itemToChip?: true | false
   changeButtonColor?: true | false
   disableChangeButtonText?: true | false
@@ -85,8 +85,11 @@ const SelectListButton = <T extends ItemType>({
 
   React.useEffect(() => {
     if (defaultValueId) setSelectedValue(findValueById(defaultValueId))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  React.useEffect(() => {
+    if (defaultValueId) setSelectedValue(findValueById(defaultValueId))
+  }, [valueList])
 
   React.useEffect(() => {
     if (!defaultValueId && clearOnListUpdated) setSelectedValue(undefined)
@@ -97,7 +100,10 @@ const SelectListButton = <T extends ItemType>({
     const id = Number(event.currentTarget.getAttribute("value"))
     const value = findValueById(id)
     if (!disableChangeButtonText) setSelectedValue(value)
-    if (onValueChange && value) onValueChange(value)
+    if (onValueChange) {
+      if (value) onValueChange(value)
+      else onValueChange(undefined)
+    }
     close()
   }
 

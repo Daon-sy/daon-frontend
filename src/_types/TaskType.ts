@@ -1,4 +1,6 @@
-import { Board } from "_types/ProjectType"
+import { Board, Project } from "_types/ProjectType"
+
+export type TASK_STATUS = "TODO" | "PROCEEDING" | "COMPLETED" | "PENDING"
 
 export interface TaskManager {
   projectParticipantId: number
@@ -9,28 +11,26 @@ export interface TaskManager {
 export interface TaskSummary {
   taskId: number
   projectId: number
-  workspaceId: number
   title: string
-  startDate: string
-  endDate: string
-  progressStatus: string
-  board: Board
+  startDate: string | undefined
+  endDate: string | undefined
+  progressStatus: TASK_STATUS
+  board: Board | undefined
   emergency: boolean
   bookmark: boolean
-  taskManager: TaskManager
+  taskManager: TaskManager | undefined
 }
 
 export interface TaskDetail {
   taskId: number
-  projectId: number
-  workspaceId: number
+  project: Project
+  board: Board | undefined
   title: string
-  content: string
-  startDate: string
-  endDate: string
-  progressStatus: string
-  board: Board
+  content: string | undefined
+  taskManager: TaskManager | undefined
+  startDate: string | undefined
+  endDate: string | undefined
+  progressStatus: TASK_STATUS
   emergency: boolean
   bookmark: boolean
-  taskManager: TaskManager
 }

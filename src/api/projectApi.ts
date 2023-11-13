@@ -1,5 +1,6 @@
 import { ApiResponse, authAxios } from "api/index"
 import { Project, Board } from "_types/ProjectType"
+import { WORKSPACE_PARTICIPANT_ROLE } from "_types/WorkspaceType"
 
 export interface CreateProjectResponse {
   projectId: number
@@ -49,5 +50,22 @@ export const createBoardApi = async (
   return authAxios.post<ApiResponse>(
     `/api/workspaces/${workspaceId}/projects/${projectId}`,
     request,
+  )
+}
+
+export interface ProjectParticipantListResponse {
+  participantId: number
+  name: string
+  email: string
+  imageUrl: null
+  role: WORKSPACE_PARTICIPANT_ROLE
+}
+
+export const projectParticipantListApi = async (
+  workspaceId: number,
+  projectId: number,
+) => {
+  return authAxios.get<ApiResponse<ProjectParticipantListResponse>>(
+    `/api/workspaces/${workspaceId}/projects/${projectId}/participants`,
   )
 }
