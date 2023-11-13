@@ -1,125 +1,9 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import Box from "@mui/material/Box"
 import { Stack } from "@mui/material"
 import TaskKanbanBoard from "components/task/kanban/TaskKanbanBoard"
-import { TASK_STATUS } from "_types/TaskType"
-
-const tasks = [
-  {
-    taskId: 1,
-    projectId: 9,
-    title: "업무 관리 시스템",
-    startDate: "2023-11-01",
-    endDate: "2023-11-31",
-    progressStatus: "PROCEEDING" as TASK_STATUS,
-    board: {
-      boardId: 1,
-      title: "회원 기능 개발",
-    },
-    emergency: false,
-    bookmark: true,
-    taskManager: {
-      projectParticipantId: 1,
-      name: "유하영",
-      profileImageUrl: null,
-    },
-  },
-  {
-    taskId: 2,
-    projectId: 9,
-    title: "업무 관리 시스템",
-    startDate: "2023-11-01",
-    endDate: "2023-11-31",
-    progressStatus: "TODO" as TASK_STATUS,
-    board: {
-      boardId: 1,
-      title: "회원 기능 개발",
-    },
-    emergency: true,
-    bookmark: false,
-    taskManager: {
-      projectParticipantId: 1,
-      name: "유하영",
-      profileImageUrl: null,
-    },
-  },
-  {
-    taskId: 3,
-    projectId: 9,
-    title: "업무 관리 시스템",
-    startDate: "2023-11-01",
-    endDate: "2023-11-31",
-    progressStatus: "COMPLETED" as TASK_STATUS,
-    board: {
-      boardId: 1,
-      title: "회원 기능 개발",
-    },
-    emergency: true,
-    bookmark: false,
-    taskManager: {
-      projectParticipantId: 1,
-      name: "유하영",
-      profileImageUrl: null,
-    },
-  },
-  {
-    taskId: 4,
-    projectId: 9,
-    title: "업무 관리 시스템",
-    startDate: "2023-11-01",
-    endDate: "2023-11-31",
-    progressStatus: "PENDING" as TASK_STATUS,
-    board: {
-      boardId: 1,
-      title: "회원 기능 개발",
-    },
-    emergency: true,
-    bookmark: false,
-    taskManager: {
-      projectParticipantId: 1,
-      name: "유하영",
-      profileImageUrl: null,
-    },
-  },
-  {
-    taskId: 5,
-    projectId: 9,
-    title: "업무 관리 시스템",
-    startDate: "2023-11-01",
-    endDate: "2023-11-31",
-    progressStatus: "COMPLETED" as TASK_STATUS,
-    board: {
-      boardId: 1,
-      title: "회원 기능 개발",
-    },
-    emergency: true,
-    bookmark: false,
-    taskManager: {
-      projectParticipantId: 1,
-      name: "유하영",
-      profileImageUrl: null,
-    },
-  },
-  {
-    taskId: 6,
-    projectId: 9,
-    title: "업무 관리 시스템",
-    startDate: "2023-11-01",
-    endDate: "2023-11-31",
-    progressStatus: "TODO" as TASK_STATUS,
-    board: {
-      boardId: 1,
-      title: "회원 기능 개발",
-    },
-    emergency: true,
-    bookmark: false,
-    taskManager: {
-      projectParticipantId: 1,
-      name: "유하영",
-      profileImageUrl: null,
-    },
-  },
-]
+import { taskListApi } from "api/taskApi"
+import { TaskSummary } from "_types/TaskType"
 
 const list = [
   {
@@ -145,14 +29,30 @@ const list = [
 ]
 
 const TaskKanbansWrapper: React.FC = () => {
+  const [tasks, setTasks] = useState<TaskSummary[]>([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await taskListApi(5, 9)
+        setTasks(response.data.data.tasks)
+      } catch (error) {
+        console.error("Error fetching tasks:", error)
+      }
+    }
+
+    fetchData() // fetchData 함수 호출
+  }, [])
+
   const renderKanbanBoards = () =>
     list.map(item => (
       <TaskKanbanBoard
+        key={item.progressStatus}
         title={item.title}
         style={{ width: "100%" }}
         dividerColor={item.dividerColor}
         tasks={tasks.filter(
-          task => task.progressStatus === item.progressStatus,
+          task => task.progressStatus === item.progressStatus && task !== null,
         )}
       />
     ))
@@ -161,8 +61,12 @@ const TaskKanbansWrapper: React.FC = () => {
     <Box
       sx={{
         paddingRight: 5,
-        backgroundColor: "white",
         width: "100%",
+        height: "80%",
+        minHeight: "555px",
+        overflow: "scroll",
+        overflowX: "hidden",
+        marginTop: 2,
       }}
     >
       <Stack
