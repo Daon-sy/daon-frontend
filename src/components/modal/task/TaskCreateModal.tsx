@@ -1,9 +1,6 @@
 import React from "react"
 import { Avatar, Button, Chip, Divider, Stack, TextField } from "@mui/material"
 import Box from "@mui/material/Box"
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers"
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo"
 import BoardSelectButton from "components/task/BoardSelectButton"
 import CustomModal from "components/common/CustomModal"
 import ProjectSelectButton from "components/task/ProjectSelectButton"
@@ -12,6 +9,9 @@ import { getWorkspaceStore } from "store/userStore"
 import useInputs from "hooks/useInputs"
 import { Dayjs } from "dayjs"
 import { useAlert } from "hooks/useAlert"
+import { ProjectParticipant } from "_types/ProjectType"
+import ProjectParticipantsModal from "components/modal/project/ProjectParticipantsModal"
+import CalendarDateField from "components/common/CalendarDateField"
 
 interface Props {
   open: boolean
@@ -31,7 +31,12 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
   const [endDate, setEndDate] = React.useState<string | undefined>()
   // TODO
   const [taskManagerId, setTaskManagerId] = React.useState<number | undefined>()
+  const [taskManager, setTaskManager] = React.useState<
+    ProjectParticipant | undefined
+  >()
   const [emergency, setEmergency] = React.useState(false)
+  const [projectParticipantsModalOpen, setProjectParticipantsModalOpen] =
+    React.useState<boolean>(false)
 
   const handleCreate = async () => {
     if (!projectId) {
@@ -66,6 +71,8 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
   const cleanUp = () => {
     setProjectId(undefined)
     setEmergency(false)
+    setTaskManager(undefined)
+    setTaskManagerId(undefined)
   }
 
   return (
@@ -160,21 +167,11 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
               >
                 시작일
               </Box>
-              <Box>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={["DatePicker"]}>
-                    <DatePicker
-                      format="YYYY-MM-DD"
-                      sx={{
-                        width: "100%",
-                      }}
-                      onChange={(value: Dayjs | null) =>
-                        setStartDate(value?.format("YYYY-MM-DD"))
-                      }
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
-              </Box>
+              <CalendarDateField
+                handleChange={(value: Dayjs | null) =>
+                  setStartDate(value?.format("YYYY-MM-DD"))
+                }
+              />
             </Box>
             <Divider flexItem sx={{ marginX: 2 }} orientation="vertical" />
             <Box sx={{ width: "100%" }}>
@@ -187,21 +184,11 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
               >
                 마감일
               </Box>
-              <Box>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={["DatePicker"]}>
-                    <DatePicker
-                      format="YYYY-MM-DD"
-                      sx={{
-                        width: "100%",
-                      }}
-                      onChange={(value: Dayjs | null) =>
-                        setEndDate(value?.format("YYYY-MM-DD"))
-                      }
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
-              </Box>
+              <CalendarDateField
+                handleChange={(value: Dayjs | null) =>
+                  setEndDate(value?.format("YYYY-MM-DD"))
+                }
+              />
             </Box>
           </Box>
           <Box
@@ -215,6 +202,7 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
               display: "flex",
               alignItems: "center",
               width: "100%",
+              height: 40,
             }}
           >
             <Box
@@ -232,6 +220,14 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
               sx={{ marginX: 1, marginRight: 2 }}
             />
             <Box
+              onClick={() => {
+                if (!projectId) {
+                  addError("프로젝트를 선택해주세요")
+
+                  return
+                }
+                setProjectParticipantsModalOpen(true)
+              }}
               sx={{
                 width: "80%",
                 display: "flex",
@@ -243,10 +239,25 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
                 },
               }}
             >
-              <Box>
-                <Avatar sx={{ width: 24, height: 24 }} />
-              </Box>
-              <Box sx={{ marginLeft: 1 }}>123</Box>
+              {taskManager ? (
+                <>
+                  <Box>
+                    <Avatar sx={{ width: 24, height: 24 }} />
+                  </Box>
+                  <Box sx={{ marginLeft: 1 }}>{taskManager?.name}</Box>
+                </>
+              ) : (
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  sx={{ display: "flex", alignItems: "center" }}
+                >
+                  <Box>
+                    <Avatar sx={{ width: 24, height: 24 }} />
+                  </Box>
+                  <Box sx={{ marginLeft: 1 }}>없음</Box>
+                </Stack>
+              )}
             </Box>
           </Box>
         </Box>
@@ -279,6 +290,16 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
             </Button>
           </Stack>
         </Box>
+        <ProjectParticipantsModal
+          workspaceId={workspace!.id}
+          projectId={projectId!}
+          open={projectParticipantsModalOpen}
+          handleClose={() => setProjectParticipantsModalOpen(false)}
+          handleItemClick={(participant: ProjectParticipant | undefined) => {
+            setTaskManager(participant)
+            setTaskManagerId(participant?.participantId)
+          }}
+        />
       </Stack>
     </CustomModal>
   )
