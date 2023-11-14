@@ -1,5 +1,5 @@
 import React from "react"
-import { TASK_STATUS, TaskDetail } from "_types/TaskType"
+import { TaskDetail, TaskManager } from "_types/TaskType"
 import CustomModal from "components/common/CustomModal"
 import { Avatar, Chip, Divider, Stack, ToggleButton } from "@mui/material"
 import Box from "@mui/material/Box"
@@ -7,14 +7,13 @@ import StarIcon from "@mui/icons-material/Star"
 import StarBorderIcon from "@mui/icons-material/StarBorder"
 import ProgressSelectButton from "components/task/ProgressSelectButton"
 import BoardSelectButton from "components/task/BoardSelectButton"
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers"
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo"
-import dayjs from "dayjs"
 import TextFieldBox from "components/common/TextFieldBox"
 import { modifyTaskApi, ModifyTaskRequest, taskDetailApi } from "api/taskApi"
 import { getWorkspaceStore } from "store/userStore"
 import { useAlert } from "hooks/useAlert"
+import CalendarDateField from "components/common/CalendarDateField"
+import ProjectParticipantsModal from "components/modal/project/ProjectParticipantsModal"
+import { ProjectParticipant } from "_types/ProjectType"
 
 interface Props {
   projectId: number
@@ -32,6 +31,8 @@ const TaskDetailModal: React.FC<Props> = ({
   const { addSuccess, addError } = useAlert()
   const { workspace } = getWorkspaceStore()
   const [task, setTask] = React.useState<TaskDetail | null>()
+  const [projectParticipantsModalOpen, setProjectParticipantsModalOpen] =
+    React.useState<boolean>(false)
 
   const fetchData = async () => {
     const { data: responseData } = await taskDetailApi(
@@ -50,6 +51,7 @@ const TaskDetailModal: React.FC<Props> = ({
   }, [open])
 
   const modifyTask = async (modifiedTask: TaskDetail) => {
+    console.log(modifiedTask.taskManager)
     if (workspace && task) {
       const request: ModifyTaskRequest = {
         title: modifiedTask.title,
@@ -230,12 +232,13 @@ const TaskDetailModal: React.FC<Props> = ({
             <Box>
               <ProgressSelectButton
                 current={task.progressStatus}
-                handleStatusSelect={status =>
+                handleStatusSelect={status => {
+                  console.log(task)
                   modifyTask({
                     ...task,
                     progressStatus: status.value,
                   })
-                }
+                }}
               />
               <Box
                 sx={{
@@ -258,25 +261,15 @@ const TaskDetailModal: React.FC<Props> = ({
                   >
                     시작일
                   </Box>
-                  <Box>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DemoContainer components={["DatePicker"]}>
-                        <DatePicker
-                          format="YYYY-MM-DD"
-                          defaultValue={dayjs(task.startDate)}
-                          sx={{
-                            width: "100%",
-                          }}
-                          onChange={value => {
-                            modifyTask({
-                              ...task,
-                              startDate: value?.format("YYYY-MM-DD"),
-                            })
-                          }}
-                        />
-                      </DemoContainer>
-                    </LocalizationProvider>
-                  </Box>
+                  <CalendarDateField
+                    date={task.startDate}
+                    handleChange={value => {
+                      modifyTask({
+                        ...task,
+                        startDate: value?.format("YYYY-MM-DD"),
+                      })
+                    }}
+                  />
                 </Box>
                 <Divider flexItem sx={{ marginX: 2 }} orientation="vertical" />
                 <Box sx={{ width: "100%" }}>
@@ -289,31 +282,15 @@ const TaskDetailModal: React.FC<Props> = ({
                   >
                     마감일
                   </Box>
-                  <Box>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DemoContainer components={["DatePicker"]}>
-                        <DatePicker
-                          format="YYYY-MM-DD"
-                          defaultValue={dayjs(task.endDate)}
-                          sx={{
-                            width: "100%",
-                          }}
-                          slotProps={{
-                            field: {
-                              // readOnly: true,
-                              clearable: true,
-                            },
-                          }}
-                          onChange={value => {
-                            modifyTask({
-                              ...task,
-                              endDate: value?.format("YYYY-MM-DD"),
-                            })
-                          }}
-                        />
-                      </DemoContainer>
-                    </LocalizationProvider>
-                  </Box>
+                  <CalendarDateField
+                    date={task.endDate}
+                    handleChange={value => {
+                      modifyTask({
+                        ...task,
+                        endDate: value?.format("YYYY-MM-DD"),
+                      })
+                    }}
+                  />
                 </Box>
               </Box>
               <Box
@@ -327,6 +304,7 @@ const TaskDetailModal: React.FC<Props> = ({
                   display: "flex",
                   alignItems: "center",
                   width: "100%",
+                  height: 40,
                 }}
               >
                 <Box
@@ -344,6 +322,7 @@ const TaskDetailModal: React.FC<Props> = ({
                   sx={{ marginX: 1, marginRight: 2 }}
                 />
                 <Box
+                  onClick={() => setProjectParticipantsModalOpen(true)}
                   sx={{
                     width: "80%",
                     display: "flex",
@@ -355,14 +334,47 @@ const TaskDetailModal: React.FC<Props> = ({
                     },
                   }}
                 >
-                  <Box>
-                    <Avatar sx={{ width: 24, height: 24 }} />
-                  </Box>
-                  <Box sx={{ marginLeft: 1 }}>{task.taskManager?.name}</Box>
+                  {task.taskManager ? (
+                    <>
+                      <Box>
+                        <Avatar sx={{ width: 24, height: 24 }} />
+                      </Box>
+                      <Box sx={{ marginLeft: 1 }}>{task.taskManager?.name}</Box>
+                    </>
+                  ) : (
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      sx={{ display: "flex", alignItems: "center" }}
+                    >
+                      <Box>
+                        <Avatar sx={{ width: 24, height: 24 }} />
+                      </Box>
+                      <Box sx={{ marginLeft: 1 }}>없음</Box>
+                    </Stack>
+                  )}
                 </Box>
               </Box>
             </Box>
           </Box>
+          <ProjectParticipantsModal
+            workspaceId={workspace!.id}
+            projectId={projectId}
+            open={projectParticipantsModalOpen}
+            handleClose={() => setProjectParticipantsModalOpen(false)}
+            handleItemClick={(participant: ProjectParticipant | undefined) =>
+              modifyTask({
+                ...task,
+                taskManager: participant
+                  ? {
+                      projectParticipantId: participant.participantId,
+                      name: participant.name,
+                      profileImageUrl: participant.imageUrl,
+                    }
+                  : undefined,
+              })
+            }
+          />
         </Stack>
       ) : null}
     </CustomModal>
