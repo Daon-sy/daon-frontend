@@ -1,6 +1,5 @@
 import { ApiResponse, authAxios } from "api/index"
-import { Project, Board } from "_types/ProjectType"
-import { WORKSPACE_PARTICIPANT_ROLE } from "_types/WorkspaceType"
+import { Project, Board, ProjectParticipant } from "_types/ProjectType"
 
 export interface CreateProjectResponse {
   projectId: number
@@ -54,11 +53,8 @@ export const createBoardApi = async (
 }
 
 export interface ProjectParticipantListResponse {
-  participantId: number
-  name: string
-  email: string
-  imageUrl: null
-  role: WORKSPACE_PARTICIPANT_ROLE
+  totalCount: number
+  participants: Array<ProjectParticipant>
 }
 
 export const projectParticipantListApi = async (
