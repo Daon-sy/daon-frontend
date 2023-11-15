@@ -5,7 +5,7 @@ import { Avatar, Chip, Stack, ToggleButton } from "@mui/material"
 import StarIcon from "@mui/icons-material/Star"
 import StarBorderIcon from "@mui/icons-material/StarBorder"
 import { getTaskTableStore } from "store/taskTableStore"
-import TaskDetailModal from "components/modal/task/TaskDetailModal"
+import TaskDetailModal from "components/task/modal/TaskDetailModal"
 
 // 북마크 버튼 아이콘
 interface BookmarkButtonProps {

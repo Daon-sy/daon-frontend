@@ -10,9 +10,14 @@ import TextFieldBox from "components/common/TextFieldBox"
 import { getWorkspaceStore } from "store/userStore"
 import { useAlert } from "hooks/useAlert"
 import CalendarDateField from "components/common/CalendarDateField"
-import ProjectParticipantsModal from "components/modal/project/ProjectParticipantsModal"
+import ProjectParticipantsModal from "components/project/modal/ProjectParticipantsModal"
 import { TaskDetail } from "_types/task"
-import { modifyTaskApi, ModifyTaskRequestBody, taskDetailApi } from "api/task"
+import {
+  modifyTaskApi,
+  ModifyTaskRequestBody,
+  taskBookmarkApi,
+  taskDetailApi,
+} from "api/task"
 import { ProjectParticipant } from "_types/project"
 
 interface Props {
@@ -60,7 +65,7 @@ const TaskDetailModal: React.FC<Props> = ({
       const request: ModifyTaskRequestBody = {
         title: modifiedTask.title,
         content: modifiedTask.content,
-        boardId: modifiedTask.board?.boardId,
+        boardId: modifiedTask.board.boardId,
         startDate: modifiedTask.startDate,
         endDate: modifiedTask.endDate,
         taskManagerId: modifiedTask.taskManager?.projectParticipantId,
@@ -72,6 +77,17 @@ const TaskDetailModal: React.FC<Props> = ({
 
       fetchData()
     }
+  }
+
+  const handleBookmark = async () => {
+    const { data } = await taskBookmarkApi(
+      workspace!.workspaceId,
+      projectId,
+      taskId,
+    )
+    const { created } = data
+    addSuccess(created ? "북마크 등록 완료" : "북마크 취소 완료")
+    fetchData()
   }
 
   return (
@@ -150,13 +166,7 @@ const TaskDetailModal: React.FC<Props> = ({
                       marginLeft: 1,
                       padding: 0.5,
                     }}
-                    // TODO 북마크
-                    onClick={() => {
-                      setTask({
-                        ...task,
-                        bookmark: !task?.bookmark,
-                      })
-                    }}
+                    onClick={handleBookmark}
                   >
                     {task.bookmark ? (
                       <StarIcon fontSize="small" />
@@ -366,18 +376,19 @@ const TaskDetailModal: React.FC<Props> = ({
             projectId={projectId}
             open={projectParticipantsModalOpen}
             handleClose={() => setProjectParticipantsModalOpen(false)}
-            handleItemClick={(participant: ProjectParticipant | undefined) =>
+            handleItemClick={(participant: ProjectParticipant | undefined) => {
+              console.log(participant)
               modifyTask({
                 ...task,
                 taskManager: participant
                   ? {
-                      projectParticipantId: participant.participantId,
+                      projectParticipantId: participant.projectParticipantId,
                       name: participant.name,
                       imageUrl: participant.imageUrl,
                     }
                   : undefined,
               })
-            }
+            }}
           />
         </Stack>
       ) : null}

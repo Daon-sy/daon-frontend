@@ -10,12 +10,14 @@ interface Props {
   projectId?: number
   currentBoardId?: number
   handleBoardSelect: (board: Board | undefined) => void
+  showClearListItem?: boolean
 }
 
 const BoardSelectButton: React.FC<Props> = ({
   projectId,
   currentBoardId,
   handleBoardSelect,
+  showClearListItem = false,
 }: Props) => {
   const { workspace } = getWorkspaceStore()
   const [boards, setBoards] = React.useState<Array<Board>>()
@@ -37,7 +39,7 @@ const BoardSelectButton: React.FC<Props> = ({
   return (
     <SelectListButton
       unsetButtonText="보드 선택"
-      showClearListItem
+      showClearListItem={showClearListItem}
       defaultValueId={currentBoardId}
       valueList={boards?.map(
         (board: Board): ItemType => ({
