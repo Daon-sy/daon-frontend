@@ -3,154 +3,8 @@ import { Stack } from "@mui/material"
 import Box from "@mui/material/Box"
 import TaskTable from "components/task/table/TaskTable"
 import { getTaskTableStore } from "store/taskTableStore"
-import { TASK_STATUS } from "_types/task"
 
-const tasks = [
-  {
-    taskId: 1,
-    project: {
-      projectId: 9,
-      title: "9번 프로젝트",
-      description: "설명",
-    },
-    workspaceId: 1,
-    title: "업무 관리 시스템",
-    startDate: "2023-11-01",
-    endDate: "2023-11-31",
-    progressStatus: "PROCEEDING" as TASK_STATUS,
-    board: {
-      boardId: 1,
-      title: "로그인 처리 및 토큰 개발ㅇ",
-    },
-    emergency: false,
-    bookmark: true,
-    taskManager: {
-      projectParticipantId: 1,
-      name: "유하영",
-      profileImageUrl: null,
-    },
-  },
-  {
-    taskId: 2,
-    project: {
-      projectId: 9,
-      title: "9번 프로젝트",
-      description: "설명",
-    },
-    workspaceId: 1,
-    title: "업무 관리 시스템",
-    startDate: "2023-11-01",
-    endDate: "2023-11-31",
-    progressStatus: "TODO" as TASK_STATUS,
-    board: {
-      boardId: 1,
-      title: "회원 기능 개발",
-    },
-    emergency: true,
-    bookmark: false,
-    taskManager: {
-      projectParticipantId: 1,
-      name: "유하영",
-      profileImageUrl: null,
-    },
-  },
-  {
-    taskId: 3,
-    project: {
-      projectId: 9,
-      title: "9번 프로젝트",
-      description: "설명",
-    },
-    workspaceId: 1,
-    title: "업무 관리 시스템",
-    startDate: "2023-11-01",
-    endDate: "2023-11-31",
-    progressStatus: "COMPLETED" as TASK_STATUS,
-    board: {
-      boardId: 2,
-      title: "회의",
-    },
-    emergency: true,
-    bookmark: false,
-    taskManager: {
-      projectParticipantId: 1,
-      name: "유하영",
-      profileImageUrl: null,
-    },
-  },
-  {
-    taskId: 4,
-    project: {
-      projectId: 9,
-      title: "9번 프로젝트",
-      description: "설명",
-    },
-    workspaceId: 1,
-    title: "업무 관리 시스템",
-    startDate: "2023-11-01",
-    endDate: "2023-11-31",
-    progressStatus: "PENDING" as TASK_STATUS,
-    board: {
-      boardId: 1,
-      title: "회원 기능 개발",
-    },
-    emergency: true,
-    bookmark: false,
-    taskManager: {
-      projectParticipantId: 2,
-      name: "김아무개",
-      profileImageUrl: null,
-    },
-  },
-  {
-    taskId: 5,
-    project: {
-      projectId: 9,
-      title: "9번 프로젝트",
-      description: "설명",
-    },
-    workspaceId: 1,
-    title: "업무 관리 시스템",
-    startDate: "2023-11-01",
-    endDate: "2023-11-31",
-    progressStatus: "COMPLETED" as TASK_STATUS,
-    board: {
-      boardId: 1,
-      title: "회원 기능 개발",
-    },
-    emergency: true,
-    bookmark: false,
-    taskManager: {
-      projectParticipantId: 3,
-      name: "성은",
-      profileImageUrl: null,
-    },
-  },
-  {
-    taskId: 6,
-    project: {
-      projectId: 9,
-      title: "9번 프로젝트",
-      description: "설명",
-    },
-    workspaceId: 1,
-    title: "업무 관리 시스템",
-    startDate: "2023-11-01",
-    endDate: "2023-11-31",
-    progressStatus: "TODO" as TASK_STATUS,
-    board: {
-      boardId: 1,
-      title: "회원 기능 개발",
-    },
-    emergency: true,
-    bookmark: false,
-    taskManager: {
-      projectParticipantId: 1,
-      name: "유하영",
-      profileImageUrl: null,
-    },
-  },
-]
+import { TaskSummary } from "_types/task"
 
 const list = [
   {
@@ -275,7 +129,11 @@ const TaskTableHeader: React.FC = () => {
   )
 }
 
-const TaskTableWrapper: React.FC = () => {
+interface TaskTableWrapperProps {
+  tasks: TaskSummary[]
+}
+
+const TaskTableWrapper: React.FC<TaskTableWrapperProps> = ({ tasks }) => {
   const renderTables = () =>
     list.map(item => (
       <TaskTable
@@ -292,6 +150,10 @@ const TaskTableWrapper: React.FC = () => {
         paddingRight: 5,
         backgroundColor: "white",
         width: "100%",
+        height: "80%",
+        minHeight: "555px",
+        overflow: "scroll",
+        overflowX: "hidden",
       }}
     >
       <Stack

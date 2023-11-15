@@ -119,9 +119,11 @@ const TaskCard: React.FC<Props> = ({ task }: Props) => {
                 alignItems: "center",
               }}
             >
-              <Box>
-                <Avatar sx={{ width: 28, height: 28 }} />
-              </Box>
+              {task.taskManager ? (
+                <Box sx={{ height: 28 }}>
+                  <Avatar sx={{ width: 28, height: 28 }} />
+                </Box>
+              ) : null}
               <Box sx={{ marginLeft: 1 }}>{task.taskManager?.name}</Box>
             </Box>
           </Box>

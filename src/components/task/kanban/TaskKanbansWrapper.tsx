@@ -2,149 +2,11 @@ import React from "react"
 import Box from "@mui/material/Box"
 import { Stack } from "@mui/material"
 import TaskKanbanBoard from "components/task/kanban/TaskKanbanBoard"
-import { TASK_STATUS } from "_types/task"
+import { TaskSummary } from "_types/task"
 
-const tasks = [
-  {
-    taskId: 1,
-    project: {
-      projectId: 9,
-      title: "9번 프로젝트",
-      description: "설명",
-    },
-    title: "업무 관리 시스템",
-    startDate: "2023-11-01",
-    endDate: "2023-11-31",
-    progressStatus: "PROCEEDING" as TASK_STATUS,
-    board: {
-      boardId: 1,
-      title: "회원 기능 개발",
-    },
-    emergency: false,
-    bookmark: true,
-    taskManager: {
-      projectParticipantId: 1,
-      name: "유하영",
-      profileImageUrl: null,
-    },
-  },
-  {
-    taskId: 2,
-    project: {
-      projectId: 9,
-      title: "9번 프로젝트",
-      description: "설명",
-    },
-    title: "업무 관리 시스템",
-    startDate: "2023-11-01",
-    endDate: "2023-11-31",
-    progressStatus: "TODO" as TASK_STATUS,
-    board: {
-      boardId: 1,
-      title: "회원 기능 개발",
-    },
-    emergency: true,
-    bookmark: false,
-    taskManager: {
-      projectParticipantId: 1,
-      name: "유하영",
-      profileImageUrl: null,
-    },
-  },
-  {
-    taskId: 3,
-    project: {
-      projectId: 9,
-      title: "9번 프로젝트",
-      description: "설명",
-    },
-    title: "업무 관리 시스템",
-    startDate: "2023-11-01",
-    endDate: "2023-11-31",
-    progressStatus: "COMPLETED" as TASK_STATUS,
-    board: {
-      boardId: 1,
-      title: "회원 기능 개발",
-    },
-    emergency: true,
-    bookmark: false,
-    taskManager: {
-      projectParticipantId: 1,
-      name: "유하영",
-      profileImageUrl: null,
-    },
-  },
-  {
-    taskId: 4,
-    project: {
-      projectId: 9,
-      title: "9번 프로젝트",
-      description: "설명",
-    },
-    title: "업무 관리 시스템",
-    startDate: "2023-11-01",
-    endDate: "2023-11-31",
-    progressStatus: "PENDING" as TASK_STATUS,
-    board: {
-      boardId: 1,
-      title: "회원 기능 개발",
-    },
-    emergency: true,
-    bookmark: false,
-    taskManager: {
-      projectParticipantId: 1,
-      name: "유하영",
-      profileImageUrl: null,
-    },
-  },
-  {
-    taskId: 5,
-    project: {
-      projectId: 9,
-      title: "9번 프로젝트",
-      description: "설명",
-    },
-    title: "업무 관리 시스템",
-    startDate: "2023-11-01",
-    endDate: "2023-11-31",
-    progressStatus: "COMPLETED" as TASK_STATUS,
-    board: {
-      boardId: 1,
-      title: "회원 기능 개발",
-    },
-    emergency: true,
-    bookmark: false,
-    taskManager: {
-      projectParticipantId: 1,
-      name: "유하영",
-      profileImageUrl: null,
-    },
-  },
-  {
-    taskId: 6,
-    project: {
-      projectId: 9,
-      title: "9번 프로젝트",
-      description: "설명",
-    },
-    title: "업무 관리 시스템",
-    startDate: "2023-11-01",
-    endDate: "2023-11-31",
-    progressStatus: "TODO" as TASK_STATUS,
-    board: {
-      boardId: 1,
-      title: "회원 기능 개발",
-    },
-    emergency: true,
-    bookmark: false,
-    taskManager: {
-      projectParticipantId: 1,
-      name: "유하영",
-      profileImageUrl: null,
-    },
-  },
-]
-
+interface TaskKanbansWrapperProps {
+  tasks: TaskSummary[]
+}
 const list = [
   {
     progressStatus: "TODO",
@@ -168,15 +30,16 @@ const list = [
   },
 ]
 
-const TaskKanbansWrapper: React.FC = () => {
+const TaskKanbansWrapper: React.FC<TaskKanbansWrapperProps> = ({ tasks }) => {
   const renderKanbanBoards = () =>
     list.map(item => (
       <TaskKanbanBoard
+        key={item.progressStatus}
         title={item.title}
         style={{ width: "100%" }}
         dividerColor={item.dividerColor}
         tasks={tasks.filter(
-          task => task.progressStatus === item.progressStatus,
+          task => task.progressStatus === item.progressStatus && task !== null,
         )}
       />
     ))
@@ -185,8 +48,12 @@ const TaskKanbansWrapper: React.FC = () => {
     <Box
       sx={{
         paddingRight: 5,
-        backgroundColor: "white",
         width: "100%",
+        height: "80%",
+        minHeight: "555px",
+        overflow: "scroll",
+        overflowX: "hidden",
+        marginTop: 2,
       }}
     >
       <Stack

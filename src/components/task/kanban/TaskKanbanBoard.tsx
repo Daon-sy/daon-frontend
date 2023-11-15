@@ -9,7 +9,6 @@ interface Props {
   dividerColor: string | null
   style: React.CSSProperties
   tasks: Array<TaskSummary>
-  // children: React.ReactNode | null
 }
 
 const TaskKanbanBoard: React.FC<Props> = ({
@@ -62,6 +61,7 @@ const TaskKanbanBoard: React.FC<Props> = ({
           paddingY: 0.1,
           backgroundColor: "rgba(242, 246, 252)",
           borderRadius: 2,
+          height: "100%",
         }}
       >
         {renderTaskCards()}
