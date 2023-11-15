@@ -17,7 +17,7 @@ export interface Board {
 }
 
 export interface ProjectParticipant {
-  participantId: number
+  projectParticipantId: number
   name: string
   email: string
   imageUrl?: string

@@ -299,7 +299,7 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
           handleClose={() => setProjectParticipantsModalOpen(false)}
           handleItemClick={(participant: ProjectParticipant | undefined) => {
             setTaskManager(participant)
-            setTaskManagerId(participant?.participantId)
+            setTaskManagerId(participant?.projectParticipantId)
           }}
         />
       </Stack>

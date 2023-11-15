@@ -72,7 +72,7 @@ export const removeEmailApi = async (
 }
 
 export interface SearchMemberByUsernameResponseBody {
-  members: { username: string; name: string }
+  members: Array<{ username: string; name: string }>
 }
 export const searchMemberByUsernameApi = async (
   username: string,
