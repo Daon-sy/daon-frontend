@@ -1,0 +1,56 @@
+{
+  "data": [
+    {
+      "replyId": 1,
+      "taskId": 1,
+      "content": "댓글1댓글1댓글1댓글1댓글1",
+      "writer": {
+        "projectParticipantId": 1,
+        "name": "USER1",
+        "imageUrl": null
+      },
+      "isWriter": true,
+      "createdAt": "2023-11-15 11:11:11",
+      "modifiedAt": "2023-11-15 11:11:11"
+    },
+    {
+      "replyId": 2,
+      "taskId": 1,
+      "content": "댓글2댓글2댓글2댓글2댓글2",
+      "writer": {
+        "projectParticipantId": 2,
+        "name": "USER2",
+        "imageUrl": null
+      },
+      "isWriter": false,
+      "createdAt": "2023-11-15 11:11:12",
+      "modifiedAt": "2023-11-15 11:11:12"
+    },
+    {
+      "replyId": 3,
+      "taskId": 1,
+      "content": "reply reply reply reply",
+      "writer": {
+        "projectParticipantId": 3,
+        "name": "USER3",
+        "imageUrl": null
+      },
+      "isWriter": false,
+      "createdAt": "2023-11-15 11:13:11",
+      "modifiedAt": "2023-11-15 11:13:11"
+    },
+    {
+      "replyId": 4,
+      "taskId": 1,
+      "content": "댓글.",
+      "writer": {
+        "projectParticipantId": 2,
+        "name": "USER2",
+        "imageUrl": null
+      },
+      "isWriter": false,
+      "createdAt": "2023-11-15 11:14:11",
+      "modifiedAt": "2023-11-15 11:14:11"
+    }
+  ]
+}

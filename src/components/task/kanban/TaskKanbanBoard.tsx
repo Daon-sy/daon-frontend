@@ -2,7 +2,7 @@ import React from "react"
 import Box from "@mui/material/Box"
 import { Chip, Divider } from "@mui/material"
 import TaskCard from "components/task/kanban/TaskCard"
-import { TaskSummary } from "_types/TaskType"
+import { TaskSummary } from "_types/task"
 
 interface Props {
   title: string

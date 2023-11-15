@@ -1,7 +1,7 @@
 import React from "react"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import SelectListButton, { ItemType } from "components/common/SelectListButton"
-import { TASK_STATUS } from "_types/TaskType"
+import { TASK_STATUS } from "_types/task"
 
 interface Status extends ItemType {
   value: TASK_STATUS

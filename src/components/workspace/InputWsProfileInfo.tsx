@@ -3,8 +3,8 @@ import Box from "@mui/material/Box"
 import { Stack, TextField } from "@mui/material"
 import Typography from "@mui/material/Typography"
 import ImageInput from "components/image/ImageInput"
-import { WsProfileInfo } from "api/workspaceApi"
-import { imageUploadApi } from "api/imageApi"
+import { WsProfileInfo } from "api/workspace"
+import { imageUploadApi } from "api/image"
 import useImageUrlInputRef from "hooks/useImageUrlInputRef"
 
 interface Props {
@@ -20,8 +20,8 @@ const InputWsProfileInfo: React.FC<Props> = ({ data, onChange }: Props) => {
     const file = files?.[0]
     if (file) {
       try {
-        const { data: responseData } = await imageUploadApi({ image: file })
-        changeRef(responseData.data.imageUrl)
+        const { data: responseBody } = await imageUploadApi({ image: file })
+        changeRef(responseBody.imageUrl)
       } catch (err) {
         console.error(err)
       }

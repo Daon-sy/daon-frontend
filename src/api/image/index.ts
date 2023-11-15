@@ -1,4 +1,4 @@
-import { ApiResponse, authAxios } from "api/index"
+import { authAxios } from "api"
 import { AxiosResponse } from "axios"
 
 export interface ImageUploadRequest {
@@ -11,7 +11,7 @@ export interface ImageUploadResponse {
 
 export const imageUploadApi = async (
   request: ImageUploadRequest,
-): Promise<AxiosResponse<ApiResponse<ImageUploadResponse>>> => {
+): Promise<AxiosResponse<ImageUploadResponse>> => {
   const axiosConfig = {
     headers: {
       "Content-Type": "multipart/form-data",

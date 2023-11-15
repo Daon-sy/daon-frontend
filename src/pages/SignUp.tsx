@@ -1,10 +1,11 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
 import { Box, Button, Container, Stack, TextField } from "@mui/material"
-import { signUpApi } from "api/signUpApi"
+import { signUpApi } from "api/member"
 import { useAlert } from "hooks/useAlert"
 
 interface SignUpForm {
+  username: string
   email: string
   password: string
   passwordCheck: string
@@ -16,11 +17,19 @@ const SignUp = () => {
   const { addSuccess, addError } = useAlert()
 
   const [formData, setFormData] = React.useState<SignUpForm>({
+    username: "",
     email: "",
     password: "",
     passwordCheck: "",
     name: "",
   })
+
+  const onUsernameChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      username: e.target.value,
+    })
+  }
 
   const onEmailChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -71,9 +80,10 @@ const SignUp = () => {
     }
 
     signUpApi({
-      email: formData.email,
+      username: formData.username,
       password: formData.password,
       name: formData.name,
+      email: formData.email,
     })
       .then(() => {
         addSuccess("회원가입 성공! 로그인 버튼을 통해 로그인 해주세요.")
@@ -117,10 +127,10 @@ const SignUp = () => {
           <Stack spacing={2}>
             <TextField
               required
-              label="이메일"
+              label="아이디"
               variant="outlined"
-              value={formData.email}
-              onChange={onEmailChanged}
+              value={formData.username}
+              onChange={onUsernameChanged}
               helperText="usermail@email.com"
             />
             <TextField
@@ -148,6 +158,14 @@ const SignUp = () => {
               value={formData.name}
               onChange={onNameChanged}
               helperText="실명 입력"
+            />
+            <TextField
+              required
+              label="이메일"
+              variant="outlined"
+              value={formData.email}
+              onChange={onEmailChanged}
+              helperText="usermail@email.com"
             />
           </Stack>
           <Box

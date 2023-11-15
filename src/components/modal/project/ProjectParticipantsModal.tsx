@@ -10,8 +10,8 @@ import {
   Stack,
   TextField,
 } from "@mui/material"
-import { projectParticipantListApi } from "api/projectApi"
-import { ProjectParticipant } from "_types/ProjectType"
+import { ProjectParticipant } from "_types/project"
+import { projectParticipantListApi } from "api/project"
 
 type Filter = "name" | "email"
 
@@ -51,7 +51,7 @@ const ProjectParticipantsModal = ({
     if (open) {
       const fetchData = async () => {
         const { data } = await projectParticipantListApi(workspaceId, projectId)
-        const { participants } = data.data
+        const { projectParticipants: participants } = data
         setProjectParticipants(participants)
       }
       fetchData()
