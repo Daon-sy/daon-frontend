@@ -3,8 +3,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import FolderIcon from "@mui/icons-material/Folder"
 import SelectListButton, { ItemType } from "components/common/SelectListButton"
 import { getWorkspaceStore } from "store/userStore"
-import { Board } from "_types/ProjectType"
-import { boardListApi } from "api/projectApi"
+import { Board } from "_types/project"
+import { projectBoardListApi } from "api/project"
 
 interface Props {
   projectId?: number
@@ -23,11 +23,11 @@ const BoardSelectButton: React.FC<Props> = ({
   React.useEffect(() => {
     if (projectId) {
       const fetchData = async () => {
-        const { data: responseData } = await boardListApi(
-          workspace!.id,
+        const { data: responseData } = await projectBoardListApi(
+          workspace!.workspaceId,
           projectId,
         )
-        const { boards: fetchedBoards } = responseData.data
+        const { boards: fetchedBoards } = responseData
         setBoards(fetchedBoards)
       }
       fetchData()

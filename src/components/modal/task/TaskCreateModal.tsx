@@ -4,14 +4,14 @@ import Box from "@mui/material/Box"
 import BoardSelectButton from "components/task/BoardSelectButton"
 import CustomModal from "components/common/CustomModal"
 import ProjectSelectButton from "components/task/ProjectSelectButton"
-import { createTaskApi } from "api/taskApi"
 import { getWorkspaceStore } from "store/userStore"
 import useInputs from "hooks/useInputs"
 import { Dayjs } from "dayjs"
 import { useAlert } from "hooks/useAlert"
-import { ProjectParticipant } from "_types/ProjectType"
 import ProjectParticipantsModal from "components/modal/project/ProjectParticipantsModal"
 import CalendarDateField from "components/common/CalendarDateField"
+import { createTaskApi } from "api/task"
+import { ProjectParticipant } from "_types/project"
 
 interface Props {
   open: boolean
@@ -45,25 +45,27 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
       return
     }
 
+    if (!boardId) {
+      addError("보드를 선택하세요")
+
+      return
+    }
+
     if (!textFieldData.title) {
       addError("할 일 제목을 입력해주세요")
 
       return
     }
 
-    const { data: responseData } = await createTaskApi(
-      workspace!.id,
-      projectId,
-      {
-        ...textFieldData,
-        boardId,
-        startDate,
-        endDate,
-        taskManagerId,
-        emergency,
-      },
-    )
-    const { taskId } = responseData.data
+    const { data } = await createTaskApi(workspace!.workspaceId, projectId, {
+      ...textFieldData,
+      boardId,
+      startDate,
+      endDate,
+      taskManagerId,
+      emergency,
+    })
+    const { taskId } = data
     addSuccess(`할 일(#${taskId})이 생성되었습니다.`)
     handleClose()
   }
@@ -291,7 +293,7 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
           </Stack>
         </Box>
         <ProjectParticipantsModal
-          workspaceId={workspace!.id}
+          workspaceId={workspace!.workspaceId}
           projectId={projectId!}
           open={projectParticipantsModalOpen}
           handleClose={() => setProjectParticipantsModalOpen(false)}

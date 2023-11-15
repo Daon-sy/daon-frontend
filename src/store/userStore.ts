@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { Workspace } from "_types/WorkspaceType"
+import { Workspace } from "_types/workspace"
 
 interface WorkspaceStore {
   workspace: Workspace | null
@@ -9,10 +9,11 @@ interface WorkspaceStore {
 
 export const getWorkspaceStore = create<WorkspaceStore>(set => ({
   workspace: {
-    id: 5,
+    workspaceId: 5,
     title: "test workspace",
     division: "GROUP",
-    imageUrl: null,
+    imageUrl: undefined,
+    description: undefined,
   },
   clear: () => set({ workspace: null }),
   setWorkspace: (workspace: Workspace) => set(() => ({ workspace })),

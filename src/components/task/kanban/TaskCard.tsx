@@ -2,7 +2,7 @@ import React from "react"
 import { Avatar, Box, Card, Chip, ToggleButton } from "@mui/material"
 import StarIcon from "@mui/icons-material/Star"
 import StarBorderIcon from "@mui/icons-material/StarBorder"
-import { TaskSummary } from "_types/TaskType"
+import { TaskSummary } from "_types/task"
 import TaskDetailModal from "components/modal/task/TaskDetailModal"
 
 // 긴급 태그 컴포넌트

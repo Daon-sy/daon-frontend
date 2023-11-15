@@ -2,10 +2,11 @@ import React from "react"
 import Typography from "@mui/material/Typography"
 import { Stack, TextField } from "@mui/material"
 import Button from "@mui/material/Button"
-import { createProjectApi, CreateProjectRequest } from "api/projectApi"
 import { useAlert } from "hooks/useAlert"
 import CustomModal from "components/common/CustomModal"
 import useInputs from "hooks/useInputs"
+import { createProjectApi, CreateProjectRequestBody } from "api/project"
+import { getWorkspaceStore } from "store/userStore"
 
 interface CreateProjectProps {
   open: boolean
@@ -13,9 +14,9 @@ interface CreateProjectProps {
   cleanUp: () => void
 }
 
-const initialState: CreateProjectRequest = {
-  projectName: "",
-  projectDescription: "",
+const initialState: CreateProjectRequestBody = {
+  title: "",
+  description: "",
 }
 
 const CreateProjectModal: React.FC<CreateProjectProps> = ({
@@ -23,18 +24,21 @@ const CreateProjectModal: React.FC<CreateProjectProps> = ({
   handleClose,
   cleanUp,
 }: CreateProjectProps) => {
+  const { workspace } = getWorkspaceStore()
   const [data, onChange, resetData] =
-    useInputs<CreateProjectRequest>(initialState)
+    useInputs<CreateProjectRequestBody>(initialState)
   const { addSuccess, addError } = useAlert()
 
   const onValidateBtn = () => {
-    if (data.projectName.length === 0) {
+    if (!workspace?.workspaceId) return
+
+    if (data.title.length === 0) {
       addError("프로젝트 제목은 필수입력 값입니다")
 
       return
     }
 
-    createProjectApi(data)
+    createProjectApi(workspace.workspaceId, data)
       .then(() => {
         addSuccess("프로젝트 생성 성공!")
       })
@@ -72,7 +76,7 @@ const CreateProjectModal: React.FC<CreateProjectProps> = ({
             label="프로젝트 이름"
             name="projectName"
             variant="outlined"
-            value={data.projectName}
+            value={data.title}
             onChange={onChange}
           />
           <TextField
@@ -81,7 +85,7 @@ const CreateProjectModal: React.FC<CreateProjectProps> = ({
             label="프로젝트 설명"
             name="projectDescription"
             variant="outlined"
-            value={data.projectDescription}
+            value={data.description}
             onChange={onChange}
           />
         </Stack>

@@ -1,9 +1,14 @@
-import { WORKSPACE_PARTICIPANT_ROLE } from "_types/WorkspaceType"
+import { WORKSPACE_PARTICIPANT_ROLE } from "_types/workspace"
 
 export interface Project {
   projectId: number
   title: string
-  description: string | null
+  description?: string
+}
+
+export interface ProjectDetail extends Project {
+  createdAt: string
+  modifiedAt: string
 }
 
 export interface Board {
@@ -15,6 +20,6 @@ export interface ProjectParticipant {
   participantId: number
   name: string
   email: string
-  imageUrl: string | null
+  imageUrl?: string
   role: WORKSPACE_PARTICIPANT_ROLE
 }

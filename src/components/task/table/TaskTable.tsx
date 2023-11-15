@@ -1,6 +1,6 @@
 import React from "react"
 import Box from "@mui/material/Box"
-import { TaskSummary } from "_types/TaskType"
+import { TaskSummary } from "_types/task"
 import { Chip } from "@mui/material"
 import { styled } from "@mui/material/styles"
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp"

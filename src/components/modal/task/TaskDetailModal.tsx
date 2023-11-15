@@ -1,5 +1,4 @@
 import React from "react"
-import { TaskDetail, TaskManager } from "_types/TaskType"
 import CustomModal from "components/common/CustomModal"
 import { Avatar, Chip, Divider, Stack, ToggleButton } from "@mui/material"
 import Box from "@mui/material/Box"
@@ -8,12 +7,13 @@ import StarBorderIcon from "@mui/icons-material/StarBorder"
 import ProgressSelectButton from "components/task/ProgressSelectButton"
 import BoardSelectButton from "components/task/BoardSelectButton"
 import TextFieldBox from "components/common/TextFieldBox"
-import { modifyTaskApi, ModifyTaskRequest, taskDetailApi } from "api/taskApi"
 import { getWorkspaceStore } from "store/userStore"
 import { useAlert } from "hooks/useAlert"
 import CalendarDateField from "components/common/CalendarDateField"
 import ProjectParticipantsModal from "components/modal/project/ProjectParticipantsModal"
-import { ProjectParticipant } from "_types/ProjectType"
+import { TaskDetail } from "_types/task"
+import { modifyTaskApi, ModifyTaskRequestBody, taskDetailApi } from "api/task"
+import { ProjectParticipant } from "_types/project"
 
 interface Props {
   projectId: number
@@ -35,13 +35,12 @@ const TaskDetailModal: React.FC<Props> = ({
     React.useState<boolean>(false)
 
   const fetchData = async () => {
-    const { data: responseData } = await taskDetailApi(
-      workspace!.id,
+    const { data } = await taskDetailApi(
+      workspace!.workspaceId,
       projectId,
       taskId,
     )
-    const { data: fetchedTask } = responseData
-    setTask(fetchedTask)
+    setTask(data)
   }
 
   React.useEffect(() => {
@@ -51,9 +50,14 @@ const TaskDetailModal: React.FC<Props> = ({
   }, [open])
 
   const modifyTask = async (modifiedTask: TaskDetail) => {
-    console.log(modifiedTask.taskManager)
+    if (!modifiedTask.board) {
+      addError("보드를 선택해주세요")
+
+      return
+    }
+
     if (workspace && task) {
-      const request: ModifyTaskRequest = {
+      const request: ModifyTaskRequestBody = {
         title: modifiedTask.title,
         content: modifiedTask.content,
         boardId: modifiedTask.board?.boardId,
@@ -63,7 +67,7 @@ const TaskDetailModal: React.FC<Props> = ({
         emergency: modifiedTask.emergency,
         progressStatus: modifiedTask.progressStatus,
       }
-      await modifyTaskApi(workspace.id, projectId, taskId, request)
+      await modifyTaskApi(workspace.workspaceId, projectId, taskId, request)
       addSuccess("할 일을 수정했습니다.")
 
       fetchData()
@@ -358,7 +362,7 @@ const TaskDetailModal: React.FC<Props> = ({
             </Box>
           </Box>
           <ProjectParticipantsModal
-            workspaceId={workspace!.id}
+            workspaceId={workspace!.workspaceId}
             projectId={projectId}
             open={projectParticipantsModalOpen}
             handleClose={() => setProjectParticipantsModalOpen(false)}
@@ -369,7 +373,7 @@ const TaskDetailModal: React.FC<Props> = ({
                   ? {
                       projectParticipantId: participant.participantId,
                       name: participant.name,
-                      profileImageUrl: participant.imageUrl,
+                      imageUrl: participant.imageUrl,
                     }
                   : undefined,
               })

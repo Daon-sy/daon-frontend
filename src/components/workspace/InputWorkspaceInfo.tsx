@@ -3,9 +3,9 @@ import Box from "@mui/material/Box"
 import { Stack, TextField } from "@mui/material"
 import Typography from "@mui/material/Typography"
 import ImageInput from "components/image/ImageInput"
-import { WorkspaceInfo } from "api/workspaceApi"
 import useImageUrlInputRef from "hooks/useImageUrlInputRef"
-import { imageUploadApi } from "../../api/imageApi"
+import { imageUploadApi } from "api/image"
+import { WorkspaceInfo } from "api/workspace"
 
 interface Props {
   data: WorkspaceInfo
@@ -13,15 +13,15 @@ interface Props {
 }
 
 const InputWorkspaceInfo: React.FC<Props> = ({ data, onChange }: Props) => {
-  const { name, subject, description, imageUrl } = data
+  const { title, subject, description, imageUrl } = data
   const [ref, changeRef] = useImageUrlInputRef()
   const onImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target
     const file = files?.[0]
     if (file) {
       try {
-        const { data: responseData } = await imageUploadApi({ image: file })
-        changeRef(responseData.data.imageUrl)
+        const { data: responseBody } = await imageUploadApi({ image: file })
+        changeRef(responseBody.imageUrl)
       } catch (err) {
         console.error(err)
       }
@@ -53,7 +53,7 @@ const InputWorkspaceInfo: React.FC<Props> = ({ data, onChange }: Props) => {
                 label="워크스페이스 이름"
                 name="name"
                 variant="outlined"
-                value={name}
+                value={title}
                 onChange={onChange}
               />
               <TextField

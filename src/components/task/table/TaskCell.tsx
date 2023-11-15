@@ -1,5 +1,5 @@
 import React from "react"
-import { TaskSummary } from "_types/TaskType"
+import { TaskSummary } from "_types/task"
 import Box from "@mui/material/Box"
 import { Avatar, Chip, Stack, ToggleButton } from "@mui/material"
 import StarIcon from "@mui/icons-material/Star"
@@ -152,7 +152,7 @@ const TaskCell: React.FC<Props> = ({ task, borderColor }: Props) => {
         </Stack>
       </Box>
       <TaskDetailModal
-        projectId={task.projectId}
+        projectId={task.project.projectId}
         taskId={task.taskId}
         open={detailModalOpen}
         handleClose={() => setDetailModalOpen(false)}
