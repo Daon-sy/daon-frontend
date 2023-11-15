@@ -16,7 +16,7 @@ const TaskView: React.FC<TaskViewProps> = ({ tasks }) => {
       case "kanban":
         return <TaskKanbansWrapper tasks={tasks} />
       case "table":
-        return <TaskTableWrapper />
+        return <TaskTableWrapper tasks={tasks} />
       default:
         return <TaskKanbansWrapper tasks={tasks} />
     }
