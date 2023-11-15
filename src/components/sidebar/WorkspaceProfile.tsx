@@ -2,7 +2,7 @@ import * as React from "react"
 import styled from "styled-components"
 import { Box, Menu, MenuItem, Typography } from "@mui/material"
 import { TEST_IMAGE_URL } from "env"
-import ShowMember from "components/modal/participant/ShowParticipantsModal"
+import ShowMember from "components/workspace/modal/WorkspaceParticipantsModal"
 
 const WorkspaceProfileWrapper = styled.button`
   box-sizing: border-box;

@@ -6,7 +6,7 @@ import ListItemText from "@mui/material/ListItemText"
 import ListSubheader from "@mui/material/ListSubheader"
 import CircleIcon from "@mui/icons-material/Circle"
 import { Box } from "@mui/material"
-import CreateProjectModal from "components/modal/project/CreateProjectModal"
+import CreateProjectModal from "components/project/modal/CreateProjectModal"
 import CreateBtn from "./CreateBtn"
 
 interface CommonListItemProps {

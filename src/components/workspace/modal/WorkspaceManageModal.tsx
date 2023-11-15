@@ -3,8 +3,8 @@ import CustomModal from "components/common/CustomModal"
 import { Box, Stack } from "@mui/material"
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
 import ToggleButton from "@mui/material/ToggleButton"
-import WorkspaceDataManage from "components/modal/workspace/page/WorkspaceDataManage"
-import WorkspaceParticipantManage from "components/modal/workspace/page/WorkspaceParticipantManage"
+import WorkspaceDataManage from "components/workspace/WorkspaceDataManage"
+import WorkspaceParticipantManage from "components/workspace/WorkspaceParticipantManage"
 
 type pageType = "workspace" | "workspaceParticipant"
 
