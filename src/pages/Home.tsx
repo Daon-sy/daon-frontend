@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import styled from "styled-components"
 import Header from "components/header/Header"
-import TitleWrapper from "components/workspace/list/TitleWrapper"
+import TitleWrapper from "components/common/TitleWrapper"
 import { Box } from "@mui/material"
 import WorkspaceCard from "components/workspace/list/WorkspaceCard"
 import { Workspace } from "_types/workspace"
