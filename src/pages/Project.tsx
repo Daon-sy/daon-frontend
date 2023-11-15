@@ -34,17 +34,6 @@ const Project: React.FC = () => {
           height: "30%",
         }}
       >
-        <TitleWrapper title="게시판">게시판내용</TitleWrapper>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-          height: "30%",
-        }}
-      >
         <TitleWrapper title="보드 목록">
           {boards.map(board => (
             <BoardCard
