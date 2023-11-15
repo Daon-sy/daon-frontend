@@ -28,10 +28,8 @@ const WorkspaceMytaskView: React.FC = () => {
         height: "100%",
       }}
     >
-      <div>
-        <h1>워크스페이스 내 나의 전체 할일</h1>
-        <TaskView tasks={tasks} />
-      </div>
+      <h1>워크스페이스 내 나의 전체 할일</h1>
+      <TaskView tasks={tasks} />
     </Box>
   )
 }

@@ -31,10 +31,8 @@ const ProjectMytaskView: React.FC = () => {
         height: "100%",
       }}
     >
-      <div>
-        <h1>프로젝트 내 할일 View 페이지</h1>
-        <TaskView tasks={tasks} />
-      </div>
+      <h1>프로젝트 내 할일 View 페이지</h1>
+      <TaskView tasks={tasks} />
     </Box>
   )
 }

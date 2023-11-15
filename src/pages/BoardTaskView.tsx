@@ -31,10 +31,8 @@ const BoardTaskView: React.FC = () => {
         height: "100%",
       }}
     >
-      <div>
-        <h1>보드 내 전체 할일 View 페이지</h1>
-        <TaskView tasks={tasks} />
-      </div>
+      <h1>보드 내 전체 할일 View 페이지</h1>
+      <TaskView tasks={tasks} />
     </Box>
   )
 }

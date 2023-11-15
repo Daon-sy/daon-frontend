@@ -28,10 +28,8 @@ const BookmarkView: React.FC = () => {
         height: "100%",
       }}
     >
-      <div>
-        <h1>즐겨찾기 할일 View 페이지</h1>
-        <TaskView tasks={tasks} />
-      </div>
+      <h1>즐겨찾기 할일 View 페이지</h1>
+      <TaskView tasks={tasks} />
     </Box>
   )
 }
