@@ -34,7 +34,7 @@
       },
       "startDate": "2023-11-01",
       "endDate": "2023-11-30",
-      "progressStatus": "TODO",
+      "progressStatus": "PROCEEDING",
       "emergency": false,
       "board": {
         "boardId": 12,
@@ -57,7 +57,7 @@
       },
       "startDate": "2023-11-01",
       "endDate": "2023-11-10",
-      "progressStatus": "TODO",
+      "progressStatus": "COMPLETED",
       "emergency": false,
       "board": {
         "boardId": 12,
@@ -99,7 +99,7 @@
       },
       "startDate": "2023-11-05",
       "endDate": "2023-11-11",
-      "progressStatus": "TODO",
+      "progressStatus": "PENDING",
       "emergency": false,
       "board": {
         "boardId": 14,
