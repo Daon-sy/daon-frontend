@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import Box from "@mui/material/Box"
 import { Stack } from "@mui/material"
 import TaskKanbanBoard from "components/task/kanban/TaskKanbanBoard"
-import { taskListApi } from "api/task"
 import { TaskSummary } from "_types/task"
 
+interface TaskKanbansWrapperProps {
+  tasks: TaskSummary[]
+}
 const list = [
   {
     progressStatus: "TODO",
@@ -28,26 +30,7 @@ const list = [
   },
 ]
 
-const TaskKanbansWrapper: React.FC = () => {
-  const [tasks, setTasks] = useState<TaskSummary[]>([])
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const workspaceId = location.pathname.split("/")[2]
-        const projectId = location.pathname.split("/")[4]
-        const response = await taskListApi(+workspaceId, {
-          projectId: +projectId,
-        })
-        setTasks(response.data.tasks)
-      } catch (error) {
-        console.error("Error fetching tasks:", error)
-      }
-    }
-
-    fetchData() // fetchData 함수 호출
-  }, [])
-
+const TaskKanbansWrapper: React.FC<TaskKanbansWrapperProps> = ({ tasks }) => {
   const renderKanbanBoards = () =>
     list.map(item => (
       <TaskKanbanBoard

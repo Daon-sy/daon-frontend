@@ -3,18 +3,22 @@ import React from "react"
 import TaskHeader from "components/task/TaskHeader"
 import TaskKanbansWrapper from "components/task/kanban/TaskKanbansWrapper"
 import TaskTableWrapper from "components/task/table/TaskTableWrapper"
+import { TaskSummary } from "_types/task"
 
-const TaskView = () => {
+interface TaskViewProps {
+  tasks: TaskSummary[]
+}
+
+const TaskView: React.FC<TaskViewProps> = ({ tasks }) => {
   const [viewType, setViewType] = React.useState<string>("kanban")
-
   const renderView = () => {
     switch (viewType) {
       case "kanban":
-        return <TaskKanbansWrapper />
+        return <TaskKanbansWrapper tasks={tasks} />
       case "table":
         return <TaskTableWrapper />
       default:
-        return <TaskKanbansWrapper />
+        return <TaskKanbansWrapper tasks={tasks} />
     }
   }
 

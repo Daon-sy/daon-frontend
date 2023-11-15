@@ -9,7 +9,6 @@ interface Props {
   dividerColor: string | null
   style: React.CSSProperties
   tasks: Array<TaskSummary>
-  // children: React.ReactNode | null
 }
 
 const TaskKanbanBoard: React.FC<Props> = ({
