@@ -3,24 +3,23 @@ import React from "react"
 import Typography from "@mui/material/Typography"
 import ImageInput from "components/image/ImageInput"
 import useInputs from "hooks/useInputs"
-import { WorkspaceInfo } from "api/workspaceApi"
 import useImageUrlInputRef from "hooks/useImageUrlInputRef"
+import { WorkspaceInfo } from "api/workspace"
 
 const WorkspaceDataManage = () => {
   const [ref] = useImageUrlInputRef()
   const [data, onChange] = useInputs<WorkspaceInfo>({
-    name: "ws1",
+    title: "ws1",
     imageUrl: "",
     subject: "목적없음",
     description: "",
   })
 
-  const { name, imageUrl, subject, description } = data
+  const { title, imageUrl, subject, description } = data
 
   const onImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target
     const file = files?.[0]
-    console.log(file)
   }
 
   return (
@@ -50,7 +49,7 @@ const WorkspaceDataManage = () => {
                     label="워크스페이스 이름"
                     name="name"
                     variant="outlined"
-                    value={name}
+                    value={title}
                     onChange={onChange}
                   />
                   <TextField

@@ -3,10 +3,10 @@ import React from "react"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import { Button, Stack, TextField } from "@mui/material"
-import { signInApi, SignInRequest } from "api/signInApi"
 import { useAlert } from "hooks/useAlert"
 import { useNavigate } from "react-router-dom"
 import CustomModal from "components/common/CustomModal"
+import { signInApi, SignInRequestBody } from "api/auth"
 
 interface LoginModalProps {
   open: boolean
@@ -17,19 +17,19 @@ const LoginModal = (props: LoginModalProps) => {
   const navigate = useNavigate()
   const { addSuccess, addError } = useAlert()
   const { open, handleClose } = props
-  const [signInRequest, setSignInRequest] = React.useState<SignInRequest>({
-    email: "",
+  const [signInRequest, setSignInRequest] = React.useState<SignInRequestBody>({
+    username: "",
     password: "",
   })
 
-  const onEmailChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSignInRequest({
       ...signInRequest,
-      email: e.target.value,
+      username: e.target.value,
     })
   }
 
-  const onPasswordChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSignInRequest({
       ...signInRequest,
       password: e.target.value,
@@ -37,11 +37,11 @@ const LoginModal = (props: LoginModalProps) => {
   }
 
   const checkRequest = (): boolean =>
-    !(!signInRequest.email || !signInRequest.password)
+    !(!signInRequest.username || !signInRequest.password)
 
   const onLoginButtonClick = () => {
     if (!checkRequest()) {
-      addError("이메일, 비밀번호를 입력해주세요.")
+      addError("아이디, 비밀번호를 입력해주세요.")
 
       return
     }
@@ -56,7 +56,7 @@ const LoginModal = (props: LoginModalProps) => {
         if (err.response) {
           const { status } = err.response
           if (status === 400) {
-            addError("이메일 또는 비밀번호가 정확하지 않습니다.")
+            addError("아이디 또는 비밀번호가 정확하지 않습니다.")
           }
 
           if (status >= 500) {
@@ -77,7 +77,7 @@ const LoginModal = (props: LoginModalProps) => {
    */
   const cleanUp = () => {
     setSignInRequest({
-      email: "",
+      username: "",
       password: "",
     })
   }
@@ -100,10 +100,10 @@ const LoginModal = (props: LoginModalProps) => {
         <Stack spacing={2}>
           <TextField
             required
-            label="이메일"
+            label="아이디"
             variant="outlined"
-            value={signInRequest.email}
-            onChange={onEmailChanged}
+            value={signInRequest.username}
+            onChange={handleUsernameChange}
             helperText="usermail@email.com"
             onKeyDown={onEnterKeyDown}
           />
@@ -113,7 +113,7 @@ const LoginModal = (props: LoginModalProps) => {
             label="비밀번호"
             variant="outlined"
             value={signInRequest.password}
-            onChange={onPasswordChanged}
+            onChange={handlePasswordChange}
             helperText="6자리 이상. 영문,숫자,특수기호 조합."
             onKeyDown={onEnterKeyDown}
           />

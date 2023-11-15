@@ -5,7 +5,7 @@ import { TEST_IMAGE_URL } from "env"
 interface ImageInputProps {
   width: number
   height: number
-  imageUrl: string | null
+  imageUrl: string | null | undefined
   onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 

@@ -1,0 +1,9 @@
+{
+  "workspaceId": 1,
+  "title": "워크스페이스1",
+  "description": "테스트 워크스페이스",
+  "imageUrl": "https://daon-dev.s3.ap-northeast-2.amazonaws.com/image.jpeg",
+  "division": "GROUP",
+  "createdAt": "2023-11-15 10:00:00",
+  "modifiedAt": "2023-11-15 11:11:11"
+}

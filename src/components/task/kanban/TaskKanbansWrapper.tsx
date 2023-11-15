@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react"
 import Box from "@mui/material/Box"
 import { Stack } from "@mui/material"
 import TaskKanbanBoard from "components/task/kanban/TaskKanbanBoard"
-import { taskListApi } from "api/taskApi"
-import { TaskSummary } from "_types/TaskType"
+import { taskListApi } from "api/task"
+import { TaskSummary } from "_types/task"
 
 const list = [
   {
@@ -36,8 +36,10 @@ const TaskKanbansWrapper: React.FC = () => {
       try {
         const workspaceId = location.pathname.split("/")[2]
         const projectId = location.pathname.split("/")[4]
-        const response = await taskListApi(+workspaceId, +projectId)
-        setTasks(response.data.data.tasks)
+        const response = await taskListApi(+workspaceId, {
+          projectId: +projectId,
+        })
+        setTasks(response.data.tasks)
       } catch (error) {
         console.error("Error fetching tasks:", error)
       }

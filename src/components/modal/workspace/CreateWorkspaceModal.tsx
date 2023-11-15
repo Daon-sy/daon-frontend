@@ -5,14 +5,14 @@ import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
 import InputWsProfileInfo from "components/workspace/InputWsProfileInfo"
 import InputWorkspaceInfo from "components/workspace/InputWorkspaceInfo"
-import {
-  createWorkspaceApi,
-  CreateWorkspaceRequest,
-  WorkspaceInfo,
-  WsProfileInfo,
-} from "api/workspaceApi"
 import CustomModal from "components/common/CustomModal"
 import useInputs from "hooks/useInputs"
+import {
+  createWorkspaceApi,
+  CreateWorkspaceRequestBody,
+  WorkspaceInfo,
+  WsProfileInfo,
+} from "api/workspace"
 
 interface InputWorkspaceInfoPageProps {
   workspaceInfo: WorkspaceInfo
@@ -117,9 +117,9 @@ interface CreateWorkspaceModalProps {
   handleClose: () => void
 }
 
-const initialState: CreateWorkspaceRequest = {
+const initialState: CreateWorkspaceRequestBody = {
   workspace: {
-    name: "",
+    title: "",
     imageUrl: "",
     description: "",
     subject: "",
@@ -127,12 +127,13 @@ const initialState: CreateWorkspaceRequest = {
   profile: {
     name: "",
     imageUrl: "",
+    email: "",
   },
 }
 
 const CreateWorkspaceModal = (props: CreateWorkspaceModalProps) => {
   const [{ workspace, profile }, setRequest] =
-    React.useState<CreateWorkspaceRequest>(initialState)
+    React.useState<CreateWorkspaceRequestBody>(initialState)
   const [pageNumber, setPageNumber] = React.useState(1)
   const [processComplete, setProcessComplete] = React.useState(false)
   const { addSuccess, addError } = useAlert()
@@ -141,7 +142,7 @@ const CreateWorkspaceModal = (props: CreateWorkspaceModalProps) => {
   const createWorkspace = React.useCallback(async () => {
     createWorkspaceApi({ workspace, profile })
       .then(res => {
-        const { workspaceId } = res.data.data
+        const { workspaceId } = res.data
         // TODO 메시지 변경, 워크스페이스 페이지로 이동
         addSuccess(`워크스페이스가 생성되었습니다. id: ${workspaceId}`)
         handleClose()

@@ -3,12 +3,16 @@ import { Stack } from "@mui/material"
 import Box from "@mui/material/Box"
 import TaskTable from "components/task/table/TaskTable"
 import { getTaskTableStore } from "store/taskTableStore"
-import { TASK_STATUS } from "_types/TaskType"
+import { TASK_STATUS } from "_types/task"
 
 const tasks = [
   {
     taskId: 1,
-    projectId: 1,
+    project: {
+      projectId: 9,
+      title: "9번 프로젝트",
+      description: "설명",
+    },
     workspaceId: 1,
     title: "업무 관리 시스템",
     startDate: "2023-11-01",
@@ -28,7 +32,11 @@ const tasks = [
   },
   {
     taskId: 2,
-    projectId: 1,
+    project: {
+      projectId: 9,
+      title: "9번 프로젝트",
+      description: "설명",
+    },
     workspaceId: 1,
     title: "업무 관리 시스템",
     startDate: "2023-11-01",
@@ -48,7 +56,11 @@ const tasks = [
   },
   {
     taskId: 3,
-    projectId: 1,
+    project: {
+      projectId: 9,
+      title: "9번 프로젝트",
+      description: "설명",
+    },
     workspaceId: 1,
     title: "업무 관리 시스템",
     startDate: "2023-11-01",
@@ -68,7 +80,11 @@ const tasks = [
   },
   {
     taskId: 4,
-    projectId: 1,
+    project: {
+      projectId: 9,
+      title: "9번 프로젝트",
+      description: "설명",
+    },
     workspaceId: 1,
     title: "업무 관리 시스템",
     startDate: "2023-11-01",
@@ -88,7 +104,11 @@ const tasks = [
   },
   {
     taskId: 5,
-    projectId: 1,
+    project: {
+      projectId: 9,
+      title: "9번 프로젝트",
+      description: "설명",
+    },
     workspaceId: 1,
     title: "업무 관리 시스템",
     startDate: "2023-11-01",
@@ -108,7 +128,11 @@ const tasks = [
   },
   {
     taskId: 6,
-    projectId: 1,
+    project: {
+      projectId: 9,
+      title: "9번 프로젝트",
+      description: "설명",
+    },
     workspaceId: 1,
     title: "업무 관리 시스템",
     startDate: "2023-11-01",

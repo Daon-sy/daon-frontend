@@ -1,0 +1,21 @@
+{
+  "totalCount": 4,
+  "boards": [
+    {
+      "boardId": 12,
+      "title": "1번 보드"
+    },
+    {
+      "boardId": 13,
+      "title": "2번 보드"
+    },
+    {
+      "boardId": 14,
+      "title": "3번 보드"
+    },
+    {
+      "boardId": 15,
+      "title": "4번 보드"
+    }
+  ]
+}
