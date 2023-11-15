@@ -10,7 +10,7 @@ import TextFieldBox from "components/common/TextFieldBox"
 import { getWorkspaceStore } from "store/userStore"
 import { useAlert } from "hooks/useAlert"
 import CalendarDateField from "components/common/CalendarDateField"
-import ProjectParticipantsModal from "components/modal/project/ProjectParticipantsModal"
+import ProjectParticipantsModal from "components/project/modal/ProjectParticipantsModal"
 import { TaskDetail } from "_types/task"
 import {
   modifyTaskApi,

@@ -6,7 +6,7 @@ import Button from "@mui/material/Button"
 import Tooltip from "@mui/material/Tooltip"
 import MenuItem from "@mui/material/MenuItem"
 import { Link } from "react-router-dom"
-import CreateWorkspaceModal from "components/modal/workspace/CreateWorkspaceModal"
+import CreateWorkspaceModal from "components/workspace/modal/CreateWorkspaceModal"
 
 const myWorkspaces = ["워크스페이스1", "워크스페이스2"]
 
