@@ -34,7 +34,9 @@ const TaskKanbansWrapper: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await taskListApi(5, 9)
+        const workspaceId = location.pathname.split("/")[2]
+        const projectId = location.pathname.split("/")[4]
+        const response = await taskListApi(+workspaceId, +projectId)
         setTasks(response.data.data.tasks)
       } catch (error) {
         console.error("Error fetching tasks:", error)
