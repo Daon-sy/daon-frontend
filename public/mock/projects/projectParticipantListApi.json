@@ -1,0 +1,40 @@
+{
+  "totalCount": 5,
+  "projectParticipants": [
+    {
+      "projectParticipantId": 1,
+      "name": "참여자2",
+      "email": "email2@email.com",
+      "imageUrl": null,
+      "role": "WORKSPACE_ADMIN"
+    },
+    {
+      "projectParticipantId": 2,
+      "name": "참여자2",
+      "email": "email2@email.com",
+      "imageUrl": null,
+      "role": "PROJECT_ADMIN"
+    },
+    {
+      "projectParticipantId": 3,
+      "name": "참여자3",
+      "email": "email3@email.com",
+      "imageUrl": null,
+      "role": "PARTICIPANT"
+    },
+    {
+      "projectParticipantId": 4,
+      "name": "참여자4",
+      "email": "email4@email.com",
+      "imageUrl": null,
+      "role": "PARTICIPANT"
+    },
+    {
+      "projectParticipantId": 5,
+      "name": "참여자5",
+      "email": "email5@email.com",
+      "imageUrl": null,
+      "role": "PARTICIPANT"
+    }
+  ]
+}

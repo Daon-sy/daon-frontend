@@ -1,0 +1,24 @@
+{
+  "taskId": 1,
+  "project": {
+    "projectId": 9,
+    "title": "project1",
+    "description": null
+  },
+  "board": {
+    "boardId": 12,
+    "title": "1번 보드"
+  },
+  "title": "Task1",
+  "content": null,
+  "taskManager": {
+    "projectParticipantId": 9,
+    "name": "WS5_USER1",
+    "imageUrl": null
+  },
+  "startDate": "2023-11-01",
+  "endDate": "2023-11-30",
+  "progressStatus": "TODO",
+  "emergency": false,
+  "bookmark": false
+}
