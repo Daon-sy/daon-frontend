@@ -130,8 +130,8 @@ const TaskCard: React.FC<Props> = ({ task }: Props) => {
         </Card>
       </Box>
       <TaskDetailModal
-        projectId={9}
-        taskId={2}
+        projectId={task.project.projectId}
+        taskId={task.taskId}
         open={detailModalOpen}
         handleClose={() => setDetailModalOpen(false)}
       />
