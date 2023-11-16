@@ -5,7 +5,7 @@ import { projectListApi } from "api/project"
 import TitleWrapper from "components/common/TitleWrapper"
 import { Box } from "@mui/material"
 
-const Workspace: React.FC = () => {
+const WorkspaceMain: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([])
 
   const workspaceId = location.pathname.split("/")[2]
@@ -60,4 +60,4 @@ const Workspace: React.FC = () => {
   )
 }
 
-export default Workspace
+export default WorkspaceMain
