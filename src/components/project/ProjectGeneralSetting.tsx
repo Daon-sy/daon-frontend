@@ -4,34 +4,46 @@ import {
   createProjectBoardApi,
   modifyProjectApi,
   modifyProjectBoardApi,
+  ModifyWorkspaceRequestBody,
   projectBoardListApi,
   projectDetailApi,
+  removeProjectApi,
   removeProjectBoardApi,
+  withdrawProjectApi,
 } from "api/project"
 import { Board, ProjectDetail } from "_types/project"
-import TextFieldBox from "components/common/TextFieldBox"
-import { Box, IconButton, TextField, Button } from "@mui/material"
+import { Box, IconButton, TextField, Button, Stack } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
 import DeleteIcon from "@mui/icons-material/Delete"
-import axios from "axios"
-import { ApiResponse } from "api"
+import { useAlert } from "hooks/useAlert"
+import { getWorkspaceStore } from "store/userStore"
+import { WORKSPACE_PARTICIPANT_ROLE } from "_types/workspace"
+import EditableBox from "components/common/EditableBox"
+import ConfirmDialog from "components/common/ConfirmDialog"
+import { useNavigate } from "react-router-dom"
+
+const allowedEdit: Array<WORKSPACE_PARTICIPANT_ROLE> = [
+  "WORKSPACE_ADMIN",
+  "PROJECT_ADMIN",
+]
 
 interface Props {
   workspaceId: number
   projectId: number
-  addSuccessAlert: (message: string) => void
-  addErrorAlert: (message: string) => void
 }
 
-const ProjectGeneralSetting = ({
-  workspaceId,
-  projectId,
-  addSuccessAlert,
-  addErrorAlert,
-}: Props) => {
+const ProjectGeneralSetting = ({ workspaceId, projectId }: Props) => {
+  const { addSuccess } = useAlert()
+  const { myProfile } = getWorkspaceStore()
+  const navigate = useNavigate()
   const [projectDetail, setProjectDetail] = React.useState<ProjectDetail>()
   const [boards, setBoards] = React.useState<Array<Board>>()
   const [newBoardTitle, setNewBoardTitle] = React.useState("")
+  const [boardIdToRemove, setBoardIdToRemove] = React.useState<number>()
+  const [projectRemoveModalOpen, setProjectRemoveModalOpen] =
+    React.useState(false)
+  const [projectWithdrawModalOpen, setProjectWithdrawModalOpen] =
+    React.useState(false)
 
   const fetchProjectDetail = async () => {
     const { data: projectDetailData } = await projectDetailApi(
@@ -53,84 +65,38 @@ const ProjectGeneralSetting = ({
     const fetchData = async () => {
       // project detail 조회
       await fetchProjectDetail()
-
       // 보드 목록 조회
       await fetchProjectBoards()
     }
     fetchData()
   }, [])
 
-  const handleProjectTitleChange = async (title?: string) => {
-    if (!projectDetail) return
-    if (!title) {
-      addErrorAlert("프로젝트 제목은 비워둘 수 없습니다.")
+  if (!(projectDetail && myProfile)) return <Box />
+  const { title: projectTitle, description } = projectDetail
 
-      return
-    }
-    try {
-      await modifyProjectApi(workspaceId, projectId, {
-        title,
-      })
-
-      await fetchProjectDetail()
-      addSuccessAlert("프로젝트 제목 변경 완료")
-    } catch (e) {
-      if (axios.isAxiosError<ApiResponse>(e)) {
-        if (e.status === 400) {
-          const { data } = e.response!
-          addErrorAlert(data.message)
-        }
-      }
-    }
-  }
-
-  const handleProjectDescriptionChange = async (description?: string) => {
-    if (!projectDetail) return
-    await modifyProjectApi(workspaceId, projectId, {
-      description,
-    })
-
-    await fetchProjectDetail()
-    addSuccessAlert("프로젝트 설명 변경 완료")
+  const updateProject = async (data: ModifyWorkspaceRequestBody) => {
+    await modifyProjectApi(workspaceId, projectId, { ...data })
+    addSuccess("프로젝트 정보 수정 완료")
+    fetchProjectDetail()
   }
 
   const handleAddBoard = async () => {
-    if (!newBoardTitle) {
-      addErrorAlert("보드 이름은 비워둘 수 없습니다.")
-
-      return
-    }
-
-    try {
+    if (newBoardTitle) {
       await createProjectBoardApi(workspaceId, projectId, {
         title: newBoardTitle,
       })
 
       await fetchProjectBoards()
-      addSuccessAlert("보드 추가 완료")
+      addSuccess("보드 추가 완료")
       setNewBoardTitle("")
-    } catch (e) {
-      if (axios.isAxiosError<ApiResponse>(e)) {
-        const { response } = e
-        if (response?.status === 400) {
-          const { data } = response
-          addErrorAlert(data.message)
-        }
-      }
     }
   }
 
-  const handleBoardUpdate = async (boardId: number, title?: string) => {
-    if (!title) {
-      addErrorAlert("보드 이름은 비워둘 수 없습니다.")
-
-      return
-    }
-
+  const updateBoard = async (boardId: number, title: string) => {
     await modifyProjectBoardApi(workspaceId, projectId, boardId, { title })
 
     await fetchProjectBoards()
-    addSuccessAlert("보드 수정 완료")
+    addSuccess("보드 수정 완료")
   }
 
   const handleNewBoardTitleEntered = async (
@@ -141,10 +107,27 @@ const ProjectGeneralSetting = ({
     }
   }
 
-  const handleBoardRemove = async (boardId: number) => {
-    await removeProjectBoardApi(workspaceId, projectId, boardId)
-    await fetchProjectBoards()
-    addSuccessAlert("보드 삭제 완료")
+  const handleBoardRemove = async () => {
+    if (boardIdToRemove) {
+      await removeProjectBoardApi(workspaceId, projectId, boardIdToRemove)
+      await fetchProjectBoards()
+      addSuccess("보드 삭제 완료")
+      setBoardIdToRemove(undefined)
+    }
+  }
+
+  const removeProject = async () => {
+    await removeProjectApi(workspaceId, projectId)
+    addSuccess("프로젝트가 삭제되었습니다")
+    // 워크스페이스 메인 페이지로 이동
+    navigate(`/workspace/${workspaceId}`)
+  }
+
+  const withdrawProject = async () => {
+    await withdrawProjectApi(workspaceId, projectId)
+    addSuccess("프로젝트를 탈퇴하였습니다")
+    // 워크스페이스 메인 페이지로 이동
+    navigate(`/workspace/${workspaceId}`)
   }
 
   return !projectDetail || !boards ? (
@@ -153,95 +136,139 @@ const ProjectGeneralSetting = ({
     <Box>
       <Box>
         <Box>
-          <Typography variant="h5">프로젝트 정보</Typography>
+          <Typography variant="h6">프로젝트 정보</Typography>
         </Box>
-        <Box mt={3}>
-          <Typography variant="h6">프로젝트 이름</Typography>
-          <TextFieldBox
+        <Box mt={2}>
+          <Typography variant="inherit" p={0.5} fontSize={15} fontWeight={500}>
+            프로젝트 이름
+          </Typography>
+          <EditableBox
+            autoFocus
             enterComplete
-            text={projectDetail.title}
-            bgcolor="rgb(233,233,233)"
-            marginTop={0}
-            paddingX={1.5}
-            fontSize={16}
-            handleTextChange={handleProjectTitleChange}
+            text={projectTitle}
+            updateText={value => value && updateProject({ title: value })}
+            blockEdit={!allowedEdit.includes(myProfile.role)}
+            maxTextLength={20}
+            style={{
+              borderColor: "rgba(200,200,200)",
+              borderWidth: 1,
+            }}
           />
         </Box>
         <Box mt={1}>
-          <Typography variant="h6">프로젝트 설명</Typography>
-          <TextFieldBox
+          <Typography variant="inherit" p={0.5} fontSize={15} fontWeight={500}>
+            프로젝트 설명
+          </Typography>
+          <EditableBox
             multiline
-            text={projectDetail.description}
-            bgcolor="rgb(233,233,233)"
-            marginTop={0}
-            paddingX={1.5}
-            fontSize={16}
-            handleTextChange={handleProjectDescriptionChange}
+            autoFocus
+            text={description}
+            updateText={value => value && updateProject({ description: value })}
+            blockEdit={!allowedEdit.includes(myProfile.role)}
+            maxTextLength={100}
+            style={{
+              borderColor: "rgba(200,200,200)",
+              borderWidth: 1,
+            }}
           />
         </Box>
       </Box>
       <Box mt={10}>
         <Box>
-          <Typography variant="h5">프로젝트 보드</Typography>
+          <Typography variant="h6">프로젝트 보드</Typography>
         </Box>
-        <Box mt={3}>
-          <Box
-            sx={{
-              width: 350,
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <TextField
-                fullWidth
-                value={newBoardTitle}
-                size="small"
-                placeholder="추가 할 보드의 이름을 입력하세요"
-                onChange={e => setNewBoardTitle(e.target.value)}
-                onKeyDown={handleNewBoardTitleEntered}
-              />
-              <Box ml={1}>
-                <IconButton size="small" onClick={handleAddBoard}>
-                  <AddIcon />
-                </IconButton>
-              </Box>
-            </Box>
-            <Box mt={2}>
-              {boards.map(board => (
+        <Box>
+          <Box sx={{ width: 350 }}>
+            {allowedEdit.includes(myProfile.role) ? (
+              <Box mt={1}>
+                <Typography
+                  variant="inherit"
+                  p={0.5}
+                  fontSize={15}
+                  fontWeight={500}
+                >
+                  보드 추가
+                </Typography>
                 <Box
                   sx={{
                     display: "flex",
                     alignItems: "center",
                   }}
                 >
-                  <Box width="100%">
-                    <TextFieldBox
-                      enterComplete
-                      text={board.title}
-                      bgcolor="rgb(233,233,233)"
-                      marginTop={0}
-                      paddingX={1.5}
-                      fontSize={15}
-                      handleTextChange={async text => {
-                        await handleBoardUpdate(board.boardId, text)
-                      }}
-                    />
-                  </Box>
-                  <Box ml={1} pb={1}>
-                    <IconButton
-                      size="small"
-                      // TODO open dialog
-                      onClick={() => handleBoardRemove(board.boardId)}
-                    >
-                      <DeleteIcon />
+                  <TextField
+                    fullWidth
+                    value={newBoardTitle}
+                    size="small"
+                    placeholder="추가 할 보드의 이름을 입력하세요"
+                    onChange={e => setNewBoardTitle(e.target.value)}
+                    onKeyDown={handleNewBoardTitleEntered}
+                  />
+                  <Box ml={1}>
+                    <IconButton size="small" onClick={handleAddBoard}>
+                      <AddIcon />
                     </IconButton>
                   </Box>
                 </Box>
-              ))}
+              </Box>
+            ) : null}
+            <Box mt={1}>
+              <Typography
+                variant="inherit"
+                p={0.5}
+                fontSize={15}
+                fontWeight={500}
+              >
+                보드 목록
+              </Typography>
+              <Stack spacing={0.5}>
+                {boards.map(board => (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Box width="100%">
+                      <EditableBox
+                        autoFocus
+                        enterComplete
+                        text={board.title}
+                        updateText={value =>
+                          value && updateBoard(board.boardId, value)
+                        }
+                        blockEdit={!allowedEdit.includes(myProfile.role)}
+                        maxTextLength={20}
+                        style={{
+                          borderColor: "rgba(200,200,200)",
+                          borderWidth: 1,
+                        }}
+                      />
+                    </Box>
+                    {allowedEdit.includes(myProfile.role) ? (
+                      <Box ml={1} pb={1}>
+                        <IconButton
+                          size="small"
+                          onClick={() => setBoardIdToRemove(board.boardId)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Box>
+                    ) : null}
+                  </Box>
+                ))}
+              </Stack>
+              <ConfirmDialog
+                open={!!boardIdToRemove}
+                maxWidth="xs"
+                title="주의!!"
+                content={
+                  "해당 보드에 포함된 모든 할 일이 함게 삭제됩니다.\n그래도 보드를 삭제하시겠습니까?"
+                }
+                handleConfirm={handleBoardRemove}
+                handleClose={() => {
+                  setBoardIdToRemove(undefined)
+                }}
+              />
             </Box>
           </Box>
         </Box>
@@ -250,25 +277,57 @@ const ProjectGeneralSetting = ({
         <Box>
           <Typography variant="h5">Danger Zone</Typography>
         </Box>
-        <Box>
-          <Box mt={3}>
-            <Typography variant="h6">프로젝트 삭제</Typography>
+        {allowedEdit.includes(myProfile.role) ? (
+          <Box>
+            <Box mt={3}>
+              <Typography variant="h6">프로젝트 삭제</Typography>
+            </Box>
+            <Box mt={1}>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => setProjectRemoveModalOpen(true)}
+              >
+                삭제하기
+              </Button>
+            </Box>
+            <ConfirmDialog
+              open={projectRemoveModalOpen}
+              maxWidth="xs"
+              title="주의!!"
+              content={
+                "프로젝트 내의 모든 정보가 삭제됩니다.\n정말로 이 프로젝트를 삭제하시겠습니까?"
+              }
+              handleConfirm={removeProject}
+              handleClose={() => {
+                setProjectRemoveModalOpen(false)
+              }}
+            />
           </Box>
-          <Box mt={1}>
-            <Button variant="outlined" color="error">
-              삭제하기
-            </Button>
-          </Box>
-        </Box>
+        ) : null}
         <Box>
           <Box mt={3}>
             <Typography variant="h6">프로젝트 탈퇴</Typography>
           </Box>
           <Box mt={1}>
-            <Button variant="outlined" color="error">
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={() => setProjectWithdrawModalOpen(true)}
+            >
               탈퇴하기
             </Button>
           </Box>
+          <ConfirmDialog
+            open={projectWithdrawModalOpen}
+            maxWidth="xs"
+            title="주의!!"
+            content="정말로 이 프로젝트를 탈퇴하시겠습니까?"
+            handleConfirm={withdrawProject}
+            handleClose={() => {
+              setProjectWithdrawModalOpen(false)
+            }}
+          />
         </Box>
       </Box>
     </Box>

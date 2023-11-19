@@ -1,12 +1,79 @@
-import { Box, Divider, Stack } from "@mui/material"
-import CustomModal from "components/common/CustomModal"
+import { Box, Chip, DialogContent, Divider, Stack } from "@mui/material"
 import React from "react"
-import Button from "@mui/material/Button"
 import ProjectGeneralSetting from "components/project/ProjectGeneralSetting"
 import Typography from "@mui/material/Typography"
 import ProjectParticipantsSetting from "components/project/ProjectParticipantsSetting"
-import { useAlert } from "hooks/useAlert"
 import { getWorkspaceStore } from "store/userStore"
+import TitleModal from "components/common/TitleModal"
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
+import ToggleButton from "@mui/material/ToggleButton"
+import { roles } from "_types/workspace"
+
+type PageType = "project" | "projectParticipant"
+
+interface MenuProps {
+  page: string
+  setPage: (page: PageType) => void
+}
+
+const Menu = ({ page, setPage }: MenuProps) => {
+  return (
+    <Box height="100%">
+      <Stack spacing={1} p={1}>
+        <ToggleButtonGroup
+          orientation="vertical"
+          value={page}
+          exclusive
+          sx={{
+            backgroundColor: "white",
+          }}
+          color="primary"
+          onChange={(e: React.MouseEvent<HTMLElement>, newPage: PageType) =>
+            newPage && setPage(newPage)
+          }
+        >
+          <ToggleButton value="project">프로젝트</ToggleButton>
+          <ToggleButton value="projectParticipant">
+            프로젝트 참여자
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Stack>
+    </Box>
+  )
+}
+
+const Body = ({
+  workspaceId,
+  projectId,
+  page,
+}: {
+  workspaceId: number
+  projectId: number
+  page: PageType
+}) => {
+  const renderPage = () => {
+    switch (page) {
+      case "project":
+        return (
+          <ProjectGeneralSetting
+            workspaceId={workspaceId}
+            projectId={projectId}
+          />
+        )
+      case "projectParticipant":
+        return (
+          <ProjectParticipantsSetting
+            workspaceId={workspaceId}
+            projectId={projectId}
+          />
+        )
+      default:
+        return null
+    }
+  }
+
+  return <Box sx={{ paddingX: 4, paddingBottom: 10 }}>{renderPage()}</Box>
+}
 
 interface Props {
   projectId: number
@@ -15,87 +82,58 @@ interface Props {
 }
 
 const ProjectSettingsModal = ({ projectId, open, handleClose }: Props) => {
-  const { workspace } = getWorkspaceStore()
-  const [page, setPage] = React.useState(1)
-  const { addSuccess, addError } = useAlert()
+  const { workspace, myProfile } = getWorkspaceStore()
+  const [page, setPage] = React.useState<PageType>("project")
 
-  const renderPage = () => {
-    if (!workspace) return <Box />
-
-    if (page === 2)
-      return (
-        <ProjectParticipantsSetting
-          workspaceId={workspace?.workspaceId}
-          projectId={projectId}
-          addSuccessAlert={addSuccess}
-          addErrorAlert={addError}
-        />
-      )
-
-    return (
-      <ProjectGeneralSetting
-        workspaceId={workspace?.workspaceId}
-        projectId={projectId}
-        addSuccessAlert={addSuccess}
-        addErrorAlert={addError}
-      />
-    )
-  }
+  if (!workspace) return <Box />
 
   return (
-    <CustomModal
+    <TitleModal
       open={open}
       handleClose={handleClose}
-      width={800}
+      title="프로젝트 설정"
+      subTitle={
+        <Box display="flex" alignItems="center">
+          <Typography fontSize={15}>사용자 : {myProfile?.name}</Typography>
+          <Chip
+            label={roles.find(p => p.role === myProfile?.role)?.description}
+            size="small"
+            sx={{
+              fontSize: 12,
+              marginLeft: 1,
+            }}
+          />
+        </Box>
+      }
+      padding={0}
       height={600}
-      fullHeight
-      px={0}
-      py={0}
     >
-      <Stack direction="row" height="100%">
-        <Box p={1} width={250}>
-          <Typography variant="h5" textAlign="center" padding={2}>
-            프로젝트 관리
-          </Typography>
-          <Divider />
-          <Box mt={2}>
-            <Stack spacing={1}>
-              <Button
-                disabled={page === 1}
-                variant={page === 1 ? "contained" : "outlined"}
-                onClick={() => setPage(1)}
-              >
-                일반
-              </Button>
-              <Button
-                disabled={page === 2}
-                variant={page === 2 ? "contained" : "outlined"}
-                onClick={() => setPage(2)}
-              >
-                참여자 관리
-              </Button>
-            </Stack>
-          </Box>
-        </Box>
-        <Divider
-          orientation="vertical"
-          sx={{
-            borderWidth: 1,
-          }}
-        />
-        <Box
-          sx={{
-            paddingTop: 5,
-            paddingLeft: 3,
-            width: "100%",
-            overflowY: "auto",
-            paddingBottom: 5,
-          }}
-        >
-          <Box pr={5}>{renderPage()}</Box>
-        </Box>
-      </Stack>
-    </CustomModal>
+      <Box height="100%">
+        <Stack direction="row" height="100%">
+          <DialogContent
+            sx={{
+              padding: 0,
+              width: 300,
+              height: "100%",
+            }}
+          >
+            <Menu page={page} setPage={setPage} />
+          </DialogContent>
+          <Divider orientation="vertical" />
+          <DialogContent
+            sx={{
+              width: "100%",
+            }}
+          >
+            <Body
+              workspaceId={workspace?.workspaceId}
+              projectId={projectId}
+              page={page}
+            />
+          </DialogContent>
+        </Stack>
+      </Box>
+    </TitleModal>
   )
 }
 
