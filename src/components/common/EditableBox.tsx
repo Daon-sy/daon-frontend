@@ -249,12 +249,25 @@ const EditBox = React.forwardRef(
               alignItems: "center",
               position: "absolute",
               marginTop: 0.5,
+              bgcolor: "white",
             }}
           >
-            <Box mr={1} fontSize={14}>
-              {maxTextLength ? `${inputText?.length}/${maxTextLength}` : null}
-            </Box>
             <ButtonGroup disableElevation variant="contained">
+              <Button
+                disabled
+                size="small"
+                sx={{
+                  "&.Mui-disabled": {
+                    backgroundColor: "white",
+                    color: "black",
+                    borderStyle: "solid",
+                    borderWidth: 1,
+                    borderColor: "rgb(155,185,229)",
+                  },
+                }}
+              >
+                {maxTextLength ? `${inputText?.length}/${maxTextLength}` : null}
+              </Button>
               <Button
                 variant="contained"
                 size="small"
