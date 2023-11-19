@@ -46,7 +46,7 @@ const Nav: React.FC = () => {
         }}
       >
         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-          LOGO
+          DAON
         </Link>
       </Typography>
 

@@ -8,20 +8,15 @@ import {
   Box,
 } from "@mui/material"
 import { Link as RouterLink } from "react-router-dom"
+import { Workspace } from "_types/workspace"
+import { TEST_IMAGE_URL } from "env"
 
 interface WorkspaceItemProps {
-  wsTitle: string
-  imgUrl: string
-  division: string
+  workspace: Workspace
   to: string
 }
 
-const WorkspaceCard: React.FC<WorkspaceItemProps> = ({
-  wsTitle,
-  imgUrl,
-  division,
-  to,
-}) => {
+const WorkspaceCard: React.FC<WorkspaceItemProps> = ({ workspace, to }) => {
   return (
     <Card sx={{ maxWidth: "250px", height: "140px", my: 1, mx: "20px" }}>
       <CardActionArea component={RouterLink} to={to}>
@@ -54,7 +49,7 @@ const WorkspaceCard: React.FC<WorkspaceItemProps> = ({
                 fontSize: "16px",
               }}
             >
-              {division}
+              {workspace.division}
             </Box>
             <CardMedia
               component="img"
@@ -63,8 +58,8 @@ const WorkspaceCard: React.FC<WorkspaceItemProps> = ({
                 width: "90px",
                 objectFit: "cover",
               }}
-              image={imgUrl}
-              alt={wsTitle}
+              image={workspace.imageUrl || TEST_IMAGE_URL}
+              alt={workspace.title}
             />
           </Box>
           <CardContent
@@ -83,7 +78,7 @@ const WorkspaceCard: React.FC<WorkspaceItemProps> = ({
                 fontSize: "16px",
               }}
             >
-              {wsTitle}
+              {workspace.title}
             </Typography>
           </CardContent>
         </Box>

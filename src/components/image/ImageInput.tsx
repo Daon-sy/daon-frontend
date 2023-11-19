@@ -5,12 +5,18 @@ import { TEST_IMAGE_URL } from "env"
 interface ImageInputProps {
   width: number
   height: number
+  borderRadius?: number
   imageUrl: string | null | undefined
   onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const ImageInput = (props: ImageInputProps) => {
-  const { width, height, imageUrl, onImageChange } = props
+const ImageInput = ({
+  width,
+  height,
+  borderRadius = 5,
+  imageUrl,
+  onImageChange,
+}: ImageInputProps) => {
   const fileInput = React.useRef<HTMLInputElement>(null)
   const onImageBoxClick = () => fileInput.current?.click()
 
@@ -24,7 +30,7 @@ const ImageInput = (props: ImageInputProps) => {
           marginRight: 2,
           border: "solid 1px",
           borderColor: "rgba(0, 0, 0, 0.23)",
-          borderRadius: "10px",
+          borderRadius,
           "&:hover": {
             cursor: "pointer",
           },

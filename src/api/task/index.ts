@@ -69,7 +69,7 @@ export const taskListApi = (
   },
 ): Promise<AxiosResponse<TaskListResponseBody>> => {
   // `/api/workspaces/${workspaceId}/projects/tasks`
-  return authAxios.get("http://localhost:3000/mock/tasks/taskListApi.json", {
+  return authAxios.get(`/api/workspaces/${workspaceId}/projects/tasks`, {
     params,
   })
 }

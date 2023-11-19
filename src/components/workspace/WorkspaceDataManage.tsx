@@ -1,25 +1,49 @@
-import { Box, Button, Stack, TextField } from "@mui/material"
+import { Box, Stack } from "@mui/material"
 import React from "react"
 import Typography from "@mui/material/Typography"
 import ImageInput from "components/image/ImageInput"
-import useInputs from "hooks/useInputs"
 import useImageUrlInputRef from "hooks/useImageUrlInputRef"
-import { WorkspaceInfo } from "api/workspace"
+import {
+  modifyWorkspaceApi,
+  ModifyWorkspaceRequestBody,
+  workspaceDetailApi,
+} from "api/workspace"
+import { getWorkspaceStore } from "store/userStore"
+import EditableBox from "components/common/EditableBox"
+import { useAlert } from "hooks/useAlert"
+import { imageUploadApi } from "api/image"
 
 const WorkspaceDataManage = () => {
-  const [ref] = useImageUrlInputRef()
-  const [data, onChange] = useInputs<WorkspaceInfo>({
-    title: "ws1",
-    imageUrl: "",
-    subject: "목적없음",
-    description: "",
-  })
+  const { workspace, myProfile, setWorkspace } = getWorkspaceStore()
+  const { addSuccess } = useAlert()
+  const [ref, changeRef] = useImageUrlInputRef()
 
-  const { title, imageUrl, subject, description } = data
+  if (!workspace) {
+    return <Box />
+  }
+
+  const { workspaceId, title, imageUrl, subject, description } = workspace
 
   const onImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target
     const file = files?.[0]
+    if (file) {
+      try {
+        const { data: responseBody } = await imageUploadApi({ image: file })
+        changeRef(responseBody.imageUrl)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+  }
+
+  const updateWorkspace = async (data: ModifyWorkspaceRequestBody) => {
+    await modifyWorkspaceApi(workspaceId, { ...data })
+    addSuccess("워크스페이스 정보 수정 완료")
+    const { data: workspaceDetail } = await workspaceDetailApi(
+      workspace.workspaceId,
+    )
+    setWorkspace(workspaceDetail)
   }
 
   return (
@@ -30,8 +54,8 @@ const WorkspaceDataManage = () => {
             <Typography variant="h6">워크스페이스 정보</Typography>
             <Box display="flex" alignItems="center">
               <ImageInput
-                width={120}
-                height={120}
+                width={160}
+                height={160}
                 imageUrl={imageUrl}
                 onImageChange={onImageChange}
               />
@@ -40,47 +64,90 @@ const WorkspaceDataManage = () => {
                 type="text"
                 name="imageUrl"
                 ref={ref}
-                onChange={onChange}
+                onChange={e =>
+                  updateWorkspace({ imageUrl: e.currentTarget.value })
+                }
               />
               <Box width="100%">
                 <Stack spacing={2}>
-                  <TextField
-                    required
-                    label="워크스페이스 이름"
-                    name="name"
-                    variant="outlined"
-                    value={title}
-                    onChange={onChange}
-                  />
-                  <TextField
-                    label="워크스페이스 목적"
-                    name="subject"
-                    variant="outlined"
-                    value={subject}
-                    onChange={onChange}
-                  />
+                  <Box>
+                    <Typography
+                      variant="inherit"
+                      p={0.5}
+                      fontSize={15}
+                      fontWeight={500}
+                    >
+                      워크스페이스 이름
+                    </Typography>
+                    <EditableBox
+                      autoFocus
+                      enterComplete
+                      text={title}
+                      updateText={value =>
+                        value && updateWorkspace({ title: value })
+                      }
+                      blockEdit={myProfile?.role !== "WORKSPACE_ADMIN"}
+                      maxTextLength={20}
+                      style={{
+                        borderColor: "rgba(200,200,200)",
+                        borderWidth: 1,
+                      }}
+                    />
+                  </Box>
+                  <Box>
+                    <Typography
+                      variant="inherit"
+                      p={0.5}
+                      fontSize={15}
+                      fontWeight={500}
+                    >
+                      워크스페이스 목적
+                    </Typography>
+                    <EditableBox
+                      autoFocus
+                      enterComplete
+                      text={subject}
+                      updateText={value =>
+                        value && updateWorkspace({ subject: value })
+                      }
+                      blockEdit={myProfile?.role !== "WORKSPACE_ADMIN"}
+                      maxTextLength={10}
+                      style={{
+                        borderColor: "rgba(200,200,200)",
+                        borderWidth: 1,
+                      }}
+                    />
+                  </Box>
                 </Stack>
               </Box>
             </Box>
-            <TextField
-              multiline
-              rows={5}
-              label="워크스페이스 설명"
-              name="description"
-              variant="outlined"
-              value={description}
-              onChange={onChange}
-            />
+            <Box>
+              <Typography
+                variant="inherit"
+                p={0.5}
+                fontSize={15}
+                fontWeight={500}
+              >
+                워크스페이스 설명
+              </Typography>
+              <Box>
+                <EditableBox
+                  multiline
+                  autoFocus
+                  text={description}
+                  updateText={value =>
+                    value && updateWorkspace({ description: value })
+                  }
+                  blockEdit={myProfile?.role !== "WORKSPACE_ADMIN"}
+                  maxTextLength={100}
+                  style={{
+                    borderColor: "rgba(200,200,200)",
+                    borderWidth: 1,
+                  }}
+                />
+              </Box>
+            </Box>
           </Stack>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            paddingTop: 4,
-          }}
-        >
-          <Button variant="contained">저장</Button>
         </Box>
       </Box>
     </Box>
