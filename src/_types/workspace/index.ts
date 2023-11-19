@@ -17,7 +17,7 @@ export interface WorkspaceDetail extends Workspace {
 export type WORKSPACE_PARTICIPANT_ROLE =
   | "WORKSPACE_ADMIN"
   | "PROJECT_ADMIN"
-  | "PARTICIPANT"
+  | "BASIC_PARTICIPANT"
 
 export interface WorkspaceParticipantRoleDetail {
   role: WORKSPACE_PARTICIPANT_ROLE
@@ -34,7 +34,7 @@ export const roles: Array<WorkspaceParticipantRoleDetail> = [
     description: "프로젝트 관리자",
   },
   {
-    role: "PARTICIPANT",
+    role: "BASIC_PARTICIPANT",
     description: "일반 참여자",
   },
 ]
