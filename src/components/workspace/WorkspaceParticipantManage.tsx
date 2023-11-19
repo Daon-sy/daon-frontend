@@ -65,16 +65,23 @@ const WorkspaceParticipantManage = () => {
       <Stack spacing={5}>
         <Box>
           <Typography variant="h6">워크스페이스 참여자 목록</Typography>
-          <Box display="flex" justifyContent="end">
-            <Button variant="outlined" onClick={() => setInviteModalOpen(true)}>
-              워크스페이스에 초대
-            </Button>
-          </Box>
-          {inviteModalOpen ? (
-            <MemberInviteModal
-              open={inviteModalOpen}
-              handleClose={() => setInviteModalOpen(false)}
-            />
+          {myProfile?.role === "WORKSPACE_ADMIN" ? (
+            <>
+              <Box display="flex" justifyContent="end">
+                <Button
+                  variant="outlined"
+                  onClick={() => setInviteModalOpen(true)}
+                >
+                  워크스페이스에 초대
+                </Button>
+              </Box>
+              {inviteModalOpen ? (
+                <MemberInviteModal
+                  open={inviteModalOpen}
+                  handleClose={() => setInviteModalOpen(false)}
+                />
+              ) : null}
+            </>
           ) : null}
           <Box
             sx={{
