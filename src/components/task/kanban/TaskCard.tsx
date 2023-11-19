@@ -68,7 +68,6 @@ const TaskCard: React.FC<Props> = ({ task }: Props) => {
         sx={{
           m: 1,
         }}
-        draggable
       >
         <EmergencyTag render={task.emergency} />
         <Card
