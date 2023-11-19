@@ -3,6 +3,7 @@ export type DIVISION = "PERSONAL" | "GROUP"
 export interface Workspace {
   workspaceId: number
   title: string
+  subject?: string
   description?: string
   imageUrl?: string
   division: DIVISION
@@ -17,6 +18,26 @@ export type WORKSPACE_PARTICIPANT_ROLE =
   | "WORKSPACE_ADMIN"
   | "PROJECT_ADMIN"
   | "PARTICIPANT"
+
+export interface WorkspaceParticipantRoleDetail {
+  role: WORKSPACE_PARTICIPANT_ROLE
+  description: string
+}
+
+export const roles: Array<WorkspaceParticipantRoleDetail> = [
+  {
+    role: "WORKSPACE_ADMIN",
+    description: "워크스페이스 관리자",
+  },
+  {
+    role: "PROJECT_ADMIN",
+    description: "프로젝트 관리자",
+  },
+  {
+    role: "PARTICIPANT",
+    description: "일반 참여자",
+  },
+]
 
 export interface WorkspaceParticipant {
   workspaceParticipantId: number

@@ -82,6 +82,7 @@ const TextBox = ({
         whiteSpace: "nowrap",
         "&:hover": {
           backgroundColor: "rgb(242,242,242)",
+          borderColor: "black",
         },
       }}
     >
@@ -111,6 +112,7 @@ const MultilineTextBox = ({
         whiteSpace: "pre-wrap",
         "&:hover": {
           backgroundColor: "rgb(242,242,242)",
+          borderColor: "black",
         },
         "&:focus": {
           borderWidth: style?.borderWidth,
