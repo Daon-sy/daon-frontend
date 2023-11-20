@@ -33,7 +33,9 @@ const list = [
   },
 ]
 
-const TaskKanbansWrapper: React.FC<TaskKanbansWrapperProps> = ({ tasks }) => {
+const TaskKanbansWrapper: React.FC<TaskKanbansWrapperProps> = ({
+  tasks,
+}: TaskKanbansWrapperProps) => {
   const workspaceId = location.pathname.split("/")[2]
   const [updateTasks, setUpdateTask] = useState<TaskSummary[]>([])
 
