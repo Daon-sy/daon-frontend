@@ -15,6 +15,7 @@ interface Props {
   open: boolean
   handleClose: () => void
   title: string
+  titleFontSize?: number
   subTitle?: string | React.ReactNode
   children: React.ReactNode
   actionButtons?: React.ReactNode
@@ -27,6 +28,7 @@ const TitleModal = ({
   open = false,
   handleClose,
   title,
+  titleFontSize = 20,
   subTitle,
   children,
   actionButtons,
@@ -36,10 +38,12 @@ const TitleModal = ({
 }: Props) => {
   return (
     <Dialog onClose={handleClose} open={open} fullWidth maxWidth={maxWidth}>
-      <DialogTitle sx={{ m: 0, p: 2 }}>
+      <DialogTitle sx={{ m: 0, p: 1.5 }}>
         <Box display="flex" alignItems="center" pr={7}>
           <Box flexGrow={1}>
-            <Typography variant="h5">{title}</Typography>
+            <Typography variant="inherit" fontSize={titleFontSize}>
+              {title}
+            </Typography>
           </Box>
           {subTitle ? <Box>{subTitle}</Box> : null}
         </Box>
