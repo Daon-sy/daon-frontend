@@ -9,6 +9,7 @@ import { modifyTaskProgressStatusApi } from "api/task"
 interface TaskKanbansWrapperProps {
   tasks: TaskSummary[]
 }
+
 const list = [
   {
     progressStatus: "TODO",
@@ -32,8 +33,8 @@ const list = [
   },
 ]
 
-const workspaceId = location.pathname.split("/")[2]
 const TaskKanbansWrapper: React.FC<TaskKanbansWrapperProps> = ({ tasks }) => {
+  const workspaceId = location.pathname.split("/")[2]
   const [updateTasks, setUpdateTask] = useState<TaskSummary[]>([])
 
   useEffect(() => {
