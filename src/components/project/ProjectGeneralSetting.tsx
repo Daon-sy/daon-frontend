@@ -146,7 +146,7 @@ const ProjectGeneralSetting = ({ workspaceId, projectId }: Props) => {
             autoFocus
             enterComplete
             text={projectTitle}
-            updateText={value => value && updateProject({ title: value })}
+            handleUpdate={value => value && updateProject({ title: value })}
             blockEdit={!allowedEdit.includes(myProfile.role)}
             maxTextLength={20}
             style={{
@@ -163,7 +163,9 @@ const ProjectGeneralSetting = ({ workspaceId, projectId }: Props) => {
             multiline
             autoFocus
             text={description}
-            updateText={value => value && updateProject({ description: value })}
+            handleUpdate={value =>
+              value && updateProject({ description: value })
+            }
             blockEdit={!allowedEdit.includes(myProfile.role)}
             maxTextLength={100}
             style={{
@@ -233,7 +235,7 @@ const ProjectGeneralSetting = ({ workspaceId, projectId }: Props) => {
                         autoFocus
                         enterComplete
                         text={board.title}
-                        updateText={value =>
+                        handleUpdate={value =>
                           value && updateBoard(board.boardId, value)
                         }
                         blockEdit={!allowedEdit.includes(myProfile.role)}

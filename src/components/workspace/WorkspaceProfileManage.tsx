@@ -98,7 +98,7 @@ const WorkspaceProfileManage = () => {
                   autoFocus
                   enterComplete
                   text={name}
-                  updateText={value =>
+                  handleUpdate={value =>
                     value && updateMyWorkspaceProfile({ name: value })
                   }
                   maxTextLength={20}
