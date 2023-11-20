@@ -59,7 +59,7 @@ interface Props {
   task: TaskSummary
 }
 
-const TaskCard: React.FC<Props> = ({ task }: Props) => {
+const TaskCard: React.FC<Props> = React.memo(({ task }: Props) => {
   const [detailModalOpen, setDetailModalOpen] = React.useState(false)
 
   return (
@@ -68,7 +68,6 @@ const TaskCard: React.FC<Props> = ({ task }: Props) => {
         sx={{
           m: 1,
         }}
-        draggable
       >
         <EmergencyTag render={task.emergency} />
         <Card
@@ -137,6 +136,5 @@ const TaskCard: React.FC<Props> = ({ task }: Props) => {
       />
     </>
   )
-}
-
+})
 export default TaskCard
