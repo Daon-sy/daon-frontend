@@ -13,6 +13,8 @@ interface Props {
   paddingX?: number
   paddingY?: number
   enterComplete?: true | false
+  marginTop?: number
+  bgcolor?: string
 }
 
 const TextFieldBox = ({
@@ -25,6 +27,8 @@ const TextFieldBox = ({
   paddingX,
   paddingY,
   enterComplete = false,
+  marginTop = 2,
+  bgcolor,
 }: Props) => {
   const [inputText, setInputText] = React.useState<string | undefined>(text)
   const [showInputField, setShowInputField] = React.useState(false)
@@ -47,7 +51,7 @@ const TextFieldBox = ({
     alignItems: "center",
     fontSize,
     fontWeight,
-    marginTop: 2,
+    marginTop,
     padding,
     paddingX,
     paddingY,
@@ -94,6 +98,7 @@ const TextFieldBox = ({
             sx={{
               display: "flex",
               justifyContent: "end",
+              position: "relative",
             }}
           >
             <ButtonGroup
@@ -111,7 +116,17 @@ const TextFieldBox = ({
               >
                 <CheckIcon fontSize="small" />
               </Button>
-              <Button variant="outlined" size="small" onClick={handleCancel}>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={handleCancel}
+                sx={{
+                  backgroundColor: "white",
+                  "&:hover": {
+                    backgroundColor: "white",
+                  },
+                }}
+              >
                 <ClearIcon fontSize="small" />
               </Button>
             </ButtonGroup>
@@ -121,9 +136,11 @@ const TextFieldBox = ({
         <Box
           sx={{
             ...commonSx,
+            bgcolor,
             whiteSpace: "pre-wrap",
             borderColor: "rgba(0,0,0,0)",
             height: multiline ? undefined : "1.4375em",
+            minHeight: "1.3em",
             "&:hover": {
               backgroundColor: "rgb(242,242,242)",
             },

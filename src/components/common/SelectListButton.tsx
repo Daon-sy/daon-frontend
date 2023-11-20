@@ -50,12 +50,17 @@ interface Props<T extends ItemType> {
   showClearListItem?: true | false
   leftMuiIcon?: React.ReactNode | undefined
   endMuiIcon?: React.ReactNode | undefined
-  onValueChange?: (selectedValue: T | undefined) => void | undefined
+  onValueChange?: (
+    selectedValue: T | undefined,
+  ) => Promise<void> | void | undefined
   itemToChip?: true | false
   changeButtonColor?: true | false
   disableChangeButtonText?: true | false
   variant?: "outlined" | "contained"
   clearOnListUpdated?: true | false
+  fontSize?: number
+  buttonSize?: "small" | "large" | "medium"
+  readonly?: boolean
 }
 
 const SelectListButton = <T extends ItemType>({
@@ -71,6 +76,9 @@ const SelectListButton = <T extends ItemType>({
   disableChangeButtonText = false,
   variant = "outlined",
   clearOnListUpdated = false,
+  fontSize = 14,
+  buttonSize = "medium",
+  readonly = false,
 }: Props<T>) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -113,7 +121,7 @@ const SelectListButton = <T extends ItemType>({
         aria-controls={open ? "fade-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
-        onClick={openList}
+        onClick={e => !readonly && openList(e)}
         variant={variant}
         disableElevation
         color={
@@ -129,9 +137,10 @@ const SelectListButton = <T extends ItemType>({
         sx={{
           px: 1,
         }}
+        size={buttonSize}
       >
         {leftMuiIcon}
-        <Box pl={leftMuiIcon ? 1 : 0}>
+        <Box pl={leftMuiIcon ? 1 : 0} sx={{ fontSize }}>
           {selectedValue ? selectedValue.text : unsetButtonText}
         </Box>
       </Button>
@@ -145,12 +154,18 @@ const SelectListButton = <T extends ItemType>({
         TransitionComponent={Fade}
       >
         {selectedValue && showClearListItem ? (
-          <MenuItem onClick={handleClickedItem}>{unsetButtonText}</MenuItem>
+          <MenuItem onClick={handleClickedItem} sx={{ fontSize }}>
+            {unsetButtonText}
+          </MenuItem>
         ) : null}
         {valueList
           ?.filter(item => item.id !== selectedValue?.id)
           .map(item => (
-            <MenuItem onClick={handleClickedItem} value={item.id}>
+            <MenuItem
+              onClick={handleClickedItem}
+              value={item.id}
+              sx={{ fontSize }}
+            >
               {itemToChip && item.color ? (
                 <Chip
                   label={item.text}
