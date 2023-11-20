@@ -1,18 +1,18 @@
 import React from "react"
 import { useAlert } from "hooks/useAlert"
 import { Stack } from "@mui/material"
-import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
 import InputWsProfileInfo from "components/workspace/InputWsProfileInfo"
 import InputWorkspaceInfo from "components/workspace/InputWorkspaceInfo"
-import CustomModal from "components/common/CustomModal"
-import useInputs from "hooks/useInputs"
 import {
   createWorkspaceApi,
   CreateWorkspaceRequestBody,
   WorkspaceInfo,
   WsProfileInfo,
 } from "api/workspace"
+import { useNavigate } from "react-router-dom"
+import Box from "@mui/material/Box"
+import TitleModal from "components/common/TitleModal"
 
 interface InputWorkspaceInfoPageProps {
   workspaceInfo: WorkspaceInfo
@@ -27,11 +27,14 @@ const InputWorkspaceInfoPage = ({
   onCancelBtnClick,
   onNextBtnClick,
 }: InputWorkspaceInfoPageProps) => {
-  const [data, onChange] = useInputs<WorkspaceInfo>(workspaceInfo)
+  const { addError } = useAlert()
 
   return (
     <>
-      <InputWorkspaceInfo data={data} onChange={onChange} />
+      <InputWorkspaceInfo
+        workspaceInfo={workspaceInfo}
+        handleDataChange={setWorkspaceInfo}
+      />
       <Stack
         direction="row"
         spacing={2}
@@ -52,7 +55,11 @@ const InputWorkspaceInfoPage = ({
           size="large"
           variant="contained"
           onClick={() => {
-            setWorkspaceInfo(data)
+            if (!workspaceInfo.title) {
+              addError("워크스페이스 이름을 입력해주세요")
+
+              return
+            }
             onNextBtnClick()
           }}
         >
@@ -76,15 +83,19 @@ const InputWsProfileInfoPage = ({
   onPrevBtnClick,
   onCreateBtnClick,
 }: InputWsProfileInfoPageProps) => {
-  const [data, onChange] = useInputs<WsProfileInfo>(wsProfileInfo)
+  const { addError } = useAlert()
 
   return (
     <>
-      <InputWsProfileInfo data={data} onChange={onChange} />
+      <InputWsProfileInfo
+        wsProfileInfo={wsProfileInfo}
+        handleDataChange={setWsProfileInfo}
+      />
       <Stack
         direction="row"
         spacing={2}
         sx={{
+          pt: 2,
           height: 50,
         }}
       >
@@ -101,7 +112,17 @@ const InputWsProfileInfoPage = ({
           size="large"
           variant="contained"
           onClick={() => {
-            setWsProfileInfo(data)
+            if (!wsProfileInfo.name) {
+              addError("프로필 이름을 입력해주세요")
+
+              return
+            }
+
+            if (!wsProfileInfo.email) {
+              addError("사용할 이메일을 선택해주세요")
+
+              return
+            }
             onCreateBtnClick()
           }}
         >
@@ -131,34 +152,38 @@ const initialState: CreateWorkspaceRequestBody = {
   },
 }
 
-const CreateWorkspaceModal = (props: CreateWorkspaceModalProps) => {
+const CreateWorkspaceModal = ({
+  open,
+  handleClose,
+}: CreateWorkspaceModalProps) => {
+  const navigate = useNavigate()
+  const { addSuccess } = useAlert()
   const [{ workspace, profile }, setRequest] =
     React.useState<CreateWorkspaceRequestBody>(initialState)
   const [pageNumber, setPageNumber] = React.useState(1)
   const [processComplete, setProcessComplete] = React.useState(false)
-  const { addSuccess, addError } = useAlert()
-  const { open, handleClose } = props
 
-  const createWorkspace = React.useCallback(async () => {
-    createWorkspaceApi({ workspace, profile })
-      .then(res => {
-        const { workspaceId } = res.data
-        // TODO 메시지 변경, 워크스페이스 페이지로 이동
-        addSuccess(`워크스페이스가 생성되었습니다. id: ${workspaceId}`)
-        handleClose()
-      })
-      .catch(err => {
-        if (err.response) {
-          const { status } = err.response
-          if (status === 400) addError("입력값을 확인해주세요.")
-          if (status === 401) {
-            addError("로그인이 필요한 서비스입니다.")
-            // TODO 로그인 페이지로 이동
-          }
-          if (status >= 500) addError("서버 오류입니다. 다시 시도해주세요.")
-        }
-      })
-  }, [addError, addSuccess, handleClose, profile, workspace])
+  /**
+   * 모달 닫을 때 clean-up 함수
+   */
+  const cleanUp = () => {
+    setPageNumber(1)
+    setProcessComplete(false)
+    setRequest(initialState)
+  }
+
+  const close = () => {
+    cleanUp()
+    handleClose()
+  }
+
+  const createWorkspace = async () => {
+    const { data } = await createWorkspaceApi({ workspace, profile })
+    const { workspaceId } = data
+    addSuccess(`워크스페이스가 생성되었습니다. id: ${workspaceId}`)
+    navigate(`/workspace/${workspaceId}`)
+    close()
+  }
 
   React.useEffect(() => {
     // processComplete가 변경되면 워크스페이스 생성 요청 전송
@@ -167,7 +192,7 @@ const CreateWorkspaceModal = (props: CreateWorkspaceModalProps) => {
     }
 
     return setProcessComplete(false)
-  }, [createWorkspace, processComplete])
+  }, [processComplete])
 
   const renderModalPage = () => {
     return pageNumber === 1 ? (
@@ -179,7 +204,7 @@ const CreateWorkspaceModal = (props: CreateWorkspaceModalProps) => {
             workspace: workspaceInfo,
           }))
         }
-        onCancelBtnClick={handleClose}
+        onCancelBtnClick={close}
         onNextBtnClick={() => setPageNumber(2)}
       />
     ) : (
@@ -197,37 +222,17 @@ const CreateWorkspaceModal = (props: CreateWorkspaceModalProps) => {
     )
   }
 
-  /**
-   * 모달 닫을 때 clean-up 함수
-   */
-  const cleanUp = () => {
-    setPageNumber(1)
-    setProcessComplete(false)
-    setRequest(initialState)
-  }
-
   return (
-    <CustomModal
+    <TitleModal
       open={open}
-      handleClose={handleClose}
-      cleanUp={cleanUp}
-      width={500}
-      minHeight={500}
-      maxHeight={800}
+      handleClose={close}
+      title="워크스페이스 생성"
+      maxWidth="sm"
     >
-      <Stack spacing={2}>
-        <Typography
-          variant="h4"
-          align="center"
-          sx={{
-            paddingBottom: 2,
-          }}
-        >
-          워크스페이스 생성
-        </Typography>
-        {renderModalPage()}
-      </Stack>
-    </CustomModal>
+      <Box p={0}>
+        <Stack spacing={2}>{renderModalPage()}</Stack>
+      </Box>
+    </TitleModal>
   )
 }
 
