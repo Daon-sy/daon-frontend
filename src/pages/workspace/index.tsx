@@ -2,19 +2,27 @@ import React from "react"
 import { Route, Routes, useParams } from "react-router-dom"
 import UserLayout from "layouts/UserLayout"
 import { getWorkspaceStore } from "store/userStore"
-import { workspaceDetailApi } from "api/workspace"
+import {
+  myWorkspaceParticipantDetailApi,
+  workspaceDetailApi,
+} from "api/workspace"
 import ProjectRoutes from "pages/workspace/project"
 import TaskRoutes from "pages/workspace/task"
 import WorkspaceMain from "pages/workspace/WorkspaceMain"
 
 const WorkspaceDetailRoutes = () => {
-  const { workspace, setWorkspace } = getWorkspaceStore()
+  const { workspace, myProfile, setWorkspace, setMyProfile } =
+    getWorkspaceStore()
   const { workspaceId } = useParams()
 
   const fetchWorkspaceDetail = async () => {
     if (workspaceId) {
       const { data } = await workspaceDetailApi(Number(workspaceId))
       setWorkspace(data)
+
+      const { data: myWorkspaceParticipantDetail } =
+        await myWorkspaceParticipantDetailApi(Number(workspaceId))
+      setMyProfile(myWorkspaceParticipantDetail)
     }
   }
 
@@ -22,7 +30,7 @@ const WorkspaceDetailRoutes = () => {
     fetchWorkspaceDetail()
   }, [workspaceId])
 
-  return workspace ? (
+  return workspace && myProfile ? (
     <Routes>
       <Route element={<UserLayout />}>
         <Route index element={<WorkspaceMain />} />

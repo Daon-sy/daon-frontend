@@ -72,6 +72,8 @@ export interface WorkspaceParticipantListResponseBody {
   workspaceParticipants: Array<WorkspaceParticipant>
 }
 
+export type MyWorkspaceParticipantDetailResponseBody = WorkspaceParticipant
+
 // API
 // 워크스페이스 생성
 export const createWorkspaceApi = async (
@@ -107,6 +109,12 @@ export const workspaceParticipantListApi = async (
   workspaceId: number,
 ): Promise<AxiosResponse<WorkspaceParticipantListResponseBody>> => {
   return authAxios.get(`${WORKSPACE_API_PREFIX}/${workspaceId}/participants`)
+}
+
+export const myWorkspaceParticipantDetailApi = async (
+  workspaceId: number,
+): Promise<AxiosResponse<MyWorkspaceParticipantDetailResponseBody>> => {
+  return authAxios.get(`${WORKSPACE_API_PREFIX}/${workspaceId}/participants/me`)
 }
 
 // 내 워크스페이스 참여자 정보 변경
