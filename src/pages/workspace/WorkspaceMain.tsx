@@ -19,7 +19,7 @@ const WorkspaceMain: React.FC = () => {
       }
     }
     fetchData()
-  }, [])
+  }, [projects])
 
   return (
     <>
@@ -44,7 +44,7 @@ const WorkspaceMain: React.FC = () => {
           height: "30%",
         }}
       >
-        <TitleWrapper title="보드 목록">
+        <TitleWrapper title="프로젝트 목록">
           {projects.map(project => (
             <ProjectCard
               key={project.projectId}
