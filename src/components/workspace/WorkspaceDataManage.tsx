@@ -109,7 +109,7 @@ const WorkspaceDataManage = () => {
                         autoFocus
                         enterComplete
                         text={title}
-                        updateText={value =>
+                        handleUpdate={value =>
                           value && updateWorkspace({ title: value })
                         }
                         blockEdit={!allowedEdit.includes(myProfile.role)}
@@ -133,7 +133,7 @@ const WorkspaceDataManage = () => {
                         autoFocus
                         enterComplete
                         text={subject}
-                        updateText={value =>
+                        handleUpdate={value =>
                           value && updateWorkspace({ subject: value })
                         }
                         blockEdit={!allowedEdit.includes(myProfile.role)}
@@ -161,7 +161,7 @@ const WorkspaceDataManage = () => {
                     multiline
                     autoFocus
                     text={description}
-                    updateText={value =>
+                    handleUpdate={value =>
                       value && updateWorkspace({ description: value })
                     }
                     blockEdit={!allowedEdit.includes(myProfile.role)}
