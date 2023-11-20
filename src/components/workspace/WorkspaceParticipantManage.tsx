@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
 import { getWorkspaceStore } from "store/userStore"
 import {
+  deportationWorkspaceParticipantApi,
   modifyWorkspaceParticipantRoleApi,
   ModifyWorkspaceParticipantRoleRequestBody,
   myWorkspaceParticipantDetailApi,
@@ -16,6 +17,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import SelectListButton from "components/common/SelectListButton"
 import { useAlert } from "hooks/useAlert"
 import MemberInviteModal from "components/workspace/modal/MemberInviteModal"
+import ConfirmDialog from "components/common/ConfirmDialog"
 
 const WorkspaceParticipantManage = () => {
   const { addSuccess } = useAlert()
@@ -24,6 +26,8 @@ const WorkspaceParticipantManage = () => {
     Array<WorkspaceParticipant>
   >([])
   const [inviteModalOpen, setInviteModalOpen] = React.useState(false)
+  const [workspaceParticipantToDrop, setWorkspaceParticipantToDrop] =
+    React.useState<WorkspaceParticipant>()
 
   const fetchWorkspaceParticipants = async () => {
     if (workspace) {
@@ -57,6 +61,20 @@ const WorkspaceParticipantManage = () => {
 
       if (data.workspaceParticipantId === myProfile?.workspaceParticipantId)
         await fetchMyWorkspaceProfile()
+    }
+  }
+
+  const handleWorkspaceParticipantDropClick = async () => {
+    if (workspace && workspaceParticipantToDrop) {
+      await deportationWorkspaceParticipantApi(workspace.workspaceId, {
+        workspaceParticipantId:
+          workspaceParticipantToDrop.workspaceParticipantId,
+      })
+      addSuccess(
+        `사용자 [${workspaceParticipantToDrop.name}]를 추방하였습니다.`,
+      )
+
+      await fetchWorkspaceParticipants()
     }
   }
 
@@ -128,7 +146,14 @@ const WorkspaceParticipantManage = () => {
                         }
                       />
                       {myProfile?.role === "WORKSPACE_ADMIN" ? (
-                        <Button size="small" sx={{ ml: 1, fontSize: 12 }}>
+                        <Button
+                          color="error"
+                          size="small"
+                          sx={{ ml: 1, fontSize: 12 }}
+                          onClick={() =>
+                            setWorkspaceParticipantToDrop(participant)
+                          }
+                        >
                           내보내기
                         </Button>
                       ) : null}
@@ -156,6 +181,17 @@ const WorkspaceParticipantManage = () => {
           </Box>
         </Box>
       </Stack>
+      {workspaceParticipantToDrop ? (
+        <ConfirmDialog
+          open={!!workspaceParticipantToDrop}
+          maxWidth="xs"
+          content={`정말로 참여자[${workspaceParticipantToDrop.name}]를 추방하시겠습니까?`}
+          handleConfirm={handleWorkspaceParticipantDropClick}
+          handleClose={() => {
+            setWorkspaceParticipantToDrop(undefined)
+          }}
+        />
+      ) : null}
     </Box>
   )
 }
