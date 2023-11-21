@@ -4,6 +4,9 @@ import StarIcon from "@mui/icons-material/Star"
 import StarBorderIcon from "@mui/icons-material/StarBorder"
 import { TaskSummary } from "_types/task"
 import TaskDetailModal from "components/task/modal/TaskDetailModal"
+import BookmarkIcon from "@mui/icons-material/Bookmark"
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
+import Tooltip from "@mui/material/Tooltip"
 
 // 긴급 태그 컴포넌트
 interface EmergencyTagProps {
@@ -38,20 +41,26 @@ interface BookmarkButtonProps {
 
 const BookmarkButton = ({ selected }: BookmarkButtonProps) => {
   const iconSx = {
-    fontSize: "small",
+    fontSize: 20,
   }
 
   return (
-    <ToggleButton
-      value="check"
-      selected={selected}
-      size="small"
-      sx={{
-        padding: 0.5,
-      }}
-    >
-      {selected ? <StarIcon sx={iconSx} /> : <StarBorderIcon sx={iconSx} />}
-    </ToggleButton>
+    <Tooltip title="북마크" arrow>
+      <ToggleButton
+        value="check"
+        selected={false}
+        sx={{
+          padding: 0.5,
+          borderStyle: "none",
+        }}
+      >
+        {selected ? (
+          <BookmarkIcon sx={{ ...iconSx, color: "#82b89b" }} />
+        ) : (
+          <BookmarkBorderIcon sx={iconSx} />
+        )}
+      </ToggleButton>
+    </Tooltip>
   )
 }
 

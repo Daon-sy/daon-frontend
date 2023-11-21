@@ -1,5 +1,4 @@
 import React from "react"
-import CustomModal from "components/common/CustomModal"
 import {
   Box,
   Avatar,
@@ -12,6 +11,7 @@ import {
 } from "@mui/material"
 import { ProjectParticipant } from "_types/project"
 import { projectParticipantListApi } from "api/project"
+import TitleModal from "components/common/TitleModal"
 
 type Filter = "name" | "email"
 
@@ -27,6 +27,7 @@ const filters = [
 ]
 
 interface Props {
+  title?: string
   workspaceId: number
   projectId: number
   open: boolean
@@ -35,6 +36,7 @@ interface Props {
 }
 
 const ProjectParticipantsModal = ({
+  title = "프로젝트 참여자 목록",
   workspaceId,
   projectId,
   open,
@@ -64,16 +66,17 @@ const ProjectParticipantsModal = ({
     setProjectParticipants(undefined)
   }
 
+  const modalClose = () => {
+    cleanUp()
+    handleClose()
+  }
+
   return (
-    <CustomModal
+    <TitleModal
       open={open}
-      handleClose={handleClose}
-      width={400}
-      height={450}
-      fullHeight
-      px={4}
-      py={4}
-      cleanUp={cleanUp}
+      handleClose={modalClose}
+      title={title}
+      maxWidth="xs"
     >
       <Box
         sx={{
@@ -180,7 +183,16 @@ const ProjectParticipantsModal = ({
                   sx={{ display: "flex", alignItems: "center" }}
                 >
                   <Box>
-                    <Avatar sx={{ width: 36, height: 36 }} />
+                    <Avatar
+                      src={participant.imageUrl}
+                      sx={{
+                        width: 36,
+                        height: 36,
+                        borderStyle: "solid",
+                        borderWidth: 1,
+                        borderColor: "#C8C8C8FF",
+                      }}
+                    />
                   </Box>
                   <Stack spacing={0.5}>
                     <Box sx={{ marginLeft: 1, fontSize: 15 }}>
@@ -201,7 +213,7 @@ const ProjectParticipantsModal = ({
             ))}
         </Box>
       </Box>
-    </CustomModal>
+    </TitleModal>
   )
 }
 
