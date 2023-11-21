@@ -1,10 +1,5 @@
 import * as React from "react"
-import Box from "@mui/material/Box"
-import Typography from "@mui/material/Typography"
-import Menu from "@mui/material/Menu"
-import Button from "@mui/material/Button"
-import Tooltip from "@mui/material/Tooltip"
-import MenuItem from "@mui/material/MenuItem"
+import { Box, Typography, Menu, Button, Tooltip, MenuItem } from "@mui/material"
 import { Link } from "react-router-dom"
 import CreateWorkspaceModal from "components/workspace/modal/CreateWorkspaceModal"
 
@@ -41,7 +36,7 @@ const Nav: React.FC = () => {
           fontFamily: "monospace",
           fontWeight: 700,
           letterSpacing: ".3rem",
-          color: "inherit",
+          color: "white",
           textDecoration: "none",
         }}
       >

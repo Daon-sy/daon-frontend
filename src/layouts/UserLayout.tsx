@@ -19,7 +19,7 @@ const SideBarWrapper = styled.div`
   width: 15%;
   min-width: 256px;
   height: 100%;
-  border-right: 1px solid black;
+  box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.1);
 `
 const Page = styled.div`
   width: 85%;
