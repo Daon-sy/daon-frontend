@@ -19,7 +19,7 @@ const WorkspaceMain: React.FC = () => {
       }
     }
     fetchData()
-  }, [projects])
+  }, [workspaceId])
 
   return (
     <>

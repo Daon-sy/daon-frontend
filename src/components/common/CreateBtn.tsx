@@ -1,39 +1,35 @@
 import * as React from "react"
 import AddBoxIcon from "@mui/icons-material/AddBox"
-import styled from "styled-components"
-
-const CreateButton = styled.button`
-  position: absolute;
-  top: 10px;
-  right: 0;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  z-index: 10;
-`
+import { Box } from "@mui/material"
 
 interface CreateBtnProps {
   handleClick: () => void
   children?: React.ReactNode
-  title?: string
 }
 
-const CreateBtn = ({ handleClick, children, title }: CreateBtnProps) => {
+const CreateBtn = ({ handleClick, children }: CreateBtnProps) => {
   return (
-    <CreateButton
-      type="button"
-      className="create_btn"
+    <Box
+      component="button"
       onClick={handleClick}
-      title={title}
+      sx={{
+        position: "absolute",
+        top: "-5px",
+        right: 0,
+        bgcolor: "transparent",
+        color: "#48634f",
+        border: "none",
+        cursor: "pointer",
+        zIndex: 10,
+      }}
     >
       {children}
-    </CreateButton>
+    </Box>
   )
 }
 
 CreateBtn.defaultProps = {
   children: <AddBoxIcon />,
-  title: "추가",
 }
 
 export default CreateBtn

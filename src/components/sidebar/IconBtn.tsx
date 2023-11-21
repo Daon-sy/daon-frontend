@@ -1,5 +1,5 @@
 import React from "react"
-import Button from "@mui/material/Button"
+import { Box } from "@mui/material"
 
 interface IconBtnProps {
   text: string
@@ -9,23 +9,27 @@ interface IconBtnProps {
 
 const IconBtn = ({ text, icon, onClick }: IconBtnProps) => {
   return (
-    <Button
-      variant="outlined"
-      startIcon={icon}
-      sx={{
-        width: "100%",
-        py: 1,
-        textAlign: "left",
-        fontSize: "16px",
-        border: "1px solid black",
-        color: "rgb(0,0,0)",
-        mb: "4px",
-        borderRadius: 3,
-      }}
+    <Box
+      component="button"
       onClick={onClick}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "35%",
+        bgcolor: "transparent",
+        border: "none",
+        cursor: "pointer",
+      }}
     >
-      {text}
-    </Button>
+      <Box component="div" sx={{ width: "80%", color: "#82b89b" }}>
+        {icon}
+      </Box>
+      <Box component="span" sx={{ fontSize: "12px", color: "#303633" }}>
+        {text}
+      </Box>
+    </Box>
   )
 }
 

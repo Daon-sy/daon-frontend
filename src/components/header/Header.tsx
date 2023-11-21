@@ -1,7 +1,6 @@
 import * as React from "react"
-import AppBar from "@mui/material/AppBar"
-import Box from "@mui/material/Box"
-import Toolbar from "@mui/material/Toolbar"
+import { AppBar, Box, Toolbar } from "@mui/material"
+import { yellow } from "@mui/material/colors"
 import NotificationsIcon from "@mui/icons-material/Notifications"
 import SearchInput from "./SearchInput"
 import User from "./UserInfo"
@@ -9,16 +8,19 @@ import Nav from "./Nav"
 
 const Header: React.FC = () => {
   return (
-    <AppBar position="static">
-      <Toolbar sx={{ minWidth: "1440px" }}>
+    <AppBar
+      position="static"
+      sx={{ bgcolor: "#b2d6c7", color: "grey", boxShadow: "none" }}
+    >
+      <Toolbar>
         {/* Nav */}
         <Nav />
         {/* 검색창 */}
         <SearchInput />
 
         {/* 알림 */}
-        <Box sx={{ flexGrow: 0, mx: 2 }}>
-          <NotificationsIcon />
+        <Box sx={{ flexGrow: 0, mx: 2, color: yellow[600] }}>
+          <NotificationsIcon fontSize="large" />
         </Box>
 
         {/* 아바타 */}
