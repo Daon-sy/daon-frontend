@@ -1,17 +1,24 @@
 import React from "react"
-import { Avatar, Button, Chip, Divider, Stack, TextField } from "@mui/material"
+import {
+  Avatar,
+  Button,
+  Chip,
+  Divider,
+  FormHelperText,
+  Stack,
+  TextField,
+} from "@mui/material"
 import Box from "@mui/material/Box"
 import BoardSelectButton from "components/task/BoardSelectButton"
-import CustomModal from "components/common/CustomModal"
 import ProjectSelectButton from "components/task/ProjectSelectButton"
 import { getWorkspaceStore } from "store/userStore"
-import useInputs from "hooks/useInputs"
 import { Dayjs } from "dayjs"
 import { useAlert } from "hooks/useAlert"
 import ProjectParticipantsModal from "components/project/modal/ProjectParticipantsModal"
 import CalendarDateField from "components/common/CalendarDateField"
 import { createTaskApi } from "api/task"
 import { ProjectParticipant } from "_types/project"
+import TitleModal from "components/common/TitleModal"
 
 interface Props {
   open: boolean
@@ -21,15 +28,13 @@ interface Props {
 const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
   const { workspace } = getWorkspaceStore()
   const { addSuccess, addError } = useAlert()
-  const [projectId, setProjectId] = React.useState<number | undefined>()
-  const [boardId, setBoardId] = React.useState<number | undefined>()
-  const [textFieldData, handleChangeTextFieldData] = useInputs({
-    title: "",
-    content: undefined,
-  })
+
+  const [projectId, setProjectId] = React.useState<number>()
+  const [boardId, setBoardId] = React.useState<number>()
+  const [title, setTitle] = React.useState<string>("")
+  const [content, setContent] = React.useState("")
   const [startDate, setStartDate] = React.useState<string | undefined>()
   const [endDate, setEndDate] = React.useState<string | undefined>()
-  // TODO
   const [taskManagerId, setTaskManagerId] = React.useState<number | undefined>()
   const [taskManager, setTaskManager] = React.useState<
     ProjectParticipant | undefined
@@ -38,27 +43,37 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
   const [projectParticipantsModalOpen, setProjectParticipantsModalOpen] =
     React.useState<boolean>(false)
 
+  const cleanUp = () => {
+    setProjectId(undefined)
+    setEmergency(false)
+    setTaskManager(undefined)
+    setTaskManagerId(undefined)
+  }
+
+  const closeModal = () => {
+    cleanUp()
+    handleClose()
+  }
+
   const handleCreate = async () => {
     if (!projectId) {
       addError("프로젝트를 선택해주세요")
-
       return
     }
 
     if (!boardId) {
       addError("보드를 선택하세요")
-
       return
     }
 
-    if (!textFieldData.title) {
+    if (!title) {
       addError("할 일 제목을 입력해주세요")
-
       return
     }
 
     const { data } = await createTaskApi(workspace!.workspaceId, projectId, {
-      ...textFieldData,
+      title,
+      content,
       boardId,
       startDate,
       endDate,
@@ -67,28 +82,17 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
     })
     const { taskId } = data
     addSuccess(`할 일(#${taskId})이 생성되었습니다.`)
-    handleClose()
-  }
-
-  const cleanUp = () => {
-    setProjectId(undefined)
-    setEmergency(false)
-    setTaskManager(undefined)
-    setTaskManagerId(undefined)
+    closeModal()
   }
 
   return (
-    <CustomModal
+    <TitleModal
       open={open}
-      handleClose={handleClose}
-      width={700}
-      height={700}
-      fullHeight
-      px={0}
-      py={0}
-      cleanUp={cleanUp}
+      handleClose={closeModal}
+      title="할 일 생성"
+      maxWidth="sm"
     >
-      <Stack px={4} pt={4} spacing={2} height="100%">
+      <Stack spacing={2} height="100%">
         <Box
           sx={{
             display: "flex",
@@ -130,9 +134,13 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
             required
             fullWidth
             label="제목"
-            name="title"
-            onChange={handleChangeTextFieldData}
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+            inputProps={{ maxLength: 20 }}
           />
+          <FormHelperText
+            sx={{ textAlign: "end" }}
+          >{`${title.length}/20자`}</FormHelperText>
         </Box>
         <Box
           sx={{
@@ -144,9 +152,12 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
             fullWidth
             rows={10}
             label="내용"
-            name="content"
-            onChange={handleChangeTextFieldData}
+            onChange={e => setContent(e.target.value)}
+            inputProps={{ maxLength: 1000 }}
           />
+          <FormHelperText
+            sx={{ textAlign: "end" }}
+          >{`${content.length}/1000자`}</FormHelperText>
         </Box>
         <Box>
           <Box
@@ -203,7 +214,6 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
               borderColor: "rgb(224,224,224)",
               display: "flex",
               alignItems: "center",
-              width: "100%",
               height: 40,
             }}
           >
@@ -225,14 +235,13 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
               onClick={() => {
                 if (!projectId) {
                   addError("프로젝트를 선택해주세요")
-
                   return
                 }
                 setProjectParticipantsModalOpen(true)
               }}
               sx={{
-                width: "80%",
                 display: "flex",
+                flexGrow: 1,
                 alignItems: "center",
                 borderRadius: 1,
                 padding: 1,
@@ -241,25 +250,21 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
                 },
               }}
             >
-              {taskManager ? (
-                <>
-                  <Box>
-                    <Avatar sx={{ width: 24, height: 24 }} />
-                  </Box>
-                  <Box sx={{ marginLeft: 1 }}>{taskManager?.name}</Box>
-                </>
-              ) : (
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  sx={{ display: "flex", alignItems: "center" }}
-                >
-                  <Box>
-                    <Avatar sx={{ width: 24, height: 24 }} />
-                  </Box>
-                  <Box sx={{ marginLeft: 1 }}>없음</Box>
-                </Stack>
-              )}
+              <Stack
+                direction="row"
+                spacing={1}
+                sx={{ display: "flex", alignItems: "center" }}
+              >
+                <Box>
+                  <Avatar
+                    src={taskManager?.imageUrl}
+                    sx={{ width: 24, height: 24 }}
+                  />
+                </Box>
+                <Box sx={{ marginLeft: 1 }}>
+                  {taskManager ? taskManager.name : "없음"}
+                </Box>
+              </Stack>
             </Box>
           </Box>
         </Box>
@@ -278,7 +283,7 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
               fullWidth
               variant="outlined"
               size="large"
-              onClick={handleClose}
+              onClick={closeModal}
             >
               취소
             </Button>
@@ -293,6 +298,7 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
           </Stack>
         </Box>
         <ProjectParticipantsModal
+          title="담당자 선택"
           workspaceId={workspace!.workspaceId}
           projectId={projectId!}
           open={projectParticipantsModalOpen}
@@ -303,7 +309,7 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
           }}
         />
       </Stack>
-    </CustomModal>
+    </TitleModal>
   )
 }
 
