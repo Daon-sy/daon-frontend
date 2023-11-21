@@ -47,7 +47,7 @@ const defaultBoxStyle: BoxStyle = {
   fontSize: 16,
   fontWeight: 500,
 
-  minHeight: "1.4375em",
+  // minHeight: "1.4375em",
 
   padding: 1,
   margin: 0,
@@ -186,6 +186,7 @@ const EditBox = React.forwardRef(
     const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
       if (e.key === "Escape") {
         handleEditDisable()
+        e.stopPropagation()
       }
 
       const { innerText } = e.currentTarget
@@ -225,6 +226,8 @@ const EditBox = React.forwardRef(
           onKeyUp={handleKeyPress}
           sx={{
             ...style,
+            display: "flex",
+            alignItems: "center",
             overflowX: "auto",
             "&::-webkit-scrollbar": { display: "none" },
             whiteSpace: "nowrap",
@@ -357,6 +360,7 @@ const MultilineEditBox = React.forwardRef(
     const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
       if (e.key === "Escape") {
         handleEditDisable()
+        e.stopPropagation()
       }
 
       if (maxTextLength) {
@@ -429,10 +433,24 @@ const MultilineEditBox = React.forwardRef(
               marginTop: 0.5,
             }}
           >
-            <Box mr={2} fontSize={14}>
-              {maxTextLength ? `${inputedText?.length}/${maxTextLength}` : null}
-            </Box>
             <ButtonGroup disableElevation variant="contained">
+              <Button
+                disabled
+                size="small"
+                sx={{
+                  "&.Mui-disabled": {
+                    backgroundColor: "white",
+                    color: "black",
+                    borderStyle: "solid",
+                    borderWidth: 1,
+                    borderColor: "rgb(155,185,229)",
+                  },
+                }}
+              >
+                {maxTextLength
+                  ? `${inputedText?.length}/${maxTextLength}`
+                  : null}
+              </Button>
               <Button
                 variant="contained"
                 size="small"

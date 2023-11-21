@@ -190,6 +190,7 @@ const ProjectParticipantsModal = ({
                         height: 36,
                         borderStyle: "solid",
                         borderWidth: 1,
+                        borderColor: "#C8C8C8FF",
                       }}
                     />
                   </Box>
