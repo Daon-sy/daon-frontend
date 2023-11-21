@@ -18,9 +18,6 @@ const SidebarMenu: React.FC = () => {
     setCreateProjectModal(false)
   }
 
-  const cleanUp = () => {
-    return null
-  }
   const myTasks = [
     {
       link: "/workspace/1/task/bookmark",
@@ -74,7 +71,6 @@ const SidebarMenu: React.FC = () => {
         ))}
       </Menu>
       <CreateProjectModal
-        cleanUp={cleanUp}
         open={openCreateProjectModal}
         handleClose={handleCloseCreateProjectModal}
       />
