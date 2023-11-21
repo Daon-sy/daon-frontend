@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import { WorkspaceDetail, WorkspaceParticipant } from "_types/workspace"
-import { ProjectDetail } from "_types/project"
+import { ProjectDetail, Project } from "_types/project"
 import { MemberDetail } from "_types/member"
 
 interface MyMemberDetailStore {
@@ -44,4 +44,16 @@ export const getProjectStore = create<ProjectStore>(set => ({
   project: undefined,
   clear: () => set({ project: undefined }),
   setProject: (project: ProjectDetail) => set(() => ({ project })),
+}))
+
+interface ProjectsStore {
+  projects: Project[]
+  clear: () => void
+  setProjects: (projects: Project[]) => void
+}
+
+export const getProjectsStore = create<ProjectsStore>(set => ({
+  projects: [],
+  clear: () => set({ projects: [] }),
+  setProjects: (projects: Project[]) => set(() => ({ projects })),
 }))

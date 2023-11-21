@@ -5,9 +5,14 @@ import { Divider, Box } from "@mui/material"
 import Menu from "components/common/Menu"
 import CreateProjectModal from "components/project/modal/CreateProjectModal"
 import CreateBtn from "components/common/CreateBtn"
+import { getProjectsStore } from "store/userStore"
+import { projectListApi } from "api/project"
+import { useParams } from "react-router-dom"
 import MenuItems from "./MenuItems"
 
 const SidebarMenu: React.FC = () => {
+  const { workspaceId } = useParams()
+  const { projects, setProjects } = getProjectsStore()
   const [openCreateProjectModal, setCreateProjectModal] =
     React.useState<boolean>(false)
 
@@ -18,29 +23,34 @@ const SidebarMenu: React.FC = () => {
     setCreateProjectModal(false)
   }
 
+  const fetchProjectList = async () => {
+    if (workspaceId) {
+      const { data } = await projectListApi(+workspaceId)
+      setProjects(data.projects)
+    }
+  }
+
+  React.useEffect(() => {
+    fetchProjectList()
+  }, [workspaceId])
+
   const myTasks = [
     {
-      link: "/workspace/1/task/bookmark",
+      link: `/workspace/${workspaceId}/task/bookmark`,
       listValue: "즐겨찾기",
       icon: StarIcon,
     },
     {
-      link: "/workspace/1/task/my",
+      link: `/workspace/${workspaceId}/task/my`,
       listValue: "내 할일",
       icon: AssignmentIcon,
     },
   ]
 
-  const myProjects = [
-    {
-      link: "/workspace/1/project/1",
-      listValue: "프로젝트1",
-    },
-    {
-      link: "/workspace/1/project/2",
-      listValue: "프로젝트2",
-    },
-  ]
+  const myProjects = projects.map(project => ({
+    link: `/workspace/${workspaceId}/project/${project.projectId}`,
+    listValue: project.title,
+  }))
 
   return (
     <Box>
@@ -50,6 +60,7 @@ const SidebarMenu: React.FC = () => {
             to={list.link}
             listValue={list.listValue}
             icon={list.icon}
+            key={list.link}
           />
         ))}
       </Menu>
@@ -65,9 +76,12 @@ const SidebarMenu: React.FC = () => {
         title="참여 중인 프로젝트"
         btn={<CreateBtn handleClick={handleOpenCreateProjectModal} />}
       >
-        {/* <CreateBtn handleClick={handleOpenCreateProjectModal} /> */}
         {myProjects.map(list => (
-          <MenuItems to={list.link} listValue={list.listValue} />
+          <MenuItems
+            to={list.link}
+            listValue={list.listValue}
+            key={list.link}
+          />
         ))}
       </Menu>
       <CreateProjectModal
