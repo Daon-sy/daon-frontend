@@ -1,8 +1,10 @@
 import * as React from "react"
 import { Box } from "@mui/material"
 import { TEST_IMAGE_URL } from "env"
+import { getWorkspaceStore } from "store/userStore"
 
 const WorkSpaceProfile: React.FC = () => {
+  const { workspace, myProfile } = getWorkspaceStore()
   return (
     <Box
       sx={{
@@ -36,7 +38,7 @@ const WorkSpaceProfile: React.FC = () => {
           fontWeight: "bold",
         }}
       >
-        워크스페이스 이름
+        {workspace?.title}
       </Box>
       <Box
         component="div"
@@ -52,7 +54,7 @@ const WorkSpaceProfile: React.FC = () => {
       >
         <Box
           component="img"
-          src={`${TEST_IMAGE_URL}`}
+          src={myProfile?.imageUrl || TEST_IMAGE_URL}
           sx={{
             objectFit: "cover",
             width: "110px",
@@ -80,7 +82,7 @@ const WorkSpaceProfile: React.FC = () => {
             whiteSpace: "nowrap",
           }}
         >
-          닉네임
+          {myProfile?.name}
         </Box>
         <Box
           sx={{
@@ -96,7 +98,7 @@ const WorkSpaceProfile: React.FC = () => {
             fontWeight: "bold",
           }}
         >
-          workspace@gmail.com
+          {myProfile?.email}
         </Box>
       </Box>
     </Box>
