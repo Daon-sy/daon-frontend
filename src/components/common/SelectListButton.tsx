@@ -116,7 +116,7 @@ const SelectListButton = <T extends ItemType>({
   }
 
   return (
-    <Box>
+    <Box component="span">
       <Button
         aria-controls={open ? "fade-menu" : undefined}
         aria-haspopup="true"

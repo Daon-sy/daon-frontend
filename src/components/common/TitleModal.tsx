@@ -14,14 +14,16 @@ import Typography from "@mui/material/Typography"
 interface Props {
   open: boolean
   handleClose: () => void
-  title: string
+  title?: string
   titleFontSize?: number
   subTitle?: string | React.ReactNode
   children: React.ReactNode
   actionButtons?: React.ReactNode
-  maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false
+  maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false | number
   height?: number
   padding?: number
+  disableCloseButton?: boolean
+  minWidth?: number
 }
 
 const TitleModal = ({
@@ -35,30 +37,48 @@ const TitleModal = ({
   maxWidth = "md",
   height,
   padding,
+  disableCloseButton = false,
+  minWidth,
 }: Props) => {
   return (
-    <Dialog onClose={handleClose} open={open} fullWidth maxWidth={maxWidth}>
-      <DialogTitle sx={{ m: 0, p: 1.5 }}>
-        <Box display="flex" alignItems="center" pr={7}>
-          <Box flexGrow={1}>
-            <Typography variant="inherit" fontSize={titleFontSize}>
-              {title}
-            </Typography>
+    <Dialog
+      onClose={handleClose}
+      open={open}
+      fullWidth
+      maxWidth={typeof maxWidth !== "number" ? maxWidth : false}
+      sx={{
+        maxWidth: typeof maxWidth !== "number" ? undefined : maxWidth,
+        marginX: typeof maxWidth !== "number" ? undefined : "auto",
+        minWidth,
+      }}
+      disableEscapeKeyDown
+      onKeyUp={e => e.key === "Escape" && handleClose()}
+    >
+      {title ? (
+        <DialogTitle sx={{ m: 0, p: 1.5 }}>
+          <Box display="flex" alignItems="center" pr={7}>
+            <Box flexGrow={1}>
+              <Typography variant="inherit" fontSize={titleFontSize}>
+                {title}
+              </Typography>
+            </Box>
+            {subTitle ? <Box>{subTitle}</Box> : null}
           </Box>
-          {subTitle ? <Box>{subTitle}</Box> : null}
-        </Box>
-      </DialogTitle>
-      <IconButton
-        onClick={handleClose}
-        sx={{
-          position: "absolute",
-          right: 8,
-          top: 8,
-          color: theme => theme.palette.grey[500],
-        }}
-      >
-        <CloseIcon />
-      </IconButton>
+        </DialogTitle>
+      ) : null}
+      {disableCloseButton ? null : (
+        <IconButton
+          onClick={handleClose}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: theme => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      )}
       <DialogContent
         dividers
         sx={{
