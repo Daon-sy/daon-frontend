@@ -1,9 +1,14 @@
 import React from "react"
-import Typography from "@mui/material/Typography"
-import { Stack, TextField } from "@mui/material"
-import Button from "@mui/material/Button"
+import {
+  Box,
+  Typography,
+  Button,
+  Stack,
+  TextField,
+  FormHelperText,
+} from "@mui/material"
 import { useAlert } from "hooks/useAlert"
-import CustomModal from "components/common/CustomModal"
+import TitleModal from "components/common/TitleModal"
 import useInputs from "hooks/useInputs"
 import { createProjectApi, CreateProjectRequestBody } from "api/project"
 import { getWorkspaceStore } from "store/userStore"
@@ -11,7 +16,6 @@ import { getWorkspaceStore } from "store/userStore"
 interface CreateProjectProps {
   open: boolean
   handleClose: () => void
-  cleanUp: () => void
 }
 
 const initialState: CreateProjectRequestBody = {
@@ -22,12 +26,11 @@ const initialState: CreateProjectRequestBody = {
 const CreateProjectModal: React.FC<CreateProjectProps> = ({
   open,
   handleClose,
-  cleanUp,
 }: CreateProjectProps) => {
   const { workspace } = getWorkspaceStore()
+  const { addSuccess, addError } = useAlert()
   const [data, onChange, resetData] =
     useInputs<CreateProjectRequestBody>(initialState)
-  const { addSuccess, addError } = useAlert()
 
   const onValidateBtn = () => {
     if (!workspace?.workspaceId) return
@@ -41,6 +44,7 @@ const CreateProjectModal: React.FC<CreateProjectProps> = ({
     createProjectApi(workspace.workspaceId, data)
       .then(() => {
         addSuccess("프로젝트 생성 성공!")
+        handleClose()
       })
       .catch(err => {
         if (err.response.status >= 500) {
@@ -51,43 +55,49 @@ const CreateProjectModal: React.FC<CreateProjectProps> = ({
 
   return (
     <div>
-      <CustomModal
+      <TitleModal
         open={open}
         handleClose={() => {
           resetData()
           handleClose()
         }}
-        cleanUp={cleanUp}
-        width={400}
+        title="프로젝트 생성"
+        maxWidth="xs"
       >
-        <Typography
-          variant="h4"
-          align="center"
-          sx={{
-            paddingBottom: 2,
-          }}
-        >
-          프로젝트 생성
-        </Typography>
         <Stack spacing={2}>
           <Typography variant="h6">프로젝트 정보 입력</Typography>
-          <TextField
-            required
-            label="프로젝트 이름"
-            name="projectName"
-            variant="outlined"
-            value={data.title}
-            onChange={onChange}
-          />
-          <TextField
-            multiline
-            rows={5}
-            label="프로젝트 설명"
-            name="projectDescription"
-            variant="outlined"
-            value={data.description}
-            onChange={onChange}
-          />
+          <Box sx={{ width: "100%" }}>
+            <TextField
+              required
+              label="프로젝트 이름"
+              variant="outlined"
+              name="title"
+              value={data.title}
+              onChange={onChange}
+              inputProps={{ maxLength: 20 }}
+              fullWidth
+            />
+            <FormHelperText
+              sx={{ textAlign: "end" }}
+            >{`${data.title.length}/20자`}</FormHelperText>
+          </Box>
+          <Box>
+            <TextField
+              fullWidth
+              size="small"
+              multiline
+              rows={5}
+              label="프로젝트 설명"
+              name="description"
+              variant="outlined"
+              value={data.description}
+              onChange={onChange}
+              inputProps={{ maxLength: 100 }}
+            />
+            <FormHelperText sx={{ textAlign: "end" }}>
+              {`${data.description?.length}/100자`}
+            </FormHelperText>
+          </Box>
         </Stack>
         <Stack
           direction="row"
@@ -100,7 +110,7 @@ const CreateProjectModal: React.FC<CreateProjectProps> = ({
           <Button
             fullWidth
             size="large"
-            variant="outlined"
+            variant="contained"
             onClick={onValidateBtn}
           >
             확인
@@ -108,7 +118,7 @@ const CreateProjectModal: React.FC<CreateProjectProps> = ({
           <Button
             fullWidth
             size="large"
-            variant="contained"
+            variant="outlined"
             onClick={() => {
               resetData()
               handleClose()
@@ -117,7 +127,7 @@ const CreateProjectModal: React.FC<CreateProjectProps> = ({
             취소
           </Button>
         </Stack>
-      </CustomModal>
+      </TitleModal>
     </div>
   )
 }

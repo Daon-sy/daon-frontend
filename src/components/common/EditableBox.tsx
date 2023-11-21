@@ -472,7 +472,7 @@ interface EditableBoxStyle extends BoxStyle {
 
 interface Props {
   text?: string | Array<string> | null
-  updateText?: (value?: string | null) => void
+  handleUpdate?: (value?: string | null) => void
   enterComplete?: boolean
   autoFocus?: boolean
   multiline?: boolean
@@ -484,7 +484,7 @@ interface Props {
 
 const EditableBox = ({
   text,
-  updateText,
+  handleUpdate,
   enterComplete = false,
   autoFocus = false,
   multiline = false,
@@ -519,7 +519,7 @@ const EditableBox = ({
       <MultilineEditBox
         ref={editBoxRef}
         text={text as string | Array<string> | undefined}
-        handleTextChange={updateText}
+        handleTextChange={handleUpdate}
         handleEditDisable={disableEdit}
         maxTextLength={maxTextLength}
         style={{
@@ -532,7 +532,7 @@ const EditableBox = ({
         enterComplete={enterComplete}
         ref={editBoxRef}
         text={text as string | null | undefined}
-        handleTextChange={updateText}
+        handleTextChange={handleUpdate}
         handleEditDisable={disableEdit}
         maxTextLength={maxTextLength}
         style={{
