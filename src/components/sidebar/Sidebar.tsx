@@ -1,15 +1,19 @@
 import React from "react"
 import { Box, Divider } from "@mui/material"
 import GroupsIcon from "@mui/icons-material/Groups"
-import TaskCreateModal from "components/task/modal/TaskCreateModal"
 import AddCircleIcon from "@mui/icons-material/AddCircle"
+import TaskCreateModal from "components/task/modal/TaskCreateModal"
+import WorkspaceParticipantsModal from "components/workspace/modal/WorkspaceParticipantsModal"
 import SidebarMenu from "./SidebarMenu"
 import WorkSpaceProfile from "./WorkspaceProfile"
 import IconBtn from "./IconBtn"
 
 const Sidebar: React.FC = () => {
   const [taskCreateModalOpen, setTaskCreateModalOpen] = React.useState(false)
+  const [participantsModalOpen, setParticipantsModalOpen] =
+    React.useState(false)
   const openTaskCreateModal = () => setTaskCreateModalOpen(true)
+  const openParticipantsModal = () => setParticipantsModalOpen(true)
 
   return (
     <Box
@@ -53,7 +57,11 @@ const Sidebar: React.FC = () => {
             minHeight: "50px",
           }}
         >
-          <IconBtn text="구성원보기" icon={<GroupsIcon fontSize="large" />} />
+          <IconBtn
+            text="구성원보기"
+            icon={<GroupsIcon fontSize="large" />}
+            onClick={openParticipantsModal}
+          />
           <IconBtn
             text="할일추가"
             icon={<AddCircleIcon fontSize="large" />}
@@ -77,6 +85,10 @@ const Sidebar: React.FC = () => {
       <TaskCreateModal
         open={taskCreateModalOpen}
         handleClose={() => setTaskCreateModalOpen(false)}
+      />
+      <WorkspaceParticipantsModal
+        open={participantsModalOpen}
+        handleClose={() => setParticipantsModalOpen(false)}
       />
     </Box>
   )
