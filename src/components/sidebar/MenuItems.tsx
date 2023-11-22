@@ -26,6 +26,7 @@ const MenuItems: React.FC<MenuItemsProps> = ({
         borderRadius: 4,
         mx: 2,
         mb: 1,
+        width: "88%",
         border: "1px solid #82b89b",
         color: "#48634f",
         "&.Mui-selected, &.Mui-selected:hover, &.Mui-selected:focus": {
@@ -42,7 +43,15 @@ const MenuItems: React.FC<MenuItemsProps> = ({
       ) : null}
       <ListItemText
         primary={listValue}
-        sx={{ color: "inherit", fontWeight: "700" }}
+        sx={{
+          display: "block",
+          color: "inherit",
+          fontWeight: "700",
+          maxWidth: "80%",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
+        }}
       />
       {children}
     </ListItemButton>

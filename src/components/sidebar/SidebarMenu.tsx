@@ -8,19 +8,27 @@ import CreateBtn from "components/common/CreateBtn"
 import { getProjectsStore } from "store/userStore"
 import { projectListApi } from "api/project"
 import { useParams } from "react-router-dom"
+import SettingsIcon from "@mui/icons-material/Settings"
+import ProjectSettingsModal from "components/project/modal/ProjectSettingsModal"
+import SubIconBtn from "./SubIconBtn"
 import MenuItems from "./MenuItems"
 
 const SidebarMenu: React.FC = () => {
   const { workspaceId } = useParams()
   const { projects, setProjects } = getProjectsStore()
-  const [openCreateProjectModal, setCreateProjectModal] =
+  const [projectCreateModalOpen, setProjectCreateModalOpen] =
     React.useState<boolean>(false)
-
-  const handleOpenCreateProjectModal = () => {
-    setCreateProjectModal(true)
+  const [projectManageModalOpenMap, setProjectManageModalOpenMap] =
+    React.useState<Record<number, boolean>>({})
+  const openProjectCreateModal = () => {
+    setProjectCreateModalOpen(true)
   }
-  const handleCloseCreateProjectModal = () => {
-    setCreateProjectModal(false)
+  const openProjectManageModal = (projectId: number, e: React.MouseEvent) => {
+    e.preventDefault()
+    setProjectManageModalOpenMap(prev => ({
+      ...prev,
+      [projectId]: true,
+    }))
   }
 
   const fetchProjectList = async () => {
@@ -37,7 +45,7 @@ const SidebarMenu: React.FC = () => {
   const myTasks = [
     {
       link: `/workspace/${workspaceId}/task/bookmark`,
-      listValue: "즐겨찾기",
+      listValue: "북마크",
       icon: StarIcon,
     },
     {
@@ -50,6 +58,7 @@ const SidebarMenu: React.FC = () => {
   const myProjects = projects.map(project => ({
     link: `/workspace/${workspaceId}/project/${project.projectId}`,
     listValue: project.title,
+    projectId: project.projectId,
   }))
 
   return (
@@ -74,19 +83,33 @@ const SidebarMenu: React.FC = () => {
       />
       <Menu
         title="참여 중인 프로젝트"
-        btn={<CreateBtn handleClick={handleOpenCreateProjectModal} />}
+        btn={<CreateBtn handleClick={openProjectCreateModal} />}
       >
         {myProjects.map(list => (
-          <MenuItems
-            to={list.link}
-            listValue={list.listValue}
-            key={list.link}
-          />
+          <Box key={list.projectId}>
+            <MenuItems to={list.link} listValue={list.listValue}>
+              <SubIconBtn
+                color="darkgreen"
+                onClick={e => openProjectManageModal(list.projectId, e)}
+                icon={<SettingsIcon />}
+              />
+            </MenuItems>
+            <ProjectSettingsModal
+              projectId={list.projectId}
+              open={projectManageModalOpenMap[list.projectId] || false}
+              handleClose={() =>
+                setProjectManageModalOpenMap(prev => ({
+                  ...prev,
+                  [list.projectId]: false,
+                }))
+              }
+            />
+          </Box>
         ))}
       </Menu>
       <CreateProjectModal
-        open={openCreateProjectModal}
-        handleClose={handleCloseCreateProjectModal}
+        open={projectCreateModalOpen}
+        handleClose={() => setProjectCreateModalOpen(false)}
       />
     </Box>
   )
