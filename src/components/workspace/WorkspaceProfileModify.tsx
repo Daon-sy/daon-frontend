@@ -16,7 +16,7 @@ import EditableBox from "components/common/EditableBox"
 import { MemberEmail } from "_types/member"
 import { myEmailsApi } from "api/member"
 
-const WorkspaceProfileManage = () => {
+const WorkspaceProfileModify = () => {
   const { workspace, myProfile, setMyProfile } = getWorkspaceStore()
   const { addSuccess } = useAlert()
   const [ref, changeRef] = useImageUrlInputRef()
@@ -150,4 +150,4 @@ const WorkspaceProfileManage = () => {
   )
 }
 
-export default WorkspaceProfileManage
+export default WorkspaceProfileModify

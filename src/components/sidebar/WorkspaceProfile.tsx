@@ -2,9 +2,28 @@ import * as React from "react"
 import { Box } from "@mui/material"
 import { TEST_IMAGE_URL } from "env"
 import { getWorkspaceStore } from "store/userStore"
+import SettingsIcon from "@mui/icons-material/Settings"
+import WorkspaceSettingsModal from "components/workspace/modal/WorkspaceSettingsModal"
+import WorkspaceProfileModifyModal from "components/workspace/modal/WorkspaceProfileModifyModal"
+import EditIcon from "@mui/icons-material/Edit"
+import SubIconBtn from "./SubIconBtn"
 
 const WorkSpaceProfile: React.FC = () => {
   const { workspace, myProfile } = getWorkspaceStore()
+
+  const [workspaceManageModalOpen, setWorkspaceManageModalOpen] =
+    React.useState(false)
+  const [profileModfiyModalOpen, setProfileModfiyModalOpen] =
+    React.useState(false)
+
+  const openWorkspaceManageModal = (e: React.MouseEvent) => {
+    e.preventDefault()
+    setWorkspaceManageModalOpen(true)
+  }
+  const openProfileModifyModal = (e: React.MouseEvent) => {
+    e.preventDefault()
+    setProfileModfiyModalOpen(true)
+  }
   return (
     <Box
       sx={{
@@ -13,8 +32,7 @@ const WorkSpaceProfile: React.FC = () => {
         height: "75%",
         minHeight: "230px",
         bgcolor: "#82b89b",
-        position: "relatvie",
-        cursor: " pointer",
+        position: "relative",
         border: "none",
         borderBottomLeftRadius: "20px",
         borderBottomRightRadius: "20px",
@@ -29,16 +47,31 @@ const WorkSpaceProfile: React.FC = () => {
         sx={{
           borderRadius: 1,
           width: "100%",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-          whiteSpace: "nowrap",
           fontSize: 20,
           textAlign: "center",
           color: "#476354",
           fontWeight: "bold",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        {workspace?.title}
+        <Box
+          component="div"
+          sx={{
+            maxWidth: "80%",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {workspace?.title}
+        </Box>
+        <SubIconBtn
+          color="#808080"
+          onClick={openWorkspaceManageModal}
+          icon={<SettingsIcon />}
+        />
       </Box>
       <Box
         component="div"
@@ -80,9 +113,17 @@ const WorkSpaceProfile: React.FC = () => {
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
           {myProfile?.name}
+          <SubIconBtn
+            color="#808080"
+            onClick={openProfileModifyModal}
+            icon={<EditIcon />}
+          />
         </Box>
         <Box
           sx={{
@@ -101,6 +142,14 @@ const WorkSpaceProfile: React.FC = () => {
           {myProfile?.email}
         </Box>
       </Box>
+      <WorkspaceSettingsModal
+        open={workspaceManageModalOpen}
+        handleClose={() => setWorkspaceManageModalOpen(false)}
+      />
+      <WorkspaceProfileModifyModal
+        open={profileModfiyModalOpen}
+        handleClose={() => setProfileModfiyModalOpen(false)}
+      />
     </Box>
   )
 }
