@@ -23,11 +23,13 @@ const ProjectSelectButton: React.FC<Props> = ({
   React.useEffect(() => {
     if (!projects) {
       const fetchData = async () => {
-        const { data: responseData } = await projectListApi(
-          workspace!.workspaceId,
-        )
-        const { projects: fetchedProjects } = responseData
-        setProjects(fetchedProjects)
+        if (workspace) {
+          const { data: responseData } = await projectListApi(
+            workspace.workspaceId,
+          )
+          const { projects: fetchedProjects } = responseData
+          setProjects(fetchedProjects)
+        }
       }
       fetchData()
     }
