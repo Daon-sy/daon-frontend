@@ -25,12 +25,14 @@ const BoardSelectButton: React.FC<Props> = ({
   React.useEffect(() => {
     if (projectId) {
       const fetchData = async () => {
-        const { data: responseData } = await projectBoardListApi(
-          workspace!.workspaceId,
-          projectId,
-        )
-        const { boards: fetchedBoards } = responseData
-        setBoards(fetchedBoards)
+        if (workspace) {
+          const { data: responseData } = await projectBoardListApi(
+            workspace.workspaceId,
+            projectId,
+          )
+          const { boards: fetchedBoards } = responseData
+          setBoards(fetchedBoards)
+        }
       }
       fetchData()
     }

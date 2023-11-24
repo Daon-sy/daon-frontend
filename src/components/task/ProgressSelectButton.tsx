@@ -1,35 +1,10 @@
 import React from "react"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import SelectListButton, { ItemType } from "components/common/SelectListButton"
-import { TASK_STATUS } from "_types/task"
+import { TASK_STATUS, TASK_STATUS_SET } from "_types/task"
 
 interface Status extends ItemType {
   value: TASK_STATUS
-}
-
-const TODO: Status = {
-  id: 1,
-  text: "할 일",
-  value: "TODO",
-  color: "info",
-}
-const PROCEEDING: Status = {
-  id: 2,
-  text: "진행중",
-  value: "PROCEEDING",
-  color: "primary",
-}
-const COMPLETED: Status = {
-  id: 3,
-  text: "완료됨",
-  value: "COMPLETED",
-  color: "success",
-}
-const PENDING: Status = {
-  id: 4,
-  text: "보류중",
-  value: "PENDING",
-  color: "warning",
 }
 
 interface Props {
@@ -41,7 +16,16 @@ const ProgressSelectButton: React.FC<Props> = ({
   current,
   handleStatusSelect,
 }: Props) => {
-  const listItems = [TODO, PROCEEDING, COMPLETED, PENDING]
+  const listItems: Status[] = TASK_STATUS_SET.map(
+    (status, index) =>
+      ({
+        id: index + 1,
+        text: status.description,
+        value: status.value,
+        color: status.chipColor,
+      }) as Status,
+  )
+  const [TODO] = listItems
 
   const foundData = listItems.find(item => item.value === current)
 
