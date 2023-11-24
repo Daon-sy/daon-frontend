@@ -8,7 +8,7 @@ import TitleModal from "components/common/TitleModal"
 import WorkspaceDataManage from "components/workspace/WorkspaceDataManage"
 import WorkspaceParticipantManage from "components/workspace/WorkspaceParticipantManage"
 import { roles } from "_types/workspace"
-import WorkspaceProfileManage from "components/workspace/WorkspaceProfileManage"
+import WorkspaceProfileModify from "components/workspace/WorkspaceProfileModify"
 
 type PageType = "workspace" | "workspaceProfile" | "workspaceParticipant"
 
@@ -50,7 +50,7 @@ const Body = ({ page }: { page: PageType }) => {
       case "workspace":
         return <WorkspaceDataManage />
       case "workspaceProfile":
-        return <WorkspaceProfileManage />
+        return <WorkspaceProfileModify />
       case "workspaceParticipant":
         return <WorkspaceParticipantManage />
       default:

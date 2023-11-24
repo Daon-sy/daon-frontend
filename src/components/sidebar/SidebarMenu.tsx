@@ -5,42 +5,61 @@ import { Divider, Box } from "@mui/material"
 import Menu from "components/common/Menu"
 import CreateProjectModal from "components/project/modal/CreateProjectModal"
 import CreateBtn from "components/common/CreateBtn"
+import { getProjectsStore } from "store/userStore"
+import { projectListApi } from "api/project"
+import { useParams } from "react-router-dom"
+import SettingsIcon from "@mui/icons-material/Settings"
+import ProjectSettingsModal from "components/project/modal/ProjectSettingsModal"
+import SubIconBtn from "./SubIconBtn"
 import MenuItems from "./MenuItems"
 
 const SidebarMenu: React.FC = () => {
-  const [openCreateProjectModal, setCreateProjectModal] =
+  const { workspaceId } = useParams()
+  const { projects, setProjects } = getProjectsStore()
+  const [projectCreateModalOpen, setProjectCreateModalOpen] =
     React.useState<boolean>(false)
+  const [projectManageModalOpenMap, setProjectManageModalOpenMap] =
+    React.useState<Record<number, boolean>>({})
+  const openProjectCreateModal = () => {
+    setProjectCreateModalOpen(true)
+  }
+  const openProjectManageModal = (projectId: number, e: React.MouseEvent) => {
+    e.preventDefault()
+    setProjectManageModalOpenMap(prev => ({
+      ...prev,
+      [projectId]: true,
+    }))
+  }
 
-  const handleOpenCreateProjectModal = () => {
-    setCreateProjectModal(true)
+  const fetchProjectList = async () => {
+    if (workspaceId) {
+      const { data } = await projectListApi(+workspaceId)
+      setProjects(data.projects)
+    }
   }
-  const handleCloseCreateProjectModal = () => {
-    setCreateProjectModal(false)
-  }
+
+  React.useEffect(() => {
+    fetchProjectList()
+  }, [workspaceId])
 
   const myTasks = [
     {
-      link: "/workspace/1/task/bookmark",
-      listValue: "즐겨찾기",
+      link: `/workspace/${workspaceId}/task/bookmark`,
+      listValue: "북마크",
       icon: StarIcon,
     },
     {
-      link: "/workspace/1/task/my",
+      link: `/workspace/${workspaceId}/task/my`,
       listValue: "내 할일",
       icon: AssignmentIcon,
     },
   ]
 
-  const myProjects = [
-    {
-      link: "/workspace/1/project/1",
-      listValue: "프로젝트1",
-    },
-    {
-      link: "/workspace/1/project/2",
-      listValue: "프로젝트2",
-    },
-  ]
+  const myProjects = projects.map(project => ({
+    link: `/workspace/${workspaceId}/project/${project.projectId}`,
+    listValue: project.title,
+    projectId: project.projectId,
+  }))
 
   return (
     <Box>
@@ -50,6 +69,7 @@ const SidebarMenu: React.FC = () => {
             to={list.link}
             listValue={list.listValue}
             icon={list.icon}
+            key={list.link}
           />
         ))}
       </Menu>
@@ -63,16 +83,33 @@ const SidebarMenu: React.FC = () => {
       />
       <Menu
         title="참여 중인 프로젝트"
-        btn={<CreateBtn handleClick={handleOpenCreateProjectModal} />}
+        btn={<CreateBtn handleClick={openProjectCreateModal} />}
       >
-        {/* <CreateBtn handleClick={handleOpenCreateProjectModal} /> */}
         {myProjects.map(list => (
-          <MenuItems to={list.link} listValue={list.listValue} />
+          <Box key={list.projectId}>
+            <MenuItems to={list.link} listValue={list.listValue}>
+              <SubIconBtn
+                color="darkgreen"
+                onClick={e => openProjectManageModal(list.projectId, e)}
+                icon={<SettingsIcon />}
+              />
+            </MenuItems>
+            <ProjectSettingsModal
+              projectId={list.projectId}
+              open={projectManageModalOpenMap[list.projectId] || false}
+              handleClose={() =>
+                setProjectManageModalOpenMap(prev => ({
+                  ...prev,
+                  [list.projectId]: false,
+                }))
+              }
+            />
+          </Box>
         ))}
       </Menu>
       <CreateProjectModal
-        open={openCreateProjectModal}
-        handleClose={handleCloseCreateProjectModal}
+        open={projectCreateModalOpen}
+        handleClose={() => setProjectCreateModalOpen(false)}
       />
     </Box>
   )
