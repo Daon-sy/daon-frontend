@@ -34,6 +34,7 @@ import CloseIcon from "@mui/icons-material/Close"
 import MenuItem from "@mui/material/MenuItem"
 import Menu from "@mui/material/Menu"
 import ConfirmDialog from "components/common/ConfirmDialog"
+import TaskReply from "../reply/TaskReply"
 
 interface Props {
   projectId: number
@@ -328,6 +329,7 @@ const TaskDetailModal: React.FC<Props> = ({
               <Box sx={{ paddingX: 1.5, paddingY: 2, fontWeight: 700 }}>
                 댓글
               </Box>
+              <TaskReply projectId={projectId} taskId={taskId} />
             </Box>
           </Box>
           {/* right */}
