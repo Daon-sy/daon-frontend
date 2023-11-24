@@ -151,12 +151,14 @@ const TaskCell: React.FC<Props> = ({ task, borderColor }: Props) => {
           </Box>
         </Stack>
       </Box>
-      <TaskDetailModal
-        projectId={task.project.projectId}
-        taskId={task.taskId}
-        open={detailModalOpen}
-        handleClose={() => setDetailModalOpen(false)}
-      />
+      {detailModalOpen ? (
+        <TaskDetailModal
+          projectId={task.project.projectId}
+          taskId={task.taskId}
+          open={detailModalOpen}
+          handleClose={() => setDetailModalOpen(false)}
+        />
+      ) : null}
     </>
   )
 }

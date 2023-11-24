@@ -17,6 +17,7 @@ const CalendarDateField = ({ date, handleChange }: Props) => {
         <DemoContainer components={["DatePicker"]}>
           <DatePicker
             format="YYYY-MM-DD"
+            value={date ? dayjs(date) : null}
             defaultValue={date ? dayjs(date) : null}
             sx={{
               width: "100%",

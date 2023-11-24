@@ -134,7 +134,7 @@ const WorkspaceProfileModify = () => {
                       updateMyWorkspaceProfile({ email: e.target.value })
                     }
                   >
-                    {memberEmails.map(memberEmail => (
+                    {memberEmails?.map(memberEmail => (
                       <MenuItem value={memberEmail.email}>
                         {memberEmail.email}
                       </MenuItem>

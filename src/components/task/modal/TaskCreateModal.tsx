@@ -55,7 +55,7 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
     handleClose()
   }
 
-  if (!workspace || !projectId) return <Box />
+  if (!workspace) return <Box />
 
   const handleCreate = async () => {
     if (!projectId) {
@@ -299,17 +299,19 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
             </Button>
           </Stack>
         </Box>
-        <ProjectParticipantsModal
-          title="담당자 선택"
-          workspaceId={workspace.workspaceId}
-          projectId={projectId}
-          open={projectParticipantsModalOpen}
-          handleClose={() => setProjectParticipantsModalOpen(false)}
-          handleItemClick={(participant: ProjectParticipant | undefined) => {
-            setTaskManager(participant)
-            setTaskManagerId(participant?.projectParticipantId)
-          }}
-        />
+        {projectId ? (
+          <ProjectParticipantsModal
+            title="담당자 선택"
+            workspaceId={workspace.workspaceId}
+            projectId={projectId}
+            open={projectParticipantsModalOpen}
+            handleClose={() => setProjectParticipantsModalOpen(false)}
+            handleItemClick={(participant: ProjectParticipant | undefined) => {
+              setTaskManager(participant)
+              setTaskManagerId(participant?.projectParticipantId)
+            }}
+          />
+        ) : null}
       </Stack>
     </TitleModal>
   )

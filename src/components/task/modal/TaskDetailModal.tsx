@@ -151,18 +151,18 @@ const TaskDetailModal: React.FC<Props> = ({
         },
       )
 
-      eventSource.onmessage = () => {
+      eventSource.addEventListener("MESSAGE", () => {
         setEventRaised(true)
-      }
+      })
 
       eventSource.onerror = e => {
         console.error(e)
-        eventSource.close()
+        eventSource?.close()
       }
     }
 
     return () => {
-      eventSource.close()
+      eventSource?.close()
     }
   }, [open])
 
