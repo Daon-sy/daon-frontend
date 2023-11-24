@@ -1,11 +1,12 @@
 import {
   TASK_STATUS,
   TaskDetail,
+  TaskHistory,
   TaskReplyDetail,
   TaskSummary,
 } from "_types/task"
 import { AxiosResponse } from "axios"
-import { authAxios } from "api"
+import { authAxios, SliceResponse } from "api"
 
 // Request
 export interface CreateTaskRequestBody {
@@ -130,6 +131,25 @@ export const taskBookmarkApi = async (
 ): Promise<AxiosResponse<{ created: boolean }>> => {
   return authAxios.post(
     `/api/workspaces/${workspaceId}/projects/${projectId}/tasks/${taskId}/bookmark`,
+  )
+}
+
+// 할 일 히스토리 조회
+export const taskHistoryApi = async (
+  workspaceId: number,
+  projectId: number,
+  taskId: number,
+  param: {
+    page?: number
+    size?: number
+  } = {
+    page: 0,
+    size: 10,
+  },
+): Promise<AxiosResponse<SliceResponse<TaskHistory>>> => {
+  return authAxios.get(
+    `/api/workspaces/${workspaceId}/projects/${projectId}/tasks/${taskId}/history`,
+    { params: param },
   )
 }
 

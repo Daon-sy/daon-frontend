@@ -1,11 +1,19 @@
 import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios"
 import { API_SERVER_URL } from "env"
 import { getTokenStore } from "store/tokenStore"
-import mem from "mem"
 
-export interface ApiResponse<T = object> {
-  data: T
-  message: string
+export interface ErrorResponse {
+  errorCode: number
+  errorDescription: string
+}
+
+export interface SliceResponse<T> {
+  first: boolean
+  last: boolean
+  pageSize: number
+  pageNumber: number
+  contentSize: number
+  content: Array<T>
 }
 
 export const basicAxios = axios.create({
@@ -25,26 +33,6 @@ export const authAxios = axios.create({
 })
 
 const BEARER_TYPE = "Bearer "
-
-// const reissue = mem(
-//   async (config: InternalAxiosRequestConfig) => {
-//     const { headers: confHeaders } = config
-//
-//     return basicAxios.post("/api/auth/reissue").then((res: AxiosResponse) => {
-//       const { headers } = res
-//       const authHeader: string = headers.authorization
-//       if (!!authHeader && authHeader.startsWith(BEARER_TYPE)) {
-//         const accessToken = authHeader.substring(BEARER_TYPE.length)
-//         getTokenStore.getState().setToken(accessToken)
-//         confHeaders.Authorization = `Bearer ${accessToken}`
-//       }
-//
-//       // 재발급 성공시 기존 요청 재호출
-//       return basicAxios.request(config)
-//     })
-//   },
-//   { maxAge: 1000 },
-// )
 
 basicAxios.interceptors.response.use((res: AxiosResponse) => {
   // 인증 헤더에 토큰이 있으면 꺼내서 store에 저장

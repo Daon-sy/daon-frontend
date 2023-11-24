@@ -55,6 +55,8 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
     handleClose()
   }
 
+  if (!workspace || !projectId) return <Box />
+
   const handleCreate = async () => {
     if (!projectId) {
       addError("프로젝트를 선택해주세요")
@@ -71,7 +73,7 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
       return
     }
 
-    const { data } = await createTaskApi(workspace!.workspaceId, projectId, {
+    const { data } = await createTaskApi(workspace.workspaceId, projectId, {
       title,
       content,
       boardId,
@@ -299,8 +301,8 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
         </Box>
         <ProjectParticipantsModal
           title="담당자 선택"
-          workspaceId={workspace!.workspaceId}
-          projectId={projectId!}
+          workspaceId={workspace.workspaceId}
+          projectId={projectId}
           open={projectParticipantsModalOpen}
           handleClose={() => setProjectParticipantsModalOpen(false)}
           handleItemClick={(participant: ProjectParticipant | undefined) => {
