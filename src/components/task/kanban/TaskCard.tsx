@@ -135,12 +135,14 @@ const TaskCard: React.FC<Props> = React.memo(({ task }: Props) => {
           </Box>
         </Card>
       </Box>
-      <TaskDetailModal
-        projectId={task.project.projectId}
-        taskId={task.taskId}
-        open={detailModalOpen}
-        handleClose={() => setDetailModalOpen(false)}
-      />
+      {detailModalOpen ? (
+        <TaskDetailModal
+          projectId={task.project.projectId}
+          taskId={task.taskId}
+          open={detailModalOpen}
+          handleClose={() => setDetailModalOpen(false)}
+        />
+      ) : null}
     </>
   )
 })

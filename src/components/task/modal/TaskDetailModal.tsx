@@ -43,6 +43,9 @@ import CloseIcon from "@mui/icons-material/Close"
 import MenuItem from "@mui/material/MenuItem"
 import Menu from "@mui/material/Menu"
 import ConfirmDialog from "components/common/ConfirmDialog"
+import { EventSourcePolyfill } from "event-source-polyfill"
+import { API_SERVER_URL } from "env"
+import { getTokenStore } from "store/tokenStore"
 
 interface Props {
   projectId: number
@@ -58,6 +61,7 @@ const TaskDetailModal: React.FC<Props> = ({
   handleClose,
 }: Props) => {
   const { addSuccess, addError } = useAlert()
+  const { token } = getTokenStore()
   const { workspace } = getWorkspaceStore()
   const [task, setTask] = React.useState<TaskDetail | null>()
   const [projectParticipantsModalOpen, setProjectParticipantsModalOpen] =
@@ -71,6 +75,7 @@ const TaskDetailModal: React.FC<Props> = ({
     page: 0,
   })
   const [history, setHistory] = React.useState<Array<TaskHistory>>([])
+  const [eventRaised, setEventRaised] = React.useState(false)
 
   const fetchHistory = async (page = 0) => {
     if (workspace) {
@@ -109,17 +114,69 @@ const TaskDetailModal: React.FC<Props> = ({
     }
   }
 
+  const fetchHistoryTop = async () => {
+    if (workspace) {
+      const { data } = await taskHistoryApi(
+        workspace.workspaceId,
+        projectId,
+        taskId,
+      )
+      const { content } = data
+
+      if (content.length > 0) {
+        setHistory(
+          [content[0], ...history]
+            .filter(
+              (h, i, arr) => i === arr.findIndex(loc => loc.revId === h.revId),
+            )
+            .sort((h1, h2) => -(h1.revId - h2.revId)),
+        )
+      }
+    }
+  }
+
+  let eventSource: EventSourcePolyfill
   React.useEffect(() => {
-    if (open) {
+    if (open && workspace) {
       fetchData()
       fetchHistory()
+
+      eventSource = new EventSourcePolyfill(
+        `${API_SERVER_URL}/api/subscribe/workspaces/projects/tasks/${taskId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          heartbeatTimeout: 130_000,
+        },
+      )
+
+      eventSource.onmessage = () => {
+        setEventRaised(true)
+      }
+
+      eventSource.onerror = e => {
+        console.error(e)
+        eventSource.close()
+      }
+    }
+
+    return () => {
+      eventSource.close()
     }
   }, [open])
+
+  React.useEffect(() => {
+    if (eventRaised) {
+      fetchData()
+      fetchHistoryTop()
+      setEventRaised(false)
+    }
+  }, [eventRaised])
 
   const modifyTask = async (modifiedTask: TaskDetail) => {
     if (!modifiedTask.board) {
       addError("보드를 선택해주세요")
-
       return
     }
 
@@ -136,15 +193,6 @@ const TaskDetailModal: React.FC<Props> = ({
       }
       await modifyTaskApi(workspace.workspaceId, projectId, taskId, request)
       addSuccess("할 일을 수정했습니다.")
-
-      fetchData()
-      const { data } = await taskHistoryApi(
-        workspace.workspaceId,
-        projectId,
-        taskId,
-      )
-      const { content } = data
-      setHistory([content[0], ...history])
     }
   }
 
