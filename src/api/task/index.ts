@@ -42,7 +42,9 @@ export interface TaskListResponseBody {
 export type TaskDetailResponseBody = TaskDetail
 
 export interface taskReplyListResponseBody {
-  data: Array<TaskReplyDetail>
+  totalCount: number
+  taskId: number
+  taskReplies: Array<TaskReplyDetail>
 }
 
 // API
