@@ -6,6 +6,8 @@ import { Box } from "@mui/material"
 import WorkspaceCard from "components/workspace/list/WorkspaceCard"
 import { Workspace } from "_types/workspace"
 import { workspaceListApi } from "api/workspace"
+import { useNavigate, useSearchParams } from "react-router-dom"
+import { getTokenStore } from "../store/tokenStore"
 
 const DefaultLayout = styled.div`
   width: 100%;
@@ -14,6 +16,19 @@ const DefaultLayout = styled.div`
 `
 
 const Home: React.FC = () => {
+  const navigate = useNavigate()
+
+  const [searchParams] = useSearchParams()
+  const { setToken } = getTokenStore()
+
+  React.useEffect(() => {
+    const testToken = searchParams.get("testToken")
+    if (testToken) {
+      setToken(testToken)
+      navigate("/")
+    }
+  }, [])
+
   const [workspaces, setWorkspaces] = useState<Workspace[]>([])
 
   useEffect(() => {
