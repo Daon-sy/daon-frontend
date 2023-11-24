@@ -3,23 +3,27 @@ import { Box, FormHelperText, TextField } from "@mui/material"
 import { TEST_IMAGE_URL } from "env"
 import { TaskReplyDetail } from "_types/task"
 import { removeTaskReply, modifyTaskReply } from "api/task"
+import { useAlert } from "hooks/useAlert"
 import ReplyBtn from "./ReplyBtn"
 
-interface CombinedTaskReplyProps {
+interface TaskReplyItemProps {
   workspaceId: number | undefined
   projectId: number
   taskId: number
   reply: TaskReplyDetail
+  onReplyUpdated: () => void
 }
 
-const CombinedTaskReply: React.FC<CombinedTaskReplyProps> = ({
+const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
   workspaceId,
   projectId,
   taskId,
   reply,
-}: CombinedTaskReplyProps) => {
+  onReplyUpdated,
+}: TaskReplyItemProps) => {
   const [isModify, setIsModify] = useState<boolean>(false)
   const [content, setContent] = useState<string>(reply.content)
+  const { addError } = useAlert()
 
   const handleToggle = () => {
     setIsModify(prevIsModify => !prevIsModify)
@@ -29,6 +33,7 @@ const CombinedTaskReply: React.FC<CombinedTaskReplyProps> = ({
     try {
       if (workspaceId) {
         await removeTaskReply(workspaceId, projectId, taskId, replyId)
+        onReplyUpdated()
       }
     } catch (error) {
       console.error("Error removing reply:", error)
@@ -42,9 +47,14 @@ const CombinedTaskReply: React.FC<CombinedTaskReplyProps> = ({
           content,
         })
         setIsModify(false)
+        onReplyUpdated()
       }
-    } catch (error) {
-      console.error("Error modifying reply:", error)
+    } catch (error: any) {
+      if (error.request.statusText.length === 0) {
+        addError("댓글 내용은 필수 입력 값입니다")
+      } else {
+        console.error("Error modifying reply:", error)
+      }
     }
   }
 
@@ -149,6 +159,8 @@ const CombinedTaskReply: React.FC<CombinedTaskReplyProps> = ({
             textOverflow: "ellipsis",
             whiteSpace: "normal",
             wordWrap: "break-word",
+            fontSize: "14px",
+            lineHeight: "16px",
           }}
         >
           {reply.content}
@@ -170,4 +182,4 @@ const CombinedTaskReply: React.FC<CombinedTaskReplyProps> = ({
   )
 }
 
-export default CombinedTaskReply
+export default TaskReplyItem

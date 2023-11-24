@@ -9,6 +9,7 @@ interface TaskReplyProps {
   workspaceId: number | undefined
   projectId: number
   taskId: number
+  onReplyAdded: () => void
 }
 
 interface TaskReply {
@@ -23,6 +24,7 @@ const TaskReplyInput: React.FC<TaskReplyProps> = ({
   workspaceId,
   projectId,
   taskId,
+  onReplyAdded,
 }: TaskReplyProps) => {
   const [data, onChange, resetData] = useInputs<TaskReply>(initialState)
   const { addError } = useAlert()
@@ -37,6 +39,7 @@ const TaskReplyInput: React.FC<TaskReplyProps> = ({
 
     addTaskReply(workspaceId, projectId, taskId, data).then(() => {
       resetData()
+      onReplyAdded()
     })
   }
 

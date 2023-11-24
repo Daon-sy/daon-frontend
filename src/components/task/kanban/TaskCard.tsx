@@ -130,7 +130,9 @@ const TaskCard: React.FC<Props> = React.memo(({ task }: Props) => {
                   <Avatar sx={{ width: 28, height: 28 }} />
                 </Box>
               ) : null}
-              <Box sx={{ marginLeft: 1 }}>{task.taskManager?.name}</Box>
+              <Box sx={{ marginLeft: 1, fontSize: "12px" }}>
+                {task.taskManager?.name}
+              </Box>
             </Box>
           </Box>
         </Card>

@@ -32,6 +32,13 @@ const TaskReply: React.FC<TaskReplyProps> = ({
       }
     }
   }
+  const handleReplyAdded = () => {
+    fetchReplyList()
+  }
+
+  const handleReplyUpdated = () => {
+    fetchReplyList()
+  }
 
   React.useEffect(() => {
     fetchReplyList()
@@ -43,6 +50,7 @@ const TaskReply: React.FC<TaskReplyProps> = ({
         workspaceId={workspace?.workspaceId}
         projectId={projectId}
         taskId={taskId}
+        onReplyAdded={handleReplyAdded}
       />
       <Box component="ul">
         {replies.map(reply => (
@@ -52,6 +60,7 @@ const TaskReply: React.FC<TaskReplyProps> = ({
             projectId={projectId}
             taskId={taskId}
             reply={reply}
+            onReplyUpdated={handleReplyUpdated}
           />
         ))}
       </Box>
