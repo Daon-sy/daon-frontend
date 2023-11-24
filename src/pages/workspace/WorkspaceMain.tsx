@@ -1,25 +1,13 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import ProjectCard from "components/project/ProjectCard"
-import { Project } from "_types/project"
-import { projectListApi } from "api/project"
 import TitleWrapper from "components/common/TitleWrapper"
 import { Box } from "@mui/material"
+import { getProjectsStore } from "store/userStore"
+import { useParams } from "react-router-dom"
 
 const WorkspaceMain: React.FC = () => {
-  const [projects, setProjects] = useState<Project[]>([])
-
-  const workspaceId = location.pathname.split("/")[2]
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await projectListApi(+workspaceId)
-        setProjects(response.data.projects)
-      } catch (error) {
-        console.error("Error fetching boards:", error)
-      }
-    }
-    fetchData()
-  }, [workspaceId])
+  const { workspaceId } = useParams()
+  const { projects } = getProjectsStore()
 
   return (
     <>

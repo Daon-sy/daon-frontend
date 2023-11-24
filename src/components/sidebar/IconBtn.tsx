@@ -20,7 +20,11 @@ const IconBtn = ({ text, icon, onClick }: IconBtnProps) => {
         width: "35%",
         bgcolor: "transparent",
         border: "none",
+        borderRadius: "10px",
         cursor: "pointer",
+        "&:hover": {
+          bgcolor: "rgba(146, 146, 146, 0.1)",
+        },
       }}
     >
       <Box component="div" sx={{ width: "80%", color: "#82b89b" }}>

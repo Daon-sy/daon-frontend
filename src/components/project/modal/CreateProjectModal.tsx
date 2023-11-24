@@ -11,7 +11,7 @@ import { useAlert } from "hooks/useAlert"
 import TitleModal from "components/common/TitleModal"
 import useInputs from "hooks/useInputs"
 import { createProjectApi, CreateProjectRequestBody } from "api/project"
-import { getWorkspaceStore } from "store/userStore"
+import { getProjectsStore, getWorkspaceStore } from "store/userStore"
 
 interface CreateProjectProps {
   open: boolean
@@ -29,9 +29,9 @@ const CreateProjectModal: React.FC<CreateProjectProps> = ({
 }: CreateProjectProps) => {
   const { workspace } = getWorkspaceStore()
   const { addSuccess, addError } = useAlert()
+  const { projects, setProjects } = getProjectsStore()
   const [data, onChange, resetData] =
     useInputs<CreateProjectRequestBody>(initialState)
-
   const onValidateBtn = () => {
     if (!workspace?.workspaceId) return
 
@@ -42,8 +42,14 @@ const CreateProjectModal: React.FC<CreateProjectProps> = ({
     }
 
     createProjectApi(workspace.workspaceId, data)
-      .then(() => {
+      .then(response => {
         addSuccess("프로젝트 생성 성공!")
+        const newProject = {
+          projectId: response.data.projectId,
+          title: data.title,
+          description: data.description,
+        }
+        setProjects([...projects, newProject])
         handleClose()
       })
       .catch(err => {
