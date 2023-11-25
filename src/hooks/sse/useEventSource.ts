@@ -70,6 +70,8 @@ const useEventSource = ({ ssePath, onMessage, onEventRaised }: Props) => {
       setEventRaised(false)
     }
   }, [eventRaised])
+
+  return () => eventSource?.close()
 }
 
 export default useEventSource
