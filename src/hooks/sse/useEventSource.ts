@@ -12,7 +12,7 @@ type EventType =
   | "DEPORTATION_PROJECT"
   | "REGISTERED_TASK_MANAGER"
 
-const heartbeatTimeout = 130_000
+const heartbeatTimeout = 140_000
 
 const addEventListener = (
   eventsource: EventSourcePolyfill,
@@ -35,11 +35,10 @@ interface Props {
 
 const useEventSource = ({ ssePath, onMessage, onEventRaised }: Props) => {
   const { token } = getTokenStore()
-  const [eventSource, setEventSource] = React.useState<EventSourcePolyfill>()
   const [eventRaised, setEventRaised] = React.useState(false)
 
   React.useEffect(() => {
-    const es = new EventSourcePolyfill(
+    const eventSource = new EventSourcePolyfill(
       `${API_SERVER_URL}/${
         ssePath.startsWith("/") ? ssePath.substring(1) : ssePath
       }`,
@@ -51,7 +50,7 @@ const useEventSource = ({ ssePath, onMessage, onEventRaised }: Props) => {
       },
     )
 
-    addEventListener(es, {
+    addEventListener(eventSource, {
       eventType: "MESSAGE",
       callback: () => {
         if (onMessage) onMessage()
@@ -59,7 +58,10 @@ const useEventSource = ({ ssePath, onMessage, onEventRaised }: Props) => {
       },
     })
 
-    setEventSource(es)
+    eventSource.onerror = e => {
+      console.error(e)
+      eventSource.close()
+    }
 
     return () => eventSource?.close()
   }, [])
@@ -70,8 +72,6 @@ const useEventSource = ({ ssePath, onMessage, onEventRaised }: Props) => {
       setEventRaised(false)
     }
   }, [eventRaised])
-
-  return () => eventSource?.close()
 }
 
 export default useEventSource
