@@ -4,15 +4,18 @@ import { ErrorResponse } from "api"
 import { taskHistoryApi } from "api/task"
 import { TaskHistory } from "_types/task"
 
-const useFetchTaskHistory = ({
-  workspaceId,
-  projectId,
-  taskId,
-}: {
-  workspaceId: number
-  projectId: number
-  taskId: number
-}) => {
+const useFetchTaskHistory = (
+  {
+    workspaceId,
+    projectId,
+    taskId,
+  }: {
+    workspaceId: number
+    projectId: number
+    taskId: number
+  },
+  skip = false,
+) => {
   const [isFetching, setIsFetching] = React.useState(false)
   const [isFirst, setIsFirst] = React.useState(true)
   const [isLast, setIsLast] = React.useState(true)
@@ -71,6 +74,11 @@ const useFetchTaskHistory = ({
       }
     }
   }
+
+  React.useEffect(() => {
+    if (skip) return
+    fetchHistories()
+  }, [])
 
   return {
     fetchHistories,

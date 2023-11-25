@@ -4,15 +4,18 @@ import { ErrorResponse } from "api"
 import { taskDetailApi } from "api/task"
 import { TaskDetail } from "_types/task"
 
-const useFetchTaskDetail = ({
-  workspaceId,
-  projectId,
-  taskId,
-}: {
-  workspaceId: number
-  projectId: number
-  taskId: number
-}) => {
+const useFetchTaskDetail = (
+  {
+    workspaceId,
+    projectId,
+    taskId,
+  }: {
+    workspaceId: number
+    projectId: number
+    taskId: number
+  },
+  skip = false,
+) => {
   const [isFetching, setIsFetching] = React.useState(false)
   const [taskDetail, setTaskDetail] = React.useState<
     TaskDetail | undefined | null
@@ -34,6 +37,11 @@ const useFetchTaskDetail = ({
       setIsFetching(false)
     }
   }
+
+  React.useEffect(() => {
+    if (skip) return
+    fetchTaskDetail()
+  }, [])
 
   return { taskDetail, fetchTaskDetail, isFetching, error }
 }

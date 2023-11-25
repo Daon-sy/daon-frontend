@@ -25,18 +25,14 @@ import ProgressSelectButton from "components/task/ProgressSelectButton"
 import BoardSelectButton from "components/task/BoardSelectButton"
 import TaskHistoriesWrapper from "components/task/history/TaskHistoriesWrapper"
 import ProjectParticipantsModal from "components/project/modal/ProjectParticipantsModal"
-import { TaskDetail } from "_types/task"
-import {
-  modifyTaskApi,
-  ModifyTaskRequestBody,
-  removeTaskApi,
-  taskBookmarkApi,
-} from "api/task"
 import { ProjectParticipant } from "_types/project"
 import { useAlert } from "hooks/useAlert"
 import useEventSource from "hooks/sse/useEventSource"
 import useFetchTaskDetail from "hooks/task/useFetchTaskDetail"
 import useFetchTaskHistory from "hooks/task/useFetchTaskHistory"
+import useModifyTask from "hooks/task/useModifyTask"
+import useHandleBookmark from "hooks/task/useHandleBookmark"
+import useRemoveTask from "hooks/task/useRemoveTask"
 
 interface Props {
   workspaceId: number
@@ -53,29 +49,25 @@ const TaskDetailModal: React.FC<Props> = ({
   open,
   handleClose,
 }: Props) => {
-  const { addSuccess, addError } = useAlert()
+  const { addError } = useAlert()
   const [projectParticipantsModalOpen, setProjectParticipantsModalOpen] =
     React.useState(false)
   const [moreButtonAnchorEl, setMoreButtonAnchorEl] =
     React.useState<null | HTMLElement>(null)
   const [taskRemoveModalOpen, setTaskRemoveModalOpen] = React.useState(false)
 
-  const { taskDetail, fetchTaskDetail } = useFetchTaskDetail({
+  const taskFullPath = {
     workspaceId,
     projectId,
     taskId,
-  })
-  const { taskHistories, fetchHistories, fetchTopHistory, isLast } =
-    useFetchTaskHistory({
-      workspaceId,
-      projectId,
-      taskId,
-    })
+  }
 
-  React.useEffect(() => {
-    fetchTaskDetail()
-    fetchHistories()
-  }, [])
+  const { taskDetail, fetchTaskDetail } = useFetchTaskDetail(taskFullPath)
+  const { taskHistories, fetchHistories, fetchTopHistory, isLast } =
+    useFetchTaskHistory(taskFullPath)
+  const { fetch: modifyTask } = useModifyTask(taskFullPath)
+  const { handleBookmark } = useHandleBookmark(taskFullPath)
+  const { fetch: removeTask } = useRemoveTask(taskFullPath, handleClose)
 
   useEventSource({
     ssePath: `/api/subscribe/workspaces/projects/tasks/${taskId}`,
@@ -84,41 +76,6 @@ const TaskDetailModal: React.FC<Props> = ({
       fetchTopHistory()
     },
   })
-
-  const modifyTask = async (modifiedTask: TaskDetail) => {
-    if (!modifiedTask.board) {
-      addError("보드를 선택해주세요")
-      return
-    }
-
-    if (taskDetail) {
-      const request: ModifyTaskRequestBody = {
-        title: modifiedTask.title,
-        content: modifiedTask.content,
-        boardId: modifiedTask.board.boardId,
-        startDate: modifiedTask.startDate,
-        endDate: modifiedTask.endDate,
-        taskManagerId: modifiedTask.taskManager?.projectParticipantId,
-        emergency: modifiedTask.emergency,
-        progressStatus: modifiedTask.progressStatus,
-      }
-      await modifyTaskApi(workspaceId, projectId, taskId, request)
-      addSuccess("할 일을 수정했습니다.")
-    }
-  }
-
-  const handleBookmark = async () => {
-    const { data } = await taskBookmarkApi(workspaceId, projectId, taskId)
-    const { created } = data
-    addSuccess(created ? "북마크 등록 완료" : "북마크 취소 완료")
-    fetchTaskDetail()
-  }
-
-  const removeTask = async () => {
-    await removeTaskApi(workspaceId, projectId, taskId)
-    addSuccess("태스크를 삭제하였습니다")
-    handleClose()
-  }
 
   return (
     <TitleModal
