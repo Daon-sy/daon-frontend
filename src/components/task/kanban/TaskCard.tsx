@@ -5,6 +5,7 @@ import TaskDetailModal from "components/task/modal/TaskDetailModal"
 import BookmarkIcon from "@mui/icons-material/Bookmark"
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 import Tooltip from "@mui/material/Tooltip"
+import { getWorkspaceStore } from "store/userStore"
 
 // 긴급 태그 컴포넌트
 interface EmergencyTagProps {
@@ -67,6 +68,7 @@ interface Props {
 }
 
 const TaskCard: React.FC<Props> = React.memo(({ task }: Props) => {
+  const { workspace } = getWorkspaceStore()
   const [detailModalOpen, setDetailModalOpen] = React.useState(false)
 
   return (
@@ -135,8 +137,9 @@ const TaskCard: React.FC<Props> = React.memo(({ task }: Props) => {
           </Box>
         </Card>
       </Box>
-      {detailModalOpen ? (
+      {detailModalOpen && workspace ? (
         <TaskDetailModal
+          workspaceId={workspace.workspaceId}
           projectId={task.project.projectId}
           taskId={task.taskId}
           open={detailModalOpen}

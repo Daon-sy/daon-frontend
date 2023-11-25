@@ -122,7 +122,7 @@ export const deportationProjectParticipantApi = async (
   requestBody: { projectParticipantId: number },
 ): Promise<AxiosResponse> => {
   return authAxios.post(
-    `/api/workspaces/${workspaceId}/projects/${projectId}/deportation`,
+    `/api/workspaces/${workspaceId}/projects/${projectId}/participants/deportation`,
     requestBody,
   )
 }
