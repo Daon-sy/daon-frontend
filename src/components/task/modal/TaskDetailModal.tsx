@@ -6,15 +6,12 @@ import {
   Divider,
   IconButton,
   Stack,
-  ToggleButton,
   Tooltip,
   Typography,
   MenuItem,
   Menu,
   Box,
 } from "@mui/material"
-import BookmarkIcon from "@mui/icons-material/Bookmark"
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 import MoreVertIcon from "@mui/icons-material/MoreVert"
 import CloseIcon from "@mui/icons-material/Close"
 import CalendarDateField from "components/common/CalendarDateField"
@@ -33,6 +30,7 @@ import useFetchTaskHistory from "hooks/task/useFetchTaskHistory"
 import useModifyTask from "hooks/task/useModifyTask"
 import useHandleBookmark from "hooks/task/useHandleBookmark"
 import useRemoveTask from "hooks/task/useRemoveTask"
+import TaskBookmarkButton from "components/task/TaskBookmarkButton"
 
 interface Props {
   workspaceId: number
@@ -66,7 +64,10 @@ const TaskDetailModal: React.FC<Props> = ({
   const { taskHistories, fetchHistories, fetchTopHistory, isLast } =
     useFetchTaskHistory(taskFullPath)
   const { fetch: modifyTask } = useModifyTask(taskFullPath)
-  const { handleBookmark } = useHandleBookmark(taskFullPath)
+  const { bookmarked, handleBookmark } = useHandleBookmark(
+    taskFullPath,
+    taskDetail?.bookmark,
+  )
   const { fetch: removeTask } = useRemoveTask(taskFullPath, handleClose)
 
   useEventSource({
@@ -197,27 +198,13 @@ const TaskDetailModal: React.FC<Props> = ({
                     sx={{
                       display: "flex",
                       alignItems: "center",
+                      marginLeft: 1,
                     }}
                   >
-                    <Tooltip title="북마크" arrow>
-                      <ToggleButton
-                        value="check"
-                        selected={false}
-                        size="small"
-                        sx={{
-                          marginLeft: 1,
-                          padding: 0.5,
-                          borderStyle: "none",
-                        }}
-                        onClick={handleBookmark}
-                      >
-                        {taskDetail.bookmark ? (
-                          <BookmarkIcon sx={{ color: "#82b89b" }} />
-                        ) : (
-                          <BookmarkBorderIcon />
-                        )}
-                      </ToggleButton>
-                    </Tooltip>
+                    <TaskBookmarkButton
+                      bookmarked={bookmarked}
+                      handleClick={handleBookmark}
+                    />
                   </Box>
                 </Box>
                 <Tooltip title="제목" arrow>

@@ -37,8 +37,10 @@ const useEventSource = ({ ssePath, onMessage, onEventRaised }: Props) => {
   const { token } = getTokenStore()
   const [eventRaised, setEventRaised] = React.useState(false)
 
-  React.useEffect(() => {
-    const eventSource = new EventSourcePolyfill(
+  let eventSource: EventSourcePolyfill
+
+  const subscribe = () => {
+    eventSource = new EventSourcePolyfill(
       `${API_SERVER_URL}/${
         ssePath.startsWith("/") ? ssePath.substring(1) : ssePath
       }`,
@@ -60,8 +62,12 @@ const useEventSource = ({ ssePath, onMessage, onEventRaised }: Props) => {
 
     eventSource.onerror = e => {
       console.error(e)
-      eventSource.close()
+      eventSource?.close()
     }
+  }
+
+  React.useEffect(() => {
+    subscribe()
 
     return () => eventSource?.close()
   }, [])
