@@ -536,7 +536,7 @@ const EditableBox = ({
     return multiline ? (
       <MultilineEditBox
         ref={editBoxRef}
-        text={text as string | Array<string> | undefined}
+        text={(text as string | Array<string> | undefined) || ""}
         handleTextChange={handleUpdate}
         handleEditDisable={disableEdit}
         maxTextLength={maxTextLength}
@@ -563,7 +563,7 @@ const EditableBox = ({
 
   return multiline ? (
     <MultilineTextBox
-      text={text as Array<string> | undefined}
+      text={(text as Array<string> | undefined) || ""}
       handleEditEnable={enableEdit}
       style={{
         ...defaultBoxStyle,
