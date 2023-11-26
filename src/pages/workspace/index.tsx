@@ -1,36 +1,33 @@
 import React from "react"
 import { Route, Routes, useParams } from "react-router-dom"
 import UserLayout from "layouts/UserLayout"
-import { getWorkspaceStore } from "store/userStore"
-import {
-  myWorkspaceParticipantDetailApi,
-  workspaceDetailApi,
-} from "api/workspace"
 import ProjectRoutes from "pages/workspace/project"
 import TaskRoutes from "pages/workspace/task"
 import WorkspaceMain from "pages/workspace/WorkspaceMain"
+import useFetchWorkspaceDetail from "hooks/workspace/useFetchWorkspaceDetail"
+import useFetchMyWorkspaceProfile from "hooks/workspace/useFetchMyWorkspaceProfile"
+import useFetchProjectList from "hooks/project/useFetchProjectList"
 
 const WorkspaceDetailRoutes = () => {
-  const { workspace, myProfile, setWorkspace, setMyProfile } =
-    getWorkspaceStore()
   const { workspaceId } = useParams()
-
-  const fetchWorkspaceDetail = async () => {
-    if (workspaceId) {
-      const { data } = await workspaceDetailApi(Number(workspaceId))
-      setWorkspace(data)
-
-      const { data: myWorkspaceParticipantDetail } =
-        await myWorkspaceParticipantDetailApi(Number(workspaceId))
-      setMyProfile(myWorkspaceParticipantDetail)
-    }
-  }
+  const { workspaceDetail, fetchWorkspaceDetail } = useFetchWorkspaceDetail(
+    Number(workspaceId),
+    true,
+  )
+  const { myWorkspaceProfile, fetchMyWorkspaceProfile } =
+    useFetchMyWorkspaceProfile(Number(workspaceId), true)
+  const { projects, fetchProjectList } = useFetchProjectList(
+    Number(workspaceId),
+    true,
+  )
 
   React.useEffect(() => {
     fetchWorkspaceDetail()
+    fetchMyWorkspaceProfile()
+    fetchProjectList()
   }, [workspaceId])
 
-  return workspace && myProfile ? (
+  return workspaceDetail && myWorkspaceProfile && projects ? (
     <Routes>
       <Route element={<UserLayout />}>
         <Route index element={<WorkspaceMain />} />

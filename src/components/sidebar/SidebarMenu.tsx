@@ -5,7 +5,6 @@ import StarIcon from "@mui/icons-material/Star"
 import AssignmentIcon from "@mui/icons-material/Assignment"
 import SettingsIcon from "@mui/icons-material/Settings"
 import { getProjectsStore } from "store/userStore"
-import { projectListApi } from "api/project"
 import Menu from "components/common/Menu"
 import CreateBtn from "components/common/CreateBtn"
 import CreateProjectModal from "components/project/modal/CreateProjectModal"
@@ -15,14 +14,16 @@ import MenuItems from "components/sidebar/MenuItems"
 
 const SidebarMenu: React.FC = () => {
   const { workspaceId } = useParams()
-  const { projects, setProjects } = getProjectsStore()
+  const { projects } = getProjectsStore()
   const [projectCreateModalOpen, setProjectCreateModalOpen] =
     React.useState<boolean>(false)
   const [projectManageModalOpenMap, setProjectManageModalOpenMap] =
     React.useState<Record<number, boolean>>({})
+
   const openProjectCreateModal = () => {
     setProjectCreateModalOpen(true)
   }
+
   const openProjectManageModal = (projectId: number, e: React.MouseEvent) => {
     e.preventDefault()
     setProjectManageModalOpenMap(prev => ({
@@ -30,17 +31,6 @@ const SidebarMenu: React.FC = () => {
       [projectId]: true,
     }))
   }
-
-  const fetchProjectList = async () => {
-    if (workspaceId) {
-      const { data } = await projectListApi(+workspaceId)
-      setProjects(data.projects)
-    }
-  }
-
-  React.useEffect(() => {
-    fetchProjectList()
-  }, [workspaceId])
 
   const myTasks = [
     {
