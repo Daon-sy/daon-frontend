@@ -25,6 +25,10 @@ export interface ProjectListResponseBody {
   projects: Array<Project>
 }
 
+export interface CreateProjectResponseBody {
+  projectId: number
+}
+
 export interface ProjectBoardListResponseBody {
   totalCount: number
   boards: Array<Board>
@@ -57,7 +61,7 @@ export const projectDetailApi = async (
 export const createProjectApi = async (
   workspaceId: number,
   requestBody: CreateProjectRequestBody,
-): Promise<AxiosResponse> => {
+): Promise<AxiosResponse<CreateProjectResponseBody>> => {
   return authAxios.post(`/api/workspaces/${workspaceId}/projects`, requestBody)
 }
 
