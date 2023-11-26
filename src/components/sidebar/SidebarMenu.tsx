@@ -107,10 +107,12 @@ const SidebarMenu: React.FC = () => {
           </Box>
         ))}
       </Menu>
-      <CreateProjectModal
-        open={projectCreateModalOpen}
-        handleClose={() => setProjectCreateModalOpen(false)}
-      />
+      {projectCreateModalOpen ? (
+        <CreateProjectModal
+          open={projectCreateModalOpen}
+          handleClose={() => setProjectCreateModalOpen(false)}
+        />
+      ) : null}
     </Box>
   )
 }
