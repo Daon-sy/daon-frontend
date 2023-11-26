@@ -2,6 +2,7 @@ import { Box } from "@mui/material"
 import React from "react"
 import { getWorkspaceStore } from "store/userStore"
 import { getTaskDetailViewStore } from "store/taskStore"
+import { TaskListApiParams } from "api/task"
 import TaskHeader from "components/task/TaskHeader"
 import TaskKanbansWrapper from "components/task/kanban/TaskKanbansWrapper"
 import TaskTableWrapper from "components/task/table/TaskTableWrapper"
@@ -9,15 +10,8 @@ import TaskDetailModal from "components/task/modal/TaskDetailModal"
 import useEventSource from "hooks/sse/useEventSource"
 import useFetchTaskList from "hooks/task/useFetchTaskList"
 
-interface Params {
-  projectId?: number
-  boardId?: number
-  bookmark?: boolean
-  my?: boolean
-}
-
 interface TaskViewProps {
-  params?: Params
+  params?: TaskListApiParams
 }
 
 const TaskView: React.FC<TaskViewProps> = ({ params }) => {

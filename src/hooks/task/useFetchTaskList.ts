@@ -1,17 +1,12 @@
 import React from "react"
 import axios from "axios"
 import { ErrorResponse } from "api"
-import { taskListApi } from "api/task"
+import { taskListApi, TaskListApiParams } from "api/task"
 import { TaskSummary } from "_types/task"
 
 interface Props {
   workspaceId: number
-  params?: {
-    projectId?: number
-    boardId?: number
-    bookmarked?: boolean
-    my?: boolean
-  }
+  params?: TaskListApiParams
 }
 
 const useFetchTaskList = ({ workspaceId, params }: Props, skip = false) => {
