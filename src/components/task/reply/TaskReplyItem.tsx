@@ -94,6 +94,9 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
               bgcolor: "grey",
               fontSize: "10px",
               borderRadius: "50%",
+              marginY: "8px",
+              marginLeft: "12px",
+              marginRight: "4px",
             }}
             src={reply.writer.imageUrl || TEST_IMAGE_URL}
           />
