@@ -7,6 +7,7 @@ import {
   modifyWorkspaceApi,
   ModifyWorkspaceRequestBody,
   removeWorkspaceApi,
+  resetPersonalWorkspaceApi,
   withdrawWorkspaceApi,
   workspaceDetailApi,
 } from "api/workspace"
@@ -28,6 +29,8 @@ const WorkspaceDataManage = () => {
   const [workspaceRemoveModalOpen, setWorkspaceRemoveModalOpen] =
     React.useState(false)
   const [workspaceWithdrawModalOpen, setWorkspaceWithdrawModalOpen] =
+    React.useState(false)
+  const [resetPersonalWorkspaceModalOpen, setResetPersonalWorkspaceModalOpen] =
     React.useState(false)
 
   if (!(workspace && myProfile)) {
@@ -69,6 +72,11 @@ const WorkspaceDataManage = () => {
     addSuccess("워크스페이스를 탈퇴하였습니다")
     // 워크스페이스 메인 페이지로 이동
     navigate("/")
+  }
+
+  const resetPersonalWorkspace = async () => {
+    await resetPersonalWorkspaceApi(workspaceId)
+    addSuccess("초기화 완료")
   }
 
   return (
@@ -178,58 +186,91 @@ const WorkspaceDataManage = () => {
               <Box>
                 <Typography variant="h5">Danger Zone</Typography>
               </Box>
-              {allowedEdit.includes(myProfile.role) ? (
+              {workspace.division !== "GROUP" ? (
                 <Box>
                   <Box mt={3}>
-                    <Typography variant="h6">워크스페이스 삭제</Typography>
+                    <Typography variant="h6">워크스페이스 초기화</Typography>
                   </Box>
                   <Box mt={1}>
                     <Button
                       variant="outlined"
                       color="error"
-                      onClick={() => setWorkspaceRemoveModalOpen(true)}
+                      onClick={() => setResetPersonalWorkspaceModalOpen(true)}
                     >
-                      삭제하기
+                      초기화하기
                     </Button>
                   </Box>
-                  <ConfirmDialog
-                    open={workspaceRemoveModalOpen}
-                    maxWidth="xs"
-                    title="주의!!"
-                    content={
-                      "워크스페이스 내의 모든 정보가 삭제됩니다.\n정말로 이 워크스페이스를 삭제하시겠습니까?"
-                    }
-                    handleConfirm={removeWorkspace}
-                    handleClose={() => {
-                      setWorkspaceRemoveModalOpen(false)
-                    }}
-                  />
+                  {resetPersonalWorkspaceModalOpen ? (
+                    <ConfirmDialog
+                      open={resetPersonalWorkspaceModalOpen}
+                      maxWidth="xs"
+                      title="주의!!"
+                      content="정말로 이 워크스페이스를 초기화 하시겠습니까?"
+                      handleConfirm={resetPersonalWorkspace}
+                      handleClose={() => {
+                        setResetPersonalWorkspaceModalOpen(false)
+                      }}
+                    />
+                  ) : null}
                 </Box>
-              ) : null}
-              <Box>
-                <Box mt={3}>
-                  <Typography variant="h6">워크스페이스 탈퇴</Typography>
-                </Box>
-                <Box mt={1}>
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    onClick={() => setWorkspaceWithdrawModalOpen(true)}
-                  >
-                    탈퇴하기
-                  </Button>
-                </Box>
-                <ConfirmDialog
-                  open={workspaceWithdrawModalOpen}
-                  maxWidth="xs"
-                  title="주의!!"
-                  content="정말로 이 워크스페이스를 탈퇴하시겠습니까?"
-                  handleConfirm={withdrawWorkspace}
-                  handleClose={() => {
-                    setWorkspaceWithdrawModalOpen(false)
-                  }}
-                />
-              </Box>
+              ) : (
+                <>
+                  {allowedEdit.includes(myProfile.role) ? (
+                    <Box>
+                      <Box mt={3}>
+                        <Typography variant="h6">워크스페이스 삭제</Typography>
+                      </Box>
+                      <Box mt={1}>
+                        <Button
+                          variant="outlined"
+                          color="error"
+                          onClick={() => setWorkspaceRemoveModalOpen(true)}
+                        >
+                          삭제하기
+                        </Button>
+                      </Box>
+                      <ConfirmDialog
+                        open={workspaceRemoveModalOpen}
+                        maxWidth="xs"
+                        title="주의!!"
+                        content={
+                          "워크스페이스 내의 모든 정보가 삭제됩니다.\n정말로 이 워크스페이스를 삭제하시겠습니까?"
+                        }
+                        handleConfirm={removeWorkspace}
+                        handleClose={() => {
+                          setWorkspaceRemoveModalOpen(false)
+                        }}
+                      />
+                    </Box>
+                  ) : null}
+                  <Box>
+                    <Box mt={3}>
+                      <Typography variant="h6">워크스페이스 탈퇴</Typography>
+                    </Box>
+                    <Box mt={1}>
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        onClick={() => setWorkspaceWithdrawModalOpen(true)}
+                      >
+                        탈퇴하기
+                      </Button>
+                    </Box>
+                    {workspaceWithdrawModalOpen ? (
+                      <ConfirmDialog
+                        open={workspaceWithdrawModalOpen}
+                        maxWidth="xs"
+                        title="주의!!"
+                        content="정말로 이 워크스페이스를 탈퇴하시겠습니까?"
+                        handleConfirm={withdrawWorkspace}
+                        handleClose={() => {
+                          setWorkspaceWithdrawModalOpen(false)
+                        }}
+                      />
+                    ) : null}
+                  </Box>
+                </>
+              )}
             </Box>
           </Stack>
         </Box>

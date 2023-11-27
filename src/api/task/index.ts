@@ -59,15 +59,17 @@ export const createTaskApi = async (
   )
 }
 
+export interface TaskListApiParams {
+  projectId?: number
+  boardId?: number
+  bookmarked?: boolean
+  my?: boolean
+}
+
 // 할 일 목록 조회
 export const taskListApi = (
   workspaceId: number,
-  params?: {
-    projectId?: number
-    boardId?: number
-    bookmarked?: boolean
-    my?: boolean
-  },
+  params?: TaskListApiParams,
 ): Promise<AxiosResponse<TaskListResponseBody>> => {
   // `/api/workspaces/${workspaceId}/projects/tasks`
   return authAxios.get(`/api/workspaces/${workspaceId}/projects/tasks`, {

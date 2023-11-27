@@ -1,65 +1,11 @@
 import React from "react"
-import { Box, Chip, DialogContent, Divider, Stack } from "@mui/material"
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
-import ToggleButton from "@mui/material/ToggleButton"
-import { getWorkspaceStore } from "store/userStore"
-import Typography from "@mui/material/Typography"
-import TitleModal from "components/common/TitleModal"
-import WorkspaceDataManage from "components/workspace/WorkspaceDataManage"
-import WorkspaceParticipantManage from "components/workspace/WorkspaceParticipantManage"
+import { Box, Chip, Typography } from "@mui/material"
 import { roles } from "_types/workspace"
+import { getWorkspaceStore } from "store/userStore"
+import MenuModal, { MenuWithPage } from "components/common/MenuModal"
+import WorkspaceDataManage from "components/workspace/WorkspaceDataManage"
 import WorkspaceProfileModify from "components/workspace/WorkspaceProfileModify"
-
-type PageType = "workspace" | "workspaceProfile" | "workspaceParticipant"
-
-interface MenuProps {
-  page: string
-  setPage: (page: PageType) => void
-}
-
-const Menu = ({ page, setPage }: MenuProps) => {
-  return (
-    <Box height="100%">
-      <Stack spacing={1} p={1}>
-        <ToggleButtonGroup
-          orientation="vertical"
-          value={page}
-          exclusive
-          sx={{
-            backgroundColor: "white",
-          }}
-          color="primary"
-          onChange={(e: React.MouseEvent<HTMLElement>, newPage: PageType) =>
-            newPage && setPage(newPage)
-          }
-        >
-          <ToggleButton value="workspace">워크스페이스</ToggleButton>
-          <ToggleButton value="workspaceProfile">프로필 관리</ToggleButton>
-          <ToggleButton value="workspaceParticipant">
-            워크스페이스 참여자
-          </ToggleButton>
-        </ToggleButtonGroup>
-      </Stack>
-    </Box>
-  )
-}
-
-const Body = ({ page }: { page: PageType }) => {
-  const renderPage = () => {
-    switch (page) {
-      case "workspace":
-        return <WorkspaceDataManage />
-      case "workspaceProfile":
-        return <WorkspaceProfileModify />
-      case "workspaceParticipant":
-        return <WorkspaceParticipantManage />
-      default:
-        return null
-    }
-  }
-
-  return <Box sx={{ paddingX: 4, paddingBottom: 10 }}>{renderPage()}</Box>
-}
+import WorkspaceParticipantManage from "components/workspace/WorkspaceParticipantManage"
 
 interface Props {
   open: boolean
@@ -67,11 +13,29 @@ interface Props {
 }
 
 const WorkspaceSettingsModal = ({ open = false, handleClose }: Props) => {
-  const { myProfile } = getWorkspaceStore()
-  const [page, setPage] = React.useState<PageType>("workspace")
+  const { workspace, myProfile } = getWorkspaceStore()
+
+  const menuWithPageList: MenuWithPage[] = [
+    {
+      pageName: "워크스페이스",
+      pageValue: "workspace",
+      pageComponent: <WorkspaceDataManage />,
+    },
+    {
+      pageName: "프로필 관리",
+      pageValue: "workspaceProfile",
+      pageComponent: <WorkspaceProfileModify />,
+    },
+  ]
+  if (workspace?.division !== "PERSONAL")
+    menuWithPageList.push({
+      pageName: "워크스페이스 참여자",
+      pageValue: "workspaceParticipant",
+      pageComponent: <WorkspaceParticipantManage />,
+    })
 
   return (
-    <TitleModal
+    <MenuModal
       open={open}
       handleClose={handleClose}
       title="워크스페이스 설정"
@@ -88,31 +52,8 @@ const WorkspaceSettingsModal = ({ open = false, handleClose }: Props) => {
           />
         </Box>
       }
-      padding={0}
-      height={600}
-    >
-      <Box height="100%">
-        <Stack direction="row" height="100%">
-          <DialogContent
-            sx={{
-              padding: 0,
-              width: 300,
-              height: "100%",
-            }}
-          >
-            <Menu page={page} setPage={setPage} />
-          </DialogContent>
-          <Divider orientation="vertical" />
-          <DialogContent
-            sx={{
-              width: "100%",
-            }}
-          >
-            <Body page={page} />
-          </DialogContent>
-        </Stack>
-      </Box>
-    </TitleModal>
+      menuWithPageList={menuWithPageList}
+    />
   )
 }
 

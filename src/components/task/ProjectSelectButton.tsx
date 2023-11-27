@@ -1,10 +1,9 @@
 import React from "react"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import DvrIcon from "@mui/icons-material/Dvr"
-import SelectListButton, { ItemType } from "components/common/SelectListButton"
-import { projectListApi } from "api/project"
-import { getWorkspaceStore } from "store/userStore"
+import { getProjectsStore } from "store/userStore"
 import { Project } from "_types/project"
+import SelectListButton, { ItemType } from "components/common/SelectListButton"
 
 interface ProjectItemType extends ItemType {
   description: string | null | undefined
@@ -17,23 +16,7 @@ interface Props {
 const ProjectSelectButton: React.FC<Props> = ({
   handleProjectSelect,
 }: Props) => {
-  const { workspace } = getWorkspaceStore()
-  const [projects, setProjects] = React.useState<Array<Project>>()
-
-  React.useEffect(() => {
-    if (!projects) {
-      const fetchData = async () => {
-        if (workspace) {
-          const { data: responseData } = await projectListApi(
-            workspace.workspaceId,
-          )
-          const { projects: fetchedProjects } = responseData
-          setProjects(fetchedProjects)
-        }
-      }
-      fetchData()
-    }
-  }, [])
+  const { projects } = getProjectsStore()
 
   return (
     <SelectListButton

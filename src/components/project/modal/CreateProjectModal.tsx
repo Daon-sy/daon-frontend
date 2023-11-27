@@ -7,11 +7,11 @@ import {
   TextField,
   FormHelperText,
 } from "@mui/material"
-import { useAlert } from "hooks/useAlert"
+import { CreateProjectRequestBody } from "api/project"
+import { getWorkspaceStore } from "store/userStore"
 import TitleModal from "components/common/TitleModal"
 import useInputs from "hooks/useInputs"
-import { createProjectApi, CreateProjectRequestBody } from "api/project"
-import { getProjectsStore, getWorkspaceStore } from "store/userStore"
+import useCreateProject from "hooks/project/useCreateProject"
 
 interface CreateProjectProps {
   open: boolean
@@ -28,45 +28,19 @@ const CreateProjectModal: React.FC<CreateProjectProps> = ({
   handleClose,
 }: CreateProjectProps) => {
   const { workspace } = getWorkspaceStore()
-  const { addSuccess, addError } = useAlert()
-  const { projects, setProjects } = getProjectsStore()
-  const [data, onChange, resetData] =
-    useInputs<CreateProjectRequestBody>(initialState)
-  const onValidateBtn = () => {
-    if (!workspace?.workspaceId) return
-
-    if (data.title.length === 0) {
-      addError("프로젝트 제목은 필수입력 값입니다")
-
-      return
-    }
-
-    createProjectApi(workspace.workspaceId, data)
-      .then(response => {
-        addSuccess("프로젝트 생성 성공!")
-        const newProject = {
-          projectId: response.data.projectId,
-          title: data.title,
-          description: data.description,
-        }
-        setProjects([...projects, newProject])
-        handleClose()
-      })
-      .catch(err => {
-        if (err.response.status >= 500) {
-          addError("서버 오류입니다. 다시 시도해주세요")
-        }
-      })
-  }
+  const [data, onChange] = useInputs<CreateProjectRequestBody>(initialState)
+  const { fetch } = useCreateProject(
+    {
+      workspaceId: workspace?.workspaceId || 0,
+    },
+    handleClose,
+  )
 
   return (
     <div>
       <TitleModal
         open={open}
-        handleClose={() => {
-          resetData()
-          handleClose()
-        }}
+        handleClose={handleClose}
         title="프로젝트 생성"
         maxWidth="xs"
       >
@@ -117,7 +91,7 @@ const CreateProjectModal: React.FC<CreateProjectProps> = ({
             fullWidth
             size="large"
             variant="contained"
-            onClick={onValidateBtn}
+            onClick={() => fetch(data)}
           >
             확인
           </Button>
@@ -125,10 +99,7 @@ const CreateProjectModal: React.FC<CreateProjectProps> = ({
             fullWidth
             size="large"
             variant="outlined"
-            onClick={() => {
-              resetData()
-              handleClose()
-            }}
+            onClick={handleClose}
           >
             취소
           </Button>

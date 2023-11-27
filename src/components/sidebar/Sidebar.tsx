@@ -82,10 +82,12 @@ const Sidebar: React.FC = () => {
       <Box component="section" sx={{ height: "50%" }}>
         <SidebarMenu />
       </Box>
-      <TaskCreateModal
-        open={taskCreateModalOpen}
-        handleClose={() => setTaskCreateModalOpen(false)}
-      />
+      {taskCreateModalOpen ? (
+        <TaskCreateModal
+          open={taskCreateModalOpen}
+          handleClose={() => setTaskCreateModalOpen(false)}
+        />
+      ) : null}
       <WorkspaceParticipantsModal
         open={participantsModalOpen}
         handleClose={() => setParticipantsModalOpen(false)}
