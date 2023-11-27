@@ -2,8 +2,8 @@ import React, { useState } from "react"
 import { Box, FormHelperText, TextField } from "@mui/material"
 import { TEST_IMAGE_URL } from "env"
 import { TaskReplyDetail } from "_types/task"
-import { removeTaskReply, modifyTaskReply } from "api/task"
-import { useAlert } from "hooks/useAlert"
+import { removeTaskReply } from "api/task"
+
 import ReplyBtn from "./ReplyBtn"
 
 interface TaskReplyItemProps {
@@ -11,7 +11,8 @@ interface TaskReplyItemProps {
   projectId: number
   taskId: number
   reply: TaskReplyDetail
-  onReplyUpdated: () => void
+  onReplyModified: (replyId: number, modifiedContent: string) => void
+  onReplyDeleted: () => void
 }
 
 const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
@@ -19,11 +20,11 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
   projectId,
   taskId,
   reply,
-  onReplyUpdated,
-}: TaskReplyItemProps) => {
+  onReplyModified,
+  onReplyDeleted,
+}: TaskReplyItemProps): React.ReactNode => {
   const [isModify, setIsModify] = useState<boolean>(false)
   const [content, setContent] = useState<string>(reply.content)
-  const { addError } = useAlert()
 
   const handleToggle = () => {
     setIsModify(prevIsModify => !prevIsModify)
@@ -33,29 +34,16 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
     try {
       if (workspaceId) {
         await removeTaskReply(workspaceId, projectId, taskId, replyId)
-        onReplyUpdated()
+        onReplyDeleted()
       }
     } catch (error) {
       console.error("Error removing reply:", error)
     }
   }
 
-  const handleModifyClick = async () => {
-    try {
-      if (workspaceId) {
-        await modifyTaskReply(workspaceId, projectId, taskId, reply.replyId, {
-          content,
-        })
-        setIsModify(false)
-        onReplyUpdated()
-      }
-    } catch (error: any) {
-      if (error.request.statusText.length === 0) {
-        addError("댓글 내용은 필수 입력 값입니다")
-      } else {
-        console.error("Error modifying reply:", error)
-      }
-    }
+  const handleModifyClick = async (replyId: number) => {
+    setIsModify(false)
+    onReplyModified(replyId, content)
   }
 
   return (
@@ -109,7 +97,11 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
             <>
               {isModify ? (
                 <>
-                  <ReplyBtn handleClick={handleModifyClick}>저장</ReplyBtn>
+                  <ReplyBtn
+                    handleClick={() => handleModifyClick(reply.replyId)}
+                  >
+                    저장
+                  </ReplyBtn>
                   <ReplyBtn handleClick={handleToggle}>취소</ReplyBtn>
                 </>
               ) : (
