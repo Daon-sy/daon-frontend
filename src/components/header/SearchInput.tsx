@@ -90,7 +90,7 @@ const SearchInput: React.FC = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Search>
+      <Search sx={{ bgcolor: "#eaebec" }}>
         <SearchIconWrapper>
           <SearchIcon />
         </SearchIconWrapper>

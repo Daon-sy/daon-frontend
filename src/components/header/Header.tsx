@@ -8,10 +8,7 @@ import Nav from "./Nav"
 
 const Header: React.FC = () => {
   return (
-    <AppBar
-      position="static"
-      sx={{ bgcolor: "#b2d6c7", color: "grey", boxShadow: "none" }}
-    >
+    <AppBar position="static" sx={{ bgcolor: "#ffffff", color: "#818181" }}>
       <Toolbar>
         {/* Nav */}
         <Nav />
