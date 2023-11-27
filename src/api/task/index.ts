@@ -160,11 +160,14 @@ export const taskReplyListApi = async (
   workspaceId: number,
   projectId: number,
   taskId: number,
-  params?: {
+  params: {
     page?: number
     size?: number
+  } = {
+    page: 0,
+    size: 3,
   },
-): Promise<AxiosResponse<taskReplyListResponseBody>> => {
+): Promise<AxiosResponse<SliceResponse<TaskReplyDetail>>> => {
   return authAxios.get(
     `/api/workspaces/${workspaceId}/projects/${projectId}/tasks/${taskId}/reply`,
     { params },
