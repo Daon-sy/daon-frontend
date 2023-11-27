@@ -1,5 +1,6 @@
 import React from "react"
 import { Route, Routes, useParams } from "react-router-dom"
+import { getBackdropStore } from "store/backdropStore"
 import UserLayout from "layouts/UserLayout"
 import ProjectRoutes from "pages/workspace/project"
 import TaskRoutes from "pages/workspace/task"
@@ -10,22 +11,45 @@ import useFetchProjectList from "hooks/project/useFetchProjectList"
 
 const WorkspaceDetailRoutes = () => {
   const { workspaceId } = useParams()
-  const { workspaceDetail, fetchWorkspaceDetail } = useFetchWorkspaceDetail(
-    Number(workspaceId),
-    true,
-  )
-  const { myWorkspaceProfile, fetchMyWorkspaceProfile } =
-    useFetchMyWorkspaceProfile(Number(workspaceId), true)
-  const { projects, fetchProjectList } = useFetchProjectList(
-    Number(workspaceId),
-    true,
-  )
+  const {
+    workspaceDetail,
+    fetchWorkspaceDetail,
+    isFetching: isWorkspaceDetailFetching,
+  } = useFetchWorkspaceDetail(Number(workspaceId), true)
+  const {
+    myWorkspaceProfile,
+    fetchMyWorkspaceProfile,
+    isFetching: isMyWorkspaceProfileFetching,
+  } = useFetchMyWorkspaceProfile(Number(workspaceId), true)
+  const {
+    projects,
+    fetchProjectList,
+    isFetching: isProjectListFetching,
+  } = useFetchProjectList(Number(workspaceId), true)
+  const { backdropOpen, handleBackdropOpen, handleBackdropClose } =
+    getBackdropStore()
 
   React.useEffect(() => {
     fetchWorkspaceDetail()
     fetchMyWorkspaceProfile()
     fetchProjectList()
   }, [workspaceId])
+
+  React.useLayoutEffect(() => {
+    if (
+      isWorkspaceDetailFetching ||
+      isMyWorkspaceProfileFetching ||
+      isProjectListFetching
+    ) {
+      handleBackdropOpen()
+    } else if (backdropOpen) {
+      handleBackdropClose()
+    }
+  }, [
+    isWorkspaceDetailFetching,
+    isMyWorkspaceProfileFetching,
+    isProjectListFetching,
+  ])
 
   return workspaceDetail && myWorkspaceProfile && projects ? (
     <Routes>
