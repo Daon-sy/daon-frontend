@@ -14,7 +14,7 @@ import Typography from "@mui/material/Typography"
 interface Props {
   open: boolean
   handleClose: () => void
-  title?: string
+  title?: string | React.ReactNode
   titleFontSize?: number
   subTitle?: string | React.ReactNode
   children: React.ReactNode

@@ -1,38 +1,17 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
+import { useParams } from "react-router-dom"
+import { Box } from "@mui/material"
 import TaskView from "components/task/TaskView"
-import { TaskSummary } from "_types/task"
-import { taskListApi } from "api/task"
-import Box from "@mui/material/Box"
 
 const BoardTaskView: React.FC = () => {
-  const [tasks, setTasks] = useState<TaskSummary[]>([])
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const workspaceId = location.pathname.split("/")[2]
-        const projectId = location.pathname.split("/")[4]
-        const boardId = location.pathname.split("/")[6]
-        const response = await taskListApi(+workspaceId, {
-          projectId: +projectId,
-          boardId: +boardId,
-        })
-        setTasks(response.data.tasks)
-      } catch (error) {
-        console.error("Error fetching tasks:", error)
-      }
-    }
-
-    fetchData()
-  }, [])
+  const { projectId, boardId } = useParams()
 
   return (
-    <Box
-      sx={{
-        height: "100%",
-      }}
-    >
+    <Box sx={{ height: "100%" }}>
       <h1>보드 내 전체 할일 View 페이지</h1>
-      <TaskView tasks={tasks} />
+      <TaskView
+        params={{ projectId: Number(projectId), boardId: Number(boardId) }}
+      />
     </Box>
   )
 }

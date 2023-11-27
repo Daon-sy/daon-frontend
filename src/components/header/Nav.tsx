@@ -82,10 +82,12 @@ const Nav: React.FC = () => {
           </MenuItem>
         </Menu>
       </Box>
-      <CreateWorkspaceModal
-        open={createWorkspaceModalOpen}
-        handleClose={closeCreateWorkspaceModal}
-      />
+      {createWorkspaceModalOpen ? (
+        <CreateWorkspaceModal
+          open={createWorkspaceModalOpen}
+          handleClose={closeCreateWorkspaceModal}
+        />
+      ) : null}
     </>
   )
 }

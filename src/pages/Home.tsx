@@ -7,7 +7,8 @@ import WorkspaceCard from "components/workspace/list/WorkspaceCard"
 import { Workspace } from "_types/workspace"
 import { workspaceListApi } from "api/workspace"
 import { useNavigate, useSearchParams } from "react-router-dom"
-import { getTokenStore } from "../store/tokenStore"
+import { getTokenStore } from "store/tokenStore"
+import { getProjectsStore, getWorkspaceStore } from "store/userStore"
 
 const DefaultLayout = styled.div`
   width: 100%;
@@ -31,7 +32,13 @@ const Home: React.FC = () => {
 
   const [workspaces, setWorkspaces] = useState<Workspace[]>([])
 
+  const { clear: clearWorkspaceStore } = getWorkspaceStore()
+  const { clear: clearProjectsStore } = getProjectsStore()
+
   useEffect(() => {
+    clearWorkspaceStore()
+    clearProjectsStore()
+
     const fetchData = async () => {
       try {
         const response = await workspaceListApi()

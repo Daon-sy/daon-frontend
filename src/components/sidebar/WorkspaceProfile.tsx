@@ -142,10 +142,12 @@ const WorkSpaceProfile: React.FC = () => {
           {myProfile?.email}
         </Box>
       </Box>
-      <WorkspaceSettingsModal
-        open={workspaceManageModalOpen}
-        handleClose={() => setWorkspaceManageModalOpen(false)}
-      />
+      {workspaceManageModalOpen ? (
+        <WorkspaceSettingsModal
+          open={workspaceManageModalOpen}
+          handleClose={() => setWorkspaceManageModalOpen(false)}
+        />
+      ) : null}
       <WorkspaceProfileModifyModal
         open={profileModfiyModalOpen}
         handleClose={() => setProfileModfiyModalOpen(false)}

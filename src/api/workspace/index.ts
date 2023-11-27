@@ -187,3 +187,10 @@ export const joinWorkspaceApi = async (
     requestBody,
   )
 }
+
+// 개인 워크스페이스 초기화
+export const resetPersonalWorkspaceApi = async (
+  workspaceId: number,
+): Promise<AxiosResponse> => {
+  return authAxios.put(`${WORKSPACE_API_PREFIX}/${workspaceId}/reset`)
+}
