@@ -86,7 +86,7 @@ const TextBox = ({
         },
       }}
     >
-      {text}
+      {text === "" ? "\u00A0" : text}
     </Box>
   )
 }
@@ -549,7 +549,7 @@ const EditableBox = ({
       <EditBox
         enterComplete={enterComplete}
         ref={editBoxRef}
-        text={text as string | null | undefined}
+        text={(text as string | null | undefined) || ""}
         handleTextChange={handleUpdate}
         handleEditDisable={disableEdit}
         maxTextLength={maxTextLength}
@@ -572,7 +572,7 @@ const EditableBox = ({
     />
   ) : (
     <TextBox
-      text={text as string | null | undefined}
+      text={(text as string | null | undefined) || ""}
       handleEditEnable={enableEdit}
       style={{
         ...defaultBoxStyle,
