@@ -5,13 +5,16 @@ interface IconBtnProps {
   text: string
   icon: React.ReactNode
   onClick?: React.MouseEventHandler<HTMLButtonElement>
+  to?: string
+  component: React.ElementType
 }
 
-const IconBtn = ({ text, icon, onClick }: IconBtnProps) => {
+const IconBtn = ({ text, icon, onClick, to, component }: IconBtnProps) => {
   return (
     <Box
-      component="button"
+      component={component}
       onClick={onClick}
+      to={to}
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -20,6 +23,7 @@ const IconBtn = ({ text, icon, onClick }: IconBtnProps) => {
         width: "35%",
         bgcolor: "transparent",
         border: "none",
+        color: "#303633",
         borderRadius: "10px",
         cursor: "pointer",
         "&:hover": {
@@ -27,10 +31,10 @@ const IconBtn = ({ text, icon, onClick }: IconBtnProps) => {
         },
       }}
     >
-      <Box component="div" sx={{ width: "80%", color: "#82b89b" }}>
+      <Box component="div" sx={{ color: "#1f4838" }}>
         {icon}
       </Box>
-      <Box component="span" sx={{ fontSize: "12px", color: "#303633" }}>
+      <Box component="span" sx={{ fontSize: "8px", fontWeight: "bold" }}>
         {text}
       </Box>
     </Box>

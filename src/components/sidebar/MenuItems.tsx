@@ -27,10 +27,11 @@ const MenuItems: React.FC<MenuItemsProps> = ({
         mx: 2,
         mb: 1,
         width: "88%",
-        border: "1px solid #82b89b",
-        color: "#48634f",
+        border: "1px solid #f6f7f9",
+        bgcolor: "#f6f7f9",
+        color: "#435951",
         "&.Mui-selected, &.Mui-selected:hover, &.Mui-selected:focus": {
-          backgroundColor: "#82b89b",
+          backgroundColor: "#ffbe00",
           color: "#ffffff",
         },
       }}

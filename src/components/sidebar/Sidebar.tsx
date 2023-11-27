@@ -1,20 +1,10 @@
 import React from "react"
-import { Box, Divider } from "@mui/material"
-import GroupsIcon from "@mui/icons-material/Groups"
-import AddCircleIcon from "@mui/icons-material/AddCircle"
-import TaskCreateModal from "components/task/modal/TaskCreateModal"
-import WorkspaceParticipantsModal from "components/workspace/modal/WorkspaceParticipantsModal"
+import { Box } from "@mui/material"
 import SidebarMenu from "./SidebarMenu"
 import WorkSpaceProfile from "./WorkspaceProfile"
-import IconBtn from "./IconBtn"
+import IconBtnWrapper from "./IconBtnWrapper"
 
 const Sidebar: React.FC = () => {
-  const [taskCreateModalOpen, setTaskCreateModalOpen] = React.useState(false)
-  const [participantsModalOpen, setParticipantsModalOpen] =
-    React.useState(false)
-  const openTaskCreateModal = () => setTaskCreateModalOpen(true)
-  const openParticipantsModal = () => setParticipantsModalOpen(true)
-
   return (
     <Box
       component="section"
@@ -35,8 +25,8 @@ const Sidebar: React.FC = () => {
       <Box
         component="div"
         sx={{
-          height: "45%",
-          minHeight: "320px",
+          height: "30%",
+          minHeight: "235px",
           maxHeight: "360px",
           width: "100%",
           position: "sticky",
@@ -46,52 +36,11 @@ const Sidebar: React.FC = () => {
         }}
       >
         <WorkSpaceProfile />
-
-        <Box
-          component="div"
-          sx={{
-            display: "flex",
-            justifyContent: "space-evenly",
-            mt: 1,
-            zIndex: 1,
-            minHeight: "50px",
-          }}
-        >
-          <IconBtn
-            text="구성원보기"
-            icon={<GroupsIcon fontSize="large" />}
-            onClick={openParticipantsModal}
-          />
-          <IconBtn
-            text="할일추가"
-            icon={<AddCircleIcon fontSize="large" />}
-            onClick={openTaskCreateModal}
-          />
-        </Box>
-
-        <Divider
-          sx={{
-            border: 1,
-            width: "80%",
-            marginX: "auto",
-            color: "#eeeeef",
-            mt: 2,
-          }}
-        />
+        <IconBtnWrapper />
       </Box>
-      <Box component="section" sx={{ height: "50%" }}>
+      <Box component="section" sx={{ height: "63%", minHeight: "400px" }}>
         <SidebarMenu />
       </Box>
-      {taskCreateModalOpen ? (
-        <TaskCreateModal
-          open={taskCreateModalOpen}
-          handleClose={() => setTaskCreateModalOpen(false)}
-        />
-      ) : null}
-      <WorkspaceParticipantsModal
-        open={participantsModalOpen}
-        handleClose={() => setParticipantsModalOpen(false)}
-      />
     </Box>
   )
 }
