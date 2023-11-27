@@ -86,7 +86,7 @@ const TextBox = ({
         },
       }}
     >
-      {text}
+      {text === "" ? "\u00A0" : text}
     </Box>
   )
 }
@@ -536,7 +536,7 @@ const EditableBox = ({
     return multiline ? (
       <MultilineEditBox
         ref={editBoxRef}
-        text={text as string | Array<string> | undefined}
+        text={(text as string | Array<string> | undefined) || ""}
         handleTextChange={handleUpdate}
         handleEditDisable={disableEdit}
         maxTextLength={maxTextLength}
@@ -549,7 +549,7 @@ const EditableBox = ({
       <EditBox
         enterComplete={enterComplete}
         ref={editBoxRef}
-        text={text as string | null | undefined}
+        text={(text as string | null | undefined) || ""}
         handleTextChange={handleUpdate}
         handleEditDisable={disableEdit}
         maxTextLength={maxTextLength}
@@ -563,7 +563,7 @@ const EditableBox = ({
 
   return multiline ? (
     <MultilineTextBox
-      text={text as Array<string> | undefined}
+      text={(text as Array<string> | undefined) || ""}
       handleEditEnable={enableEdit}
       style={{
         ...defaultBoxStyle,
@@ -572,7 +572,7 @@ const EditableBox = ({
     />
   ) : (
     <TextBox
-      text={text as string | null | undefined}
+      text={(text as string | null | undefined) || ""}
       handleEditEnable={enableEdit}
       style={{
         ...defaultBoxStyle,

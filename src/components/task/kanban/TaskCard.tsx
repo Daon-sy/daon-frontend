@@ -1,10 +1,10 @@
 import React from "react"
-import { Avatar, Box, Card, Chip, ToggleButton } from "@mui/material"
+import { Avatar, Box, Card, Chip } from "@mui/material"
+import { getWorkspaceStore } from "store/userStore"
+import TaskBookmarkButton from "components/task/TaskBookmarkButton"
+import useHandleBookmark from "hooks/task/useHandleBookmark"
 import { TaskSummary } from "_types/task"
-import TaskDetailModal from "components/task/modal/TaskDetailModal"
-import BookmarkIcon from "@mui/icons-material/Bookmark"
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
-import Tooltip from "@mui/material/Tooltip"
+import { getTaskDetailViewStore } from "store/taskStore"
 
 // 긴급 태그 컴포넌트
 interface EmergencyTagProps {
@@ -32,120 +32,96 @@ const EmergencyTag = ({ render }: EmergencyTagProps) =>
     </Box>
   ) : null
 
-// 북마크 버튼 아이콘
-interface BookmarkButtonProps {
-  selected: boolean
-}
-
-const BookmarkButton = ({ selected }: BookmarkButtonProps) => {
-  const iconSx = {
-    fontSize: 20,
-  }
-
-  return (
-    <Tooltip title="북마크" arrow>
-      <ToggleButton
-        value="check"
-        selected={false}
-        sx={{
-          padding: 0.5,
-          borderStyle: "none",
-        }}
-      >
-        {selected ? (
-          <BookmarkIcon sx={{ ...iconSx, color: "#82b89b" }} />
-        ) : (
-          <BookmarkBorderIcon sx={iconSx} />
-        )}
-      </ToggleButton>
-    </Tooltip>
-  )
-}
-
 interface Props {
   task: TaskSummary
 }
 
 const TaskCard: React.FC<Props> = React.memo(({ task }: Props) => {
-  const [detailModalOpen, setDetailModalOpen] = React.useState(false)
+  const { workspace } = getWorkspaceStore()
+  const { setTaskDetailParam } = getTaskDetailViewStore()
+  const { bookmarked, handleBookmark } = useHandleBookmark(
+    {
+      workspaceId: workspace?.workspaceId || 0,
+      projectId: task.project.projectId,
+      taskId: task.taskId,
+    },
+    task.bookmark,
+  )
 
   return (
-    <>
-      <Box
+    <Box
+      sx={{
+        m: 1,
+      }}
+    >
+      <EmergencyTag render={task.emergency} />
+      <Card
+        key={task.taskId}
+        variant="outlined"
         sx={{
-          m: 1,
+          borderRadius: 2,
+          "&:hover": {
+            cursor: "pointer",
+          },
         }}
+        onClick={() =>
+          setTaskDetailParam({
+            workspaceId: workspace?.workspaceId || 0,
+            projectId: task.project.projectId,
+            taskId: task.taskId,
+          })
+        }
       >
-        <EmergencyTag render={task.emergency} />
-        <Card
-          key={task.taskId}
-          variant="outlined"
+        <Box
           sx={{
-            borderRadius: 2,
-            "&:hover": {
-              cursor: "pointer",
-            },
+            padding: 2,
           }}
-          onClick={() => setDetailModalOpen(true)}
         >
-          <Box
-            sx={{
-              padding: 2,
-            }}
-          >
-            <Box sx={{ display: "flex" }}>
-              <Box flexGrow={1} key={task.board?.boardId}>
-                <Chip label={task.board?.title} color="primary" size="small" />
-              </Box>
-              <Box>
-                <BookmarkButton selected={task.bookmark} />
-              </Box>
+          <Box sx={{ display: "flex" }}>
+            <Box flexGrow={1} key={task.board?.boardId}>
+              <Chip label={task.board?.title} color="primary" size="small" />
             </Box>
-            <Box
-              sx={{
-                paddingTop: 1.5,
-                fontSize: 16,
-                fontWeight: "bold",
-              }}
-            >
-              {task.title}
-            </Box>
-            <Box
-              sx={{
-                paddingY: 1,
-                color: "gray",
-                fontSize: 12,
-              }}
-            >
-              ~ {task.endDate}
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              {task.taskManager ? (
-                <Box sx={{ height: 28 }}>
-                  <Avatar sx={{ width: 28, height: 28 }} />
-                </Box>
-              ) : null}
-              <Box sx={{ marginLeft: 1, fontSize: "12px" }}>
-                {task.taskManager?.name}
-              </Box>
+            <Box>
+              <TaskBookmarkButton
+                bookmarked={bookmarked}
+                handleClick={handleBookmark}
+              />
             </Box>
           </Box>
-        </Card>
-      </Box>
-      {detailModalOpen ? (
-        <TaskDetailModal
-          projectId={task.project.projectId}
-          taskId={task.taskId}
-          open={detailModalOpen}
-          handleClose={() => setDetailModalOpen(false)}
-        />
-      ) : null}
-    </>
+          <Box
+            sx={{
+              paddingTop: 1.5,
+              fontSize: 16,
+              fontWeight: "bold",
+            }}
+          >
+            {task.title}
+          </Box>
+          <Box
+            sx={{
+              paddingY: 1,
+              color: "gray",
+              fontSize: 12,
+            }}
+          >
+            ~ {task.endDate}
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            {task.taskManager ? (
+              <Box sx={{ height: 28 }}>
+                <Avatar sx={{ width: 28, height: 28 }} />
+              </Box>
+            ) : null}
+            <Box sx={{ marginLeft: 1 }}>{task.taskManager?.name}</Box>
+          </Box>
+        </Box>
+      </Card>
+    </Box>
   )
 })
 export default TaskCard
