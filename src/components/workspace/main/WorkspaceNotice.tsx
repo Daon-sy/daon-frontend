@@ -21,8 +21,8 @@ const WorkspaceNotice: React.FC = () => {
           component="span"
           sx={{
             display: "inline-flex",
-            width: "28px",
-            height: "28px",
+            width: "35px",
+            height: "35px",
             borderRadius: "50%",
             bgcolor: "#E25860",
             alignItems: "center",

@@ -49,25 +49,32 @@ const WorkspaceParticipants: React.FC = () => {
     >
       {/* title */}
       <Box
+        component="h3"
         sx={{
+          display: "flex",
+          alignItems: "center",
           mb: "16px",
           color: "#3A4CA8",
           fontSize: "20px",
           fontWeight: "800",
         }}
       >
-        <Box component="span">
-          <FontAwesomeIcon icon={faPeopleGroup} />
-        </Box>
         <Box
-          component="h3"
+          component="span"
           sx={{
-            display: "inline-block",
-            ml: "4px",
+            display: "inline-flex",
+            width: "35px",
+            height: "35px",
+            borderRadius: "50%",
+            bgcolor: "#3A4CA8",
+            alignItems: "center",
+            justifyContent: "center",
+            mr: "4px",
           }}
         >
-          구성원
+          <FontAwesomeIcon icon={faPeopleGroup} color="#ffffff" />
         </Box>
+        구성원
       </Box>
       {/* 구성원 Wrapper */}
       <Box
@@ -142,6 +149,7 @@ const WorkspaceParticipants: React.FC = () => {
                 textAlign: "left",
                 width: "80%",
                 marginLeft: "8px",
+                overflow: "hidden",
               }}
             >
               <Box sx={{ display: "flex", position: "relative" }}>
@@ -155,6 +163,7 @@ const WorkspaceParticipants: React.FC = () => {
                     textOverflow: "ellipsis",
                     whiteSpace: "nowrap",
                     wordBreak: "break-all",
+                    fontSize: "14px",
                   }}
                 >
                   {participant.name}
@@ -185,6 +194,7 @@ const WorkspaceParticipants: React.FC = () => {
                   whiteSpace: "nowrap",
                   wordBreak: "break-all",
                   position: "relative",
+                  fontSize: "12px",
                 }}
               >
                 {participant.email}

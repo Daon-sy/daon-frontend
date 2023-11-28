@@ -30,6 +30,7 @@ const Page = styled.div`
   background-color: #f6f7f9;
   margin-top: 6px;
   padding-top: 18px;
+  box-sizing: "border-box";
 `
 
 const UserLayout = () => {

@@ -12,7 +12,7 @@ import TaskTimelineBar from "components/task/timeline/TaskTimelineBar"
 
 interface TaskViewProps {
   params?: TaskListApiParams
-  height?: number
+  height?: number | string
 }
 
 interface YearMonthDateCount {
