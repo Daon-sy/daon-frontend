@@ -100,18 +100,22 @@ const MyPageModify = () => {
 
   return (
     <Box>
-      <Typography pt={1}>정보 수정</Typography>
+      <Typography pt={1} color="#1F4838">
+        정보 수정
+      </Typography>
       <Box component="form" sx={{ display: "flex", flexDirection: "column" }}>
         <TextField
-          sx={{ m: 2 }}
+          sx={{ mt: 2, mb: 4 }}
+          size="small"
           label="이름"
           helperText="* 이름은 20자 이내여야 합니다."
           value={name}
           onChange={e => setName(e.target.value)}
         />
         <TextField
-          sx={{ m: 2 }}
+          sx={{ mb: 4 }}
           type="password"
+          size="small"
           label="현재 비밀번호"
           helperText="* 비밀번호는 30자 이내여야 합니다."
           required
@@ -121,8 +125,9 @@ const MyPageModify = () => {
           autoComplete="password"
         />
         <TextField
-          sx={{ m: 2, mb: 4 }}
+          sx={{ mb: 4 }}
           type="password"
+          size="small"
           label="새 비밀번호"
           InputLabelProps={{ shrink: true }}
           value={newPassword}
@@ -130,7 +135,7 @@ const MyPageModify = () => {
           autoComplete="password"
         />
       </Box>
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
+      <Box sx={{ display: "flex", justifyContent: "center", pb: 3 }}>
         <Button
           sx={{ mr: 1, mb: 4 }}
           variant="contained"
@@ -143,8 +148,10 @@ const MyPageModify = () => {
         </Button>
       </Box>
       <Divider />
-      <Typography pt={3}>내 이메일 목록</Typography>
-      <List>
+      <Typography sx={{ pt: 3, mb: 0.5 }} color="#1F4838">
+        이메일 목록
+      </Typography>
+      <List sx={{ border: 1, borderRadius: 1, borderColor: "lightgray" }}>
         {memberEmails.map(email => (
           <ListItem key={email.memberEmailId}>
             <ListItemText primary={email.email} />
@@ -168,17 +175,21 @@ const MyPageModify = () => {
           <Button onClick={() => setRemoveEmailModalOpen(false)}>취소</Button>
         </DialogActions>
       </Dialog>
-      <Box sx={{ display: "flex", m: 2, mb: 4 }}>
+      <Box sx={{ display: "flex", m: 2, mb: 4, pb: 3 }}>
         <TextField
+          variant="standard"
+          size="small"
           label="추가할 이메일을 입력하세요."
           value={newEmail}
           onChange={e => setNewEmail(e.target.value)}
         />
-        <Button onClick={addEmail}>이메일 추가</Button>
+        <Button sx={{ mt: 1.7, ml: 2 }} onClick={addEmail}>
+          이메일 추가
+        </Button>
       </Box>
       <Divider />
       <Button
-        sx={{ mt: 4 }}
+        sx={{ mt: 5 }}
         size="small"
         color="error"
         onClick={() => setWithdrawMemberModalOpen(true)}
