@@ -25,7 +25,11 @@ const Page = styled.div`
   width: 85%;
   height: 100%;
   padding-left: 32px;
+  padding-right: 32px;
   min-width: 1184px;
+  background-color: #f6f7f9;
+  margin-top: 6px;
+  padding-top: 18px;
 `
 
 const UserLayout = () => {
