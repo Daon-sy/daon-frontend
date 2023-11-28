@@ -43,7 +43,9 @@ export interface TaskListResponseBody {
 export type TaskDetailResponseBody = TaskDetail
 
 export interface taskReplyListResponseBody {
-  data: Array<TaskReplyDetail>
+  totalCount: number
+  taskId: number
+  taskReplies: Array<TaskReplyDetail>
 }
 
 // API
@@ -160,11 +162,14 @@ export const taskReplyListApi = async (
   workspaceId: number,
   projectId: number,
   taskId: number,
-  params?: {
+  params: {
     page?: number
     size?: number
+  } = {
+    page: 0,
+    size: 3,
   },
-): Promise<AxiosResponse<taskReplyListResponseBody>> => {
+): Promise<AxiosResponse<SliceResponse<TaskReplyDetail>>> => {
   return authAxios.get(
     `/api/workspaces/${workspaceId}/projects/${projectId}/tasks/${taskId}/reply`,
     { params },
