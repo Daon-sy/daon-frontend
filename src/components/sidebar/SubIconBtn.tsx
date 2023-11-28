@@ -5,9 +5,19 @@ interface SubIconBtnProps {
   icon: React.ReactNode
   onClick?: React.MouseEventHandler<HTMLButtonElement>
   color?: string
+  position?: string
+  right?: string
+  top?: string
 }
 
-const SubIconBtn = ({ icon, onClick, color }: SubIconBtnProps) => {
+const SubIconBtn = ({
+  icon,
+  onClick,
+  color,
+  position,
+  right,
+  top,
+}: SubIconBtnProps) => {
   return (
     <Box
       component="button"
@@ -19,6 +29,9 @@ const SubIconBtn = ({ icon, onClick, color }: SubIconBtnProps) => {
         cursor: "pointer",
         pt: 0.4,
         paddingRight: 0.5,
+        position: `${position}`,
+        top: `${top}`,
+        right: `${right}`,
         ml: 0.5,
         "&:hover": {
           bgcolor: "rgba(0,0,0,0.1)",

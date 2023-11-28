@@ -31,6 +31,7 @@ import useModifyTask from "hooks/task/useModifyTask"
 import useHandleBookmark from "hooks/task/useHandleBookmark"
 import useRemoveTask from "hooks/task/useRemoveTask"
 import TaskBookmarkButton from "components/task/TaskBookmarkButton"
+import TaskReply from "../reply/TaskReply"
 
 interface Props {
   workspaceId: number
@@ -277,6 +278,7 @@ const TaskDetailModal: React.FC<Props> = ({
                 <Box sx={{ paddingX: 1.5, paddingY: 2, fontWeight: 700 }}>
                   댓글
                 </Box>
+                <TaskReply projectId={projectId} taskId={taskId} />
               </Box>
             </Box>
             {/* right */}

@@ -1,8 +1,6 @@
 import React from "react"
 import { useParams } from "react-router-dom"
-import { Divider, Box, TextField, InputAdornment } from "@mui/material"
-import StarIcon from "@mui/icons-material/Star"
-import AssignmentIcon from "@mui/icons-material/Assignment"
+import { Box, TextField, InputAdornment } from "@mui/material"
 import SettingsIcon from "@mui/icons-material/Settings"
 import { getProjectsStore } from "store/userStore"
 import Menu from "components/common/Menu"
@@ -34,19 +32,6 @@ const SidebarMenu: React.FC = () => {
     }))
   }
 
-  const myTasks = [
-    {
-      link: `/workspace/${workspaceId}/task/bookmark`,
-      listValue: "북마크",
-      icon: StarIcon,
-    },
-    {
-      link: `/workspace/${workspaceId}/task/my`,
-      listValue: "내 할일",
-      icon: AssignmentIcon,
-    },
-  ]
-
   const myProjects = projects.map(project => ({
     link: `/workspace/${workspaceId}/project/${project.projectId}`,
     listValue: project.title,
@@ -55,24 +40,6 @@ const SidebarMenu: React.FC = () => {
 
   return (
     <Box>
-      <Menu title="나의 할일 모음">
-        {myTasks.map(list => (
-          <MenuItems
-            to={list.link}
-            listValue={list.listValue}
-            icon={list.icon}
-            key={list.link}
-          />
-        ))}
-      </Menu>
-      <Divider
-        sx={{
-          border: 1,
-          width: "80%",
-          marginX: "auto",
-          color: "#eeeeef",
-        }}
-      />
       <Menu
         title="참여 중인 프로젝트"
         btn={<CreateBtn handleClick={openProjectCreateModal} />}
