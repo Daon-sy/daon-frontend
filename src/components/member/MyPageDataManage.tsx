@@ -1,10 +1,10 @@
 import React from "react"
-import { Box, Button, Typography } from "@mui/material"
+import { Box, List, ListItem, ListItemText, Typography } from "@mui/material"
 import { getMyMemberDetailStore } from "store/userStore"
 import { MemberEmail } from "_types/member"
 import { myEmailsApi } from "api/member"
 
-const MemberDataManage = () => {
+const MyPageDataManage = () => {
   const { myDetail } = getMyMemberDetailStore()
   const [memberEmails, setMemberEmails] = React.useState<Array<MemberEmail>>([])
 
@@ -18,20 +18,28 @@ const MemberDataManage = () => {
   }, [])
 
   return (
-    <Box>
-      <Typography>마이페이지 정보</Typography>
-      <Typography>아이디: {myDetail?.username}</Typography>
-      <Typography>이름: {myDetail?.name}</Typography>
-      {memberEmails.map(email => (
-        <Box>
-          <Typography>이메일: {email.email}</Typography>
-        </Box>
-      ))}
-      <Button size="small" color="error">
-        회원 탈퇴
-      </Button>
+    <Box sx={{ pt: 1 }}>
+      <Box sx={{ border: 1, borderRadius: 2, mb: 2, p: 2 }}>
+        <Typography variant="h6" mb={2}>
+          기본 정보
+        </Typography>
+        <Typography>아이디🐔 {myDetail?.username}</Typography>
+        <Typography>이름🐔 {myDetail?.name}</Typography>
+      </Box>
+      <Box sx={{ border: 1, borderRadius: 2, p: 2 }}>
+        <Typography variant="h6" mb={1}>
+          이메일 목록
+        </Typography>
+        <List>
+          {memberEmails.map(email => (
+            <ListItem key={email.memberEmailId}>
+              <ListItemText primary={email.email} />
+            </ListItem>
+          ))}
+        </List>
+      </Box>
     </Box>
   )
 }
 
-export default MemberDataManage
+export default MyPageDataManage
