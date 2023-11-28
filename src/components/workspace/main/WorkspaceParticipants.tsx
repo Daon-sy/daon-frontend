@@ -6,17 +6,14 @@ import { getWorkspaceStore } from "store/userStore"
 import { WorkspaceParticipant } from "_types/workspace"
 import { workspaceParticipantListApi } from "api/workspace"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-
 import {
   faCrown,
   faLeaf,
-  faFileCircleExclamation,
   faPeopleGroup,
-  faStopwatch,
 } from "@fortawesome/free-solid-svg-icons"
 
 const WorkspaceParticipants: React.FC = () => {
-  const { workspace, myProfile } = getWorkspaceStore()
+  const { workspace } = getWorkspaceStore()
   const [workspaceParticipants, setWorkspaceParticipants] = React.useState<
     Array<WorkspaceParticipant>
   >([])
