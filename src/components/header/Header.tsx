@@ -10,7 +10,12 @@ const Header: React.FC = () => {
   return (
     <AppBar
       position="static"
-      sx={{ bgcolor: "#b2d6c7", color: "grey", boxShadow: "none" }}
+      sx={{
+        bgcolor: "#ffffff",
+        color: "#818181",
+        height: "10%",
+        maxHeight: "70px",
+      }}
     >
       <Toolbar>
         {/* Nav */}

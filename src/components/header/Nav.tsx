@@ -36,7 +36,7 @@ const Nav: React.FC = () => {
           fontFamily: "monospace",
           fontWeight: 700,
           letterSpacing: ".3rem",
-          color: "white",
+          color: "#495e57",
           textDecoration: "none",
         }}
       >
@@ -50,7 +50,7 @@ const Nav: React.FC = () => {
         <Tooltip title="워크스페이스 메뉴">
           <Button
             onClick={handleOpenNavMenu}
-            sx={{ my: 2, color: "white", display: "block" }}
+            sx={{ my: 2, color: "#495e57", display: "block" }}
           >
             워크스페이스
           </Button>

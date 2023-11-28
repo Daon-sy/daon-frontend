@@ -2,127 +2,107 @@ import * as React from "react"
 import { Box } from "@mui/material"
 import { TEST_IMAGE_URL } from "env"
 import { getWorkspaceStore } from "store/userStore"
-import SettingsIcon from "@mui/icons-material/Settings"
-import WorkspaceSettingsModal from "components/workspace/modal/WorkspaceSettingsModal"
 import WorkspaceProfileModifyModal from "components/workspace/modal/WorkspaceProfileModifyModal"
 import EditIcon from "@mui/icons-material/Edit"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faCrown, faLeaf } from "@fortawesome/free-solid-svg-icons"
+
 import SubIconBtn from "./SubIconBtn"
 
 const WorkSpaceProfile: React.FC = () => {
-  const { workspace, myProfile } = getWorkspaceStore()
-
-  const [workspaceManageModalOpen, setWorkspaceManageModalOpen] =
-    React.useState(false)
+  let icon = null
+  let color = null
+  const { myProfile } = getWorkspaceStore()
   const [profileModfiyModalOpen, setProfileModfiyModalOpen] =
     React.useState(false)
 
-  const openWorkspaceManageModal = (e: React.MouseEvent) => {
-    e.preventDefault()
-    setWorkspaceManageModalOpen(true)
-  }
   const openProfileModifyModal = (e: React.MouseEvent) => {
     e.preventDefault()
     setProfileModfiyModalOpen(true)
   }
+
+  if (myProfile?.role === "WORKSPACE_ADMIN") {
+    icon = faCrown
+    color = "#fdd835"
+  } else if (myProfile?.role === "PROJECT_ADMIN") {
+    icon = faLeaf
+    color = "#009959"
+  }
+
   return (
     <Box
       sx={{
         boxSizing: "border-box",
         width: "100%",
-        height: "75%",
-        minHeight: "230px",
-        bgcolor: "#82b89b",
+        height: "20%",
+        minHeight: "110px",
+        bgcolor: "#1f4838",
         position: "relative",
         border: "none",
-        borderBottomLeftRadius: "20px",
-        borderBottomRightRadius: "20px",
+        borderBottomLeftRadius: "5px",
+        borderBottomRightRadius: "5px",
         display: "flex",
-        flexDirection: "column",
         alignItems: "center",
         justifyContent: "space-evenly",
+        pl: "12px",
       }}
     >
-      <Box
-        component="div"
-        sx={{
-          borderRadius: 1,
-          width: "100%",
-          fontSize: 20,
-          textAlign: "center",
-          color: "#476354",
-          fontWeight: "bold",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+      {icon ? (
         <Box
-          component="div"
           sx={{
-            maxWidth: "80%",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
+            position: "absolute",
+            top: 5,
+            right: 10,
+            color,
           }}
         >
-          {workspace?.title}
+          <FontAwesomeIcon icon={icon} />
         </Box>
-        <SubIconBtn
-          color="#808080"
-          onClick={openWorkspaceManageModal}
-          icon={<SettingsIcon />}
-        />
-      </Box>
+      ) : null}
+
       <Box
-        component="div"
+        component="img"
+        src={myProfile?.imageUrl || TEST_IMAGE_URL}
         sx={{
-          width: "130px",
-          height: "130px",
-          background: "linear-gradient( #ffffff, #faa788)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: 50,
+          objectFit: "cover",
+          width: "30%",
+          minWidth: "80px",
+          height: "80px",
+          borderRadius: "50%",
         }}
-      >
-        <Box
-          component="img"
-          src={myProfile?.imageUrl || TEST_IMAGE_URL}
-          sx={{
-            objectFit: "cover",
-            width: "110px",
-            height: "110px",
-            borderRadius: 50,
-          }}
-        />
-      </Box>
+      />
       <Box
         sx={{
-          width: "100%",
+          width: "55%",
           mt: "2px",
-          textAlign: "center",
+          textAlign: "left",
           color: "white",
+          position: "relative",
         }}
       >
-        <Box
-          sx={{
-            borderRadius: 1,
-            width: "100%",
-            fontSize: 20,
-            fontWeight: "bold",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {myProfile?.name}
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box
+            sx={{
+              maxWidth: "100px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              wordBreak: "break-all",
+              borderRadius: 1,
+              fontSize: 20,
+              fontWeight: "bold",
+              display: "block",
+              mt: 2,
+            }}
+          >
+            {myProfile?.name}
+          </Box>
           <SubIconBtn
             color="#808080"
             onClick={openProfileModifyModal}
             icon={<EditIcon />}
+            position="relative"
+            top="8px"
           />
         </Box>
         <Box
@@ -134,7 +114,7 @@ const WorkSpaceProfile: React.FC = () => {
             whiteSpace: "nowrap",
             color: "#b6d1c2",
             marginY: 1,
-            fontSize: 18,
+            fontSize: 12,
             lineHeight: "20px",
             fontWeight: "bold",
           }}
@@ -142,12 +122,6 @@ const WorkSpaceProfile: React.FC = () => {
           {myProfile?.email}
         </Box>
       </Box>
-      {workspaceManageModalOpen ? (
-        <WorkspaceSettingsModal
-          open={workspaceManageModalOpen}
-          handleClose={() => setWorkspaceManageModalOpen(false)}
-        />
-      ) : null}
       <WorkspaceProfileModifyModal
         open={profileModfiyModalOpen}
         handleClose={() => setProfileModfiyModalOpen(false)}
