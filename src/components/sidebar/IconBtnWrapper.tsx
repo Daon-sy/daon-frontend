@@ -7,8 +7,9 @@ import BookmarkIcon from "@mui/icons-material/Bookmark"
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions"
 import { Link as RouterLink, useParams } from "react-router-dom"
 import TaskCreateModal from "components/task/modal/TaskCreateModal"
-import WorkspaceParticipantsModal from "components/workspace/modal/WorkspaceParticipantsModal"
+// import WorkspaceParticipantsModal from "components/common/ParticipantsModal"
 import WorkspaceSettingsModal from "components/workspace/modal/WorkspaceSettingsModal"
+import ParticipantsModal from "components/common/ParticipantsModal"
 import IconBtn from "./IconBtn"
 
 const IconBtnWrapper: React.FC = () => {
@@ -98,7 +99,11 @@ const IconBtnWrapper: React.FC = () => {
           handleClose={() => setTaskCreateModalOpen(false)}
         />
       ) : null}
-      <WorkspaceParticipantsModal
+      {/* <WorkspaceParticipantsModal
+        open={participantsModalOpen}
+        handleClose={() => setParticipantsModalOpen(false)}
+      /> */}
+      <ParticipantsModal
         open={participantsModalOpen}
         handleClose={() => setParticipantsModalOpen(false)}
       />
