@@ -14,23 +14,33 @@ const Header: React.FC = () => {
       sx={{
         bgcolor: "#ffffff",
         color: "#818181",
-        height: "10%",
-        maxHeight: "70px",
+        height: 70,
       }}
     >
-      <Toolbar>
-        <Logo />
-        <WorkspaceSelectButton />
-        {/* 검색창 */}
-        <SearchInput />
-
-        {/* 알림 */}
-        <Box sx={{ flexGrow: 0, mx: 2, color: yellow[600] }}>
-          <NotificationsIcon fontSize="large" />
+      <Toolbar
+        sx={{
+          height: "100%",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "start",
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Logo />
+          <WorkspaceSelectButton />
         </Box>
-
-        {/* 아바타 */}
-        <User />
+        {/* 검색창 */}
+        <Box sx={{ width: "50%", height: "100%", minWidth: 400 }}>
+          <SearchInput />
+        </Box>
+        <Box sx={{ height: "100%", display: "flex", alignItems: "center" }}>
+          {/* 알림 */}
+          <Box sx={{ mx: 2, color: yellow[600] }}>
+            <NotificationsIcon fontSize="large" />
+          </Box>
+          {/* 아바타 */}
+          <User />
+        </Box>
       </Toolbar>
     </AppBar>
   )
