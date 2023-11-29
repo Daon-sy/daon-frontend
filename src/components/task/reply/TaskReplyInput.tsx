@@ -63,7 +63,7 @@ const TaskReplyInput: React.FC<TaskReplyProps> = ({
       <Box component="div" sx={{ height: "100%", width: "100%" }}>
         <TextField
           required
-          placeholder="댓글을 입력해주세요"
+          placeholder="댓글 입력 후, 엔터키를 눌러주세요 😄"
           name="content"
           value={data.content}
           onChange={onChange}

@@ -148,7 +148,6 @@ const TaskDetailModal: React.FC<Props> = ({
               sx={{
                 width: "100%",
                 height: "100%",
-                minWidth: 400,
               }}
             >
               <Box>
@@ -346,7 +345,7 @@ const TaskDetailModal: React.FC<Props> = ({
             <Box
               id="right-container"
               sx={{
-                width: "100%",
+                width: "80%",
                 height: "100%",
               }}
             >
@@ -368,23 +367,14 @@ const TaskDetailModal: React.FC<Props> = ({
                   sx={{
                     display: "flex",
                     marginTop: 2,
-                    padding: 2,
-                    border: "solid",
-                    borderWidth: 1,
                     borderRadius: 2,
-                    borderColor: "rgb(224,224,224)",
+                    fontWeight: 700,
+                    color: "#1f4838",
+                    fontSize: "20x",
                   }}
                 >
                   <Box sx={{ width: "100%" }}>
-                    <Box
-                      sx={{
-                        paddingX: 1,
-                        fontSize: 14,
-                        fontWeight: 700,
-                      }}
-                    >
-                      시작일
-                    </Box>
+                    <Box>시작일</Box>
                     <CalendarDateField
                       date={taskDetail.startDate}
                       handleChange={value => {
@@ -395,21 +385,19 @@ const TaskDetailModal: React.FC<Props> = ({
                       }}
                     />
                   </Box>
-                  <Divider
-                    flexItem
-                    sx={{ marginX: 2 }}
-                    orientation="vertical"
-                  />
+                  <Box
+                    sx={{
+                      lineHeight: "78px",
+                      marginX: 3,
+                      fontSize: "32px",
+                      color: "#929292",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    ~
+                  </Box>
                   <Box sx={{ width: "100%" }}>
-                    <Box
-                      sx={{
-                        paddingX: 1,
-                        fontSize: 14,
-                        fontWeight: 700,
-                      }}
-                    >
-                      마감일
-                    </Box>
+                    <Box>마감일</Box>
                     <CalendarDateField
                       date={taskDetail.endDate}
                       handleChange={value => {
@@ -435,7 +423,7 @@ const TaskDetailModal: React.FC<Props> = ({
                   </Box>
                   <TaskReply projectId={projectId} taskId={taskId} />
                 </Box>
-
+                {/* 히스토리 */}
                 {/* <Box sx={{ marginTop: 4, paddingLeft: 1 }}>
                   <Typography fontWeight={700}>히스토리</Typography>
                   <TaskHistoriesWrapper taskHistories={taskHistories} />
