@@ -15,7 +15,7 @@ const WorkspaceDeadlineTaskWrapper: React.FC = () => {
   return (
     <Box
       component="section"
-      sx={{ maxWidth: "265px", width: "20%", height: "100%", pl: 4 }}
+      sx={{ maxWidth: "265px", width: "22%", height: "100%", pl: 4 }}
     >
       {/* title */}
       <Box
