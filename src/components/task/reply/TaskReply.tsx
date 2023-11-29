@@ -114,7 +114,7 @@ const TaskReply: React.FC<TaskReplyProps> = ({
             ...(replySlice.last && { display: "none" }),
           }}
         >
-          더보기
+          + 더보기
         </Button>
       </Box>
     </Box>

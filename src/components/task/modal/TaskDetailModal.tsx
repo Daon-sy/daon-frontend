@@ -274,11 +274,72 @@ const TaskDetailModal: React.FC<Props> = ({
                   marginTop: 6,
                 }}
               />
-              <Box>
-                <Box sx={{ paddingX: 1.5, paddingY: 2, fontWeight: 700 }}>
-                  댓글
+              <Box
+                sx={{
+                  marginTop: 2,
+                  padding: 1,
+                  border: "solid",
+                  borderWidth: 1,
+                  borderRadius: 2,
+                  borderColor: "rgb(224,224,224)",
+                  display: "flex",
+                  alignItems: "center",
+                  height: 40,
+                }}
+              >
+                <Box
+                  sx={{
+                    paddingX: 2,
+                    fontSize: 14,
+                    fontWeight: 700,
+                  }}
+                >
+                  담당자
                 </Box>
-                <TaskReply projectId={projectId} taskId={taskId} />
+                <Divider
+                  orientation="vertical"
+                  flexItem
+                  sx={{ marginX: 1, marginRight: 2 }}
+                />
+                <Tooltip title="담당자 선택" arrow>
+                  <Box
+                    onClick={() => setProjectParticipantsModalOpen(true)}
+                    sx={{
+                      display: "flex",
+                      flexGrow: 1,
+                      alignItems: "center",
+                      borderRadius: 1,
+                      padding: 1,
+                      "&:hover": {
+                        backgroundColor: "rgb(242,242,242)",
+                      },
+                    }}
+                  >
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      sx={{ display: "flex", alignItems: "center" }}
+                    >
+                      <Box>
+                        <Avatar
+                          src={taskDetail.taskManager?.imageUrl}
+                          sx={{
+                            width: 28,
+                            height: 28,
+                            borderStyle: "solid",
+                            borderWidth: 1,
+                            borderColor: "#C8C8C8FF",
+                          }}
+                        />
+                      </Box>
+                      <Box sx={{ marginLeft: 1 }}>
+                        {taskDetail.taskManager
+                          ? taskDetail.taskManager.name
+                          : "없음"}
+                      </Box>
+                    </Stack>
+                  </Box>
+                </Tooltip>
               </Box>
             </Box>
             {/* right */}
@@ -360,74 +421,22 @@ const TaskDetailModal: React.FC<Props> = ({
                     />
                   </Box>
                 </Box>
-                <Box
-                  sx={{
-                    marginTop: 2,
-                    padding: 1,
-                    border: "solid",
-                    borderWidth: 1,
-                    borderRadius: 2,
-                    borderColor: "rgb(224,224,224)",
-                    display: "flex",
-                    alignItems: "center",
-                    height: 40,
-                  }}
-                >
+                <Box>
                   <Box
                     sx={{
-                      paddingX: 2,
-                      fontSize: 14,
-                      fontWeight: 700,
+                      pt: 2,
+                      pb: 1,
+                      fontWeight: "bold",
+                      color: "#1f4838",
+                      fontSize: "20x",
                     }}
                   >
-                    담당자
+                    댓글
                   </Box>
-                  <Divider
-                    orientation="vertical"
-                    flexItem
-                    sx={{ marginX: 1, marginRight: 2 }}
-                  />
-                  <Tooltip title="담당자 선택" arrow>
-                    <Box
-                      onClick={() => setProjectParticipantsModalOpen(true)}
-                      sx={{
-                        display: "flex",
-                        flexGrow: 1,
-                        alignItems: "center",
-                        borderRadius: 1,
-                        padding: 1,
-                        "&:hover": {
-                          backgroundColor: "rgb(242,242,242)",
-                        },
-                      }}
-                    >
-                      <Stack
-                        direction="row"
-                        spacing={1}
-                        sx={{ display: "flex", alignItems: "center" }}
-                      >
-                        <Box>
-                          <Avatar
-                            src={taskDetail.taskManager?.imageUrl}
-                            sx={{
-                              width: 28,
-                              height: 28,
-                              borderStyle: "solid",
-                              borderWidth: 1,
-                              borderColor: "#C8C8C8FF",
-                            }}
-                          />
-                        </Box>
-                        <Box sx={{ marginLeft: 1 }}>
-                          {taskDetail.taskManager
-                            ? taskDetail.taskManager.name
-                            : "없음"}
-                        </Box>
-                      </Stack>
-                    </Box>
-                  </Tooltip>
+                  <TaskReply projectId={projectId} taskId={taskId} />
                 </Box>
-                <Box sx={{ marginTop: 4, paddingLeft: 1 }}>
+
+                {/* <Box sx={{ marginTop: 4, paddingLeft: 1 }}>
                   <Typography fontWeight={700}>히스토리</Typography>
                   <TaskHistoriesWrapper taskHistories={taskHistories} />
                   {isLast ? null : (
@@ -440,7 +449,7 @@ const TaskDetailModal: React.FC<Props> = ({
                       더보기
                     </Button>
                   )}
-                </Box>
+                </Box> */}
               </Box>
             </Box>
             <ProjectParticipantsModal
@@ -469,12 +478,13 @@ const TaskDetailModal: React.FC<Props> = ({
           <ConfirmDialog
             open={taskRemoveModalOpen}
             maxWidth="xs"
-            content="정말로 해당 태스크를 삭제하시겠습니까?"
             handleConfirm={removeTask}
             handleClose={() => {
               setTaskRemoveModalOpen(false)
             }}
-          />
+          >
+            지우시겠습니까?
+          </ConfirmDialog>
         ) : null}
       </Box>
     </TitleModal>

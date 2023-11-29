@@ -50,11 +50,12 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
     <Box
       component="li"
       sx={{
+        color: "#1f4838",
         display: "flex",
         flexDirection: "column",
-        borderRadius: "15px",
-        border: "1px solid black",
-        mb: "4px",
+        borderRadius: "4px",
+        mb: "8px",
+        background: "#f6f7f9",
       }}
       key={reply.replyId}
     >
@@ -77,14 +78,14 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
             component="img"
             alt="댓글 작성자 이미지"
             sx={{
-              width: "30px",
-              height: "30px",
+              width: "20px",
+              height: "20px",
               bgcolor: "grey",
               fontSize: "10px",
               borderRadius: "50%",
               marginY: "8px",
               marginLeft: "12px",
-              marginRight: "4px",
+              marginRight: "6px",
             }}
             src={reply.writer.imageUrl || TEST_IMAGE_URL}
           />
@@ -98,16 +99,24 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
               {isModify ? (
                 <>
                   <ReplyBtn
+                    bgcolor="#ffb83b"
                     handleClick={() => handleModifyClick(reply.replyId)}
                   >
                     저장
                   </ReplyBtn>
-                  <ReplyBtn handleClick={handleToggle}>취소</ReplyBtn>
+                  <ReplyBtn bgcolor="#AE3A1E" handleClick={handleToggle}>
+                    취소
+                  </ReplyBtn>
                 </>
               ) : (
-                <ReplyBtn handleClick={handleToggle}>수정</ReplyBtn>
+                <ReplyBtn bgcolor="#ffb83b" handleClick={handleToggle}>
+                  수정
+                </ReplyBtn>
               )}
-              <ReplyBtn handleClick={() => handleRemoveClick(reply.replyId)}>
+              <ReplyBtn
+                bgcolor="#747474"
+                handleClick={() => handleRemoveClick(reply.replyId)}
+              >
                 삭제
               </ReplyBtn>
             </>
@@ -169,6 +178,7 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
           fontSize: "10px",
           textAlign: "right",
           paddingRight: "12px",
+          my: "8px",
         }}
       >
         {reply.createdAt}

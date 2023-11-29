@@ -29,7 +29,7 @@ const TaskReplyInput: React.FC<TaskReplyProps> = ({
   const [data, onChange, resetData] = useInputs<TaskReply>(initialState)
   const { addError } = useAlert()
 
-  const createReplyBtn = () => {
+  const createReply = () => {
     if (!workspaceId) return
     if (data.content.length === 0) {
       addError("댓글 내용은 필수 입력 값입니다")
@@ -43,6 +43,13 @@ const TaskReplyInput: React.FC<TaskReplyProps> = ({
     })
   }
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault()
+      createReply()
+    }
+  }
+
   return (
     <Box
       component="form"
@@ -53,16 +60,17 @@ const TaskReplyInput: React.FC<TaskReplyProps> = ({
         width: "100%",
       }}
     >
-      <Box component="div" sx={{ height: "100%", width: "90%" }}>
+      <Box component="div" sx={{ height: "100%", width: "100%" }}>
         <TextField
           required
           placeholder="댓글을 입력해주세요"
           name="content"
           value={data.content}
           onChange={onChange}
+          onKeyDown={handleKeyDown}
           inputProps={{ maxLength: 500 }}
           sx={{
-            height: "90%",
+            height: "100%",
             width: "100%",
           }}
         />
@@ -70,13 +78,6 @@ const TaskReplyInput: React.FC<TaskReplyProps> = ({
           {`${data.content?.length}/500자`}
         </FormHelperText>
       </Box>
-      <Box
-        component="input"
-        type="button"
-        value="입력"
-        onClick={createReplyBtn}
-        sx={{ position: "relative", height: "50px", top: "-10px" }}
-      />
     </Box>
   )
 }
