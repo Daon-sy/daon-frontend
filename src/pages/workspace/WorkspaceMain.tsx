@@ -35,6 +35,7 @@ const WorkspaceMain: React.FC = () => {
       <Box
         component="div"
         sx={{
+          height: "30%",
           width: "100%",
           display: "flex",
           alignItems: "center",
@@ -50,10 +51,10 @@ const WorkspaceMain: React.FC = () => {
         component="div"
         sx={{
           width: "100%",
+          height: "50%",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          height: "100%",
           mt: 2,
         }}
       >

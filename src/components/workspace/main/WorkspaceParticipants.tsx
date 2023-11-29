@@ -39,7 +39,7 @@ const WorkspaceParticipants: React.FC = () => {
       component="section"
       sx={{
         maxWidth: "265px",
-        width: "22%",
+        width: "20%",
         pl: 4,
         height: "100%",
       }}
