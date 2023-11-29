@@ -1,14 +1,18 @@
 import * as React from "react"
-import { Box, Typography, Menu, Button, Tooltip, MenuItem } from "@mui/material"
 import { Link } from "react-router-dom"
-import CreateWorkspaceModal from "components/workspace/modal/CreateWorkspaceModal"
+import { Box, Typography, Menu, Button, Tooltip, MenuItem } from "@mui/material"
+import { useTitleDialog } from "components/common/TitleDialog"
+import CreateWorkspace from "components/workspace/CreateWorkspace"
 
 const myWorkspaces = ["워크스페이스1", "워크스페이스2"]
 
 const Nav: React.FC = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
-  const [createWorkspaceModalOpen, setCreateWorkspaceModalOpen] =
-    React.useState<boolean>(false)
+  const {
+    TitleDialog,
+    open: openCreateWorkspaceDialog,
+    close: closeCreateWorkspaceDialog,
+  } = useTitleDialog()
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
@@ -17,13 +21,6 @@ const Nav: React.FC = () => {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null)
   }
-
-  const openCreateWorkspaceModal = () => {
-    handleCloseNavMenu()
-    setCreateWorkspaceModalOpen(true)
-  }
-
-  const closeCreateWorkspaceModal = () => setCreateWorkspaceModalOpen(false)
 
   return (
     <>
@@ -77,17 +74,14 @@ const Nav: React.FC = () => {
             </MenuItem>
           ))}
           <hr />
-          <MenuItem onClick={openCreateWorkspaceModal}>
+          <MenuItem onClick={openCreateWorkspaceDialog}>
             <Typography textAlign="center">워크스페이스 생성</Typography>
           </MenuItem>
         </Menu>
       </Box>
-      {createWorkspaceModalOpen ? (
-        <CreateWorkspaceModal
-          open={createWorkspaceModalOpen}
-          handleClose={closeCreateWorkspaceModal}
-        />
-      ) : null}
+      <TitleDialog title="워크스페이스 생성" maxWidth="sm">
+        <CreateWorkspace handleCancel={closeCreateWorkspaceDialog} />
+      </TitleDialog>
     </>
   )
 }
