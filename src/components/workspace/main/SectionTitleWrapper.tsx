@@ -11,7 +11,7 @@ interface SectionTitleWrapperProp {
   height?: number | string
   color: string
   icon: FontAwesomeIconProps["icon"]
-  children?: ReactNode
+  children: ReactNode
   title: string
   pl?: number
 }

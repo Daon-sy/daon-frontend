@@ -1,7 +1,5 @@
 import React from "react"
 import { Box } from "@mui/material"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faFileCircleExclamation } from "@fortawesome/free-solid-svg-icons"
 import { getWorkspaceStore } from "store/userStore"
 import useFetchTaskList from "hooks/task/useFetchTaskList"
 
@@ -14,344 +12,307 @@ const WorkspaceDeadlineTaskWrapper: React.FC = () => {
 
   return (
     <Box
-      component="section"
-      sx={{ maxWidth: "265px", width: "22%", height: "100%", pl: 4 }}
+      component="ul"
+      sx={{
+        pt: "10px",
+        borderRadius: "6px",
+        width: "100%",
+        height: "82%",
+        bgcolor: "#ffffff",
+        scrollbarWidth: "0.5em",
+        WebkitScrollSnapType: "none",
+        overflowX: "hidden",
+        overflowY: "scroll",
+        boxShadow: "2px 2px 6px rgba(0,0,0,0.3)",
+        "&::-webkit-scrollbar": {
+          width: "8px",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          backgroundColor: "#495e57",
+          borderRadius: "15px",
+        },
+        "&::-webkit-scrollbar-button": {
+          height: "16px",
+        },
+      }}
     >
-      {/* title */}
+      {/* 할일 item */}
+      {tasks.map(task => (
+        <Box
+          component="li"
+          sx={{
+            mb: "4px",
+            width: "90%",
+            height: "40px",
+            marginX: "16px",
+            paddingY: "8px",
+            display: "inline-flex",
+            alignItems: "center",
+            border: "1px solid #cecece",
+            borderRadius: "15px",
+          }}
+        >
+          {/* 날짜 */}
+          <Box
+            component="div"
+            sx={{
+              lineHeight: "40px",
+              color: "white",
+              bgcolor: "#568a35",
+              height: "100%",
+              paddingY: "8px",
+              width: "25%",
+              textAlign: "center",
+              borderTopLeftRadius: "6px",
+              borderBottomLeftRadius: "6px",
+            }}
+          >
+            D-2
+          </Box>
+          {/* 내용 */}
+          <Box
+            component="div"
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              marginLeft: "12px",
+            }}
+          >
+            <Box
+              component="span"
+              sx={{
+                color: "#3c5f52",
+                fontSize: "16px",
+                fontWeight: "bold",
+                maxWidth: "120px",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                wordBreak: "break-all",
+                mb: 1,
+              }}
+            >
+              {task.title}
+            </Box>
+
+            <Box
+              component="span"
+              sx={{
+                color: "#858585",
+                fontSize: "12px",
+                fontWeight: "bold",
+              }}
+            >
+              {task.endDate}
+            </Box>
+          </Box>
+        </Box>
+      ))}
+
       <Box
-        component="h3"
+        component="li"
         sx={{
-          height: "5%",
-          display: "flex",
+          width: "90%",
+          height: "40px",
+          mb: "4px",
+          marginX: "16px",
+          paddingY: "8px",
+          display: "inline-flex",
           alignItems: "center",
-          mb: "16px",
-          color: "#7DB249",
-          fontSize: "20px",
-          fontWeight: "800",
+          // justifyContent: "space-between",
+          border: "1px solid #cecece",
+          borderRadius: "15px",
         }}
       >
+        {/* 날짜 */}
         <Box
-          component="span"
+          component="div"
           sx={{
-            display: "inline-flex",
-            width: "35px",
-            height: "35px",
-            borderRadius: "50%",
-            bgcolor: "#7DB249",
-            alignItems: "center",
-            justifyContent: "center",
-            mr: "4px",
+            lineHeight: "40px",
+            color: "white",
+            bgcolor: "#FFB83B",
+            height: "100%",
+            paddingY: "8px",
+            width: "25%",
+            textAlign: "center",
+            borderTopLeftRadius: "6px",
+            borderBottomLeftRadius: "6px",
           }}
         >
-          <FontAwesomeIcon icon={faFileCircleExclamation} color="#ffffff" />
+          D-1
         </Box>
-        할일 D-3
+        {/* 내용 */}
+        <Box
+          component="div"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            marginLeft: "12px",
+          }}
+        >
+          <Box
+            component="span"
+            sx={{
+              color: "#3c5f52",
+              fontSize: "16px",
+              fontWeight: "bold",
+              maxWidth: "120px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              wordBreak: "break-all",
+              mb: 1,
+            }}
+          >
+            할일 title
+          </Box>
+          <Box
+            component="span"
+            sx={{
+              color: "#858585",
+              fontSize: "12px",
+              fontWeight: "bold",
+            }}
+          >
+            마감일 날짜
+          </Box>
+        </Box>
       </Box>
-
-      {/* 할일 Wrapper */}
       <Box
-        component="ul"
+        component="li"
         sx={{
-          pt: "10px",
-          borderRadius: "6px",
-          width: "100%",
-          height: "82%",
-          bgcolor: "#ffffff",
-          scrollbarWidth: "0.5em",
-          WebkitScrollSnapType: "none",
-          overflowX: "hidden",
-          overflowY: "scroll",
-          boxShadow: "2px 2px 6px rgba(0,0,0,0.3)",
-          "&::-webkit-scrollbar": {
-            width: "8px",
-          },
-          "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "#495e57",
-            borderRadius: "15px",
-          },
-          "&::-webkit-scrollbar-button": {
-            height: "16px",
-          },
+          width: "90%",
+          height: "40px",
+          mb: "4px",
+          marginX: "16px",
+          paddingY: "8px",
+          display: "inline-flex",
+          alignItems: "center",
+          // justifyContent: "space-between",
+          border: "1px solid #cecece",
+          borderRadius: "15px",
         }}
       >
-        {/* 할일 item */}
-        {tasks.map(task => (
-          <Box
-            component="li"
-            sx={{
-              mb: "4px",
-              width: "90%",
-              height: "40px",
-              marginX: "16px",
-              paddingY: "8px",
-              display: "inline-flex",
-              alignItems: "center",
-              border: "1px solid #cecece",
-              borderRadius: "15px",
-            }}
-          >
-            {/* 날짜 */}
-            <Box
-              component="div"
-              sx={{
-                lineHeight: "40px",
-                color: "white",
-                bgcolor: "#568a35",
-                height: "100%",
-                paddingY: "8px",
-                width: "25%",
-                textAlign: "center",
-                borderTopLeftRadius: "6px",
-                borderBottomLeftRadius: "6px",
-              }}
-            >
-              D-2
-            </Box>
-            {/* 내용 */}
-            <Box
-              component="div"
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                marginLeft: "12px",
-              }}
-            >
-              <Box
-                component="span"
-                sx={{
-                  color: "#3c5f52",
-                  fontSize: "16px",
-                  fontWeight: "bold",
-                  maxWidth: "120px",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                  wordBreak: "break-all",
-                  mb: 1,
-                }}
-              >
-                {task.title}
-              </Box>
-
-              <Box
-                component="span"
-                sx={{
-                  color: "#858585",
-                  fontSize: "12px",
-                  fontWeight: "bold",
-                }}
-              >
-                {task.endDate}
-              </Box>
-            </Box>
-          </Box>
-        ))}
-
+        {/* 날짜 */}
         <Box
-          component="li"
+          component="div"
           sx={{
-            width: "90%",
-            height: "40px",
-            mb: "4px",
-            marginX: "16px",
+            lineHeight: "40px",
+            color: "white",
+            bgcolor: "#AE3A1E",
+            height: "100%",
             paddingY: "8px",
-            display: "inline-flex",
-            alignItems: "center",
-            // justifyContent: "space-between",
-            border: "1px solid #cecece",
-            borderRadius: "15px",
+            width: "25%",
+            textAlign: "center",
+            borderTopLeftRadius: "6px",
+            borderBottomLeftRadius: "6px",
           }}
         >
-          {/* 날짜 */}
+          today
+        </Box>
+        {/* 내용 */}
+        <Box
+          component="div"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            marginLeft: "12px",
+          }}
+        >
           <Box
-            component="div"
+            component="span"
             sx={{
-              lineHeight: "40px",
-              color: "white",
-              bgcolor: "#FFB83B",
-              height: "100%",
-              paddingY: "8px",
-              width: "25%",
-              textAlign: "center",
-              borderTopLeftRadius: "6px",
-              borderBottomLeftRadius: "6px",
+              color: "#3c5f52",
+              fontSize: "16px",
+              fontWeight: "bold",
+              maxWidth: "120px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              wordBreak: "break-all",
+              mb: 1,
             }}
           >
-            D-1
+            할일 title
           </Box>
-          {/* 내용 */}
           <Box
-            component="div"
+            component="span"
             sx={{
-              display: "flex",
-              flexDirection: "column",
-              marginLeft: "12px",
+              color: "#858585",
+              fontSize: "12px",
+              fontWeight: "bold",
             }}
           >
-            <Box
-              component="span"
-              sx={{
-                color: "#3c5f52",
-                fontSize: "16px",
-                fontWeight: "bold",
-                maxWidth: "120px",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-                wordBreak: "break-all",
-                mb: 1,
-              }}
-            >
-              할일 title
-            </Box>
-            <Box
-              component="span"
-              sx={{
-                color: "#858585",
-                fontSize: "12px",
-                fontWeight: "bold",
-              }}
-            >
-              마감일 날짜
-            </Box>
+            마감일 날짜
           </Box>
         </Box>
+      </Box>
+      <Box
+        component="li"
+        sx={{
+          mb: "4px",
+          width: "90%",
+          height: "40px",
+          marginX: "16px",
+          paddingY: "8px",
+          display: "inline-flex",
+          alignItems: "center",
+          // justifyContent: "space-between",
+          border: "1px solid #cecece",
+          borderRadius: "15px",
+        }}
+      >
+        {/* 날짜 */}
         <Box
-          component="li"
+          component="div"
           sx={{
-            width: "90%",
-            height: "40px",
-            mb: "4px",
-            marginX: "16px",
+            lineHeight: "40px",
+            color: "white",
+            bgcolor: "#346B8A",
+            height: "100%",
             paddingY: "8px",
-            display: "inline-flex",
-            alignItems: "center",
-            // justifyContent: "space-between",
-            border: "1px solid #cecece",
-            borderRadius: "15px",
+            width: "25%",
+            textAlign: "center",
+            borderTopLeftRadius: "6px",
+            borderBottomLeftRadius: "6px",
           }}
         >
-          {/* 날짜 */}
-          <Box
-            component="div"
-            sx={{
-              lineHeight: "40px",
-              color: "white",
-              bgcolor: "#AE3A1E",
-              height: "100%",
-              paddingY: "8px",
-              width: "25%",
-              textAlign: "center",
-              borderTopLeftRadius: "6px",
-              borderBottomLeftRadius: "6px",
-            }}
-          >
-            today
-          </Box>
-          {/* 내용 */}
-          <Box
-            component="div"
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              marginLeft: "12px",
-            }}
-          >
-            <Box
-              component="span"
-              sx={{
-                color: "#3c5f52",
-                fontSize: "16px",
-                fontWeight: "bold",
-                maxWidth: "120px",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-                wordBreak: "break-all",
-                mb: 1,
-              }}
-            >
-              할일 title
-            </Box>
-            <Box
-              component="span"
-              sx={{
-                color: "#858585",
-                fontSize: "12px",
-                fontWeight: "bold",
-              }}
-            >
-              마감일 날짜
-            </Box>
-          </Box>
+          D-3
         </Box>
+        {/* 내용 */}
         <Box
-          component="li"
+          component="div"
           sx={{
-            mb: "4px",
-            width: "90%",
-            height: "40px",
-            marginX: "16px",
-            paddingY: "8px",
-            display: "inline-flex",
-            alignItems: "center",
-            // justifyContent: "space-between",
-            border: "1px solid #cecece",
-            borderRadius: "15px",
+            display: "flex",
+            flexDirection: "column",
+            marginLeft: "12px",
           }}
         >
-          {/* 날짜 */}
           <Box
-            component="div"
+            component="span"
             sx={{
-              lineHeight: "40px",
-              color: "white",
-              bgcolor: "#346B8A",
-              height: "100%",
-              paddingY: "8px",
-              width: "25%",
-              textAlign: "center",
-              borderTopLeftRadius: "6px",
-              borderBottomLeftRadius: "6px",
+              color: "#3c5f52",
+              fontSize: "16px",
+              fontWeight: "bold",
+              maxWidth: "120px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              wordBreak: "break-all",
+              mb: 1,
             }}
           >
-            D-3
+            할일 title
           </Box>
-          {/* 내용 */}
           <Box
-            component="div"
+            component="span"
             sx={{
-              display: "flex",
-              flexDirection: "column",
-              marginLeft: "12px",
+              color: "#858585",
+              fontSize: "12px",
+              fontWeight: "bold",
             }}
           >
-            <Box
-              component="span"
-              sx={{
-                color: "#3c5f52",
-                fontSize: "16px",
-                fontWeight: "bold",
-                maxWidth: "120px",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-                wordBreak: "break-all",
-                mb: 1,
-              }}
-            >
-              할일 title
-            </Box>
-            <Box
-              component="span"
-              sx={{
-                color: "#858585",
-                fontSize: "12px",
-                fontWeight: "bold",
-              }}
-            >
-              마감일 날짜
-            </Box>
+            마감일 날짜
           </Box>
         </Box>
       </Box>

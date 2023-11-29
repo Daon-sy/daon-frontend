@@ -5,6 +5,13 @@ import WorkspaceNotice from "components/workspace/main/WorkspaceNotice"
 import WorkspaceParticipants from "components/workspace/main/WorkspaceParticipants"
 import WorkspaceDeadlineTaskWrapper from "components/workspace/main/WorkspaceDeadlineTaskWrapper"
 import TaskTimelineView from "components/task/timeline/TaskTimelineView"
+import {
+  faPeopleGroup,
+  faBullhorn,
+  faFileCircleExclamation,
+  faStopwatch,
+} from "@fortawesome/free-solid-svg-icons"
+import SectionTitleWrapper from "../../components/workspace/main/SectionTitleWrapper"
 
 const WorkspaceMain: React.FC = () => {
   const { workspace } = getWorkspaceStore()
@@ -44,8 +51,24 @@ const WorkspaceMain: React.FC = () => {
           mt: 2,
         }}
       >
-        <WorkspaceNotice />
-        <WorkspaceParticipants />
+        <SectionTitleWrapper
+          width="80%"
+          color="#E25860"
+          icon={faBullhorn}
+          title="공지사항"
+        >
+          <WorkspaceNotice />
+        </SectionTitleWrapper>
+        <SectionTitleWrapper
+          width="20%"
+          maxWidth="265px"
+          color="#3A4CA8"
+          icon={faPeopleGroup}
+          title="구성원"
+          pl={4}
+        >
+          <WorkspaceParticipants />
+        </SectionTitleWrapper>
       </Box>
       <Box
         component="div"
@@ -58,8 +81,25 @@ const WorkspaceMain: React.FC = () => {
           mt: 2,
         }}
       >
-        <TaskTimelineView params={{ my: true }} height="100%" />
-        <WorkspaceDeadlineTaskWrapper />
+        <SectionTitleWrapper
+          width="80%"
+          height="5%"
+          color="#B96BC6"
+          icon={faStopwatch}
+          title="타임라인"
+        >
+          <TaskTimelineView params={{ my: true }} height="85%" />
+        </SectionTitleWrapper>
+        <SectionTitleWrapper
+          width="20%"
+          height="5%"
+          color="#7DB249"
+          icon={faFileCircleExclamation}
+          title="할일 D-3"
+          pl={4}
+        >
+          <WorkspaceDeadlineTaskWrapper />
+        </SectionTitleWrapper>
       </Box>
     </Box>
   ) : null
