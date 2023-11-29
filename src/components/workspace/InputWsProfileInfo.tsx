@@ -1,5 +1,4 @@
 import React from "react"
-import Box from "@mui/material/Box"
 import {
   FormControl,
   FormHelperText,
@@ -8,14 +7,15 @@ import {
   Select,
   Stack,
   TextField,
+  Typography,
+  Box,
 } from "@mui/material"
-import Typography from "@mui/material/Typography"
-import ImageInput from "components/image/ImageInput"
-import { WsProfileInfo } from "api/workspace"
 import { imageUploadApi } from "api/image"
-import useImageUrlInputRef from "hooks/useImageUrlInputRef"
-import { MemberEmail } from "_types/member"
 import { myEmailsApi } from "api/member"
+import { WsProfileInfo } from "api/workspace"
+import { MemberEmail } from "_types/member"
+import useImageUrlInputRef from "hooks/useImageUrlInputRef"
+import ImageInput from "components/image/ImageInput"
 
 interface Props {
   wsProfileInfo: WsProfileInfo
@@ -59,8 +59,8 @@ const InputWsProfileInfo: React.FC<Props> = ({
         <Box display="flex" justifyContent="center">
           <Box>
             <ImageInput
-              width={140}
-              height={140}
+              width={150}
+              height={150}
               borderRadius={20}
               imageUrl={imageUrl}
               onImageChange={onImageChange}
@@ -75,7 +75,7 @@ const InputWsProfileInfo: React.FC<Props> = ({
               }
             />
           </Box>
-          <Box display="flex" alignItems="center" sx={{ width: "100%" }}>
+          <Box display="flex" sx={{ width: "100%" }}>
             <Stack spacing={1} sx={{ width: "100%" }}>
               <Box>
                 <TextField
