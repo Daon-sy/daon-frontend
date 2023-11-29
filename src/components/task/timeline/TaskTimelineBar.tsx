@@ -12,7 +12,6 @@ interface Props {
     year: number
     month: number
   }
-  minStartDate: Date
   totalWidth: number
 }
 
@@ -20,7 +19,6 @@ const TaskTimelineBar = ({
   task,
   index = 0,
   baseYearMonth,
-  minStartDate,
   totalWidth,
 }: Props) => {
   const { workspace } = getWorkspaceStore()
@@ -35,25 +33,29 @@ const TaskTimelineBar = ({
       const dateCount =
         Math.abs((start.getTime() - end.getTime()) / (1000 * 60 * 60 * 24)) + 1
       const { year: baseYear, month: baseMonth } = baseYearMonth
-      const blankCount = Math.abs(
-        (start.getTime() - new Date(baseYear, baseMonth - 1, 1).getTime()) /
-          (1000 * 60 * 60 * 24),
+      const blankCount = Math.floor(
+        Math.abs(
+          (start.getTime() - new Date(baseYear, baseMonth - 1, 1).getTime()) /
+            (1000 * 60 * 60 * 24),
+        ),
       )
 
-      const monthSub =
-        (minStartDate.getFullYear() - baseYear) * 12 +
-        (minStartDate.getMonth() - baseMonth)
-
       return (
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            zIndex: 1,
+          }}
+        >
           <Tooltip title={`${task.startDate} ~ ${task.endDate}`} arrow>
             <Box
               sx={{
                 position: "relative",
-                left: blankCount * dateWidth - (monthSub + 1),
+                left: blankCount * dateWidth,
                 borderRadius: 1,
                 height: taskHeight * 0.55,
-                width: dateCount * dateWidth - 1,
+                width: dateCount * dateWidth,
                 backgroundColor: "#B96BC6",
                 "&:hover": {
                   backgroundColor: "rgba(185,107,198,0.74)",

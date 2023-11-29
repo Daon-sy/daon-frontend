@@ -62,17 +62,10 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
     )
   }
 
-  const [yearMonthDateCountList] = React.useState<YearMonthDateCount[]>(
-    getDateCountArray({
-      startDate: getMinStartDate(),
-      endDate: getMaxEndDate(),
-    }),
-  )
-
-  const totalWidth =
-    yearMonthDateCountList
-      .map(ymdc => ymdc.dateCount)
-      .reduce((prev, curr) => prev + curr) * dateWidth
+  const [yearMonthDateCountList, setYearMonthDateCountList] = React.useState<
+    YearMonthDateCount[]
+  >([])
+  const [totalWidth, setTotalWidth] = React.useState(0)
 
   const boxRef = React.useRef<HTMLDivElement>(null)
 
@@ -87,6 +80,18 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
   }
 
   React.useEffect(() => {
+    const tmp = getDateCountArray({
+      startDate: getMinStartDate(),
+      endDate: getMaxEndDate(),
+    })
+    setYearMonthDateCountList(tmp)
+    setTotalWidth(
+      tmp.map(ymdc => ymdc.dateCount).reduce((prev, curr) => prev + curr) *
+        dateWidth,
+    )
+  }, [tasks])
+
+  React.useEffect(() => {
     if (boxRef.current) {
       const blankCount = getBlankCount()
 
@@ -98,7 +103,7 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
     }
   })
 
-  if (tasks.length <= 0) return <Box />
+  if (tasks.length <= 0 || yearMonthDateCountList.length < 2) return <Box />
   return (
     <>
       <Box
@@ -144,6 +149,8 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
               display: "flex",
               flexDirection: "column",
               borderRight: "1px solid #C8C8C8FF",
+              borderBottom: 1,
+              borderColor: "#C8C8C8FF",
             }}
           >
             <Box
@@ -196,15 +203,60 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
         <Box
           sx={{
             position: "relative",
+            left: taskWidth,
           }}
         >
-          <Box sx={{ display: "flex", position: "absolute", zIndex: 3 }}>
+          {/* 오늘 날짜 선 */}
+          {/* <Tooltip title={todayDateToString()} placement="top"> */}
+          <Box
+            sx={{
+              zIndex: 2,
+              position: "absolute",
+              left: dateWidth * getBlankCount(),
+              top: headerHeight,
+              width: 5,
+              height: taskHeight * tasks.length,
+              borderLeft: 1,
+              borderWidth: 2,
+              borderColor: "#FFBE00",
+              "&:hover": {
+                borderColor: "#dca900",
+              },
+            }}
+          />
+          {/* </Tooltip> */}
+          {/* header */}
+          <Box sx={{ display: "flex" }} position="sticky" top={0} zIndex={2}>
+            {yearMonthDateCountList.map(ymdc => (
+              <Box
+                sx={{
+                  width: dateWidth * ymdc.dateCount,
+                  height: headerHeight,
+                  display: "flex",
+                  backgroundColor: "#F1F2F4FF",
+                  boxSizing: "border-box",
+                  borderBottom: 1,
+                  borderRight: 1,
+                  borderColor: "#C8C8C8FF",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 12,
+                }}
+              >
+                {currentDate.getFullYear() !== ymdc.year
+                  ? `${ymdc.year}년 `
+                  : null}
+                {ymdc.month}월
+              </Box>
+            ))}
+          </Box>
+          <Box display="flex" position="absolute">
             {yearMonthDateCountList.map((ymdc, index) => (
               <Box
                 sx={{
-                  position: "relative",
-                  width: dateWidth * ymdc.dateCount - 1,
-                  height: headerHeight + taskHeight * tasks.length,
+                  width: dateWidth * ymdc.dateCount,
+                  height: taskHeight * tasks.length,
+                  boxSizing: "border-box",
                   borderRight:
                     index < yearMonthDateCountList.length - 1 ? 1 : 0,
                   borderColor: "#c8c8c8",
@@ -213,56 +265,13 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
               />
             ))}
           </Box>
-          {/* 오늘 날짜 선 */}
-          <Tooltip title={todayDateToString()} placement="top">
-            <Box
-              sx={{
-                zIndex: 1,
-                position: "absolute",
-                left: dateWidth * getBlankCount(),
-                top: headerHeight,
-                width: 5,
-                height: taskHeight * tasks.length,
-                borderLeft: 1,
-                borderWidth: 2,
-                borderColor: "#FFBE00",
-                "&:hover": {
-                  borderColor: "#dca900",
-                },
-              }}
-            />
-          </Tooltip>
-          {/* header */}
-          <Box sx={{ display: "flex" }} position="sticky" top={0} zIndex={2}>
-            {yearMonthDateCountList.map(ymdc => (
-              <Box
-                sx={{
-                  display: "flex",
-                  backgroundColor: "#F1F2F4FF",
-                  borderBottom: 1,
-                  borderColor: "#C8C8C8FF",
-                }}
-              >
-                <Box
-                  sx={{
-                    width: dateWidth * ymdc.dateCount,
-                    height: headerHeight,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: 12,
-                  }}
-                >
-                  {currentDate.getFullYear() !== ymdc.year
-                    ? `${ymdc.year}년 `
-                    : null}
-                  {ymdc.month}월
-                </Box>
-              </Box>
-            ))}
-          </Box>
           {/* 할 일 타임라인 */}
-          <Box>
+          <Box
+            sx={{
+              borderBottom: 1,
+              borderColor: "#C8C8C8FF",
+            }}
+          >
             {tasks.map((task, index) => (
               <TaskTimelineBar
                 task={task}
@@ -270,7 +279,6 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
                   year: yearMonthDateCountList[0].year,
                   month: yearMonthDateCountList[0].month,
                 }}
-                minStartDate={getMinStartDate()}
                 totalWidth={totalWidth}
                 index={index}
               />

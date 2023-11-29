@@ -19,12 +19,14 @@ export const getDateCount = ({ year, month }: YearMonth): number =>
 export const getDateCountArray = ({
   startDate,
   endDate,
+  monthRange = 3,
 }: {
   startDate: Date
   endDate: Date
+  monthRange?: number
 }): YearMonthDateCount[] => {
   let startYear = startDate.getFullYear()
-  let startMonth = startDate.getMonth() - 5
+  let startMonth = startDate.getMonth() - monthRange + 1
   if (startMonth < 1) {
     startYear -= 1
     startMonth += 12
@@ -32,7 +34,7 @@ export const getDateCountArray = ({
 
   // 최대 마감일로부터 반년 후 날짜
   let endYear = endDate.getFullYear()
-  let endMonth = endDate.getMonth() + 7
+  let endMonth = endDate.getMonth() + monthRange + 1
   if (endMonth > 12) {
     endYear += 1
     endMonth -= 12

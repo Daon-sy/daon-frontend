@@ -1,42 +1,41 @@
 import React from "react"
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
-  Stack,
 } from "@mui/material"
 
 interface Props {
-  open: boolean
+  open?: boolean
   children?: React.ReactNode
   handleConfirm: () => void
   handleClose: () => void
   confirmButtonText?: string
-  cancelButtonText?: string
   maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false
 }
 
-export const ConfirmDialog = ({
-  open,
+export const AlertDialog = ({
+  open = false,
   children,
   handleConfirm,
   handleClose,
   confirmButtonText,
-  cancelButtonText,
   maxWidth = "xs",
 }: Props) => {
   return (
     <Dialog open={open} onClose={handleClose} maxWidth={maxWidth}>
       <DialogContent>{children}</DialogContent>
       <DialogActions>
-        <Stack
-          direction="row"
-          spacing={3}
-          sx={{ width: "100%", mx: 3, mb: 2.5 }}
+        <Box
+          width="100%"
+          mx={3}
+          mb={2.5}
+          display="flex"
+          justifyContent="center"
         >
           <Button
-            fullWidth
             autoFocus
             color="primary"
             variant="contained"
@@ -44,35 +43,29 @@ export const ConfirmDialog = ({
               handleConfirm()
               handleClose()
             }}
+            sx={{
+              width: 1 / 2,
+            }}
           >
             {confirmButtonText || "확인"}
           </Button>
-          <Button
-            fullWidth
-            color="primary"
-            variant="outlined"
-            onClick={handleClose}
-          >
-            {cancelButtonText || "취소"}
-          </Button>
-        </Stack>
+        </Box>
       </DialogActions>
     </Dialog>
   )
 }
 
-interface useConfirmDialogProps {
+interface useAlertDialogProps {
   children?: React.ReactNode
-  handleConfirm?: () => void
+  handleConfirm: () => void
   confirmButtonText?: string
-  cancelButtonText?: string
   maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false
 }
 
 /**
- * ConfirmDialog 사용 hook
+ * AlertDialog 사용 hook
  */
-export const useConfirmDialog = () => {
+export const useAlertDialog = () => {
   const [isOpen, setIsOpen] = React.useState(false)
 
   const open = React.useCallback(() => {
@@ -84,27 +77,22 @@ export const useConfirmDialog = () => {
   }, [])
 
   return {
-    ConfirmDialog: isOpen
+    AlertDialog: isOpen
       ? ({
           children,
           handleConfirm,
           confirmButtonText,
-          cancelButtonText,
           maxWidth = "xs",
-        }: useConfirmDialogProps) => (
-          <ConfirmDialog
+        }: useAlertDialogProps) => (
+          <AlertDialog
             open={isOpen}
-            handleConfirm={() => {
-              if (handleConfirm) handleConfirm()
-              close()
-            }}
+            handleConfirm={handleConfirm}
             handleClose={close}
             confirmButtonText={confirmButtonText}
-            cancelButtonText={cancelButtonText}
             maxWidth={maxWidth}
           >
             {children}
-          </ConfirmDialog>
+          </AlertDialog>
         )
       : () => null,
     open,
@@ -113,4 +101,4 @@ export const useConfirmDialog = () => {
   }
 }
 
-export default ConfirmDialog
+export default AlertDialog

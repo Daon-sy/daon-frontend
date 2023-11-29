@@ -1,11 +1,10 @@
 import React from "react"
 import Box from "@mui/material/Box"
-import { FormHelperText, Stack, TextField } from "@mui/material"
-import Typography from "@mui/material/Typography"
-import ImageInput from "components/image/ImageInput"
-import useImageUrlInputRef from "hooks/useImageUrlInputRef"
+import { FormHelperText, Stack, TextField, Typography } from "@mui/material"
 import { imageUploadApi } from "api/image"
 import { WorkspaceInfo } from "api/workspace"
+import useImageUrlInputRef from "hooks/useImageUrlInputRef"
+import ImageInput from "components/image/ImageInput"
 
 interface Props {
   workspaceInfo: WorkspaceInfo
@@ -36,10 +35,11 @@ const InputWorkspaceInfo: React.FC<Props> = ({
     <Box>
       <Stack spacing={2}>
         <Typography variant="h6">워크스페이스 정보 입력</Typography>
-        <Box display="flex" alignItems="center">
+        <Box display="flex" justifyContent="center">
           <ImageInput
-            width={140}
-            height={140}
+            width={150}
+            height={150}
+            borderRadius={20}
             imageUrl={imageUrl}
             onImageChange={onImageChange}
           />
@@ -57,7 +57,6 @@ const InputWorkspaceInfo: React.FC<Props> = ({
                 <TextField
                   fullWidth
                   required
-                  size="small"
                   label="워크스페이스 이름"
                   variant="outlined"
                   value={title}
@@ -76,7 +75,6 @@ const InputWorkspaceInfo: React.FC<Props> = ({
               <Box>
                 <TextField
                   fullWidth
-                  size="small"
                   label="워크스페이스 목적"
                   variant="outlined"
                   value={subject}
@@ -98,7 +96,6 @@ const InputWorkspaceInfo: React.FC<Props> = ({
         <Box>
           <TextField
             fullWidth
-            size="small"
             multiline
             rows={5}
             label="워크스페이스 설명"
