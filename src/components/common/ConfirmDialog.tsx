@@ -1,21 +1,11 @@
 import React from "react"
 import {
   Button,
-  ButtonProps,
   Dialog,
   DialogActions,
   DialogContent,
   Stack,
 } from "@mui/material"
-import { styled } from "@mui/material/styles"
-
-const ConfirmButton = styled(Button)<ButtonProps>(({ theme }) => ({
-  color: theme.palette.getContrastText("#1F4838"),
-  backgroundColor: "#1F4838",
-  "&:hover": {
-    backgroundColor: "#295644",
-  },
-}))
 
 interface Props {
   open: boolean
@@ -45,9 +35,10 @@ export const ConfirmDialog = ({
           spacing={3}
           sx={{ width: "100%", mx: 3, mb: 2.5 }}
         >
-          <ConfirmButton
+          <Button
             fullWidth
             autoFocus
+            color="primary"
             variant="contained"
             onClick={() => {
               handleConfirm()
@@ -55,11 +46,11 @@ export const ConfirmDialog = ({
             }}
           >
             {confirmButtonText || "확인"}
-          </ConfirmButton>
+          </Button>
           <Button
             fullWidth
+            color="primary"
             variant="outlined"
-            color="inherit"
             onClick={handleClose}
           >
             {cancelButtonText || "취소"}
