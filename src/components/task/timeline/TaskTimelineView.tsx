@@ -1,12 +1,11 @@
 import React from "react"
 import { Box } from "@mui/material"
-import Tooltip from "@mui/material/Tooltip"
 import { TaskListApiParams } from "api/task"
 import { getWorkspaceStore } from "store/userStore"
 import { getTaskDetailViewStore } from "store/taskStore"
 import { getTaskTimelineStore } from "store/taskTimelineStore"
 import useFetchTaskList from "hooks/task/useFetchTaskList"
-import { getDateCountArray, todayDateToString } from "utils/DateUtils"
+import { getDateCountArray } from "utils/DateUtils"
 import TaskDetailModal from "components/task/modal/TaskDetailModal"
 import TaskTimelineBar from "components/task/timeline/TaskTimelineBar"
 
