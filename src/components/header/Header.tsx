@@ -1,10 +1,11 @@
-import * as React from "react"
+import React from "react"
 import { AppBar, Box, Toolbar } from "@mui/material"
 import { yellow } from "@mui/material/colors"
 import NotificationsIcon from "@mui/icons-material/Notifications"
-import SearchInput from "./SearchInput"
-import User from "./UserInfo"
-import Nav from "./Nav"
+import Logo from "components/header/Logo"
+import User from "components/header/UserInfo"
+import SearchInput from "components/header/SearchInput"
+import WorkspaceSelectButton from "components/workspace/WorkspaceSelectButton"
 
 const Header: React.FC = () => {
   return (
@@ -18,8 +19,8 @@ const Header: React.FC = () => {
       }}
     >
       <Toolbar>
-        {/* Nav */}
-        <Nav />
+        <Logo />
+        <WorkspaceSelectButton />
         {/* 검색창 */}
         <SearchInput />
 

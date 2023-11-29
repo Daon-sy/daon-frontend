@@ -17,6 +17,13 @@ const theme = createTheme({
       default: "#F6F7F9",
     },
   },
+  typography: {
+    fontSize: 14,
+    // 버튼 텍스트 자동 대문자 변환 off
+    button: {
+      textTransform: "none",
+    },
+  },
 })
 
 function App() {
