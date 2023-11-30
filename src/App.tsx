@@ -7,16 +7,24 @@ import RefreshComponent from "auth/RefreshComponent"
 declare module "@mui/material/styles" {
   interface Palette {
     green: Palette["primary"]
+    lightRed: Palette["primary"]
   }
 
   interface PaletteOptions {
     green?: PaletteOptions["primary"]
+    lightRed?: PaletteOptions["primary"]
   }
 }
 
 // Update the Button's color options to include a salmon option
 declare module "@mui/material/Button" {
   interface ButtonPropsColorOverrides {
+    green: true
+  }
+}
+
+declare module "@mui/material/Chip" {
+  interface ChipPropsColorOverrides {
     green: true
   }
 }
@@ -29,6 +37,14 @@ let theme = createTheme({
     },
     secondary: {
       main: "#FFBE00",
+      contrastText: "#FFFFFF",
+    },
+    success: {
+      main: "#3A4CA8",
+      contrastText: "#FFFFFF",
+    },
+    error: {
+      main: "#AE3A1E",
       contrastText: "#FFFFFF",
     },
     background: {
@@ -51,6 +67,13 @@ theme = createTheme(theme, {
         contrastText: "#FFFFFF",
       },
       name: "green",
+    }),
+    lightRed: theme.palette.augmentColor({
+      color: {
+        main: "#FFECEC",
+        contrastText: "#FFFFFF",
+      },
+      name: "lightRed",
     }),
   },
 })
