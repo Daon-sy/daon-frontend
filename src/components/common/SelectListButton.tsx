@@ -9,6 +9,7 @@ import {
   Chip,
 } from "@mui/material"
 import { styled } from "@mui/material/styles"
+import Typography from "@mui/material/Typography"
 
 const StyledMenu = styled((props: MenuProps) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -57,8 +58,10 @@ interface Props<T extends ItemType> {
   changeButtonColor?: true | false
   disableChangeButtonText?: true | false
   variant?: "outlined" | "contained"
+  color?: "primary" | "secondary" | "green"
   clearOnListUpdated?: true | false
   fontSize?: number
+  fontWeight?: number | string
   buttonSize?: "small" | "large" | "medium"
   readonly?: boolean
 }
@@ -75,8 +78,10 @@ const SelectListButton = <T extends ItemType>({
   changeButtonColor = false,
   disableChangeButtonText = false,
   variant = "outlined",
+  color = "primary",
   clearOnListUpdated = false,
   fontSize = 14,
+  fontWeight = 500,
   buttonSize = "medium",
   readonly = false,
 }: Props<T>) => {
@@ -131,7 +136,7 @@ const SelectListButton = <T extends ItemType>({
                 | "primary"
                 | "success"
                 | "warning")
-            : "info"
+            : color || "info"
         }
         endIcon={endMuiIcon}
         sx={{
@@ -140,9 +145,9 @@ const SelectListButton = <T extends ItemType>({
         size={buttonSize}
       >
         {leftMuiIcon}
-        <Box pl={leftMuiIcon ? 1 : 0} sx={{ fontSize }}>
+        <Typography pl={leftMuiIcon ? 1 : 0} sx={{ fontSize, fontWeight }}>
           {selectedValue ? selectedValue.text : unsetButtonText}
-        </Box>
+        </Typography>
       </Button>
       <StyledMenu
         anchorEl={anchorEl}
