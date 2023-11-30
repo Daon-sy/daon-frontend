@@ -56,6 +56,7 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
         borderRadius: "4px",
         mb: "8px",
         background: "#f6f7f9",
+        width: "495px",
       }}
       key={reply.replyId}
     >
@@ -140,8 +141,8 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
             inputProps={{ maxLength: 500 }}
             sx={{
               boxSizing: "border-box",
-              width: "488px",
-              paddingLeft: "28px",
+              width: "480px",
+              paddingLeft: "24px",
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "normal",
@@ -157,8 +158,8 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
           component="div"
           sx={{
             boxSizing: "border-box",
-            width: "512px",
-            paddingLeft: "28px",
+            width: "480px",
+            paddingLeft: "24px",
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "normal",
