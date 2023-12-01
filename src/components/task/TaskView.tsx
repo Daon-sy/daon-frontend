@@ -10,12 +10,14 @@ import TaskTableWrapper from "components/task/table/TaskTableWrapper"
 import TaskDetailModal from "components/task/modal/TaskDetailModal"
 import useEventSource from "hooks/sse/useEventSource"
 import useFetchTaskList from "hooks/task/useFetchTaskList"
+import Typography from "@mui/material/Typography"
 
 interface TaskViewProps {
   params?: TaskListApiParams
+  title?: string
 }
 
-const TaskView: React.FC<TaskViewProps> = ({ params }) => {
+const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
   const [viewType, setViewType] = React.useState<string>("kanban")
   const { workspace } = getWorkspaceStore()
   const { taskDetailParam, clear } = getTaskDetailViewStore()
@@ -55,14 +57,45 @@ const TaskView: React.FC<TaskViewProps> = ({ params }) => {
   }
 
   return (
-    <Box sx={{ height: "100%" }}>
+    <Box height="100%">
       <IconBreadcrumbs />
-      <TaskHeader
-        viewType={viewType}
-        setViewType={setViewType}
-        taskListApiParams={params}
-      />
-      {renderView()}
+      {title ? (
+        <Typography mt={1} variant="h2" sx={{ fontSize: 24, fontWeight: 900 }}>
+          {title}
+        </Typography>
+      ) : null}
+      <Box mt={2}>
+        <TaskHeader
+          viewType={viewType}
+          setViewType={setViewType}
+          taskListApiParams={params}
+        />
+      </Box>
+      <Box
+        mt={2}
+        mb={2}
+        height="70%"
+        overflow="hidden"
+        sx={{
+          overflowY: "scroll",
+          borderRadius: 1,
+          "&::-webkit-scrollbar": {
+            width: "8px",
+            borderColor: "#C8C8C8FF",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            position: "absolute",
+            backgroundColor: "#495e57",
+            borderRadius: "4px",
+          },
+          "&::-webkit-scrollbar-button": {
+            width: "0px",
+            height: "0px",
+          },
+        }}
+      >
+        {renderView()}
+      </Box>
       {taskDetailParam ? (
         <TaskDetailModal
           workspaceId={taskDetailParam.workspaceId}

@@ -112,24 +112,16 @@ const TaskKanbansWrapper: React.FC<TaskKanbansWrapperProps> = ({
     <DragDropContext onDragEnd={handleDragEnd}>
       <Box
         sx={{
-          paddingRight: 5,
           width: "100%",
-          height: "80%",
+          // height: "80%",
           minHeight: "555px",
-          overflow: "scroll",
-          overflowX: "hidden",
-          marginTop: 2,
+          // overflow: "scroll",
+          // overflowX: "hidden",
+          borderRadius: 1,
+          // border: 1,
         }}
       >
-        <Stack
-          direction="row"
-          sx={{
-            width: "100%",
-            padding: 1,
-            marginTop: 2,
-          }}
-          spacing={2}
-        >
+        <Stack direction="row" sx={{ width: "100%" }} spacing={2}>
           {renderKanbanBoards()}
         </Stack>
       </Box>
