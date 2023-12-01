@@ -1,10 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from "react"
 import Box from "@mui/material/Box"
-import { Chip, Divider } from "@mui/material"
+import { Chip } from "@mui/material"
 import TaskCard from "components/task/kanban/TaskCard"
 import { TaskSummary } from "_types/task"
 import { Droppable, Draggable } from "react-beautiful-dnd"
+import Typography from "@mui/material/Typography"
 
 interface Props {
   title: string
@@ -12,6 +13,7 @@ interface Props {
   style: React.CSSProperties
   progressStatus: string
   tasks: Array<TaskSummary>
+  renderProject?: boolean
 }
 
 const TaskKanbanBoard: React.FC<Props> = ({
@@ -20,6 +22,7 @@ const TaskKanbanBoard: React.FC<Props> = ({
   style,
   tasks,
   progressStatus,
+  renderProject = false,
 }: Props) => {
   return (
     <Droppable droppableId={progressStatus}>
@@ -28,48 +31,54 @@ const TaskKanbanBoard: React.FC<Props> = ({
           ref={droppableProvided.innerRef}
           {...droppableProvided.droppableProps}
           style={style}
+          sx={{
+            backgroundColor: "#FFFFFF",
+            borderTopStyle: "solid",
+            borderTopColor: dividerColor,
+            borderTopWidth: 10,
+            borderRadius: 1,
+          }}
         >
           <Box
             sx={{
-              fontSize: 24,
-              fontWeight: 500,
-              paddingLeft: 0.5,
-              paddingBottom: 2,
+              display: "flex",
+              alignItems: "center",
+              paddingLeft: 2,
+              paddingTop: 1,
               margin: 0.5,
             }}
           >
-            {title}
+            <Typography
+              fontSize={24}
+              fontWeight={900}
+              sx={{ color: dividerColor }}
+            >
+              {title}
+            </Typography>
             <Chip
               label={tasks.length}
               variant="outlined"
               size="small"
               sx={{
+                border: 0,
                 marginLeft: 2,
-                paddingX: 1,
+                fontSize: 16,
+                fontWeight: 900,
                 color: "rgba(150, 150, 150)",
+                backgroundColor: "rgb(229,229,229)",
               }}
             />
           </Box>
           <Box
             sx={{
-              margin: 0.5,
-            }}
-          >
-            <Divider
-              sx={{
-                border: "2px solid",
-                borderColor: dividerColor,
-              }}
-            />
-          </Box>
-          <Box
-            sx={{
-              margin: 1,
-              marginTop: 2.5,
-              paddingY: 0.1,
-              backgroundColor: "rgba(242, 246, 252)",
+              marginX: 1,
+              paddingBottom: 1,
               borderRadius: 2,
               height: "100%",
+              // display: "flex",
+              // flexDirection: "column",
+              // alignItems: "center",
+              // overflow: "hidden",
             }}
           >
             {tasks.map((task, index) => (
@@ -84,7 +93,7 @@ const TaskKanbanBoard: React.FC<Props> = ({
                     {...draggableProvided.draggableProps}
                     {...draggableProvided.dragHandleProps}
                   >
-                    <TaskCard task={task} />
+                    <TaskCard task={task} renderProject={renderProject} />
                   </div>
                 )}
               </Draggable>
