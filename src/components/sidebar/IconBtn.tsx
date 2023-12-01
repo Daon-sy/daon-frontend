@@ -25,6 +25,7 @@ const IconBtn = ({ text, icon, onClick, to, component }: IconBtnProps) => {
         border: "none",
         color: "#303633",
         borderRadius: "10px",
+        textDecoration: "none",
         cursor: "pointer",
         "&:hover": {
           bgcolor: "rgba(146, 146, 146, 0.1)",
