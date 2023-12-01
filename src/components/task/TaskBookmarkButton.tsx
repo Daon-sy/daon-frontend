@@ -25,7 +25,7 @@ const TaskBookmarkButton = ({ bookmarked, handleClick }: Props) => {
         }}
       >
         {bookmarked ? (
-          <BookmarkIcon sx={{ color: "#82b89b" }} />
+          <BookmarkIcon sx={{ color: "secondary.main" }} />
         ) : (
           <BookmarkBorderIcon />
         )}

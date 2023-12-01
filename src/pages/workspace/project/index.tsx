@@ -2,9 +2,9 @@ import React from "react"
 import { Route, Routes, useParams } from "react-router-dom"
 import { getProjectStore, getWorkspaceStore } from "store/userStore"
 import { projectDetailApi } from "api/project"
-import ProjectMain from "pages/workspace/project/ProjectMain"
 import BoardRoutes from "pages/workspace/project/board"
 import TaskRoutes from "pages/workspace/project/task"
+import ProjectTaskView from "pages/workspace/project/task/ProjectTaskView"
 
 const ProjectDetailRoutes = () => {
   const { workspace } = getWorkspaceStore()
@@ -27,7 +27,7 @@ const ProjectDetailRoutes = () => {
 
   return (
     <Routes>
-      <Route index element={<ProjectMain />} />
+      <Route index element={<ProjectTaskView />} />
       <Route path="/board/*" element={<BoardRoutes />} />
       <Route path="/task/*" element={<TaskRoutes />} />
     </Routes>
