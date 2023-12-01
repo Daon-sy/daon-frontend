@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCrown, faLeaf } from "@fortawesome/free-solid-svg-icons"
 
 const WorkspaceParticipants: React.FC = () => {
-  const { workspace } = getWorkspaceStore()
+  const { workspace, myProfile } = getWorkspaceStore()
   const [workspaceParticipants, setWorkspaceParticipants] = React.useState<
     Array<WorkspaceParticipant>
   >([])
@@ -23,7 +23,7 @@ const WorkspaceParticipants: React.FC = () => {
 
   React.useEffect(() => {
     fetchWorkspaceParticipants()
-  }, [])
+  }, [myProfile])
 
   const getColorByIndex = (index: number) => {
     const colors = ["#9bd9e5", "#f2625a", "#fedc7a", "#8dcfb0"]
