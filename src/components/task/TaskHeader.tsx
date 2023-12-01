@@ -18,6 +18,12 @@ import { TaskListApiParams } from "api/task"
 import { getTaskListFilterStore } from "store/taskStore"
 import { getProjectsStore, getWorkspaceStore } from "store/userStore"
 import useFetchBoardList from "hooks/project/useFetchBoardList"
+import Typography from "@mui/material/Typography"
+import { styled } from "@mui/material/styles"
+
+const SelectItem = styled(MenuItem)({
+  fontSize: 14,
+})
 
 interface Props {
   viewType?: string
@@ -51,7 +57,8 @@ const TaskHeader: React.FC<Props> = ({
   const { clear: clearFilter } = getTaskListFilterStore()
 
   React.useEffect(() => {
-    clearFilter()
+    if (taskListApiParams?.my) setFilter({ my: true })
+    else clearFilter()
   }, [taskListApiParams?.my, taskListApiParams?.bookmarked])
 
   React.useEffect(() => {
@@ -68,10 +75,17 @@ const TaskHeader: React.FC<Props> = ({
 
   return (
     <Box
-      sx={{ display: "flex", alignItems: "center", backgroundColor: "#FFFFFF" }}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        backgroundColor: "#FFFFFF",
+        borderRadius: 1,
+        p: 1,
+        color: "primary.main",
+      }}
     >
       {/* 뷰 방식 변경 */}
-      <Box>
+      <Box flexGrow={1}>
         <ToggleButtonGroup
           value={viewType}
           exclusive
@@ -79,17 +93,18 @@ const TaskHeader: React.FC<Props> = ({
           sx={{
             backgroundColor: "white",
           }}
+          size="small"
         >
           <ToggleButton value="kanban">
-            <ViewKanbanIcon />
+            <ViewKanbanIcon fontSize="small" />
           </ToggleButton>
           <ToggleButton value="table">
-            <TableChartIcon />
+            <TableChartIcon fontSize="small" />
           </ToggleButton>
         </ToggleButtonGroup>
       </Box>
       {/* 검색어 입력 */}
-      <Box height="100%">
+      <Box height="100%" width={400}>
         <TextField
           fullWidth
           autoComplete="off"
@@ -111,34 +126,38 @@ const TaskHeader: React.FC<Props> = ({
       </Box>
       {/* 프로젝트 선택 */}
       {/* multi select ?? 추후 고려 Select Item Grouping */}
-      {taskListApiParams?.projectId ? null : (
-        <Box width={200}>
-          <FormControl fullWidth>
-            <Select
-              displayEmpty
-              size="small"
-              sx={{ fontSize: 14 }}
-              input={<OutlinedInput />}
-              onChange={e =>
-                setFilter({ ...filter, projectId: Number(e.target.value) })
-              }
-              value={filter.projectId}
-              renderValue={selected => {
-                return projects.find(project => project.projectId === selected)
-                  ?.title
-              }}
-            >
-              <MenuItem value={undefined}>선택안함</MenuItem>
-              {projects.map(project => (
-                <MenuItem value={project.projectId}>{project.title}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
-      )}
+      {/* {taskListApiParams?.projectId ? null : ( */}
+      <Box ml={2} display="flex" alignItems="center">
+        <Typography fontSize={18}>프로젝트</Typography>
+        <FormControl sx={{ width: 120, ml: 1 }}>
+          <Select
+            displayEmpty
+            size="small"
+            sx={{ fontSize: 14 }}
+            input={<OutlinedInput />}
+            disabled={!!taskListApiParams?.projectId}
+            onChange={e =>
+              setFilter({ ...filter, projectId: Number(e.target.value) })
+            }
+            value={filter.projectId || 0}
+            renderValue={selected => {
+              if (!filter.projectId) return ""
+              return projects.find(project => project.projectId === selected)
+                ?.title
+            }}
+          >
+            <SelectItem value={0}>선택안함</SelectItem>
+            {projects.map(project => (
+              <SelectItem value={project.projectId}>{project.title}</SelectItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
+      {/* )} */}
       {/* 보드 선택 */}
-      <Box width={200}>
-        <FormControl fullWidth>
+      <Box ml={2} display="flex" alignItems="center">
+        <Typography fontSize={18}>보드</Typography>
+        <FormControl sx={{ width: 120, ml: 1 }}>
           <Select
             displayEmpty
             size="small"
@@ -147,7 +166,7 @@ const TaskHeader: React.FC<Props> = ({
             onChange={e =>
               setFilter({ ...filter, boardId: Number(e.target.value) })
             }
-            value={filter.boardId}
+            value={filter.boardId || 0}
             renderValue={selected => {
               if (!filter.boardId) return ""
               return boards.find(board => board.boardId === selected)?.title
@@ -155,33 +174,40 @@ const TaskHeader: React.FC<Props> = ({
           >
             {filter.projectId ? (
               Array.of(
-                <MenuItem value={undefined}>선택안함</MenuItem>,
+                <SelectItem value={0}>선택안함</SelectItem>,
                 ...boards.map(board => (
-                  <MenuItem value={board.boardId}>{board.title}</MenuItem>
+                  <SelectItem value={board.boardId}>{board.title}</SelectItem>
                 )),
               )
             ) : (
-              <MenuItem disabled>먼저 프로젝트를 선택하세요</MenuItem>
+              <SelectItem disabled value={0}>
+                먼저 프로젝트를 선택하세요
+              </SelectItem>
             )}
           </Select>
         </FormControl>
       </Box>
       {/* 담당자 선택 */}
-      {taskListApiParams?.my ? null : (
-        <Box>
-          <Switch
-            checked={filter.my}
-            onChange={e => {
-              setFilter({ ...filter, my: e.target.checked })
-            }}
-          />
-        </Box>
-      )}
-      {/* 긴급 선택 */}
-      <Box>
+      <Box ml={2} display="flex" alignItems="center">
+        <Typography fontSize={18}>내 담당</Typography>
         <Switch
+          size="small"
+          checked={filter.my}
+          disabled={taskListApiParams?.my}
+          onChange={e => {
+            setFilter({ ...filter, my: e.target.checked })
+          }}
+        />
+      </Box>
+      {/* 긴급 선택 */}
+      <Box ml={2} display="flex" alignItems="center">
+        <Typography fontSize={18} color="error">
+          긴급
+        </Typography>
+        <Switch
+          size="small"
           color="error"
-          checked={filter.emergency}
+          checked={filter.emergency || false}
           onChange={e => {
             setFilter({ ...filter, emergency: e.target.checked })
           }}

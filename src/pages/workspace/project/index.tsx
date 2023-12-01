@@ -8,7 +8,7 @@ import ProjectTaskView from "pages/workspace/project/task/ProjectTaskView"
 
 const ProjectDetailRoutes = () => {
   const { workspace } = getWorkspaceStore()
-  const { setProject } = getProjectStore()
+  const { setProject, clear: clearProjectStore } = getProjectStore()
   const { projectId } = useParams()
 
   const fetchProjectDetail = async () => {
@@ -23,6 +23,7 @@ const ProjectDetailRoutes = () => {
 
   React.useEffect(() => {
     fetchProjectDetail()
+    return () => clearProjectStore()
   }, [projectId])
 
   return (

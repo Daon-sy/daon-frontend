@@ -4,13 +4,8 @@ import Box from "@mui/material/Box"
 
 const WorkspaceMytaskView: React.FC = () => {
   return (
-    <Box
-      sx={{
-        height: "100%",
-      }}
-    >
-      <h1>워크스페이스 내 나의 전체 할일</h1>
-      <TaskView params={{ my: true }} />
+    <Box sx={{ height: "100%" }}>
+      <TaskView params={{ my: true }} title="전체 내 할 일 목록" />
     </Box>
   )
 }
