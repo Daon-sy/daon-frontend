@@ -23,7 +23,7 @@ const WorkspaceParticipants: React.FC = () => {
 
   React.useEffect(() => {
     fetchWorkspaceParticipants()
-  }, [])
+  }, [workspace])
 
   const getColorByIndex = (index: number) => {
     const colors = ["#9bd9e5", "#f2625a", "#fedc7a", "#8dcfb0"]

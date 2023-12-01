@@ -81,10 +81,11 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
     )
   }
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
+    const now = new Date()
     const tmp = getDateCountArray({
-      startDate: getMinStartDate(),
-      endDate: getMaxEndDate(),
+      startDate: getMinStartDate() || now,
+      endDate: getMaxEndDate() || now,
     })
     setYearMonthDateCountList(tmp)
     setTotalWidth(
@@ -94,7 +95,7 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
   }, [tasks])
 
   React.useEffect(() => {
-    if (boxRef.current) {
+    if (boxRef.current && yearMonthDateCountList.length > 0) {
       const blankCount = getBlankCount()
 
       boxRef.current.scrollTo({
@@ -107,9 +108,8 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
 
   React.useEffect(() => {
     fetchTaskList()
-  }, [])
+  }, [workspace])
 
-  if (tasks.length <= 0 || yearMonthDateCountList.length < 2) return <Box />
   return (
     <>
       <Box
@@ -161,10 +161,12 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
           >
             <Box
               sx={{
+                width: taskWidth,
                 top: 0,
                 position: "sticky",
                 color: "#F1F2F4FF",
                 backgroundColor: "#F1F2F4FF",
+                boxSizing: "border-box",
                 borderBottom: 1,
                 borderColor: "#C8C8C8FF",
                 borderTopLeftRadius: 1,
@@ -218,7 +220,10 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
             sx={{
               zIndex: 2,
               position: "absolute",
-              left: dateWidth * getBlankCount(),
+              left:
+                yearMonthDateCountList.length > 0
+                  ? dateWidth * getBlankCount()
+                  : 0,
               top: headerHeight,
               width: 5,
               height: taskHeight * tasks.length,
