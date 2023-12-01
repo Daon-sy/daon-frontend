@@ -48,6 +48,8 @@ export interface TaskSummary {
   progressStatus: TASK_STATUS
   emergency: boolean
   bookmark: boolean
+  replyCount: number
+  myTask: boolean
 }
 
 export interface TaskDetail {

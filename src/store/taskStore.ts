@@ -19,4 +19,41 @@ export const getTaskDetailViewStore = create<TaskDetailViewStore>(set => ({
     set(() => ({ taskDetailParam })),
 }))
 
-export default { getTaskDetailViewStore }
+interface TaskListFilter {
+  keyword?: string
+  projectId?: number
+  boardId?: number
+  my?: boolean
+  emergency?: boolean
+}
+
+interface TaskListFilterStore {
+  filter: TaskListFilter
+  clear: () => void
+  setFilter: (filterParam: TaskListFilter) => void
+}
+
+export const getTaskListFilterStore = create<TaskListFilterStore>(set => ({
+  filter: {
+    keyword: "",
+    projectId: undefined,
+    boardId: undefined,
+    my: false,
+    emergency: false,
+  },
+  clear: () => {
+    set({
+      filter: {
+        keyword: "",
+        projectId: undefined,
+        boardId: undefined,
+        my: false,
+        emergency: false,
+      },
+    })
+  },
+  setFilter: (filterParam: TaskListFilter) =>
+    set(() => ({ filter: filterParam })),
+}))
+
+export default { getTaskDetailViewStore, getTaskListFilterStore }

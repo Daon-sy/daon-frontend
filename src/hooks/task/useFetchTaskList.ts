@@ -33,7 +33,7 @@ const useFetchTaskList = ({ workspaceId, params }: Props, skip = false) => {
   React.useEffect(() => {
     if (skip) return
     fetchTaskList()
-  }, [])
+  }, [params])
 
   return { tasks, fetchTaskList, isFetching, error }
 }
