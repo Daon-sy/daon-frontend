@@ -4,13 +4,8 @@ import Box from "@mui/material/Box"
 
 const BookmarkView: React.FC = () => {
   return (
-    <Box
-      sx={{
-        height: "100%",
-      }}
-    >
-      <h1>즐겨찾기 할일 View 페이지</h1>
-      <TaskView params={{ bookmarked: true }} />
+    <Box sx={{ height: "100%" }}>
+      <TaskView params={{ bookmarked: true }} title="북마크 할 일 목록" />
     </Box>
   )
 }

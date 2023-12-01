@@ -33,23 +33,27 @@ const TaskKanbanBoard: React.FC<Props> = ({
           style={style}
           sx={{
             backgroundColor: "#FFFFFF",
-            borderTopStyle: "solid",
-            borderTopColor: dividerColor,
-            borderTopWidth: 10,
-            borderRadius: 1,
           }}
         >
           <Box
             sx={{
+              backgroundColor: "#FFFFFF",
+              borderTopStyle: "solid",
+              borderTopColor: dividerColor,
+              borderTopWidth: 10,
+              borderRadius: 1,
+              top: 0,
+              position: "sticky",
               display: "flex",
               alignItems: "center",
               paddingLeft: 2,
               paddingTop: 1,
-              margin: 0.5,
+              paddingBottom: 1,
+              zIndex: 10,
             }}
           >
             <Typography
-              fontSize={24}
+              fontSize={20}
               fontWeight={900}
               sx={{ color: dividerColor }}
             >
@@ -75,10 +79,6 @@ const TaskKanbanBoard: React.FC<Props> = ({
               paddingBottom: 1,
               borderRadius: 2,
               height: "100%",
-              // display: "flex",
-              // flexDirection: "column",
-              // alignItems: "center",
-              // overflow: "hidden",
             }}
           >
             {tasks.map((task, index) => (
