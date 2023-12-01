@@ -3,6 +3,7 @@ import { Box } from "@mui/material"
 import { getWorkspaceStore } from "store/userStore"
 import { getTaskDetailViewStore } from "store/taskStore"
 import { TaskListApiParams } from "api/task"
+import IconBreadcrumbs from "components/common/IconBreadcrumbs"
 import TaskHeader from "components/task/TaskHeader"
 import TaskKanbansWrapper from "components/task/kanban/TaskKanbansWrapper"
 import TaskTableWrapper from "components/task/table/TaskTableWrapper"
@@ -55,6 +56,7 @@ const TaskView: React.FC<TaskViewProps> = ({ params }) => {
 
   return (
     <Box sx={{ height: "100%" }}>
+      <IconBreadcrumbs />
       <TaskHeader
         viewType={viewType}
         setViewType={setViewType}

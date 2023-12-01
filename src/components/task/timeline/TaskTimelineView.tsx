@@ -24,10 +24,13 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
   const [taskWidth] = React.useState(220)
 
   const { workspace } = getWorkspaceStore()
-  const { tasks } = useFetchTaskList({
-    workspaceId: workspace?.workspaceId || 0,
-    params,
-  })
+  const { tasks, fetchTaskList } = useFetchTaskList(
+    {
+      workspaceId: workspace?.workspaceId || 0,
+      params,
+    },
+    true,
+  )
   const { taskDetailParam, setTaskDetailParam, clear } =
     getTaskDetailViewStore()
   const { props: timelineProps } = getTaskTimelineStore()
@@ -101,6 +104,10 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
       })
     }
   })
+
+  React.useEffect(() => {
+    fetchTaskList()
+  }, [])
 
   if (tasks.length <= 0 || yearMonthDateCountList.length < 2) return <Box />
   return (
