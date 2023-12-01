@@ -2,8 +2,7 @@ import React from "react"
 import { Box, Typography } from "@mui/material"
 import { getMyMemberDetailStore } from "store/userStore"
 import MenuModal, { MenuWithPage } from "components/common/MenuModal"
-import MyPageDataManage from "../MyPageDataManage"
-import MyPageModify from "../MyPageModify"
+import MyPageDataManage from "../MyPage"
 
 interface MyPageProps {
   open: boolean
@@ -18,11 +17,6 @@ const MyPageModal = ({ open = false, handleClose }: MyPageProps) => {
       pageName: "Home",
       pageValue: "Home",
       pageComponent: <MyPageDataManage />,
-    },
-    {
-      pageName: "Modify",
-      pageValue: "Modify",
-      pageComponent: <MyPageModify />,
     },
   ]
 

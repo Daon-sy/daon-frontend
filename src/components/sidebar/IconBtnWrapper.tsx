@@ -6,8 +6,8 @@ import AddCircleIcon from "@mui/icons-material/AddCircle"
 import SettingsIcon from "@mui/icons-material/Settings"
 import BookmarkIcon from "@mui/icons-material/Bookmark"
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions"
-import WorkspaceParticipantsModal from "components/workspace/modal/WorkspaceParticipantsModal"
 import WorkspaceSettingsModal from "components/workspace/modal/WorkspaceSettingsModal"
+import ParticipantsModal from "components/common/ParticipantsModal"
 import { useCreateTaskModal } from "components/task/CreateTask"
 import IconBtn from "./IconBtn"
 
@@ -92,7 +92,11 @@ const IconBtnWrapper: React.FC = () => {
           handleClose={() => setWorkspaceManageModalOpen(false)}
         />
       ) : null}
-      <WorkspaceParticipantsModal
+      {/* <WorkspaceParticipantsModal
+        open={participantsModalOpen}
+        handleClose={() => setParticipantsModalOpen(false)}
+      /> */}
+      <ParticipantsModal
         open={participantsModalOpen}
         handleClose={() => setParticipantsModalOpen(false)}
       />

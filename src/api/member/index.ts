@@ -3,6 +3,7 @@ import { authAxios, basicAxios } from "api/index"
 import { MemberDetail, MemberEmail } from "_types/member"
 
 export const MEMBER_API_PREFIX = "/api/members"
+export const EMAIL_API_PREFIX = "/api/emails/verification"
 
 // ========== REQUEST ===========
 export interface SignUpRequestBody {
@@ -22,12 +23,25 @@ export interface AddEmailRequestBody {
   email: string
 }
 
+export interface SendVerificationEmailRequestBody {
+  email: string
+}
+
+export interface CheckVerificationEmailRequestBody {
+  email: string
+  code: string
+}
+
 // ========== RESPONSE ==========
 export type MyMemberDetailResponseBody = MemberDetail
 
 export interface MyEmailsResponseBody {
   totalCount: number
   memberEmails: Array<MemberEmail>
+}
+
+export interface CheckVerificationEmailResponseBody {
+  verified: boolean
 }
 
 // ========== API ==========
@@ -78,4 +92,16 @@ export const searchMemberByUsernameApi = async (
   username: string,
 ): Promise<AxiosResponse<SearchMemberByUsernameResponseBody>> => {
   return authAxios.get(`${MEMBER_API_PREFIX}`, { params: { username } })
+}
+
+export const sendVerificationEmailApi = async (
+  requestBody: SendVerificationEmailRequestBody,
+): Promise<AxiosResponse> => {
+  return basicAxios.post(`${EMAIL_API_PREFIX}/send`, requestBody)
+}
+
+export const checkVerificationEmailApi = async (
+  requestBody: CheckVerificationEmailRequestBody,
+): Promise<AxiosResponse<CheckVerificationEmailResponseBody>> => {
+  return authAxios.post(`${EMAIL_API_PREFIX}/check`, requestBody)
 }

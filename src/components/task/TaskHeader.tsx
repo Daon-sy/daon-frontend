@@ -37,7 +37,6 @@ const TaskHeader: React.FC<Props> = ({
   taskListApiParams,
 }: Props) => {
   const { filter, setFilter } = getTaskListFilterStore()
-  // TODO 이거 안됌. 고치기
   const { projectId } = filter
   const { workspace } = getWorkspaceStore()
   const { projects } = getProjectsStore()
