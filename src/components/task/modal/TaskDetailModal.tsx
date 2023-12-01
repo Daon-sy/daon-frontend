@@ -17,7 +17,7 @@ import CloseIcon from "@mui/icons-material/Close"
 import DeleteIcon from "@mui/icons-material/Delete"
 import HistoryIcon from "@mui/icons-material/History"
 import CalendarDateField from "components/common/CalendarDateField"
-import TitleModal from "components/common/TitleModal"
+// import TitleModal from "components/common/TitleModal"
 import EditableBox from "components/common/EditableBox"
 import ConfirmDialog from "components/common/ConfirmDialog"
 import BoardSelectButton from "components/task/BoardSelectButton"
@@ -32,6 +32,7 @@ import useModifyTask from "hooks/task/useModifyTask"
 import useHandleBookmark from "hooks/task/useHandleBookmark"
 import useRemoveTask from "hooks/task/useRemoveTask"
 import TaskBookmarkButton from "components/task/TaskBookmarkButton"
+import TitleDialog from "components/common/TitleDialog"
 import TaskReply from "../reply/TaskReply"
 import ProgressRadioButton from "../ProgressRadioButton"
 
@@ -96,7 +97,7 @@ const TaskDetailModal: React.FC<Props> = ({
   const id = openhistory ? "history" : undefined
 
   return (
-    <TitleModal
+    <TitleDialog
       disableCloseButton
       open={open}
       handleClose={handleClose}
@@ -562,7 +563,7 @@ const TaskDetailModal: React.FC<Props> = ({
           </ConfirmDialog>
         ) : null}
       </Box>
-    </TitleModal>
+    </TitleDialog>
   )
 }
 
