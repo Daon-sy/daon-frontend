@@ -21,6 +21,14 @@ const CalendarDateField = ({ date, handleChange }: Props) => {
             defaultValue={date ? dayjs(date) : null}
             sx={{
               width: "100%",
+              "& .MuiInputBase-input": {
+                height: 8,
+              },
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderWidth: 2,
+                borderColor: "#929292",
+                borderRadius: "5px",
+              },
             }}
             slotProps={{
               field: {
