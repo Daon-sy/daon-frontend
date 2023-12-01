@@ -20,6 +20,8 @@ interface Props {
   padding?: number
   disableCloseButton?: boolean
   minWidth?: number | string
+  color?: string
+  right?: number
 }
 
 export const TitleDialog = ({
@@ -33,6 +35,8 @@ export const TitleDialog = ({
   padding,
   disableCloseButton = false,
   minWidth,
+  color = "#FFFFFF",
+  right = 8,
 }: Props) => {
   return (
     <Dialog
@@ -55,7 +59,7 @@ export const TitleDialog = ({
               <Typography
                 variant="inherit"
                 fontSize={titleFontSize}
-                color="#FFFFFF"
+                color={color}
                 fontWeight={700}
               >
                 {title || "\u00A0"}
@@ -70,9 +74,9 @@ export const TitleDialog = ({
           onClick={handleClose}
           sx={{
             position: "absolute",
-            right: 8,
+            right: { right },
             top: 8,
-            color: () => "#FFFFFF",
+            color: { color },
           }}
         >
           <CloseIcon />
