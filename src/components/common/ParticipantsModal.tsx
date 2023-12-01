@@ -1,14 +1,13 @@
 import React from "react"
 import {
   Box,
+  FormControl,
   InputAdornment,
-  ListItemButton,
-  ListItemText,
+  MenuItem,
+  Select,
   TextField,
 } from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
-import ExpandLess from "@mui/icons-material/ExpandLess"
-import ExpandMore from "@mui/icons-material/ExpandMore"
 import {
   roles,
   WORKSPACE_PARTICIPANT_ROLE,
@@ -26,11 +25,10 @@ interface Props {
 }
 
 const ParticipantsModal = ({ open, handleClose }: Props) => {
-  const { workspace } = getWorkspaceStore()
+  const { workspace, myProfile } = getWorkspaceStore()
   const [participants, setParticipants] = React.useState<
     Array<WorkspaceParticipant>
   >([])
-  const [roleListOpen, setRoleListOpen] = React.useState<boolean>(true)
   const [selectedRole, setSelectedRole] = React.useState<
     string | WORKSPACE_PARTICIPANT_ROLE
   >("전체")
@@ -45,15 +43,10 @@ const ParticipantsModal = ({ open, handleClose }: Props) => {
 
   React.useEffect(() => {
     fetchParticipants()
-  }, [])
-
-  const roleListOpenClick = () => {
-    setRoleListOpen(!roleListOpen)
-  }
+  }, [myProfile])
 
   const selectRoleClick = (role: string | WORKSPACE_PARTICIPANT_ROLE) => () => {
     setSelectedRole(role)
-    setRoleListOpen(false)
   }
 
   const getFilteredParticipants = () => {
@@ -79,24 +72,23 @@ const ParticipantsModal = ({ open, handleClose }: Props) => {
       title="구성원 목록"
       open={open}
       handleClose={handleClose}
-      maxWidth={700}
+      maxWidth={728}
       height={550}
     >
-      <Box sx={{ display: "flex" }}>
-        <Box
-          sx={{
-            width: "45%",
-            m: 1,
-            mr: 17,
-            flexDirection: "row",
-          }}
-        >
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          my: 1,
+        }}
+      >
+        <Box>
           <TextField
             autoComplete="off"
             size="small"
             sx={{
               fontSize: 14,
-              backgroundColor: "#F6F7F9",
             }}
             placeholder="구성원 검색"
             value={searchKeyword}
@@ -112,62 +104,116 @@ const ParticipantsModal = ({ open, handleClose }: Props) => {
             }}
           />
         </Box>
-        <Box
-          sx={{
-            width: "40%",
-            flexDirection: "row-reverse",
-            position: "relative",
-          }}
-        >
-          <ListItemButton
-            onClick={roleListOpenClick}
-            sx={{
-              backgroundColor: "#F6F7F9",
-              height: 40,
-              m: 1,
-              width: 202,
-              border: 1,
-              borderColor: "lightgray",
-              borderTopLeftRadius: 5,
-              borderTopRightRadius: 5,
-            }}
-          >
-            <ListItemText primary="전체 보기" />
-            {roleListOpen ? <ExpandLess /> : <ExpandMore />}
-          </ListItemButton>
-          {roleListOpen && (
-            <Box
-              sx={{
-                position: "absolute",
-                zIndex: 2,
-                top: 47,
-                left: 8,
-                backgroundColor: "white",
-                width: 200,
-                border: 1,
-                borderColor: "lightgray",
-                borderBottomLeftRadius: 5,
-                borderBottomRightRadius: 5,
-              }}
-            >
-              <ListItemText
-                sx={{ m: 1, ml: 2 }}
-                primary="전체"
-                onClick={selectRoleClick("전체")}
-              />
+        <Box>
+          <FormControl>
+            <Select sx={{ width: 180 }} size="small" value={selectedRole}>
+              <MenuItem value="전체" onClick={selectRoleClick("전체")}>
+                전체 보기
+              </MenuItem>
               {roles.map((roleDetail: WorkspaceParticipantRoleDetail) => (
-                <ListItemText
-                  sx={{ m: 1, ml: 2 }}
+                <MenuItem
                   key={roleDetail.role}
-                  primary={roleDetail.description}
+                  value={roleDetail.role}
                   onClick={selectRoleClick(roleDetail.role)}
-                />
+                >
+                  {roleDetail.description}
+                </MenuItem>
               ))}
-            </Box>
-          )}
+            </Select>
+          </FormControl>
         </Box>
       </Box>
-      <Box sx={{ display: "flex" }}>
+      <Box
+        sx={{
+          width: "598px",
+          display: "flex",
+          flexWrap: "wrap",
+        }}
+      >
+        {getFilteredParticipants().map(participant => (
+          <ParticipantCard
+            key={participant.workspaceParticipantId}
+            participant={participant}
+          />
+        ))}
+        {getFilteredParticipants().map(participant => (
+          <ParticipantCard
+            key={participant.workspaceParticipantId}
+            participant={participant}
+          />
+        ))}
+        {getFilteredParticipants().map(participant => (
+          <ParticipantCard
+            key={participant.workspaceParticipantId}
+            participant={participant}
+          />
+        ))}
+        {getFilteredParticipants().map(participant => (
+          <ParticipantCard
+            key={participant.workspaceParticipantId}
+            participant={participant}
+          />
+        ))}
+        {getFilteredParticipants().map(participant => (
+          <ParticipantCard
+            key={participant.workspaceParticipantId}
+            participant={participant}
+          />
+        ))}
+        {getFilteredParticipants().map(participant => (
+          <ParticipantCard
+            key={participant.workspaceParticipantId}
+            participant={participant}
+          />
+        ))}
+        {getFilteredParticipants().map(participant => (
+          <ParticipantCard
+            key={participant.workspaceParticipantId}
+            participant={participant}
+          />
+        ))}
+        {getFilteredParticipants().map(participant => (
+          <ParticipantCard
+            key={participant.workspaceParticipantId}
+            participant={participant}
+          />
+        ))}
+        {getFilteredParticipants().map(participant => (
+          <ParticipantCard
+            key={participant.workspaceParticipantId}
+            participant={participant}
+          />
+        ))}
+        {getFilteredParticipants().map(participant => (
+          <ParticipantCard
+            key={participant.workspaceParticipantId}
+            participant={participant}
+          />
+        ))}
+        {getFilteredParticipants().map(participant => (
+          <ParticipantCard
+            key={participant.workspaceParticipantId}
+            participant={participant}
+          />
+        ))}
+        {getFilteredParticipants().map(participant => (
+          <ParticipantCard
+            key={participant.workspaceParticipantId}
+            participant={participant}
+          />
+        ))}
+        {getFilteredParticipants().map(participant => (
+          <ParticipantCard
+            key={participant.workspaceParticipantId}
+            participant={participant}
+          />
+        ))}
+        {getFilteredParticipants().map(participant => (
+          <ParticipantCard
+            key={participant.workspaceParticipantId}
+            participant={participant}
+          />
+        ))}
         {getFilteredParticipants().map(participant => (
           <ParticipantCard
             key={participant.workspaceParticipantId}
