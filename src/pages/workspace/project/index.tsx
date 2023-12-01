@@ -23,7 +23,6 @@ const ProjectDetailRoutes = () => {
 
   React.useEffect(() => {
     fetchProjectDetail()
-    return () => clearProjectStore()
   }, [projectId])
 
   return (
