@@ -2,7 +2,6 @@ import React from "react"
 import {
   Box,
   DialogContent,
-  Divider,
   Stack,
   RadioGroup,
   FormControlLabel,
@@ -98,7 +97,7 @@ const MenuModal = ({ open, handleClose, menuWithPageList = [] }: Props) => {
               </Stack>
             </Box>
           </DialogContent>
-          <Divider orientation="vertical" />
+
           <DialogContent
             sx={{
               width: "100%",
