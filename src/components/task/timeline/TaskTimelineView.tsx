@@ -125,15 +125,12 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
           borderRadius: 1,
           scrollbarWidth: "0.5em",
           WebkitScrollSnapType: "none",
-          overflowX: "scroll",
-          overflowY: "scroll",
+          overflow: "auto",
           boxShadow: "2px 2px 6px rgba(0,0,0,0.3)",
           "&::-webkit-scrollbar": {
             height: "8px",
             width: "8px",
-            borderTop: 1,
-            borderLeft: 1,
-            borderColor: "#C8C8C8FF",
+            borderRadius: 1,
             backgroundColor: "#F1F2F4FF",
           },
           "&::-webkit-scrollbar-thumb": {
@@ -144,6 +141,10 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
           "&::-webkit-scrollbar-button": {
             width: "0px",
             height: "0px",
+          },
+          "&::-webkit-scrollbar-corner": {
+            borderRadius: 1,
+            backgroundColor: "#F1F2F4FF",
           },
         }}
       >
@@ -268,8 +269,7 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
                   width: dateWidth * ymdc.dateCount,
                   height: taskHeight * tasks.length,
                   boxSizing: "border-box",
-                  borderRight:
-                    index < yearMonthDateCountList.length - 1 ? 1 : 0,
+                  borderRight: 1,
                   borderColor: "#c8c8c8",
                   backgroundColor: "rgba(255,255,255,0)",
                 }}
