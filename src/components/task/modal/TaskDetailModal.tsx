@@ -18,7 +18,6 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import HistoryIcon from "@mui/icons-material/History"
 import CalendarDateField from "components/common/CalendarDateField"
 import TitleModal from "components/common/TitleModal"
-import EditableBox from "components/common/EditableBox"
 import ConfirmDialog from "components/common/ConfirmDialog"
 import BoardSelectButton from "components/task/BoardSelectButton"
 import TaskHistoriesWrapper from "components/task/history/TaskHistoriesWrapper"
@@ -32,6 +31,7 @@ import useModifyTask from "hooks/task/useModifyTask"
 import useHandleBookmark from "hooks/task/useHandleBookmark"
 import useRemoveTask from "hooks/task/useRemoveTask"
 import TaskBookmarkButton from "components/task/TaskBookmarkButton"
+import EditableTextBox from "components/common/EditableTextBox"
 import TaskReply from "../reply/TaskReply"
 import ProgressRadioButton from "../ProgressRadioButton"
 
@@ -313,10 +313,13 @@ const TaskDetailModal: React.FC<Props> = ({
                 >
                   <Box mt={2}>
                     {/* title */}
-                    <EditableBox
-                      autoFocus
-                      enterComplete
+                    <EditableTextBox
                       text={taskDetail.title}
+                      enterComplete
+                      fontWeight={700}
+                      maxTextLength={20}
+                      fontSize={24}
+                      borderStyle="none"
                       handleUpdate={value => {
                         if (!value) {
                           addError("제목은 비워둘 수 없습니다")
@@ -327,43 +330,24 @@ const TaskDetailModal: React.FC<Props> = ({
                           title: value,
                         })
                       }}
-                      maxTextLength={20}
-                      style={{
-                        fontSize: 28,
-                        borderStyle: "none",
-                      }}
                     />
                   </Box>
                 </Tooltip>
 
                 {/* 내용 */}
-                <Box
-                  sx={{
-                    mt: 2,
-                    borderRadius: "5px",
-                    height: "300px",
-                  }}
-                >
+                <Box sx={{ mt: 2 }}>
                   <Tooltip title="내용" arrow>
                     <Box>
-                      <EditableBox
-                        autoFocus
+                      <EditableTextBox
+                        text={taskDetail.content}
                         multiline
-                        enterComplete
-                        text={taskDetail.content ? taskDetail.content : ""}
+                        rows={13}
+                        maxTextLength={1000}
                         handleUpdate={value => {
                           modifyTask({
                             ...taskDetail,
-                            content: value as string | undefined,
+                            content: value?.trim(),
                           })
-                        }}
-                        maxTextLength={1000}
-                        style={{
-                          fontSize: 16,
-                          borderWidth: 1,
-                          borderStyle: "solid",
-                          borderColor: "#c3c3c3",
-                          height: "280px",
                         }}
                       />
                     </Box>
