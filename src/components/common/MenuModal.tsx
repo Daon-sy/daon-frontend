@@ -6,6 +6,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Typography,
 } from "@mui/material"
 import TitleDialog from "./TitleDialog"
 
@@ -17,11 +18,17 @@ export interface MenuWithPage {
 
 interface Props {
   open: boolean
+  title: string
   handleClose: () => void
   menuWithPageList: MenuWithPage[]
 }
 
-const MenuModal = ({ open, handleClose, menuWithPageList = [] }: Props) => {
+const MenuModal = ({
+  open,
+  title,
+  handleClose,
+  menuWithPageList = [],
+}: Props) => {
   const [selectedPage, setSelectedPage] = React.useState<string | undefined>(
     menuWithPageList.length > 0 ? menuWithPageList[0].pageValue : undefined,
   )
@@ -103,6 +110,16 @@ const MenuModal = ({ open, handleClose, menuWithPageList = [] }: Props) => {
               width: "100%",
             }}
           >
+            <Typography
+              sx={{
+                fontSize: "20px",
+                color: "#777777",
+                fontWeight: "bold",
+                mb: 5,
+              }}
+            >
+              {title}
+            </Typography>
             <Box sx={{ paddingX: 4, paddingBottom: 10 }}>
               {
                 menuWithPageList.find(mwp => mwp.pageValue === selectedPage)

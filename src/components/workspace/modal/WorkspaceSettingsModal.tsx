@@ -35,6 +35,7 @@ const WorkspaceSettingsModal = ({ open = false, handleClose }: Props) => {
   return (
     <MenuModal
       open={open}
+      title="워크스페이스 설정"
       handleClose={handleClose}
       // subTitle={
       //   <Box display="flex" alignItems="center">
