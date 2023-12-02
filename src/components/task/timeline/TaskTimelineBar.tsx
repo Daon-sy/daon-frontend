@@ -70,16 +70,16 @@ const TaskTimelineBar = ({
               }
             />
           </Tooltip>
-          <Box
-            sx={{
-              color: "#797979",
-              fontSize: 12,
-              position: "relative",
-              left: blankCount * dateWidth + 5,
-            }}
-          >
-            {task.title}
-          </Box>
+          {/* <Box */}
+          {/*  sx={{ */}
+          {/*    color: "#797979", */}
+          {/*    fontSize: 12, */}
+          {/*    position: "relative", */}
+          {/*    left: blankCount * dateWidth + 5, */}
+          {/*  }} */}
+          {/* > */}
+          {/*  {task.title} */}
+          {/* </Box> */}
         </Box>
       )
     }

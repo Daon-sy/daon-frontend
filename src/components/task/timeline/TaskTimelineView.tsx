@@ -1,5 +1,5 @@
 import React from "react"
-import { Box } from "@mui/material"
+import { Box, Chip } from "@mui/material"
 import { TaskListApiParams } from "api/task"
 import { getWorkspaceStore } from "store/userStore"
 import { getTaskDetailViewStore } from "store/taskStore"
@@ -8,6 +8,9 @@ import useFetchTaskList from "hooks/task/useFetchTaskList"
 import { getDateCountArray } from "utils/DateUtils"
 import TaskDetailModal from "components/task/modal/TaskDetailModal"
 import TaskTimelineBar from "components/task/timeline/TaskTimelineBar"
+import Typography from "@mui/material/Typography"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faFire } from "@fortawesome/free-solid-svg-icons"
 
 interface TaskViewProps {
   params?: TaskListApiParams
@@ -21,16 +24,35 @@ interface YearMonthDateCount {
 }
 
 const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
-  const [taskWidth] = React.useState(220)
+  const [taskWidth] = React.useState(230)
 
   const { workspace } = getWorkspaceStore()
-  const { tasks, fetchTaskList } = useFetchTaskList(
+  const { tasks: allMyTasks, fetchTaskList } = useFetchTaskList(
     {
       workspaceId: workspace?.workspaceId || 0,
       params,
     },
     true,
   )
+
+  // 보여줄 할 일 목록
+  const tasks = React.useMemo(() => {
+    return allMyTasks
+      .filter(task => task.progressStatus !== "PENDING")
+      .sort((t1, t2) => {
+        if (t1.emergency) return -1
+        if (t2.emergency) return 1
+        if (!t1.endDate && !t2.endDate) return t1.title > t2.title ? 1 : -1
+
+        if (!t1.endDate) return -1
+        if (!t2.endDate) return 1
+        const sub =
+          new Date(t1.endDate).getTime() - new Date(t2.endDate).getTime()
+
+        return sub
+      })
+  }, [allMyTasks])
+
   const { taskDetailParam, setTaskDetailParam, clear } =
     getTaskDetailViewStore()
   const { props: timelineProps } = getTaskTimelineStore()
@@ -177,9 +199,9 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
             {tasks.map((task, index) => (
               <Box
                 sx={{
+                  display: "flex",
+                  alignItems: "center",
                   width: taskWidth,
-                  lineHeight: `${taskHeight}px`,
-                  fontSize: 14,
                   backgroundColor: index % 2 === 0 ? "#ffffff" : "#F7F8F9FF",
                   "&:hover": {
                     cursor: "pointer",
@@ -194,16 +216,42 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
                   })
                 }
               >
-                <Box
+                {task.emergency ? (
+                  <Typography ml={1}>
+                    <FontAwesomeIcon icon={faFire} color="red" />
+                  </Typography>
+                ) : null}
+                <Chip
+                  label={task.project.title}
+                  color="secondary"
+                  size="small"
                   sx={{
-                    paddingX: 1,
+                    ml: 1,
+                    fontSize: 12,
+                    borderRadius: 1.5,
+                    fontWeight: 900,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    maxWidth: 80,
+                  }}
+                />
+                <Typography
+                  sx={{
+                    // 완료됨 표시. 다른 아이콘 넣으면 좋을 것 같음
+                    textDecoration:
+                      task.progressStatus === "COMPLETED"
+                        ? "line-through"
+                        : undefined,
+                    fontSize: 12,
+                    lineHeight: `${taskHeight}px`,
+                    paddingX: 0.5,
                     whiteSpace: "nowrap",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                   }}
                 >
                   {task.title}
-                </Box>
+                </Typography>
               </Box>
             ))}
           </Box>
@@ -255,10 +303,7 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
                   fontSize: 12,
                 }}
               >
-                {currentDate.getFullYear() !== ymdc.year
-                  ? `${ymdc.year}년 `
-                  : null}
-                {ymdc.month}월
+                {ymdc.year}년 {ymdc.month}월
               </Box>
             ))}
           </Box>
