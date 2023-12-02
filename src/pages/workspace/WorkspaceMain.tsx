@@ -33,7 +33,7 @@ const WorkspaceMain: React.FC = () => {
         sx={{
           color: "#445a53",
           fontSize: "24px",
-          fontWeight: "800",
+          fontWeight: 700,
         }}
       >
         {workspace.title}에 오신 것을 환영합니다.
