@@ -9,6 +9,7 @@ import useFetchWorkspaceDetail from "hooks/workspace/useFetchWorkspaceDetail"
 import useFetchMyWorkspaceProfile from "hooks/workspace/useFetchMyWorkspaceProfile"
 import useFetchProjectList from "hooks/project/useFetchProjectList"
 import useNotification from "hooks/sse/useNotification"
+import useFetchNotifications from "hooks/notification/useFetchNotifications"
 
 const WorkspaceDetailRoutes = () => {
   const { workspaceId } = useParams()
@@ -29,6 +30,7 @@ const WorkspaceDetailRoutes = () => {
   } = useFetchProjectList(Number(workspaceId), true)
   const { backdropOpen, handleBackdropOpen, handleBackdropClose } =
     getBackdropStore()
+  useFetchNotifications()
 
   useNotification({
     ssePath: "/api/notifications/subscribe",

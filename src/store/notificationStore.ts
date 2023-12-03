@@ -12,7 +12,11 @@ export const getNotificationStore = create<NotificationStore>(set => ({
   clear: () => set({ notifications: [] }),
   setNotifications: (notifications: Notification[]) => {
     set(({ notifications: prev }) => ({
-      notifications: [...notifications, ...prev],
+      notifications: [...notifications, ...prev].filter(
+        (noti, i, arr) =>
+          i ===
+          arr.findIndex(loc => loc.notificationId === noti.notificationId),
+      ),
     }))
   },
 }))
