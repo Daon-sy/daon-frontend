@@ -8,6 +8,7 @@ import {
   DeportationWorkspaceNotification,
   InviteProjectNotification,
   InviteWorkspaceNotification,
+  Notification,
   RegisteredTaskManagerNotification,
 } from "_types/notification"
 import { useAlert } from "hooks/useAlert"
@@ -88,10 +89,17 @@ const useNotification = ({
         if (onRegisteredTaskManager) onRegisteredTaskManager(event)
         else {
           const msgEvent = event as MessageEvent
-          const data = JSON.parse(
-            msgEvent.data,
-          ) as RegisteredTaskManagerNotification
-          setNotifications([{ type: "REGISTERED_TASK_MANAGER", data }])
+          const parsedNotification = JSON.parse(msgEvent.data)
+          const parsedData = JSON.parse(
+            parsedNotification.data,
+          ) as RegisteredTaskManagerNotification & { time: string }
+          const notification: Notification<RegisteredTaskManagerNotification> =
+            {
+              notificationId: parsedNotification.notificationId,
+              data: parsedData,
+              type: parsedNotification.type,
+            }
+          setNotifications([notification])
         }
         addInfo("알림이 도착했습니다")
       },
@@ -104,8 +112,16 @@ const useNotification = ({
         if (onInviteWorkspace) onInviteWorkspace(event)
         else {
           const msgEvent = event as MessageEvent
-          const data = JSON.parse(msgEvent.data) as InviteWorkspaceNotification
-          setNotifications([{ type: "INVITE_WORKSPACE", data }])
+          const parsedNotification = JSON.parse(msgEvent.data)
+          const parsedData = JSON.parse(
+            parsedNotification.data,
+          ) as InviteWorkspaceNotification & { time: string }
+          const notification: Notification<InviteWorkspaceNotification> = {
+            notificationId: parsedNotification.notificationId,
+            data: parsedData,
+            type: parsedNotification.type,
+          }
+          setNotifications([notification])
         }
         addInfo("알림이 도착했습니다")
       },
@@ -118,8 +134,16 @@ const useNotification = ({
         if (onInviteProject) onInviteProject(event)
         else {
           const msgEvent = event as MessageEvent
-          const data = JSON.parse(msgEvent.data) as InviteProjectNotification
-          setNotifications([{ type: "INVITE_PROJECT", data }])
+          const parsedNotification = JSON.parse(msgEvent.data)
+          const parsedData = JSON.parse(
+            parsedNotification.data,
+          ) as InviteProjectNotification & { time: string }
+          const notification: Notification<InviteProjectNotification> = {
+            notificationId: parsedNotification.notificationId,
+            data: parsedData,
+            type: parsedNotification.type,
+          }
+          setNotifications([notification])
         }
         addInfo("알림이 도착했습니다")
       },
@@ -132,10 +156,16 @@ const useNotification = ({
         if (onDeportationWorkspace) onDeportationWorkspace(event)
         else {
           const msgEvent = event as MessageEvent
-          const data = JSON.parse(
-            msgEvent.data,
-          ) as DeportationWorkspaceNotification
-          setNotifications([{ type: "DEPORTATION_WORKSPACE", data }])
+          const parsedNotification = JSON.parse(msgEvent.data)
+          const parsedData = JSON.parse(
+            parsedNotification.data,
+          ) as DeportationWorkspaceNotification & { time: string }
+          const notification: Notification<DeportationWorkspaceNotification> = {
+            notificationId: parsedNotification.notificationId,
+            data: parsedData,
+            type: parsedNotification.type,
+          }
+          setNotifications([notification])
         }
         addInfo("알림이 도착했습니다")
       },
@@ -148,10 +178,16 @@ const useNotification = ({
         if (onDeportationProject) onDeportationProject(event)
         else {
           const msgEvent = event as MessageEvent
-          const data = JSON.parse(
-            msgEvent.data,
-          ) as DeportationProjectNotification
-          setNotifications([{ type: "DEPORTATION_PROJECT", data }])
+          const parsedNotification = JSON.parse(msgEvent.data)
+          const parsedData = JSON.parse(
+            parsedNotification.data,
+          ) as DeportationProjectNotification & { time: string }
+          const notification: Notification<DeportationProjectNotification> = {
+            notificationId: parsedNotification.notificationId,
+            data: parsedData,
+            type: parsedNotification.type,
+          }
+          setNotifications([notification])
         }
         addInfo("알림이 도착했습니다")
       },

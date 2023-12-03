@@ -31,7 +31,7 @@ const WorkspaceDetailRoutes = () => {
     getBackdropStore()
 
   useNotification({
-    ssePath: "/api/subscribe/alarm",
+    ssePath: "/api/notifications/subscribe",
   })
 
   React.useEffect(() => {

@@ -1,26 +1,5 @@
 import { create } from "zustand"
-import {
-  DeportationProjectNotification,
-  DeportationWorkspaceNotification,
-  InviteProjectNotification,
-  InviteWorkspaceNotification,
-  RegisteredTaskManagerNotification,
-} from "_types/notification"
-
-export interface Notification {
-  type:
-    | "INVITE_WORKSPACE"
-    | "INVITE_PROJECT"
-    | "DEPORTATION_WORKSPACE"
-    | "DEPORTATION_PROJECT"
-    | "REGISTERED_TASK_MANAGER"
-  data:
-    | RegisteredTaskManagerNotification
-    | InviteWorkspaceNotification
-    | InviteProjectNotification
-    | DeportationWorkspaceNotification
-    | DeportationProjectNotification
-}
+import { Notification } from "_types/notification"
 
 interface NotificationStore {
   notifications: Notification[]

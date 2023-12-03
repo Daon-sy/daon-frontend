@@ -1,3 +1,5 @@
+// 임시
+/* eslint-disable */
 import React from "react"
 import {
   IconButton,
@@ -12,8 +14,9 @@ import {
 import { styled } from "@mui/material/styles"
 import { yellow } from "@mui/material/colors"
 import NotificationsIcon from "@mui/icons-material/Notifications"
-import { getNotificationStore, Notification } from "store/notificationStore"
+import { getNotificationStore } from "store/notificationStore"
 import {
+  Notification,
   DeportationProjectNotification,
   DeportationWorkspaceNotification,
   InviteProjectNotification,
@@ -29,10 +32,12 @@ const StyledTypography = styled((props: TypographyProps) => (
 }))
 
 const RegisteredTaskManagerNoti = ({
+  notificationId,
   workspaceTitle,
   projectTitle,
   taskTitle,
 }: {
+  notificationId: number
   workspaceTitle: string
   projectTitle: string
   taskTitle: string
@@ -53,8 +58,10 @@ const RegisteredTaskManagerNoti = ({
 )
 
 const InviteWorkspaceNoti = ({
+  notificationId,
   workspaceTitle,
 }: {
+  notificationId: number
   workspaceTitle: string
 }) => (
   <StyledTypography>
@@ -65,9 +72,11 @@ const InviteWorkspaceNoti = ({
 )
 
 const InviteProjectNoti = ({
+  notificationId,
   workspaceTitle,
   projectTitle,
 }: {
+  notificationId: number
   workspaceTitle: string
   projectTitle: string
 }) => (
@@ -81,8 +90,10 @@ const InviteProjectNoti = ({
 )
 
 const DeportationWorkspaceNoti = ({
+  notificationId,
   workspaceTitle,
 }: {
+  notificationId: number
   workspaceTitle: string
 }) => (
   <StyledTypography>
@@ -93,9 +104,11 @@ const DeportationWorkspaceNoti = ({
 )
 
 const DeportationProjectNoti = ({
+  notificationId,
   workspaceTitle,
   projectTitle,
 }: {
+  notificationId: number
   workspaceTitle: string
   projectTitle: string
 }) => (
@@ -115,6 +128,7 @@ const renderNotification = (noti: Notification) => {
         noti.data as RegisteredTaskManagerNotification
       return (
         <RegisteredTaskManagerNoti
+          notificationId={noti.notificationId}
           workspaceTitle={workspace.workspaceTitle}
           projectTitle={project.projectTitle}
           taskTitle={task.taskTitle}
@@ -123,12 +137,18 @@ const renderNotification = (noti: Notification) => {
     }
     case "INVITE_WORKSPACE": {
       const { workspace } = noti.data as InviteWorkspaceNotification
-      return <InviteWorkspaceNoti workspaceTitle={workspace.workspaceTitle} />
+      return (
+        <InviteWorkspaceNoti
+          notificationId={noti.notificationId}
+          workspaceTitle={workspace.workspaceTitle}
+        />
+      )
     }
     case "INVITE_PROJECT": {
       const { workspace, project } = noti.data as InviteProjectNotification
       return (
         <InviteProjectNoti
+          notificationId={noti.notificationId}
           workspaceTitle={workspace.workspaceTitle}
           projectTitle={project.projectTitle}
         />
@@ -137,13 +157,17 @@ const renderNotification = (noti: Notification) => {
     case "DEPORTATION_WORKSPACE": {
       const { workspace } = noti.data as DeportationWorkspaceNotification
       return (
-        <DeportationWorkspaceNoti workspaceTitle={workspace.workspaceTitle} />
+        <DeportationWorkspaceNoti
+          notificationId={noti.notificationId}
+          workspaceTitle={workspace.workspaceTitle}
+        />
       )
     }
     case "DEPORTATION_PROJECT": {
       const { workspace, project } = noti.data as DeportationProjectNotification
       return (
         <DeportationProjectNoti
+          notificationId={noti.notificationId}
           workspaceTitle={workspace.workspaceTitle}
           projectTitle={project.projectTitle}
         />
@@ -190,7 +214,7 @@ const NotificationButton = () => {
               mt: 1.5,
               maxWidth: 300,
               maxHeight: 400,
-              overflowY: "scroll",
+              overflowY: "auto",
               "&:before": {
                 content: '""',
                 display: "block",

@@ -1,3 +1,11 @@
+export type NotificationType =
+  | "MESSAGE"
+  | "INVITE_WORKSPACE"
+  | "INVITE_PROJECT"
+  | "DEPORTATION_WORKSPACE"
+  | "DEPORTATION_PROJECT"
+  | "REGISTERED_TASK_MANAGER"
+
 interface WorkspaceSummary {
   workspaceId: number
   workspaceTitle: string
@@ -35,4 +43,17 @@ export interface DeportationWorkspaceNotification {
 export interface DeportationProjectNotification {
   workspace: WorkspaceSummary
   project: ProjectSummary
+}
+
+export interface Notification<
+  T =
+    | RegisteredTaskManagerNotification
+    | InviteWorkspaceNotification
+    | InviteProjectNotification
+    | DeportationProjectNotification
+    | DeportationWorkspaceNotification,
+> {
+  notificationId: number
+  data: T & { time: string }
+  type: NotificationType
 }
