@@ -8,6 +8,7 @@ import WorkspaceMain from "pages/workspace/WorkspaceMain"
 import useFetchWorkspaceDetail from "hooks/workspace/useFetchWorkspaceDetail"
 import useFetchMyWorkspaceProfile from "hooks/workspace/useFetchMyWorkspaceProfile"
 import useFetchProjectList from "hooks/project/useFetchProjectList"
+import useNotification from "hooks/sse/useNotification"
 
 const WorkspaceDetailRoutes = () => {
   const { workspaceId } = useParams()
@@ -28,6 +29,10 @@ const WorkspaceDetailRoutes = () => {
   } = useFetchProjectList(Number(workspaceId), true)
   const { backdropOpen, handleBackdropOpen, handleBackdropClose } =
     getBackdropStore()
+
+  useNotification({
+    ssePath: "/api/subscribe/alarm",
+  })
 
   React.useEffect(() => {
     fetchWorkspaceDetail()
