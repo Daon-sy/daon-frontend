@@ -1,6 +1,6 @@
 import React from "react"
 import Typography from "@mui/material/Typography"
-import { Box, Button, Container, Stack, TextField } from "@mui/material"
+import { Box, Button, Stack, TextField } from "@mui/material"
 import { useAlert } from "hooks/useAlert"
 import { useNavigate } from "react-router-dom"
 import { signInApi, SignInRequestBody } from "api/auth"
@@ -68,11 +68,15 @@ const SignIn: React.FC = () => {
   }
 
   return (
-    <Container
+    <Box
       sx={{
+        width: "100%",
+        height: "100%",
+        m: 0,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        bgcolor: "white",
       }}
     >
       <Box
@@ -157,7 +161,7 @@ const SignIn: React.FC = () => {
           </Box>
         </Stack>
       </Box>
-    </Container>
+    </Box>
   )
 }
 

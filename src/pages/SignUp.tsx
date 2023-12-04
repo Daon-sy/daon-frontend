@@ -1,6 +1,6 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import { Box, Button, Container, Stack, TextField } from "@mui/material"
+import { Box, Button, Stack, TextField } from "@mui/material"
 import { signUpApi } from "api/member"
 import { useAlert } from "hooks/useAlert"
 import Typography from "@mui/material/Typography"
@@ -109,11 +109,15 @@ const SignUp = () => {
   }
 
   return (
-    <Container
+    <Box
       sx={{
+        width: "100%",
+        height: "100%",
+        m: 0,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        bgcolor: "white",
       }}
     >
       <Box
@@ -221,7 +225,7 @@ const SignUp = () => {
           </Box>
         </Stack>
       </Box>
-    </Container>
+    </Box>
   )
 }
 
