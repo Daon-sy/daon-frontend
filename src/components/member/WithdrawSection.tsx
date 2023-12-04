@@ -8,13 +8,19 @@ import {
 } from "@mui/material"
 import { withdrawApi } from "api/member"
 import React from "react"
+import { useNavigate } from "react-router-dom"
+import { getTokenStore } from "store/tokenStore"
 
 const WithdrawSection: React.FC = () => {
+  const tokenState = getTokenStore()
+  const navigate = useNavigate()
   const [withdrawMemberModalOpen, setWithdrawMemberModalOpen] =
     React.useState<boolean>(false)
 
   const withdraw = async () => {
     await withdrawApi()
+    tokenState.clear()
+    navigate("/")
   }
 
   return (
