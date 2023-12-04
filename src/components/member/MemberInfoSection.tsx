@@ -18,15 +18,15 @@ const MemberInfoSection: React.FC = () => {
   const [editPasswordOpen, setEditPasswordOpen] = React.useState<boolean>(false)
   const [checkPasswordModalOpen, setCheckPasswordModalOpen] =
     React.useState<boolean>(false)
-
-  const [name, setName] = React.useState(myDetail?.name)
-  const [newPassword, setNewPassword] = React.useState<string>("")
-  const [confirmPassword, setConfirmPassword] = React.useState<string>("")
   const [checkPasswordModalInfo, setCheckPasswordModalInfo] =
     React.useState<PasswordModalInfo>({
       name: "",
       newPassword: "",
     })
+
+  const [name, setName] = React.useState(myDetail?.name)
+  const [newPassword, setNewPassword] = React.useState<string>("")
+  const [confirmPassword, setConfirmPassword] = React.useState<string>("")
 
   const fetchMyMemberDetail = async () => {
     const { data } = await myMemberDetailApi()
@@ -87,7 +87,9 @@ const MemberInfoSection: React.FC = () => {
             }}
           >
             <BadgeIcon sx={{ width: "10%", color: "#1F4838" }} />
-            <Typography sx={{ width: "12%" }}>이름</Typography>
+            <Typography sx={{ width: "12%", color: "#1F4838" }}>
+              이름
+            </Typography>
             <Box sx={{ position: "relative", width: "78%" }}>
               <TextField
                 size="small"
@@ -110,7 +112,9 @@ const MemberInfoSection: React.FC = () => {
           </Box>
           <Box sx={{ height: 50, display: "flex", alignItems: "center" }}>
             <PersonIcon sx={{ width: "10%", color: "#1F4838" }} />
-            <Typography sx={{ width: "12%" }}>아이디</Typography>
+            <Typography sx={{ width: "12%", color: "#1F4838" }}>
+              아이디
+            </Typography>
             <TextField
               sx={{ width: "78%", backgroundColor: "#F6F7F9" }}
               size="small"
@@ -125,13 +129,15 @@ const MemberInfoSection: React.FC = () => {
             }}
           >
             <LockIcon sx={{ mt: "13px", width: "10%", color: "#1F4838" }} />
-            <Typography sx={{ mt: "13px", width: "12%" }}>비밀번호</Typography>
+            <Typography sx={{ mt: "13px", width: "12%", color: "#1F4838" }}>
+              비밀번호
+            </Typography>
             {editPasswordOpen ? (
               <Box sx={{ position: "relative", mt: "13px", width: "78%" }}>
                 <Button sx={{ p: 0 }} onClick={handleCancleEditPasswordClick}>
                   취소
                 </Button>
-                <Typography sx={{ mt: 2, fontSize: 14 }}>
+                <Typography sx={{ mt: 2, fontSize: 14, color: "#1F4838" }}>
                   새 비밀번호 입력
                 </Typography>
                 <TextField
@@ -152,7 +158,7 @@ const MemberInfoSection: React.FC = () => {
                 >
                   ({newPassword?.length}/30)
                 </Typography>
-                <Typography sx={{ mt: 2, fontSize: 14 }}>
+                <Typography sx={{ mt: 2, fontSize: 14, color: "#1F4838" }}>
                   새 비밀번호 확인
                 </Typography>
                 <TextField

@@ -53,12 +53,25 @@ const EmailInfoSection: React.FC = () => {
   }
 
   return (
-    <Box>
-      <Typography>이메일 정보</Typography>
-      <Box>
-        <MailIcon />
-        <Typography>이메일</Typography>
-        <Button onClick={() => setAddEmailModalOpen(true)}>이메일 추가</Button>
+    <Box sx={{ width: 584, m: 1.5, mb: 5 }}>
+      <Typography sx={{ color: "#1F4838", fontWeight: "bold" }}>
+        이메일 정보
+      </Typography>
+      <Box sx={{ mt: 2, mb: 1, display: "flex", alignItems: "center" }}>
+        <MailIcon sx={{ width: "10%", color: "#1F4838" }} />
+        <Typography sx={{ width: "12%", color: "#1F4838" }}>이메일</Typography>
+        <Button
+          sx={{
+            width: "15%",
+            p: 0,
+            border: 1,
+            color: "white",
+            backgroundColor: "#FFBE00",
+          }}
+          onClick={() => setAddEmailModalOpen(true)}
+        >
+          이메일 추가
+        </Button>
       </Box>
       {addEmailModalOpen ? (
         <AddEmailModal
@@ -68,9 +81,21 @@ const EmailInfoSection: React.FC = () => {
         />
       ) : null}
       {memberEmails.map(email => (
-        <Box>
-          <Typography>{email.email}</Typography>
+        <Box sx={{ ml: 4, display: "flex", alignItems: "center" }}>
+          <Typography
+            sx={{
+              width: "50%",
+              m: 0.5,
+              p: 1,
+              border: 1,
+              borderRadius: 1,
+              borderColor: "lightGray",
+            }}
+          >
+            {email.email}
+          </Typography>
           <IconButton
+            sx={{ color: "lightGray" }}
             onClick={() => handleRemoveEmailButtonCick(email.memberEmailId)}
           >
             <DeleteIcon />
