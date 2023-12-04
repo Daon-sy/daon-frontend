@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { Box, Button, Container, Stack, TextField } from "@mui/material"
 import { signUpApi } from "api/member"
 import { useAlert } from "hooks/useAlert"
+import Typography from "@mui/material/Typography"
 
 interface SignUpForm {
   username: string
@@ -120,10 +121,22 @@ const SignUp = () => {
           width: 500,
           marginTop: 10, // 상단 공백 임시
           padding: 5,
-          backgroundColor: "gray", // 임시 색상
+          backgroundColor: "white",
         }}
       >
         <Stack spacing={2}>
+          <Box>
+            <Typography
+              variant="h4"
+              component="h2"
+              sx={{
+                textAlign: "center",
+                marginBottom: 3,
+              }}
+            >
+              회원가입
+            </Typography>
+          </Box>
           <Stack spacing={2}>
             <TextField
               required

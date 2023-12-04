@@ -44,11 +44,13 @@ const AnonymousHeader = () => {
             >
               <Button color="inherit">회원가입</Button>
             </Link>
-            <Button color="inherit" onClick={openLoginModal}>
-              로그인
-            </Button>
+            <Link
+              to="/sign-in"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <Button color="inherit">로그인</Button>
+            </Link>
           </Stack>
-          <LoginModal open={loginModalOpen} handleClose={closeLoginModal} />
         </Box>
       </Toolbar>
     </AppBar>
