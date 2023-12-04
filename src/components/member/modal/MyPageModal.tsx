@@ -2,7 +2,7 @@ import React from "react"
 import { Box, Typography } from "@mui/material"
 import { getMyMemberDetailStore } from "store/userStore"
 import MenuModal, { MenuWithPage } from "components/common/MenuModal"
-import MyPageDataManage from "../MyPage"
+import MyPageDataManage from "../MyPageComponent"
 
 interface MyPageProps {
   open: boolean

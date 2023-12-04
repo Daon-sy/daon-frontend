@@ -30,6 +30,8 @@ import MailIcon from "@mui/icons-material/Mail"
 import AddEmailModal from "./modal/AddEmailModal"
 import CheckPasswordModal from "./modal/ModifyPasswordModal"
 import MemberInfoSection from "./MemberInfoSection"
+import EmailInfoSection from "./EmailInfoSection"
+import WithdrawSection from "./WithdrawSection"
 
 const MyPage: React.FC = () => {
   const { addSuccess } = useAlert()
@@ -119,7 +121,8 @@ const MyPage: React.FC = () => {
       >
         회원 정보
       </Typography>
-      {/* <MemberInfoSection /> */}
+      <MemberInfoSection />
+      <Divider />
       {myInfoEditOpen ? (
         <Box>
           {/* 회원 정보 수정 */}
@@ -449,7 +452,7 @@ const MyPage: React.FC = () => {
           </Box>
         ))}
       </Box>
-      {/* <EmailInfo /> */}
+      <EmailInfoSection />
       <Divider sx={{ mt: 5 }} />
       {/* 회원 탈퇴 */}
       <Box>
@@ -471,6 +474,7 @@ const MyPage: React.FC = () => {
           }}
         />
       </Box>
+      <WithdrawSection />
     </Box>
   )
 }
