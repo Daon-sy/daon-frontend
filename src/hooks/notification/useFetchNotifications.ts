@@ -15,7 +15,7 @@ import {
 const useFetchNotifications = (skip = false) => {
   const [isFetching, setIsFetching] = React.useState(false)
   const [error, setError] = React.useState<ErrorResponse>()
-  const { notifications, setNotifications } = getNotificationStore()
+  const { notifications, addNotifications } = getNotificationStore()
 
   const fetchNotifications = async () => {
     try {
@@ -23,7 +23,7 @@ const useFetchNotifications = (skip = false) => {
       const { data: responseData } = await notificationListApi()
       const { notifications: fetchedNotifications } = responseData
 
-      setNotifications(
+      addNotifications(
         fetchedNotifications.map((noti): Notification => {
           switch (noti.type) {
             case "REGISTERED_TASK_MANAGER":

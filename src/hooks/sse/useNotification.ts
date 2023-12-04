@@ -59,7 +59,7 @@ const useNotification = ({
 }: Props) => {
   const { addInfo } = useAlert()
   const { token } = getTokenStore()
-  const { setNotifications } = getNotificationStore()
+  const { addNotifications } = getNotificationStore()
 
   let eventSource: EventSourcePolyfill
   const subscribe = () => {
@@ -99,7 +99,7 @@ const useNotification = ({
               data: parsedData,
               type: parsedNotification.type,
             }
-          setNotifications([notification])
+          addNotifications([notification])
         }
         addInfo("알림이 도착했습니다")
       },
@@ -121,7 +121,7 @@ const useNotification = ({
             data: parsedData,
             type: parsedNotification.type,
           }
-          setNotifications([notification])
+          addNotifications([notification])
         }
         addInfo("알림이 도착했습니다")
       },
@@ -143,7 +143,7 @@ const useNotification = ({
             data: parsedData,
             type: parsedNotification.type,
           }
-          setNotifications([notification])
+          addNotifications([notification])
         }
         addInfo("알림이 도착했습니다")
       },
@@ -165,7 +165,7 @@ const useNotification = ({
             data: parsedData,
             type: parsedNotification.type,
           }
-          setNotifications([notification])
+          addNotifications([notification])
         }
         addInfo("알림이 도착했습니다")
       },
@@ -187,7 +187,7 @@ const useNotification = ({
             data: parsedData,
             type: parsedNotification.type,
           }
-          setNotifications([notification])
+          addNotifications([notification])
         }
         addInfo("알림이 도착했습니다")
       },

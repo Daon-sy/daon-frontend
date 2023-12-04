@@ -12,3 +12,11 @@ export const notificationListApi = (): Promise<
 > => {
   return authAxios.get(`${API_SERVER_URL}/api/notifications`)
 }
+
+export const readNotificationApi = (
+  notificationId: number,
+): Promise<AxiosResponse> => {
+  return authAxios.delete(
+    `${API_SERVER_URL}/api/notifications/${notificationId}`,
+  )
+}

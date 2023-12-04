@@ -1,5 +1,3 @@
-// 임시
-/* eslint-disable */
 import React from "react"
 import {
   IconButton,
@@ -23,6 +21,7 @@ import {
   InviteWorkspaceNotification,
   RegisteredTaskManagerNotification,
 } from "_types/notification"
+import useReadNotification from "hooks/notification/useReadNotification"
 
 const StyledTypography = styled((props: TypographyProps) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -32,15 +31,15 @@ const StyledTypography = styled((props: TypographyProps) => (
 }))
 
 const RegisteredTaskManagerNoti = ({
-  notificationId,
   workspaceTitle,
   projectTitle,
   taskTitle,
+  time,
 }: {
-  notificationId: number
   workspaceTitle: string
   projectTitle: string
   taskTitle: string
+  time: string
 }) => (
   <>
     <StyledTypography>
@@ -54,31 +53,33 @@ const RegisteredTaskManagerNoti = ({
       </StyledTypography>] {">"} 프로젝트[
       <StyledTypography component="span">{projectTitle}</StyledTypography>]
     </StyledTypography>
+    <StyledTypography>{time}</StyledTypography>
   </>
 )
 
 const InviteWorkspaceNoti = ({
-  notificationId,
   workspaceTitle,
+  time,
 }: {
-  notificationId: number
   workspaceTitle: string
+  time: string
 }) => (
   <StyledTypography>
     워크스페이스[
     <StyledTypography component="span">{workspaceTitle}</StyledTypography>]에
     초대되었습니다.
+    <StyledTypography>{time}</StyledTypography>
   </StyledTypography>
 )
 
 const InviteProjectNoti = ({
-  notificationId,
   workspaceTitle,
   projectTitle,
+  time,
 }: {
-  notificationId: number
   workspaceTitle: string
   projectTitle: string
+  time: string
 }) => (
   <StyledTypography>
     워크스페이스[
@@ -86,31 +87,33 @@ const InviteProjectNoti = ({
     프로젝트[
     <StyledTypography component="span">{projectTitle}</StyledTypography>]에
     초대되었습니다.
+    <StyledTypography>{time}</StyledTypography>
   </StyledTypography>
 )
 
 const DeportationWorkspaceNoti = ({
-  notificationId,
   workspaceTitle,
+  time,
 }: {
-  notificationId: number
   workspaceTitle: string
+  time: string
 }) => (
   <StyledTypography>
     워크스페이스[
     <StyledTypography component="span">{workspaceTitle}</StyledTypography>
     ]에서 내보내졌습니다.
+    <StyledTypography>{time}</StyledTypography>
   </StyledTypography>
 )
 
 const DeportationProjectNoti = ({
-  notificationId,
   workspaceTitle,
   projectTitle,
+  time,
 }: {
-  notificationId: number
   workspaceTitle: string
   projectTitle: string
+  time: string
 }) => (
   <StyledTypography>
     워크스페이스[
@@ -118,58 +121,68 @@ const DeportationProjectNoti = ({
     프로젝트[
     <StyledTypography component="span">{projectTitle}</StyledTypography>]에서
     내보내졌습니다.
+    <StyledTypography>{time}</StyledTypography>
   </StyledTypography>
 )
 
 const renderNotification = (noti: Notification) => {
   switch (noti.type) {
     case "REGISTERED_TASK_MANAGER": {
-      const { workspace, project, task } =
-        noti.data as RegisteredTaskManagerNotification
+      const { workspace, project, task, time } =
+        noti.data as RegisteredTaskManagerNotification & { time: string }
       return (
         <RegisteredTaskManagerNoti
-          notificationId={noti.notificationId}
           workspaceTitle={workspace.workspaceTitle}
           projectTitle={project.projectTitle}
           taskTitle={task.taskTitle}
+          time={time}
         />
       )
     }
     case "INVITE_WORKSPACE": {
-      const { workspace } = noti.data as InviteWorkspaceNotification
+      const { workspace, time } = noti.data as InviteWorkspaceNotification & {
+        time: string
+      }
       return (
         <InviteWorkspaceNoti
-          notificationId={noti.notificationId}
           workspaceTitle={workspace.workspaceTitle}
+          time={time}
         />
       )
     }
     case "INVITE_PROJECT": {
-      const { workspace, project } = noti.data as InviteProjectNotification
+      const { workspace, project, time } =
+        noti.data as InviteProjectNotification & {
+          time: string
+        }
       return (
         <InviteProjectNoti
-          notificationId={noti.notificationId}
           workspaceTitle={workspace.workspaceTitle}
           projectTitle={project.projectTitle}
+          time={time}
         />
       )
     }
     case "DEPORTATION_WORKSPACE": {
-      const { workspace } = noti.data as DeportationWorkspaceNotification
+      const { workspace, time } =
+        noti.data as DeportationWorkspaceNotification & {
+          time: string
+        }
       return (
         <DeportationWorkspaceNoti
-          notificationId={noti.notificationId}
           workspaceTitle={workspace.workspaceTitle}
+          time={time}
         />
       )
     }
     case "DEPORTATION_PROJECT": {
-      const { workspace, project } = noti.data as DeportationProjectNotification
+      const { workspace, project, time } =
+        noti.data as DeportationProjectNotification & { time: string }
       return (
         <DeportationProjectNoti
-          notificationId={noti.notificationId}
           workspaceTitle={workspace.workspaceTitle}
           projectTitle={project.projectTitle}
+          time={time}
         />
       )
     }
@@ -188,6 +201,8 @@ const NotificationButton = () => {
   const handleClose = () => {
     setAnchorEl(null)
   }
+
+  const { fetch: readNotification } = useReadNotification()
 
   return (
     <Box mx={2}>
@@ -240,10 +255,13 @@ const NotificationButton = () => {
         }}
       >
         {notifications.length === 0 ? (
-          <ListItem disablePadding>{123}</ListItem>
+          <ListItem disablePadding>empty set</ListItem>
         ) : (
           notifications.map(noti => (
-            <ListItem disablePadding>
+            <ListItem
+              disablePadding
+              onClick={() => readNotification(noti.notificationId)}
+            >
               <Paper
                 variant="outlined"
                 sx={{
