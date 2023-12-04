@@ -11,7 +11,6 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material"
-import ViewKanbanIcon from "@mui/icons-material/ViewKanban"
 import TableChartIcon from "@mui/icons-material/TableChart"
 import SearchIcon from "@mui/icons-material/Search"
 import { TaskListApiParams } from "api/task"
@@ -20,6 +19,8 @@ import { getProjectsStore, getWorkspaceStore } from "store/userStore"
 import useFetchBoardList from "hooks/project/useFetchBoardList"
 import Typography from "@mui/material/Typography"
 import { styled } from "@mui/material/styles"
+import TableRowsIcon from "@mui/icons-material/TableRows"
+import Tooltip from "@mui/material/Tooltip"
 
 const SelectItem = styled(MenuItem)({
   fontSize: 14,
@@ -125,12 +126,16 @@ const TaskHeader: React.FC<Props> = ({
             }}
             size="small"
           >
-            <ToggleButton value="kanban">
-              <ViewKanbanIcon fontSize="small" />
-            </ToggleButton>
-            <ToggleButton value="table">
-              <TableChartIcon fontSize="small" />
-            </ToggleButton>
+            <Tooltip title="칸반보드 뷰" arrow>
+              <ToggleButton value="kanban">
+                <TableChartIcon fontSize="small" />
+              </ToggleButton>
+            </Tooltip>
+            <Tooltip title="테이블 뷰" arrow>
+              <ToggleButton value="table">
+                <TableRowsIcon fontSize="small" />
+              </ToggleButton>
+            </Tooltip>
           </ToggleButtonGroup>
         </Box>
         {/* 검색어 입력 */}
