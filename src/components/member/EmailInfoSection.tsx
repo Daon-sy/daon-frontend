@@ -25,7 +25,8 @@ const EmailInfoSection: React.FC = () => {
   const [selectedEmailId, setSelectedEmailId] = React.useState<number | null>(
     null,
   )
-  const [removeEmailModalOpen, setRemoveEmailModalOpen] = React.useState(false)
+  const [removeEmailModalOpen, setRemoveEmailModalOpen] =
+    React.useState<boolean>(false)
 
   const fetchMemberEmails = async () => {
     const { data } = await myEmailsApi()
@@ -67,6 +68,9 @@ const EmailInfoSection: React.FC = () => {
             border: 1,
             color: "white",
             backgroundColor: "#FFBE00",
+            ":hover": {
+              backgroundColor: "#1F4838",
+            },
           }}
           onClick={() => setAddEmailModalOpen(true)}
         >

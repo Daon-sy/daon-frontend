@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import {
   Button,
   Dialog,
@@ -26,12 +26,23 @@ const CheckPasswordModal = ({
   modalInfo,
 }: Props) => {
   const [prevPassword, setPrevPassword] = React.useState<string>("")
+  const [error, setError] = useState<string | null>(null)
 
   const handleConfirmClick = async () => {
+    if (!prevPassword) {
+      setError("* 비밀번호를 입력해 주세요.")
+      return
+    }
+
     const { name, newPassword } = modalInfo
-    await modifyMyMemberInfoApi({ name, prevPassword, newPassword })
-    onSuccess()
-    handleClose()
+    try {
+      await modifyMyMemberInfoApi({ name, prevPassword, newPassword })
+      onSuccess()
+      handleClose()
+      setError(null)
+    } catch (e) {
+      setError("* 비밀번호가 일치하지 않습니다.")
+    }
   }
 
   return (
@@ -45,6 +56,8 @@ const CheckPasswordModal = ({
           value={prevPassword}
           onChange={e => setPrevPassword(e.target.value)}
           inputProps={{ maxLength: 30 }}
+          error={!!error}
+          helperText={error}
         />
       </DialogContent>
       <DialogActions>
@@ -54,6 +67,9 @@ const CheckPasswordModal = ({
             borderRadius: 1,
             color: "white",
             backgroundColor: "#1F4838",
+            ":hover": {
+              backgroundColor: "#FFBE00",
+            },
           }}
           onClick={handleConfirmClick}
         >

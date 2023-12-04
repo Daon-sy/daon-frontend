@@ -215,6 +215,9 @@ const MemberInfoSection: React.FC = () => {
                 borderRadius: 1,
                 color: "white",
                 backgroundColor: "#1F4838",
+                ":hover": {
+                  backgroundColor: "#FFBE00",
+                },
               }}
               onClick={handleCheckPasswordClick}
             >

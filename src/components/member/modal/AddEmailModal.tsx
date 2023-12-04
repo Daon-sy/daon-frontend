@@ -22,6 +22,7 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
   const [sendEmail, setSendEmail] = React.useState<boolean>(false)
   const [code, setCode] = React.useState<string>("")
   const [checkCode, setCheckCode] = React.useState<boolean | null>(null)
+  const [error, setError] = React.useState<string | null>(null)
 
   const MINUTES_IN_MS = 30 * 60 * 1000
   const INTERVAL = 1000
@@ -52,16 +53,31 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
   }, [timeLeft])
 
   const handleSendEmailClick = async () => {
+    if (!email) {
+      setError("* 이메일을 입력해 주세요.")
+      return
+    }
     if (!validateEmail(email)) {
+      setError("* 올바르지 않은 이메일 양식입니다.")
       return
     }
 
-    setSendEmail(true)
-    await sendVerificationEmailApi({ email })
-    setTimeLeft(MINUTES_IN_MS)
+    try {
+      setError(null)
+      setSendEmail(true)
+      setTimeLeft(MINUTES_IN_MS)
+      setCheckCode(null)
+      await sendVerificationEmailApi({ email })
+    } catch (e) {
+      setError("이메일 전송에 실패했습니다. 다시 요청해 주세요.")
+    }
   }
 
   const handleCheckVerificationCodeClick = async () => {
+    if (!code) {
+      setCheckCode(false)
+      return
+    }
     const verifiedData = await checkVerificationEmailApi({ email, code })
     if (verifiedData.data.verified) {
       setCheckCode(true)
@@ -105,9 +121,18 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
           value={email}
           onChange={e => setEmail(e.target.value)}
           inputProps={{ maxLength: 100 }}
+          error={!!error}
+          helperText={error}
         />
         <Button
-          sx={{ color: "white", backgroundColor: "#FFBE00" }}
+          sx={{
+            height: 40,
+            color: "white",
+            backgroundColor: "#FFBE00",
+            ":hover": {
+              backgroundColor: "#1F4838",
+            },
+          }}
           onClick={handleSendEmailClick}
         >
           인증번호 전송
@@ -159,7 +184,14 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
               {minutes} : {second}
             </Typography>
             <Button
-              sx={{ ml: 3, color: "white", backgroundColor: "#1F4838" }}
+              sx={{
+                ml: 3,
+                color: "white",
+                backgroundColor: "#1F4838",
+                ":hover": {
+                  backgroundColor: "#FFBE00",
+                },
+              }}
               onClick={handleCheckVerificationCodeClick}
             >
               인증번호 확인
@@ -185,6 +217,9 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
             border: 1,
             color: "white",
             backgroundColor: "#1F4838",
+            ":hover": {
+              backgroundColor: "#FFBE00",
+            },
           }}
         >
           추 가

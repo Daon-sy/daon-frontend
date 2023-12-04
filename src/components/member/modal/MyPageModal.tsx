@@ -16,8 +16,8 @@ const MyPageModal = ({ open = false, handleClose }: MyPageProps) => {
       title="마이페이지"
       open={open}
       handleClose={handleClose}
-      maxWidth={720}
-      minWidth={720}
+      maxWidth={750}
+      minWidth={750}
       height={600}
     >
       <Box>
