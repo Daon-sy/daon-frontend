@@ -53,7 +53,7 @@ const EmailInfoSection: React.FC = () => {
   }
 
   return (
-    <Box sx={{ width: 584, m: 1.5, mb: 5 }}>
+    <Box sx={{ width: 584, m: 1.5, mt: 3, mb: 5 }}>
       <Typography sx={{ color: "#1F4838", fontWeight: "bold" }}>
         이메일 정보
       </Typography>

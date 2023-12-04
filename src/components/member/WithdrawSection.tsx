@@ -1,6 +1,12 @@
-import { Box, Button } from "@mui/material"
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material"
 import { withdrawApi } from "api/member"
-import ConfirmDialog from "components/common/ConfirmDialog"
 import React from "react"
 
 const WithdrawSection: React.FC = () => {
@@ -12,19 +18,26 @@ const WithdrawSection: React.FC = () => {
   }
 
   return (
-    <Box>
-      <Button onClick={() => setWithdrawMemberModalOpen(true)}>
+    <Box sx={{ mt: 13 }}>
+      <Button
+        sx={{ color: "#AE3A1E", fontSize: 12 }}
+        onClick={() => setWithdrawMemberModalOpen(true)}
+      >
         회원 탈퇴
       </Button>
-      <ConfirmDialog
+      <Dialog
         open={withdrawMemberModalOpen}
-        title="주의!!"
-        content="회원 탈퇴가 진행되면 복구가 불가능합니다."
-        handleConfirm={withdraw}
-        handleClose={() => {
-          setWithdrawMemberModalOpen(false)
-        }}
-      />
+        onClose={() => setWithdrawMemberModalOpen(false)}
+      >
+        <DialogTitle>회원 탈퇴</DialogTitle>
+        <DialogContent>회원 탈퇴가 진행되면 복구가 불가능합니다.</DialogContent>
+        <DialogActions>
+          <Button onClick={withdraw}>회원 탈퇴</Button>
+          <Button onClick={() => setWithdrawMemberModalOpen(false)}>
+            취소
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   )
 }
