@@ -5,39 +5,43 @@ import TaskKanbanBoard from "components/task/kanban/TaskKanbanBoard"
 import { TaskSummary, TASK_STATUS } from "_types/task"
 import { DragDropContext, DropResult } from "react-beautiful-dnd"
 import { modifyTaskProgressStatusApi } from "api/task"
-
-interface TaskKanbansWrapperProps {
-  tasks: TaskSummary[]
-}
+import { getTaskListFilterStore } from "store/taskStore"
 
 const list = [
   {
     progressStatus: "TODO",
-    title: "할 일",
-    dividerColor: "rgba(29, 28, 53)",
+    title: "예정",
+    dividerColor: "primary.main",
   },
   {
     progressStatus: "PROCEEDING",
     title: "진행중",
-    dividerColor: "rgba(40, 101, 249)",
+    dividerColor: "secondary.main",
   },
   {
     progressStatus: "COMPLETED",
-    title: "완료됨",
-    dividerColor: "rgba(110, 188, 81)",
+    title: "완료",
+    dividerColor: "success.main",
   },
   {
     progressStatus: "PENDING",
-    title: "보류중",
-    dividerColor: "rgba(254, 171, 119)",
+    title: "보류",
+    dividerColor: "error.main",
   },
 ]
 
+interface TaskKanbansWrapperProps {
+  tasks: TaskSummary[]
+  renderProject?: boolean
+}
+
 const TaskKanbansWrapper: React.FC<TaskKanbansWrapperProps> = ({
   tasks,
+  renderProject = false,
 }: TaskKanbansWrapperProps) => {
   const workspaceId = location.pathname.split("/")[2]
   const [updateTasks, setUpdateTask] = useState<TaskSummary[]>([])
+  const { filter } = getTaskListFilterStore()
 
   useEffect(() => {
     setUpdateTask(tasks)
@@ -75,9 +79,32 @@ const TaskKanbansWrapper: React.FC<TaskKanbansWrapperProps> = ({
         style={{ width: "100%" }}
         dividerColor={item.dividerColor}
         progressStatus={item.progressStatus}
-        tasks={updateTasks.filter(
-          task => task.progressStatus === item.progressStatus && task !== null,
-        )}
+        tasks={updateTasks
+          // 키워드 필터링
+          .filter(task =>
+            filter.keyword
+              ? task.title.toUpperCase().includes(filter.keyword.toUpperCase())
+              : true,
+          )
+          // 프로젝트 필터링
+          .filter(task =>
+            filter.projectId
+              ? task.project.projectId === filter.projectId
+              : true,
+          )
+          // 보드 필터링
+          .filter(task =>
+            filter.boardId ? task.board?.boardId === filter.boardId : true,
+          )
+          // 담당자 필터링
+          .filter(task => (filter.my ? task.myTask : true))
+          // 긴급 필터링
+          .filter(task => (filter.emergency ? task.emergency : true))
+          .filter(
+            task =>
+              task.progressStatus === item.progressStatus && task !== null,
+          )}
+        renderProject={renderProject}
       />
     ))
 
@@ -85,24 +112,16 @@ const TaskKanbansWrapper: React.FC<TaskKanbansWrapperProps> = ({
     <DragDropContext onDragEnd={handleDragEnd}>
       <Box
         sx={{
-          paddingRight: 5,
           width: "100%",
-          height: "80%",
+          // height: "80%",
           minHeight: "555px",
-          overflow: "scroll",
-          overflowX: "hidden",
-          marginTop: 2,
+          // overflow: "scroll",
+          // overflowX: "hidden",
+          borderRadius: 1,
+          // border: 1,
         }}
       >
-        <Stack
-          direction="row"
-          sx={{
-            width: "100%",
-            padding: 1,
-            marginTop: 2,
-          }}
-          spacing={2}
-        >
+        <Stack direction="row" sx={{ width: "100%" }} spacing={2}>
           {renderKanbanBoards()}
         </Stack>
       </Box>

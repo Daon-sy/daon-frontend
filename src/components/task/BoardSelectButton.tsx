@@ -40,6 +40,9 @@ const BoardSelectButton: React.FC<Props> = ({
 
   return (
     <SelectListButton
+      color="green"
+      variant="contained"
+      fontWeight={900}
       unsetButtonText="보드 선택"
       showClearListItem={showClearListItem}
       defaultValueId={currentBoardId}

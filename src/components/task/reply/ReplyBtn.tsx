@@ -4,22 +4,27 @@ import { Box } from "@mui/material"
 interface ReplyBtnProps {
   handleClick: () => void
   children: React.ReactNode
+  bgcolor: string
 }
 
-const ReplyBtn = ({ handleClick, children }: ReplyBtnProps) => {
+const ReplyBtn = ({ handleClick, children, bgcolor }: ReplyBtnProps) => {
   return (
     <Box
       component="button"
       onClick={handleClick}
       sx={{
+        mt: "8px",
+        mx: "4px",
+        py: "4px",
+        px: "8px",
         position: "relative",
-        fontSize: "12px",
+        fontSize: "8px",
         border: "none",
-        bgcolor: "transparent",
-        borderRadius: "30px",
-        color: "grey",
+        bgcolor,
+        borderRadius: "4px",
+        color: "#ffffff",
         "&:hover": {
-          backgroundColor: "rgb(7, 177, 77, 0.42)",
+          backgroundColor: "#1f4838",
         },
       }}
     >

@@ -5,28 +5,23 @@ export type TASK_STATUS = "TODO" | "PROCEEDING" | "COMPLETED" | "PENDING"
 export interface TaskStatus {
   value: TASK_STATUS
   description: string
-  chipColor: "info" | "primary" | "success" | "warning"
 }
 
 const TODO: TaskStatus = {
   value: "TODO",
-  description: "할 일",
-  chipColor: "info",
+  description: "예정",
 }
 const PROCEEDING: TaskStatus = {
   value: "PROCEEDING",
-  description: "진행중",
-  chipColor: "primary",
+  description: "진행",
 }
 const COMPLETED: TaskStatus = {
   value: "COMPLETED",
-  description: "완료됨",
-  chipColor: "success",
+  description: "완료",
 }
 const PENDING: TaskStatus = {
   value: "PENDING",
-  description: "보류중",
-  chipColor: "warning",
+  description: "보류",
 }
 
 export const TASK_STATUS_SET: Array<TaskStatus> = [
@@ -53,6 +48,8 @@ export interface TaskSummary {
   progressStatus: TASK_STATUS
   emergency: boolean
   bookmark: boolean
+  replyCount: number
+  myTask: boolean
 }
 
 export interface TaskDetail {

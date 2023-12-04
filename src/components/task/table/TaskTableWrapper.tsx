@@ -159,7 +159,8 @@ const TaskTableWrapper: React.FC<TaskTableWrapperProps> = ({ tasks }) => {
       <Stack
         sx={{
           width: "100%",
-          padding: 1,
+          // paddingY: 1,
+          paddingX: 0,
           marginTop: 2,
         }}
         spacing={2}

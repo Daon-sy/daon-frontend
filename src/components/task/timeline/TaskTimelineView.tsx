@@ -1,14 +1,16 @@
 import React from "react"
-import { Box } from "@mui/material"
-import Tooltip from "@mui/material/Tooltip"
+import { Box, Chip } from "@mui/material"
 import { TaskListApiParams } from "api/task"
 import { getWorkspaceStore } from "store/userStore"
 import { getTaskDetailViewStore } from "store/taskStore"
 import { getTaskTimelineStore } from "store/taskTimelineStore"
 import useFetchTaskList from "hooks/task/useFetchTaskList"
-import { getDateCountArray, todayDateToString } from "utils/DateUtils"
+import { getDateCountArray } from "utils/DateUtils"
 import TaskDetailModal from "components/task/modal/TaskDetailModal"
 import TaskTimelineBar from "components/task/timeline/TaskTimelineBar"
+import Typography from "@mui/material/Typography"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faFire } from "@fortawesome/free-solid-svg-icons"
 
 interface TaskViewProps {
   params?: TaskListApiParams
@@ -22,13 +24,35 @@ interface YearMonthDateCount {
 }
 
 const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
-  const [taskWidth] = React.useState(220)
+  const [taskWidth] = React.useState(230)
 
   const { workspace } = getWorkspaceStore()
-  const { tasks } = useFetchTaskList({
-    workspaceId: workspace?.workspaceId || 0,
-    params,
-  })
+  const { tasks: allMyTasks, fetchTaskList } = useFetchTaskList(
+    {
+      workspaceId: workspace?.workspaceId || 0,
+      params,
+    },
+    true,
+  )
+
+  // 보여줄 할 일 목록
+  const tasks = React.useMemo(() => {
+    return allMyTasks
+      .filter(task => task.progressStatus !== "PENDING")
+      .sort((t1, t2) => {
+        if (t1.emergency) return -1
+        if (t2.emergency) return 1
+        if (!t1.endDate && !t2.endDate) return t1.title > t2.title ? 1 : -1
+
+        if (!t1.endDate) return -1
+        if (!t2.endDate) return 1
+        const sub =
+          new Date(t1.endDate).getTime() - new Date(t2.endDate).getTime()
+
+        return sub
+      })
+  }, [allMyTasks])
+
   const { taskDetailParam, setTaskDetailParam, clear } =
     getTaskDetailViewStore()
   const { props: timelineProps } = getTaskTimelineStore()
@@ -62,17 +86,10 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
     )
   }
 
-  const [yearMonthDateCountList] = React.useState<YearMonthDateCount[]>(
-    getDateCountArray({
-      startDate: getMinStartDate(),
-      endDate: getMaxEndDate(),
-    }),
-  )
-
-  const totalWidth =
-    yearMonthDateCountList
-      .map(ymdc => ymdc.dateCount)
-      .reduce((prev, curr) => prev + curr) * dateWidth
+  const [yearMonthDateCountList, setYearMonthDateCountList] = React.useState<
+    YearMonthDateCount[]
+  >([])
+  const [totalWidth, setTotalWidth] = React.useState(0)
 
   const boxRef = React.useRef<HTMLDivElement>(null)
 
@@ -86,8 +103,21 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
     )
   }
 
+  React.useLayoutEffect(() => {
+    const now = new Date()
+    const tmp = getDateCountArray({
+      startDate: getMinStartDate() || now,
+      endDate: getMaxEndDate() || now,
+    })
+    setYearMonthDateCountList(tmp)
+    setTotalWidth(
+      tmp.map(ymdc => ymdc.dateCount).reduce((prev, curr) => prev + curr) *
+        dateWidth,
+    )
+  }, [tasks])
+
   React.useEffect(() => {
-    if (boxRef.current) {
+    if (boxRef.current && yearMonthDateCountList.length > 0) {
       const blankCount = getBlankCount()
 
       boxRef.current.scrollTo({
@@ -98,7 +128,10 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
     }
   })
 
-  if (tasks.length <= 0) return <Box />
+  React.useEffect(() => {
+    fetchTaskList()
+  }, [workspace])
+
   return (
     <>
       <Box
@@ -114,15 +147,12 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
           borderRadius: 1,
           scrollbarWidth: "0.5em",
           WebkitScrollSnapType: "none",
-          overflowX: "scroll",
-          overflowY: "scroll",
+          overflow: "auto",
           boxShadow: "2px 2px 6px rgba(0,0,0,0.3)",
           "&::-webkit-scrollbar": {
             height: "8px",
             width: "8px",
-            borderTop: 1,
-            borderLeft: 1,
-            borderColor: "#C8C8C8FF",
+            borderRadius: 1,
             backgroundColor: "#F1F2F4FF",
           },
           "&::-webkit-scrollbar-thumb": {
@@ -134,6 +164,10 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
             width: "0px",
             height: "0px",
           },
+          "&::-webkit-scrollbar-corner": {
+            borderRadius: 1,
+            backgroundColor: "#F1F2F4FF",
+          },
         }}
       >
         {/* 할 일 목록 */}
@@ -144,14 +178,18 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
               display: "flex",
               flexDirection: "column",
               borderRight: "1px solid #C8C8C8FF",
+              borderBottom: 1,
+              borderColor: "#C8C8C8FF",
             }}
           >
             <Box
               sx={{
+                width: taskWidth,
                 top: 0,
                 position: "sticky",
                 color: "#F1F2F4FF",
                 backgroundColor: "#F1F2F4FF",
+                boxSizing: "border-box",
                 borderBottom: 1,
                 borderColor: "#C8C8C8FF",
                 borderTopLeftRadius: 1,
@@ -161,9 +199,9 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
             {tasks.map((task, index) => (
               <Box
                 sx={{
+                  display: "flex",
+                  alignItems: "center",
                   width: taskWidth,
-                  lineHeight: `${taskHeight}px`,
-                  fontSize: 14,
                   backgroundColor: index % 2 === 0 ? "#ffffff" : "#F7F8F9FF",
                   "&:hover": {
                     cursor: "pointer",
@@ -178,16 +216,42 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
                   })
                 }
               >
-                <Box
+                {task.emergency ? (
+                  <Typography ml={1}>
+                    <FontAwesomeIcon icon={faFire} color="red" />
+                  </Typography>
+                ) : null}
+                <Chip
+                  label={task.project.title}
+                  color="secondary"
+                  size="small"
                   sx={{
-                    paddingX: 1,
+                    ml: 1,
+                    fontSize: 12,
+                    borderRadius: 1.5,
+                    fontWeight: 900,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    maxWidth: 80,
+                  }}
+                />
+                <Typography
+                  sx={{
+                    // 완료됨 표시. 다른 아이콘 넣으면 좋을 것 같음
+                    textDecoration:
+                      task.progressStatus === "COMPLETED"
+                        ? "line-through"
+                        : undefined,
+                    fontSize: 12,
+                    lineHeight: `${taskHeight}px`,
+                    paddingX: 0.5,
                     whiteSpace: "nowrap",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                   }}
                 >
                   {task.title}
-                </Box>
+                </Typography>
               </Box>
             ))}
           </Box>
@@ -196,73 +260,74 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
         <Box
           sx={{
             position: "relative",
+            left: taskWidth,
           }}
         >
-          <Box sx={{ display: "flex", position: "absolute", zIndex: 3 }}>
+          {/* 오늘 날짜 선 */}
+          {/* <Tooltip title={todayDateToString()} placement="top"> */}
+          <Box
+            sx={{
+              zIndex: 2,
+              position: "absolute",
+              left:
+                yearMonthDateCountList.length > 0
+                  ? dateWidth * getBlankCount()
+                  : 0,
+              top: headerHeight,
+              width: 5,
+              height: taskHeight * tasks.length,
+              borderLeft: 1,
+              borderWidth: 2,
+              borderColor: "#FFBE00",
+              "&:hover": {
+                borderColor: "#dca900",
+              },
+            }}
+          />
+          {/* </Tooltip> */}
+          {/* header */}
+          <Box sx={{ display: "flex" }} position="sticky" top={0} zIndex={2}>
+            {yearMonthDateCountList.map(ymdc => (
+              <Box
+                sx={{
+                  width: dateWidth * ymdc.dateCount,
+                  height: headerHeight,
+                  display: "flex",
+                  backgroundColor: "#F1F2F4FF",
+                  boxSizing: "border-box",
+                  borderBottom: 1,
+                  borderRight: 1,
+                  borderColor: "#C8C8C8FF",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 12,
+                }}
+              >
+                {ymdc.year}년 {ymdc.month}월
+              </Box>
+            ))}
+          </Box>
+          <Box display="flex" position="absolute">
             {yearMonthDateCountList.map((ymdc, index) => (
               <Box
                 sx={{
-                  position: "relative",
-                  width: dateWidth * ymdc.dateCount - 1,
-                  height: headerHeight + taskHeight * tasks.length,
-                  borderRight:
-                    index < yearMonthDateCountList.length - 1 ? 1 : 0,
+                  width: dateWidth * ymdc.dateCount,
+                  height: taskHeight * tasks.length,
+                  boxSizing: "border-box",
+                  borderRight: 1,
                   borderColor: "#c8c8c8",
                   backgroundColor: "rgba(255,255,255,0)",
                 }}
               />
             ))}
           </Box>
-          {/* 오늘 날짜 선 */}
-          <Tooltip title={todayDateToString()} placement="top">
-            <Box
-              sx={{
-                zIndex: 1,
-                position: "absolute",
-                left: dateWidth * getBlankCount(),
-                top: headerHeight,
-                width: 5,
-                height: taskHeight * tasks.length,
-                borderLeft: 1,
-                borderWidth: 2,
-                borderColor: "#FFBE00",
-                "&:hover": {
-                  borderColor: "#dca900",
-                },
-              }}
-            />
-          </Tooltip>
-          {/* header */}
-          <Box sx={{ display: "flex" }} position="sticky" top={0} zIndex={2}>
-            {yearMonthDateCountList.map(ymdc => (
-              <Box
-                sx={{
-                  display: "flex",
-                  backgroundColor: "#F1F2F4FF",
-                  borderBottom: 1,
-                  borderColor: "#C8C8C8FF",
-                }}
-              >
-                <Box
-                  sx={{
-                    width: dateWidth * ymdc.dateCount,
-                    height: headerHeight,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: 12,
-                  }}
-                >
-                  {currentDate.getFullYear() !== ymdc.year
-                    ? `${ymdc.year}년 `
-                    : null}
-                  {ymdc.month}월
-                </Box>
-              </Box>
-            ))}
-          </Box>
           {/* 할 일 타임라인 */}
-          <Box>
+          <Box
+            sx={{
+              borderBottom: 1,
+              borderColor: "#C8C8C8FF",
+            }}
+          >
             {tasks.map((task, index) => (
               <TaskTimelineBar
                 task={task}
@@ -270,7 +335,6 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
                   year: yearMonthDateCountList[0].year,
                   month: yearMonthDateCountList[0].month,
                 }}
-                minStartDate={getMinStartDate()}
                 totalWidth={totalWidth}
                 index={index}
               />
