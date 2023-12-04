@@ -22,6 +22,8 @@ import {
   RegisteredTaskManagerNotification,
 } from "_types/notification"
 import useReadNotification from "hooks/notification/useReadNotification"
+import { useTitleDialog } from "components/common/TitleDialog"
+import JoinWorkspace from "components/workspace/JoinWorkspace"
 
 const StyledTypography = styled((props: TypographyProps) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -125,72 +127,6 @@ const DeportationProjectNoti = ({
   </StyledTypography>
 )
 
-const renderNotification = (noti: Notification) => {
-  switch (noti.type) {
-    case "REGISTERED_TASK_MANAGER": {
-      const { workspace, project, task, time } =
-        noti.data as RegisteredTaskManagerNotification & { time: string }
-      return (
-        <RegisteredTaskManagerNoti
-          workspaceTitle={workspace.workspaceTitle}
-          projectTitle={project.projectTitle}
-          taskTitle={task.taskTitle}
-          time={time}
-        />
-      )
-    }
-    case "INVITE_WORKSPACE": {
-      const { workspace, time } = noti.data as InviteWorkspaceNotification & {
-        time: string
-      }
-      return (
-        <InviteWorkspaceNoti
-          workspaceTitle={workspace.workspaceTitle}
-          time={time}
-        />
-      )
-    }
-    case "INVITE_PROJECT": {
-      const { workspace, project, time } =
-        noti.data as InviteProjectNotification & {
-          time: string
-        }
-      return (
-        <InviteProjectNoti
-          workspaceTitle={workspace.workspaceTitle}
-          projectTitle={project.projectTitle}
-          time={time}
-        />
-      )
-    }
-    case "DEPORTATION_WORKSPACE": {
-      const { workspace, time } =
-        noti.data as DeportationWorkspaceNotification & {
-          time: string
-        }
-      return (
-        <DeportationWorkspaceNoti
-          workspaceTitle={workspace.workspaceTitle}
-          time={time}
-        />
-      )
-    }
-    case "DEPORTATION_PROJECT": {
-      const { workspace, project, time } =
-        noti.data as DeportationProjectNotification & { time: string }
-      return (
-        <DeportationProjectNoti
-          workspaceTitle={workspace.workspaceTitle}
-          projectTitle={project.projectTitle}
-          time={time}
-        />
-      )
-    }
-    default:
-      return null
-  }
-}
-
 const NotificationButton = () => {
   const { notifications } = getNotificationStore()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -203,6 +139,109 @@ const NotificationButton = () => {
   }
 
   const { fetch: readNotification } = useReadNotification()
+
+  const {
+    TitleDialog,
+    open: openJoinWorkspaceDialog,
+    close: closeJoinWorkspaceDialog,
+  } = useTitleDialog()
+
+  const [selectedNoti, setSelectedNoti] = React.useState<
+    | {
+        notificationId: number
+        workspaceId: number
+      }
+    | undefined
+  >()
+
+  React.useEffect(() => {
+    if (selectedNoti) {
+      openJoinWorkspaceDialog()
+    }
+  }, [selectedNoti])
+
+  const renderNotification = (noti: Notification) => {
+    switch (noti.type) {
+      case "REGISTERED_TASK_MANAGER": {
+        const { workspace, project, task, time } =
+          noti.data as RegisteredTaskManagerNotification & { time: string }
+        return (
+          <Box onClick={() => readNotification(noti.notificationId)}>
+            <RegisteredTaskManagerNoti
+              workspaceTitle={workspace.workspaceTitle}
+              projectTitle={project.projectTitle}
+              taskTitle={task.taskTitle}
+              time={time}
+            />
+          </Box>
+        )
+      }
+      case "INVITE_WORKSPACE": {
+        const { workspace, time } = noti.data as InviteWorkspaceNotification & {
+          time: string
+        }
+        return (
+          <Box
+            onClick={() => {
+              setSelectedNoti({
+                notificationId: noti.notificationId,
+                workspaceId: workspace.workspaceId,
+              })
+            }}
+          >
+            <InviteWorkspaceNoti
+              workspaceTitle={workspace.workspaceTitle}
+              time={time}
+            />
+          </Box>
+        )
+      }
+      case "INVITE_PROJECT": {
+        const { workspace, project, time } =
+          noti.data as InviteProjectNotification & {
+            time: string
+          }
+        return (
+          <Box onClick={() => readNotification(noti.notificationId)}>
+            <InviteProjectNoti
+              workspaceTitle={workspace.workspaceTitle}
+              projectTitle={project.projectTitle}
+              time={time}
+            />
+          </Box>
+        )
+      }
+      case "DEPORTATION_WORKSPACE": {
+        const { workspace, time } =
+          noti.data as DeportationWorkspaceNotification & {
+            time: string
+          }
+        return (
+          <Box onClick={() => readNotification(noti.notificationId)}>
+            <DeportationWorkspaceNoti
+              workspaceTitle={workspace.workspaceTitle}
+              time={time}
+            />
+          </Box>
+        )
+      }
+      case "DEPORTATION_PROJECT": {
+        const { workspace, project, time } =
+          noti.data as DeportationProjectNotification & { time: string }
+        return (
+          <Box onClick={() => readNotification(noti.notificationId)}>
+            <DeportationProjectNoti
+              workspaceTitle={workspace.workspaceTitle}
+              projectTitle={project.projectTitle}
+              time={time}
+            />
+          </Box>
+        )
+      }
+      default:
+        return null
+    }
+  }
 
   return (
     <Box mx={2}>
@@ -258,10 +297,7 @@ const NotificationButton = () => {
           <ListItem disablePadding>empty set</ListItem>
         ) : (
           notifications.map(noti => (
-            <ListItem
-              disablePadding
-              onClick={() => readNotification(noti.notificationId)}
-            >
+            <ListItem disablePadding>
               <Paper
                 variant="outlined"
                 sx={{
@@ -275,6 +311,17 @@ const NotificationButton = () => {
           ))
         )}
       </Menu>
+      <TitleDialog title="워크스페이스 참여" maxWidth="sm">
+        <JoinWorkspace
+          workspaceId={selectedNoti ? selectedNoti.workspaceId : 0}
+          handleSuccess={() => {
+            readNotification(selectedNoti ? selectedNoti.notificationId : 0)
+            closeJoinWorkspaceDialog()
+            handleClose()
+          }}
+          handleCancel={closeJoinWorkspaceDialog}
+        />
+      </TitleDialog>
     </Box>
   )
 }
