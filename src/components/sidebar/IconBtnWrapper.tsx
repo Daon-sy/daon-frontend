@@ -1,28 +1,28 @@
 import React from "react"
+import { Link as RouterLink, useParams } from "react-router-dom"
 import { Box, Divider } from "@mui/material"
 import GroupsIcon from "@mui/icons-material/Groups"
 import AddCircleIcon from "@mui/icons-material/AddCircle"
 import SettingsIcon from "@mui/icons-material/Settings"
 import BookmarkIcon from "@mui/icons-material/Bookmark"
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions"
-import { Link as RouterLink, useParams } from "react-router-dom"
-import TaskCreateModal from "components/task/modal/TaskCreateModal"
-import WorkspaceParticipantsModal from "components/workspace/modal/WorkspaceParticipantsModal"
 import WorkspaceSettingsModal from "components/workspace/modal/WorkspaceSettingsModal"
+import ParticipantsModal from "components/common/ParticipantsModal"
+import { useCreateTaskModal } from "components/task/CreateTask"
 import IconBtn from "./IconBtn"
 
 const IconBtnWrapper: React.FC = () => {
   const { workspaceId } = useParams()
-  const [taskCreateModalOpen, setTaskCreateModalOpen] = React.useState(false)
   const [participantsModalOpen, setParticipantsModalOpen] =
     React.useState(false)
   const [workspaceManageModalOpen, setWorkspaceManageModalOpen] =
     React.useState(false)
-  const openTaskCreateModal = () => setTaskCreateModalOpen(true)
+  const { CreateTaskModal, open: openCreateTaskModal } = useCreateTaskModal()
   const openParticipantsModal = () => setParticipantsModalOpen(true)
   const openWorkspaceManageModal = () => {
     setWorkspaceManageModalOpen(true)
   }
+
   return (
     <Box sx={{ width: "100%", height: "40%" }}>
       <Box
@@ -51,7 +51,7 @@ const IconBtnWrapper: React.FC = () => {
           component="button"
           text="할일추가"
           icon={<AddCircleIcon fontSize="large" />}
-          onClick={openTaskCreateModal}
+          onClick={openCreateTaskModal}
         />
       </Box>
       <Box
@@ -92,16 +92,15 @@ const IconBtnWrapper: React.FC = () => {
           handleClose={() => setWorkspaceManageModalOpen(false)}
         />
       ) : null}
-      {taskCreateModalOpen ? (
-        <TaskCreateModal
-          open={taskCreateModalOpen}
-          handleClose={() => setTaskCreateModalOpen(false)}
-        />
-      ) : null}
-      <WorkspaceParticipantsModal
+      {/* <WorkspaceParticipantsModal
+        open={participantsModalOpen}
+        handleClose={() => setParticipantsModalOpen(false)}
+      /> */}
+      <ParticipantsModal
         open={participantsModalOpen}
         handleClose={() => setParticipantsModalOpen(false)}
       />
+      <CreateTaskModal />
     </Box>
   )
 }

@@ -1,11 +1,8 @@
-import * as React from "react"
-import AppBar from "@mui/material/AppBar"
-import Toolbar from "@mui/material/Toolbar"
-import Typography from "@mui/material/Typography"
-import { Box, Button } from "@mui/material"
-import LoginModal from "components/auth/modal/LoginModal"
+import React from "react"
 import { Link } from "react-router-dom"
-import Stack from "@mui/material/Stack"
+import { Box, Button, Stack, AppBar, Toolbar } from "@mui/material"
+import Logo from "components/header/Logo"
+import LoginModal from "components/auth/modal/LoginModal"
 
 const AnonymousHeader = () => {
   const [loginModalOpen, setLoginModalOpen] = React.useState<boolean>(false)
@@ -18,24 +15,7 @@ const AnonymousHeader = () => {
     <AppBar position="static">
       <Toolbar>
         {/* Nav */}
-        <Typography
-          variant="h6"
-          noWrap
-          component="div"
-          sx={{
-            mr: 2,
-            fontFamily: "monospace",
-            fontWeight: 700,
-            letterSpacing: ".3rem",
-            color: "inherit",
-            textDecoration: "none",
-          }}
-          flexGrow={1}
-        >
-          <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-            LOGO
-          </Link>
-        </Typography>
+        <Logo />
         <Box>
           <Stack spacing={2} direction="row">
             <Link

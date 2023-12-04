@@ -194,6 +194,12 @@ const TaskHistory = ({ taskHistory }: Props) => {
             },
           },
         }}
+        PopperProps={{
+          style: {
+            zIndex: 10000,
+            cursor: "default",
+          },
+        }}
       >
         <Stack
           direction="row"

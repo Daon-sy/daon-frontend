@@ -4,14 +4,12 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
-  DialogTitle,
+  Stack,
 } from "@mui/material"
 
 interface Props {
   open: boolean
-  title?: string
-  content: string
+  children?: React.ReactNode
   handleConfirm: () => void
   handleClose: () => void
   confirmButtonText?: string
@@ -19,36 +17,100 @@ interface Props {
   maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false
 }
 
-const ConfirmDialog = ({
+export const ConfirmDialog = ({
   open,
-  title,
-  content,
+  children,
   handleConfirm,
   handleClose,
   confirmButtonText,
   cancelButtonText,
-  maxWidth,
+  maxWidth = "xs",
 }: Props) => {
   return (
     <Dialog open={open} onClose={handleClose} maxWidth={maxWidth}>
-      {title ? <DialogTitle>{title}</DialogTitle> : null}
-      <DialogContent>
-        <DialogContentText whiteSpace="pre-wrap">{content}</DialogContentText>
-      </DialogContent>
+      <DialogContent>{children}</DialogContent>
       <DialogActions>
-        <Button
-          autoFocus
-          onClick={() => {
-            handleConfirm()
-            handleClose()
-          }}
+        <Stack
+          direction="row"
+          spacing={3}
+          sx={{ width: "100%", mx: 3, mb: 2.5 }}
         >
-          {confirmButtonText || "확인"}
-        </Button>
-        <Button onClick={handleClose}>{cancelButtonText || "취소"}</Button>
+          <Button
+            fullWidth
+            autoFocus
+            color="primary"
+            variant="contained"
+            onClick={() => {
+              handleConfirm()
+              handleClose()
+            }}
+          >
+            {confirmButtonText || "확인"}
+          </Button>
+          <Button
+            fullWidth
+            color="primary"
+            variant="outlined"
+            onClick={handleClose}
+          >
+            {cancelButtonText || "취소"}
+          </Button>
+        </Stack>
       </DialogActions>
     </Dialog>
   )
+}
+
+interface useConfirmDialogProps {
+  children?: React.ReactNode
+  handleConfirm?: () => void
+  confirmButtonText?: string
+  cancelButtonText?: string
+  maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false
+}
+
+/**
+ * ConfirmDialog 사용 hook
+ */
+export const useConfirmDialog = () => {
+  const [isOpen, setIsOpen] = React.useState(false)
+
+  const open = React.useCallback(() => {
+    setIsOpen(true)
+  }, [])
+
+  const close = React.useCallback(() => {
+    setIsOpen(false)
+  }, [])
+
+  return {
+    ConfirmDialog: isOpen
+      ? ({
+          children,
+          handleConfirm,
+          confirmButtonText,
+          cancelButtonText,
+          maxWidth = "xs",
+        }: useConfirmDialogProps) => (
+          <ConfirmDialog
+            open={isOpen}
+            handleConfirm={() => {
+              if (handleConfirm) handleConfirm()
+              close()
+            }}
+            handleClose={close}
+            confirmButtonText={confirmButtonText}
+            cancelButtonText={cancelButtonText}
+            maxWidth={maxWidth}
+          >
+            {children}
+          </ConfirmDialog>
+        )
+      : () => null,
+    open,
+    close,
+    isOpen,
+  }
 }
 
 export default ConfirmDialog

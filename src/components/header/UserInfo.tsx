@@ -8,6 +8,7 @@ import Tooltip from "@mui/material/Tooltip"
 import MenuItem from "@mui/material/MenuItem"
 import { getTokenStore } from "store/tokenStore"
 import { useAlert } from "hooks/useAlert"
+import MyPageModal from "components/member/modal/MyPageModal"
 
 const UserInfo: React.FC = () => {
   const tokenState = getTokenStore()
@@ -15,6 +16,7 @@ const UserInfo: React.FC = () => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null,
   )
+  const [myPageModalOpen, setMyPageModalOpen] = React.useState<boolean>(false)
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget)
@@ -22,6 +24,11 @@ const UserInfo: React.FC = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null)
+  }
+
+  const onMyPageButtonClick = () => {
+    setMyPageModalOpen(true)
+    handleCloseUserMenu()
   }
 
   const onLogoutButtonClick = () => {
@@ -33,7 +40,7 @@ const UserInfo: React.FC = () => {
 
   // 각 메뉴 클릭에 해당하는 callback 함수 지정
   const settings = [
-    { name: "Profile", onClick: handleCloseUserMenu },
+    { name: "MyPage", onClick: onMyPageButtonClick },
     { name: "Logout", onClick: onLogoutButtonClick },
   ]
 
@@ -66,6 +73,10 @@ const UserInfo: React.FC = () => {
           </MenuItem>
         ))}
       </Menu>
+      <MyPageModal
+        open={myPageModalOpen}
+        handleClose={() => setMyPageModalOpen(false)}
+      />
     </Box>
   )
 }

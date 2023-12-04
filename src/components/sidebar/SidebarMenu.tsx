@@ -2,27 +2,27 @@ import React from "react"
 import { useParams } from "react-router-dom"
 import { Box, TextField, InputAdornment } from "@mui/material"
 import SettingsIcon from "@mui/icons-material/Settings"
+import SearchIcon from "@mui/icons-material/Search"
 import { getProjectsStore } from "store/userStore"
 import Menu from "components/common/Menu"
 import CreateBtn from "components/common/CreateBtn"
-import CreateProjectModal from "components/project/modal/CreateProjectModal"
-import ProjectSettingsModal from "components/project/modal/ProjectSettingsModal"
+import { useTitleDialog } from "components/common/TitleDialog"
 import SubIconBtn from "components/sidebar/SubIconBtn"
 import MenuItems from "components/sidebar/MenuItems"
-import SearchIcon from "@mui/icons-material/Search"
+import CreateProject from "components/project/CreateProject"
+import ProjectSettingsModal from "components/project/modal/ProjectSettingsModal"
 
 const SidebarMenu: React.FC = () => {
   const { workspaceId } = useParams()
   const { projects } = getProjectsStore()
-  const [projectCreateModalOpen, setProjectCreateModalOpen] =
-    React.useState<boolean>(false)
   const [projectManageModalOpenMap, setProjectManageModalOpenMap] =
     React.useState<Record<number, boolean>>({})
   const [projectFilterKeyword, setProjectFilterKeyword] = React.useState("")
-
-  const openProjectCreateModal = () => {
-    setProjectCreateModalOpen(true)
-  }
+  const {
+    TitleDialog,
+    open: openCreateProjectDialog,
+    close: closeCreateProjectDialog,
+  } = useTitleDialog()
 
   const openProjectManageModal = (projectId: number, e: React.MouseEvent) => {
     e.preventDefault()
@@ -42,7 +42,7 @@ const SidebarMenu: React.FC = () => {
     <Box>
       <Menu
         title="참여 중인 프로젝트"
-        btn={<CreateBtn handleClick={openProjectCreateModal} />}
+        btn={<CreateBtn handleClick={openCreateProjectDialog} />}
       >
         <Box width="88%" mb={1}>
           <TextField
@@ -92,12 +92,9 @@ const SidebarMenu: React.FC = () => {
             </Box>
           ))}
       </Menu>
-      {projectCreateModalOpen ? (
-        <CreateProjectModal
-          open={projectCreateModalOpen}
-          handleClose={() => setProjectCreateModalOpen(false)}
-        />
-      ) : null}
+      <TitleDialog title="프로젝트 생성" maxWidth="sm">
+        <CreateProject onCancelButtonClick={closeCreateProjectDialog} />
+      </TitleDialog>
     </Box>
   )
 }
