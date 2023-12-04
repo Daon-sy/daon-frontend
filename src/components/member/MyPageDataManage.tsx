@@ -28,12 +28,11 @@ import PersonIcon from "@mui/icons-material/Person"
 import LockIcon from "@mui/icons-material/Lock"
 import MailIcon from "@mui/icons-material/Mail"
 import AddEmailModal from "./modal/AddEmailModal"
-import CheckPasswordModal from "./modal/ModifyPasswordModal"
 import MemberInfoSection from "./MemberInfoSection"
 import EmailInfoSection from "./EmailInfoSection"
 import WithdrawSection from "./WithdrawSection"
 
-const MyPage: React.FC = () => {
+const MyPageDataManage: React.FC = () => {
   const { addSuccess } = useAlert()
   const { myDetail, setMyDetail } = getMyMemberDetailStore()
 
@@ -352,12 +351,7 @@ const MyPage: React.FC = () => {
             >
               변경
             </Button>
-            {checkPasswordModalOpen ? (
-              <CheckPasswordModal
-                open={checkPasswordModalOpen}
-                handleClose={() => setCheckPasswordModalOpen(false)}
-              />
-            ) : null}
+            {checkPasswordModalOpen ? null : null}
           </Box>
           <Button
             sx={{
@@ -479,4 +473,4 @@ const MyPage: React.FC = () => {
   )
 }
 
-export default MyPage
+export default MyPageDataManage
