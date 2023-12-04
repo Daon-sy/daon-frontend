@@ -114,7 +114,7 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
           placeholder="gildong@email.com"
           value={email}
           onChange={e => setEmail(e.target.value)}
-          inputProps={{ maxLength: 20 }}
+          inputProps={{ maxLength: 30 }}
         />
         <Button
           sx={{ color: "white", backgroundColor: "#FFBE00" }}

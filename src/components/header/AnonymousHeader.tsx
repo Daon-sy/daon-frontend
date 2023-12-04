@@ -2,7 +2,6 @@ import React from "react"
 import { Link } from "react-router-dom"
 import { Box, Button, Stack, AppBar, Toolbar } from "@mui/material"
 import Logo from "components/header/Logo"
-import LoginModal from "components/auth/modal/LoginModal"
 
 const AnonymousHeader = () => {
   const [loginModalOpen, setLoginModalOpen] = React.useState<boolean>(false)
