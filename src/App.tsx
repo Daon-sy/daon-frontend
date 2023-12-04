@@ -57,6 +57,20 @@ let theme = createTheme({
       textTransform: "none",
     },
   },
+  components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: props =>
+          props.ownerState.type === "password"
+            ? {
+                "& .MuiInputBase-input": {
+                  fontFamily: "Pretendard-Regular !important",
+                },
+              }
+            : undefined,
+      },
+    },
+  },
 })
 
 theme = createTheme(theme, {

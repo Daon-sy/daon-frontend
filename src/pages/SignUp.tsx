@@ -76,7 +76,6 @@ const SignUp = () => {
     // TODO 데이터 유효성 검사
     if (!checkFormData()) {
       addError("입력값을 확인해주세요")
-
       return
     }
 
