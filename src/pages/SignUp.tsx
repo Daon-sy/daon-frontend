@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { Box, Button, LinearProgress, Stack, TextField } from "@mui/material"
 import {
   addEmailApi,
+  checkUsernameApi,
   checkVerificationEmailApi,
   sendVerificationEmailApi,
   signUpApi,
@@ -28,6 +29,11 @@ const SignUp = () => {
   const [code, setCode] = React.useState<string>("")
   const [checkCode, setCheckCode] = React.useState<boolean | null>(null)
   const [progress, setProgress] = React.useState<number>(-1)
+
+  const [isUsernameDuplicate, setIsUsernameDuplicate] = React.useState<
+    boolean | null
+  >(null)
+  const [isEmailValid, setIsEmailValid] = React.useState<boolean>(true)
 
   const [formData, setFormData] = React.useState<SignUpForm>({
     username: "",
@@ -71,14 +77,6 @@ const SignUp = () => {
       name: e.target.value,
     })
   }
-
-  const checkFormData = (): boolean =>
-    !(
-      !formData.email ||
-      !formData.password ||
-      !formData.passwordCheck ||
-      !formData.name
-    )
 
   const MINUTES_IN_MS = 30 * 60 * 1000
   const INTERVAL = 1000
@@ -137,10 +135,83 @@ const SignUp = () => {
     navigate(-1)
   }
 
+  // 유효성 검사
+
+  // 1. 빈칸이 있는지
+  const checkFormData = (): boolean =>
+    !(
+      !formData.email ||
+      !formData.password ||
+      !formData.passwordCheck ||
+      !formData.name
+    )
+
+  // 2. '아이디'가 이미 존재하는지
+  const checkUsername = async () => {
+    try {
+      const response = await checkUsernameApi({
+        username: formData.username,
+      })
+      setIsUsernameDuplicate(response.data.isDuplicate)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  // 3. '비밀번호'가 6자리 이상인지
+  const checkPassword = () => formData.password.length >= 6
+
+  // 4. '비밀번호'와 '비밀번호 확인'의 값이 똑같은지
+  const checkPasswordMatching = () =>
+    formData.password === formData.passwordCheck
+
+  // 5. '이름'이 한국어로 기입되었는지
+  const checkNameKorean = () => /^[가-힣]+$/.test(formData.name)
+
+  // 6. '이메일'이 이메일 형식에 맞는지
+  const checkEmailValid = () =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+
   const onSignUpButtonClick = () => {
-    // TODO 데이터 유효성 검사
+    // 1. 빈칸이 있는지
     if (!checkFormData()) {
       addError("입력값을 확인해주세요")
+      return
+    }
+
+    // 2. '아이디'가 이미 존재하는지
+    if (isUsernameDuplicate === true) {
+      addError("이미 사용 중인 아이디입니다.")
+      return
+    }
+
+    // 3. '비밀번호'가 6자리 이상인지
+    if (!checkPassword()) {
+      addError("비밀번호는 6자리 이상이어야 합니다.")
+      return
+    }
+
+    // 4. '비밀번호'와 '비밀번호 확인'의 값이 똑같은지
+    if (!checkPasswordMatching()) {
+      addError("비밀번호와 비밀번호 확인이 일치하지 않습니다.")
+      return
+    }
+
+    // 5. '이름'이 한국어로 기입되었는지
+    if (!checkNameKorean()) {
+      addError("이름은 한글로 기입해주세요.")
+      return
+    }
+
+    // 6. '이메일'이 이메일 형식에 맞는지
+    if (!checkEmailValid()) {
+      addError("올바른 이메일 형식이 아닙니다.")
+      return
+    }
+
+    // 7. '이메일'인증을 했는지
+    if (!checkCode) {
+      addError("이메일을 인증해주세요.")
       return
     }
 
@@ -240,7 +311,14 @@ const SignUp = () => {
               onChange={onNameChanged}
               helperText="실명 입력"
             />
-            <Box component="form" sx={{ display: "flex" }}>
+            <Box
+              component="form"
+              sx={{
+                display: "flex",
+                width: "500px",
+                justifyContent: "space-between",
+              }}
+            >
               <TextField
                 required
                 label="이메일"
@@ -248,13 +326,17 @@ const SignUp = () => {
                 value={formData.email}
                 onChange={onEmailChanged}
                 helperText="usermail@email.com"
+                sx={{ flexGrow: 1 }}
               />
               <Button
                 sx={{
                   color: "white",
                   backgroundColor: "#FFBE00",
                   width: 120,
-                  height: 50,
+                  ml: 1,
+                  height: "56px",
+                  postion: "relative",
+                  top: 0,
                 }}
                 onClick={handleSendEmailClick}
               >
@@ -286,32 +368,9 @@ const SignUp = () => {
             )}
             {sendEmail ? (
               <Box>
-                <Typography sx={{ mt: 0.5, fontSize: 14, color: "#787878" }}>
+                <Typography sx={{ m: 0.5, fontSize: 14, color: "#787878" }}>
                   입력하신 이메일로 6자리 코드가 전송되었습니다.
                 </Typography>
-                <Box
-                  sx={{ display: "flex", mt: 2.5, mb: 2, alignItems: "center" }}
-                >
-                  <Typography
-                    sx={{
-                      fontSize: 18,
-                      color: "#1F4838",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    인증번호 입력
-                  </Typography>
-                  {checkCode !== null &&
-                    (checkCode ? (
-                      <CheckCircleIcon
-                        sx={{ ml: 0.5, fontSize: "medium", color: "#3A4CA8" }}
-                      />
-                    ) : (
-                      <ErrorIcon
-                        sx={{ ml: 0.5, fontSize: "medium", color: "#AE3A1E" }}
-                      />
-                    ))}
-                </Box>
                 <Box
                   sx={{
                     display: "flex",
@@ -322,7 +381,7 @@ const SignUp = () => {
                   <TextField
                     sx={{ width: 200 }}
                     required
-                    size="small"
+                    label="인증번호 입력"
                     error={checkCode === false}
                     value={code}
                     onChange={e => setCode(e.target.value)}
@@ -332,7 +391,15 @@ const SignUp = () => {
                     {minutes} : {second}
                   </Typography>
                   <Button
-                    sx={{ ml: 3, color: "white", backgroundColor: "#1F4838" }}
+                    sx={{
+                      color: "white",
+                      backgroundColor: "#1F4838",
+                      width: 120,
+                      ml: 1,
+                      height: "56px",
+                      postion: "relative",
+                      top: 0,
+                    }}
                     onClick={handleCheckVerificationCodeClick}
                   >
                     인증번호 확인
