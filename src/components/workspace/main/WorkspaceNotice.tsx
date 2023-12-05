@@ -8,7 +8,6 @@ const WorkspaceNotice: React.FC = () => {
       sx={{
         borderRadius: "15px",
         width: "100%",
-        height: "200px",
         bgcolor: "#ffffff",
         display: "flex",
         alignItems: "center",

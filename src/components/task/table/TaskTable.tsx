@@ -1,26 +1,24 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from "react"
-import Box from "@mui/material/Box"
-import { TaskSummary } from "_types/task"
-import { Chip } from "@mui/material"
-import { styled } from "@mui/material/styles"
-import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp"
+import { Droppable, Draggable } from "react-beautiful-dnd"
+import { Chip, Box, Typography } from "@mui/material"
 import MuiAccordion, { AccordionProps } from "@mui/material/Accordion"
 import MuiAccordionSummary, {
   AccordionSummaryProps,
 } from "@mui/material/AccordionSummary"
 import MuiAccordionDetails from "@mui/material/AccordionDetails"
+import { styled } from "@mui/material/styles"
+import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp"
+import { TaskSummary } from "_types/task"
 import TaskCell from "components/task/table/TaskCell"
 
 const tableBorderColor = "rgba(224,224,224)"
 
 const Accordion = styled((props: AccordionProps) => (
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  <MuiAccordion disableGutters square {...props} />
-))(({ theme }) => ({
-  border: `1px solid ${theme.palette.divider}`,
-  borderColor: tableBorderColor,
+  <MuiAccordion disableGutters {...props} />
+))(() => ({
   "&:not(:last-child)": {
-    borderBottom: 0,
+    // borderBottom: 0,
   },
   "&:before": {
     display: "none",
@@ -30,7 +28,6 @@ const Accordion = styled((props: AccordionProps) => (
 const AccordionSummary = styled((props: AccordionSummaryProps) => (
   <MuiAccordionSummary
     expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: "0.9rem" }} />}
-    // eslint-disable-next-line react/jsx-props-no-spreading
     {...props}
   />
 ))(({ theme }) => ({
@@ -52,45 +49,102 @@ const AccordionDetails = styled(MuiAccordionDetails)(() => ({
 interface Props {
   title: string
   tasks: Array<TaskSummary>
+  dividerColor: string | null
+  progressStatus: string
+  renderProject?: boolean
 }
 
-const TaskTable: React.FC<Props> = ({ title, tasks }: Props) => {
+const TaskTable: React.FC<Props> = ({
+  title,
+  tasks,
+  dividerColor,
+  progressStatus,
+  renderProject = false,
+}: Props) => {
   const [open, setOpen] = React.useState(true)
-  const renderTaskCells = () =>
-    tasks.map(task => <TaskCell task={task} borderColor={tableBorderColor} />)
 
   return (
-    <Accordion expanded={open} onChange={() => setOpen(!open)}>
-      <AccordionSummary>
+    <Droppable droppableId={progressStatus}>
+      {droppableProvided => (
         <Box
+          ref={droppableProvided.innerRef}
+          {...droppableProvided.droppableProps}
           sx={{
-            fontSize: 20,
-            fontWeight: 500,
-            display: "flex",
-            alignItems: "center",
+            backgroundColor: "#FFFFFF",
           }}
         >
-          <Box
+          <Accordion
+            variant="outlined"
+            expanded={open}
+            onChange={() => setOpen(!open)}
             sx={{
-              marginTop: 0.3,
+              border: 0,
+              borderLeftStyle: "solid",
+              borderLeftColor: dividerColor,
+              borderLeftWidth: 5,
+              borderRadius: 1,
             }}
           >
-            {title}
-          </Box>
-          <Chip
-            label={tasks.length}
-            variant="outlined"
-            size="small"
-            sx={{
-              marginLeft: 2,
-              paddingX: 1,
-              color: "rgba(150, 150, 150)",
-            }}
-          />
+            <AccordionSummary
+              sx={{
+                backgroundColor: "#FFFFFF",
+                top: 0,
+                position: "sticky",
+                zIndex: 10,
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Typography
+                  fontSize={20}
+                  fontWeight={900}
+                  sx={{ color: dividerColor }}
+                >
+                  {title}
+                </Typography>
+                <Chip
+                  label={tasks.length}
+                  variant="outlined"
+                  size="small"
+                  sx={{
+                    border: 0,
+                    marginLeft: 1,
+                    fontSize: 16,
+                    fontWeight: 900,
+                    color: "rgba(150, 150, 150)",
+                    backgroundColor: "rgb(229,229,229)",
+                  }}
+                />
+              </Box>
+            </AccordionSummary>
+            <AccordionDetails sx={{ height: "100%" }}>
+              {/* {renderTaskCells()} */}
+              {tasks.map((task, index) => (
+                <Draggable
+                  key={task.taskId}
+                  draggableId={String(task.taskId)}
+                  index={index}
+                >
+                  {draggableProvided => (
+                    <div
+                      ref={draggableProvided.innerRef}
+                      {...draggableProvided.draggableProps}
+                      {...draggableProvided.dragHandleProps}
+                    >
+                      <TaskCell
+                        task={task}
+                        borderColor={tableBorderColor}
+                        renderProject={renderProject}
+                      />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {droppableProvided.placeholder}
+            </AccordionDetails>
+          </Accordion>
         </Box>
-      </AccordionSummary>
-      <AccordionDetails>{renderTaskCells()}</AccordionDetails>
-    </Accordion>
+      )}
+    </Droppable>
   )
 }
 

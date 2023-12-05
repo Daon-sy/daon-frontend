@@ -34,8 +34,9 @@ const WorkspaceParticipants: React.FC = () => {
     <Box
       component="ul"
       sx={{
+        p: 1,
         borderRadius: "15px",
-        width: "100%",
+        // width: "100%",
         height: "200px",
         bgcolor: "#ffffff",
         scrollbarWidth: "0.5em",
@@ -62,8 +63,8 @@ const WorkspaceParticipants: React.FC = () => {
           sx={{
             width: "100%",
             height: "40px",
-            paddingY: "10px",
-            paddingX: "16px",
+            paddingY: "5px",
+            paddingX: "5px",
             display: "inline-flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -107,12 +108,27 @@ const WorkspaceParticipants: React.FC = () => {
             }}
           >
             <Box sx={{ display: "flex", position: "relative" }}>
+              {participant.role === "WORKSPACE_ADMIN" ? (
+                <Box
+                  component="span"
+                  sx={{
+                    color: "#fdd835",
+                    mr: "4px",
+                  }}
+                >
+                  <FontAwesomeIcon icon={faCrown} />
+                </Box>
+              ) : participant.role === "PROJECT_ADMIN" ? (
+                <Box component="span" sx={{ color: "#1F4838", mr: "4px" }}>
+                  <FontAwesomeIcon icon={faLeaf} />
+                </Box>
+              ) : null}
               <Box
                 component="div"
                 sx={{
+                  // width: "fit-content",
                   color: "#1F4838",
                   fontWeight: "bold",
-                  maxWidth: "120px",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   whiteSpace: "nowrap",
@@ -122,28 +138,13 @@ const WorkspaceParticipants: React.FC = () => {
               >
                 {participant.name}
               </Box>
-              {participant.role === "WORKSPACE_ADMIN" ? (
-                <Box
-                  component="span"
-                  sx={{
-                    color: "#fdd835",
-                    ml: "4px",
-                  }}
-                >
-                  <FontAwesomeIcon icon={faCrown} />
-                </Box>
-              ) : participant.role === "PROJECT_ADMIN" ? (
-                <Box component="span" sx={{ color: "#1F4838", ml: "4px" }}>
-                  <FontAwesomeIcon icon={faLeaf} />
-                </Box>
-              ) : null}
             </Box>
             <Box
               component="div"
               sx={{
                 color: "#a9a9a9",
                 overflow: "hidden",
-                width: "120px",
+                // width: "120px",
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
                 wordBreak: "break-all",

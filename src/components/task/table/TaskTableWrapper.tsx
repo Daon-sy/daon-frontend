@@ -1,34 +1,38 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
 import { Stack } from "@mui/material"
 import Box from "@mui/material/Box"
+import { DragDropContext, DropResult } from "react-beautiful-dnd"
 import TaskTable from "components/task/table/TaskTable"
 import { getTaskTableStore } from "store/taskTableStore"
-
-import { TaskSummary } from "_types/task"
+import { TASK_STATUS, TaskSummary } from "_types/task"
+import { getTaskListFilterStore } from "store/taskStore"
+import { modifyTaskProgressStatusApi } from "api/task"
 
 const list = [
   {
     progressStatus: "TODO",
-    title: "할 일",
-    dividerColor: "rgba(29, 28, 53)",
+    title: "예정",
+    dividerColor: "primary.main",
   },
   {
     progressStatus: "PROCEEDING",
     title: "진행중",
-    dividerColor: "rgba(40, 101, 249)",
+    dividerColor: "secondary.main",
   },
   {
     progressStatus: "COMPLETED",
-    title: "완료됨",
-    dividerColor: "rgba(110, 188, 81)",
+    title: "완료",
+    dividerColor: "success.main",
   },
   {
     progressStatus: "PENDING",
-    title: "보류중",
-    dividerColor: "rgba(254, 171, 119)",
+    title: "보류",
+    dividerColor: "error.main",
   },
 ]
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const TaskTableHeader: React.FC = () => {
   const { cellWidth } = getTaskTableStore()
   const {
@@ -131,44 +135,101 @@ const TaskTableHeader: React.FC = () => {
 
 interface TaskTableWrapperProps {
   tasks: TaskSummary[]
+  renderProject?: boolean
 }
 
-const TaskTableWrapper: React.FC<TaskTableWrapperProps> = ({ tasks }) => {
+const TaskTableWrapper: React.FC<TaskTableWrapperProps> = ({
+  tasks,
+  renderProject = false,
+}) => {
+  const { workspaceId } = useParams()
+  const [updateTasks, setUpdateTask] = useState<TaskSummary[]>([])
+  const { filter } = getTaskListFilterStore()
+
+  useEffect(() => {
+    setUpdateTask(tasks)
+  }, [tasks])
+
+  const handleDragEnd = (result: DropResult) => {
+    if (!result.destination || !workspaceId) {
+      return
+    }
+    const { destination, draggableId } = result
+    const updatedTasks = [...updateTasks]
+    const movedTaskIndex = updatedTasks.findIndex(
+      task => task.taskId === +draggableId,
+    )
+    const movedTask = updatedTasks[movedTaskIndex]
+    updatedTasks.splice(movedTaskIndex, 1)
+    updatedTasks.splice(destination.index, 0, movedTask)
+    movedTask.progressStatus = destination.droppableId as TASK_STATUS
+    // API 호출 및 업데이트
+    modifyTaskProgressStatusApi(
+      Number(workspaceId),
+      movedTask.project.projectId,
+      movedTask.taskId,
+      {
+        ...movedTask,
+      },
+    )
+    setUpdateTask(updatedTasks)
+  }
+
   const renderTables = () =>
     list.map(item => (
       <TaskTable
+        key={item.progressStatus}
         title={item.title}
-        tasks={tasks.filter(
-          task => task.progressStatus === item.progressStatus,
-        )}
+        dividerColor={item.dividerColor}
+        progressStatus={item.progressStatus}
+        tasks={updateTasks
+          // 키워드 필터링
+          .filter(task =>
+            filter.keyword
+              ? task.title.toUpperCase().includes(filter.keyword.toUpperCase())
+              : true,
+          )
+          // 프로젝트 필터링
+          .filter(task =>
+            filter.projectId
+              ? task.project.projectId === filter.projectId
+              : true,
+          )
+          // 보드 필터링
+          .filter(task =>
+            filter.boardId ? task.board?.boardId === filter.boardId : true,
+          )
+          // 담당자 필터링
+          .filter(task => (filter.my ? task.myTask : true))
+          // 긴급 필터링
+          .filter(task => (filter.emergency ? task.emergency : true))
+          .filter(task => task.progressStatus === item.progressStatus)}
+        renderProject={renderProject}
       />
     ))
 
   return (
-    <Box
-      sx={{
-        paddingRight: 5,
-        backgroundColor: "white",
-        width: "100%",
-        height: "80%",
-        minHeight: "555px",
-        overflow: "scroll",
-        overflowX: "hidden",
-      }}
-    >
-      <Stack
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <Box
         sx={{
           width: "100%",
-          // paddingY: 1,
-          paddingX: 0,
-          marginTop: 2,
+          height: "90%",
+          overflow: "scroll",
+          overflowX: "hidden",
         }}
-        spacing={2}
       >
-        <TaskTableHeader />
-        {renderTables()}
-      </Stack>
-    </Box>
+        <Stack
+          sx={{
+            width: "100%",
+            paddingX: 0,
+          }}
+          spacing={2}
+        >
+          {/* <TaskTableHeader /> */}
+          {renderTables()}
+        </Stack>
+      </Box>
+    </DragDropContext>
   )
 }
 

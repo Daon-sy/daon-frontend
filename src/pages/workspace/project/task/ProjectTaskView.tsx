@@ -8,6 +8,8 @@ const ProjectTaskView: React.FC = () => {
   const { projectId } = useParams()
   const { project } = getProjectStore()
 
+  if (!project) return <Box />
+
   return (
     <Box sx={{ height: "100%" }}>
       <TaskView

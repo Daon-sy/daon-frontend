@@ -25,6 +25,10 @@ const ProjectDetailRoutes = () => {
     fetchProjectDetail()
   }, [projectId])
 
+  React.useEffect(() => {
+    return () => clearProjectStore()
+  }, [])
+
   return (
     <Routes>
       <Route index element={<ProjectTaskView />} />
