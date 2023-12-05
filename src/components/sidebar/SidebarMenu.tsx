@@ -39,7 +39,14 @@ const SidebarMenu: React.FC = () => {
   }))
 
   return (
-    <Box>
+    <Box
+      sx={{
+        height: "calc(100vh - 315px)",
+        display: "flex",
+        flexDirection: "column",
+        boxSizing: "border-box",
+      }}
+    >
       <Menu
         title="참여 중인 프로젝트"
         btn={<CreateBtn handleClick={openCreateProjectDialog} />}
@@ -50,6 +57,7 @@ const SidebarMenu: React.FC = () => {
             autoComplete="off"
             size="small"
             sx={{
+              boxSizing: "border-box",
               mx: 2,
               fontSize: 14,
               height: 40,
@@ -68,29 +76,45 @@ const SidebarMenu: React.FC = () => {
             }}
           />
         </Box>
-        {myProjects
-          .filter(project => project.listValue.includes(projectFilterKeyword))
-          .map(list => (
-            <Box key={list.projectId}>
-              <MenuItems to={list.link} listValue={list.listValue}>
-                <SubIconBtn
-                  color="darkgreen"
-                  onClick={e => openProjectManageModal(list.projectId, e)}
-                  icon={<SettingsIcon />}
+        <Box
+          sx={{
+            height: "calc(100vh - 420px)",
+            msOverflowStyle: "none",
+            scrollbarWidth: "none",
+            WebkitScrollSnapType: "none",
+            overflowY: "auto",
+            "&::-webkit-scrollbar": {
+              width: "0.2rem",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#ffbe00",
+            },
+          }}
+        >
+          {myProjects
+            .filter(project => project.listValue.includes(projectFilterKeyword))
+            .map(list => (
+              <Box key={list.projectId}>
+                <MenuItems to={list.link} listValue={list.listValue}>
+                  <SubIconBtn
+                    color="darkgreen"
+                    onClick={e => openProjectManageModal(list.projectId, e)}
+                    icon={<SettingsIcon />}
+                  />
+                </MenuItems>
+                <ProjectSettingsModal
+                  projectId={list.projectId}
+                  open={projectManageModalOpenMap[list.projectId] || false}
+                  handleClose={() =>
+                    setProjectManageModalOpenMap(prev => ({
+                      ...prev,
+                      [list.projectId]: false,
+                    }))
+                  }
                 />
-              </MenuItems>
-              <ProjectSettingsModal
-                projectId={list.projectId}
-                open={projectManageModalOpenMap[list.projectId] || false}
-                handleClose={() =>
-                  setProjectManageModalOpenMap(prev => ({
-                    ...prev,
-                    [list.projectId]: false,
-                  }))
-                }
-              />
-            </Box>
-          ))}
+              </Box>
+            ))}
+        </Box>
       </Menu>
       <TitleDialog title="프로젝트 생성" maxWidth="sm">
         <CreateProject onCancelButtonClick={closeCreateProjectDialog} />

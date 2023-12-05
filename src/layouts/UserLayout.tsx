@@ -5,6 +5,8 @@ import Sidebar from "components/sidebar/Sidebar"
 import styled from "styled-components"
 
 const DefaultLayout = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100vh;
   overflow: hidden;
@@ -12,10 +14,13 @@ const DefaultLayout = styled.div`
 const Main = styled.div`
   display: flex;
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 70px);
+  box-sizing: border-box;
+  border: 3px solid red;
 `
 
 const SideBarWrapper = styled.div`
+  box-sizing: border-box;
   width: 15%;
   min-width: 256px;
   height: 100%;
@@ -30,7 +35,7 @@ const Page = styled.div`
   background-color: #f6f7f9;
   margin-top: 6px;
   padding-top: 18px;
-  box-sizing: "border-box";
+  box-sizing: border-box;
 `
 
 const UserLayout = () => {
@@ -41,9 +46,9 @@ const UserLayout = () => {
         <SideBarWrapper>
           <Sidebar />
         </SideBarWrapper>
-        <Page>
+        {/* <Page>
           <Outlet />
-        </Page>
+        </Page> */}
       </Main>
     </DefaultLayout>
   )
