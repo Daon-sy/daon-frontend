@@ -1,31 +1,42 @@
 import React from "react"
-import { Box } from "@mui/material"
-import { getWorkspaceStore } from "store/userStore"
-import WorkspaceNotice from "components/workspace/main/WorkspaceNotice"
-import WorkspaceParticipants from "components/workspace/main/WorkspaceParticipants"
-import WorkspaceDeadlineTaskWrapper from "components/workspace/main/WorkspaceDeadlineTaskWrapper"
-import TaskTimelineView from "components/task/timeline/TaskTimelineView"
+import { Box, Stack } from "@mui/material"
 import {
   faPeopleGroup,
   faBullhorn,
   faFileCircleExclamation,
   faStopwatch,
 } from "@fortawesome/free-solid-svg-icons"
-import SectionTitleWrapper from "../../components/workspace/main/SectionTitleWrapper"
+import { getWorkspaceStore } from "store/userStore"
+import WorkspaceNotice from "components/workspace/main/WorkspaceNotice"
+import WorkspaceParticipants from "components/workspace/main/WorkspaceParticipants"
+import WorkspaceDeadlineTaskWrapper from "components/workspace/main/WorkspaceDeadlineTaskWrapper"
+import TaskTimelineView from "components/task/timeline/TaskTimelineView"
+import SectionTitleWrapper from "components/workspace/main/SectionTitleWrapper"
+import useFetchTaskList from "hooks/task/useFetchTaskList"
 
 const WorkspaceMain: React.FC = () => {
   const { workspace } = getWorkspaceStore()
+  const { tasks, fetchTaskList } = useFetchTaskList(
+    {
+      workspaceId: workspace?.workspaceId || 0,
+      params: { my: true },
+    },
+    true,
+  )
 
-  return workspace ? (
+  React.useLayoutEffect(() => {
+    fetchTaskList()
+  }, [workspace])
+
+  if (!workspace) return null
+
+  return (
     <Box
       component="div"
       sx={{
         width: "100%",
         minHeight: "600px",
-        height: "85%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
+        height: "100%",
       }}
     >
       <Box
@@ -39,18 +50,7 @@ const WorkspaceMain: React.FC = () => {
         {workspace.title}에 오신 것을 환영합니다.
       </Box>
 
-      <Box
-        component="div"
-        sx={{
-          height: "30%",
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          minHeight: "265px",
-          mt: 2,
-        }}
-      >
+      <Stack mt={2} spacing={2} direction="row">
         <SectionTitleWrapper
           width="80%"
           color="#E25860"
@@ -61,48 +61,34 @@ const WorkspaceMain: React.FC = () => {
         </SectionTitleWrapper>
         <SectionTitleWrapper
           width="20%"
-          maxWidth="265px"
           color="#3A4CA8"
           icon={faPeopleGroup}
           title="구성원"
-          pl={4}
         >
           <WorkspaceParticipants />
         </SectionTitleWrapper>
-      </Box>
-      <Box
-        component="div"
-        sx={{
-          width: "100%",
-          height: "50%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          mt: 2,
-        }}
-      >
+      </Stack>
+
+      <Stack mt={3} spacing={2} direction="row" height="40%">
         <SectionTitleWrapper
-          width="80%"
-          height="5%"
+          width="25%"
+          color="#7DB249"
+          icon={faFileCircleExclamation}
+          title="할일 D-3"
+        >
+          <WorkspaceDeadlineTaskWrapper tasks={tasks} />
+        </SectionTitleWrapper>
+        <SectionTitleWrapper
+          width="75%"
           color="#B96BC6"
           icon={faStopwatch}
           title="타임라인"
         >
-          <TaskTimelineView params={{ my: true }} height="85%" />
+          <TaskTimelineView tasks={tasks} />
         </SectionTitleWrapper>
-        <SectionTitleWrapper
-          width="20%"
-          height="5%"
-          color="#7DB249"
-          icon={faFileCircleExclamation}
-          title="할일 D-3"
-          pl={4}
-        >
-          <WorkspaceDeadlineTaskWrapper />
-        </SectionTitleWrapper>
-      </Box>
+      </Stack>
     </Box>
-  ) : null
+  )
 }
 
 export default WorkspaceMain

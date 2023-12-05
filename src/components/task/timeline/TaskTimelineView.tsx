@@ -1,19 +1,17 @@
 import React from "react"
-import { Box, Chip } from "@mui/material"
-import { TaskListApiParams } from "api/task"
+import { Box, Chip, Typography } from "@mui/material"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faFire } from "@fortawesome/free-solid-svg-icons"
 import { getWorkspaceStore } from "store/userStore"
 import { getTaskDetailViewStore } from "store/taskStore"
 import { getTaskTimelineStore } from "store/taskTimelineStore"
-import useFetchTaskList from "hooks/task/useFetchTaskList"
-import { getDateCountArray } from "utils/DateUtils"
 import TaskDetailModal from "components/task/modal/TaskDetailModal"
 import TaskTimelineBar from "components/task/timeline/TaskTimelineBar"
-import Typography from "@mui/material/Typography"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faFire } from "@fortawesome/free-solid-svg-icons"
+import { TaskSummary } from "_types/task"
+import { getDateCountArray } from "utils/DateUtils"
 
 interface TaskViewProps {
-  params?: TaskListApiParams
+  tasks: TaskSummary[]
   height?: number | string
 }
 
@@ -23,21 +21,14 @@ interface YearMonthDateCount {
   dateCount: number
 }
 
-const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
+const TaskTimelineView = ({ tasks = [], height = 300 }: TaskViewProps) => {
   const [taskWidth] = React.useState(230)
 
   const { workspace } = getWorkspaceStore()
-  const { tasks: allMyTasks, fetchTaskList } = useFetchTaskList(
-    {
-      workspaceId: workspace?.workspaceId || 0,
-      params,
-    },
-    true,
-  )
 
   // 보여줄 할 일 목록
-  const tasks = React.useMemo(() => {
-    return allMyTasks
+  const memoTasks = React.useMemo(() => {
+    return tasks
       .filter(task => task.progressStatus !== "PENDING")
       .sort((t1, t2) => {
         if (t1.emergency) return -1
@@ -51,7 +42,7 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
 
         return sub
       })
-  }, [allMyTasks])
+  }, [tasks])
 
   const { taskDetailParam, setTaskDetailParam, clear } =
     getTaskDetailViewStore()
@@ -59,9 +50,9 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
   const { dateWidth, headerHeight, taskHeight } = timelineProps
 
   const getMaxEndDate = (): Date => {
-    if (!tasks || tasks.length <= 0) return new Date()
+    if (!memoTasks || memoTasks.length <= 0) return new Date()
     return new Date(
-      tasks
+      memoTasks
         .filter(task => !!task.endDate)
         .reduce((prev, curr) => {
           return new Date(prev.endDate || "").getTime() <=
@@ -73,9 +64,9 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
   }
 
   const getMinStartDate = (): Date => {
-    if (!tasks || tasks.length <= 0) return new Date()
+    if (!memoTasks || memoTasks.length <= 0) return new Date()
     return new Date(
-      tasks
+      memoTasks
         .filter(task => !!task.startDate)
         .reduce((prev, curr) => {
           return new Date(prev.startDate || "").getTime() <=
@@ -114,7 +105,7 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
       tmp.map(ymdc => ymdc.dateCount).reduce((prev, curr) => prev + curr) *
         dateWidth,
     )
-  }, [tasks])
+  }, [memoTasks])
 
   React.useEffect(() => {
     if (boxRef.current && yearMonthDateCountList.length > 0) {
@@ -128,16 +119,12 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
     }
   })
 
-  React.useEffect(() => {
-    fetchTaskList()
-  }, [workspace])
-
   return (
     <>
       <Box
         ref={boxRef}
         sx={{
-          height,
+          height: "100%",
           display: "flex",
           width: "100%",
           minWidth: 600,
@@ -149,6 +136,7 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
           WebkitScrollSnapType: "none",
           overflow: "auto",
           boxShadow: "2px 2px 6px rgba(0,0,0,0.3)",
+          boxSizing: "border-box",
           "&::-webkit-scrollbar": {
             height: "8px",
             width: "8px",
@@ -196,7 +184,7 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
                 height: headerHeight,
               }}
             />
-            {tasks.map((task, index) => (
+            {memoTasks.map((task, index) => (
               <Box
                 sx={{
                   display: "flex",
@@ -248,6 +236,8 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
                     whiteSpace: "nowrap",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
+                    color: "deepGray.main",
+                    fontWeight: 600,
                   }}
                 >
                   {task.title}
@@ -275,11 +265,12 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
                   : 0,
               top: headerHeight,
               width: 5,
-              height: taskHeight * tasks.length,
+              height: taskHeight * memoTasks.length,
               borderLeft: 1,
               borderWidth: 2,
               borderColor: "#FFBE00",
               "&:hover": {
+                cursor: "pointer",
                 borderColor: "#dca900",
               },
             }}
@@ -312,7 +303,7 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
               <Box
                 sx={{
                   width: dateWidth * ymdc.dateCount,
-                  height: taskHeight * tasks.length,
+                  height: taskHeight * memoTasks.length,
                   boxSizing: "border-box",
                   borderRight: 1,
                   borderColor: "#c8c8c8",
@@ -328,7 +319,7 @@ const TaskTimelineView = ({ params, height = 300 }: TaskViewProps) => {
               borderColor: "#C8C8C8FF",
             }}
           >
-            {tasks.map((task, index) => (
+            {memoTasks.map((task, index) => (
               <TaskTimelineBar
                 task={task}
                 baseYearMonth={{

@@ -1,23 +1,45 @@
 import React from "react"
 import { Box } from "@mui/material"
-import { getWorkspaceStore } from "store/userStore"
-import useFetchTaskList from "hooks/task/useFetchTaskList"
+import { TaskSummary } from "_types/task"
+import DeadlineTask from "components/task/deadlined/DeadlineTask"
 
-const WorkspaceDeadlineTaskWrapper: React.FC = () => {
-  const { workspace } = getWorkspaceStore()
-  const { tasks } = useFetchTaskList({
-    workspaceId: workspace?.workspaceId || 0,
-    params: { my: true },
-  })
+interface Props {
+  tasks: TaskSummary[]
+}
+
+const WorkspaceDeadlineTaskWrapper: React.FC<Props> = ({ tasks }) => {
+  const memoTasks = React.useMemo(() => {
+    const now = new Date()
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    const deadline = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() + 4,
+    )
+    return tasks
+      .filter(task => task.progressStatus !== "PENDING")
+      .filter(task => {
+        if (!task.endDate) return false
+        const endDate = new Date(task.endDate)
+        return endDate < deadline && endDate >= today
+      })
+      .sort((t1, t2) => {
+        // eslint-disable-next-line
+        return new Date(t1.endDate!).getTime() - new Date(t2.endDate!).getTime()
+      })
+  }, [tasks])
+
+  React.useEffect(() => {
+    // console.log(memoTasks)
+  }, [memoTasks])
 
   return (
     <Box
       component="ul"
       sx={{
-        pt: "10px",
+        // p: 1,
         borderRadius: "6px",
-        width: "100%",
-        height: "82%",
+        height: "100%",
         bgcolor: "#ffffff",
         scrollbarWidth: "0.5em",
         WebkitScrollSnapType: "none",
@@ -36,285 +58,11 @@ const WorkspaceDeadlineTaskWrapper: React.FC = () => {
         },
       }}
     >
-      {/* 할일 item */}
-      {tasks.map(task => (
-        <Box
-          component="li"
-          sx={{
-            mb: "4px",
-            width: "90%",
-            height: "40px",
-            marginX: "16px",
-            paddingY: "8px",
-            display: "inline-flex",
-            alignItems: "center",
-            border: "1px solid #cecece",
-            borderRadius: "15px",
-          }}
-        >
-          {/* 날짜 */}
-          <Box
-            component="div"
-            sx={{
-              lineHeight: "40px",
-              color: "white",
-              bgcolor: "#568a35",
-              height: "100%",
-              paddingY: "8px",
-              width: "25%",
-              textAlign: "center",
-              borderTopLeftRadius: "6px",
-              borderBottomLeftRadius: "6px",
-            }}
-          >
-            D-2
-          </Box>
-          {/* 내용 */}
-          <Box
-            component="div"
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              marginLeft: "12px",
-            }}
-          >
-            <Box
-              component="span"
-              sx={{
-                color: "#3c5f52",
-                fontSize: "16px",
-                fontWeight: "bold",
-                maxWidth: "120px",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-                wordBreak: "break-all",
-                mb: 1,
-              }}
-            >
-              {task.title}
-            </Box>
-
-            <Box
-              component="span"
-              sx={{
-                color: "#858585",
-                fontSize: "12px",
-                fontWeight: "bold",
-              }}
-            >
-              {task.endDate}
-            </Box>
-          </Box>
-        </Box>
-      ))}
-
-      <Box
-        component="li"
-        sx={{
-          width: "90%",
-          height: "40px",
-          mb: "4px",
-          marginX: "16px",
-          paddingY: "8px",
-          display: "inline-flex",
-          alignItems: "center",
-          // justifyContent: "space-between",
-          border: "1px solid #cecece",
-          borderRadius: "15px",
-        }}
-      >
-        {/* 날짜 */}
-        <Box
-          component="div"
-          sx={{
-            lineHeight: "40px",
-            color: "white",
-            bgcolor: "#FFB83B",
-            height: "100%",
-            paddingY: "8px",
-            width: "25%",
-            textAlign: "center",
-            borderTopLeftRadius: "6px",
-            borderBottomLeftRadius: "6px",
-          }}
-        >
-          D-1
-        </Box>
-        {/* 내용 */}
-        <Box
-          component="div"
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            marginLeft: "12px",
-          }}
-        >
-          <Box
-            component="span"
-            sx={{
-              color: "#3c5f52",
-              fontSize: "16px",
-              fontWeight: "bold",
-              maxWidth: "120px",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-              wordBreak: "break-all",
-              mb: 1,
-            }}
-          >
-            할일 title
-          </Box>
-          <Box
-            component="span"
-            sx={{
-              color: "#858585",
-              fontSize: "12px",
-              fontWeight: "bold",
-            }}
-          >
-            마감일 날짜
-          </Box>
-        </Box>
-      </Box>
-      <Box
-        component="li"
-        sx={{
-          width: "90%",
-          height: "40px",
-          mb: "4px",
-          marginX: "16px",
-          paddingY: "8px",
-          display: "inline-flex",
-          alignItems: "center",
-          // justifyContent: "space-between",
-          border: "1px solid #cecece",
-          borderRadius: "15px",
-        }}
-      >
-        {/* 날짜 */}
-        <Box
-          component="div"
-          sx={{
-            lineHeight: "40px",
-            color: "white",
-            bgcolor: "#AE3A1E",
-            height: "100%",
-            paddingY: "8px",
-            width: "25%",
-            textAlign: "center",
-            borderTopLeftRadius: "6px",
-            borderBottomLeftRadius: "6px",
-          }}
-        >
-          today
-        </Box>
-        {/* 내용 */}
-        <Box
-          component="div"
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            marginLeft: "12px",
-          }}
-        >
-          <Box
-            component="span"
-            sx={{
-              color: "#3c5f52",
-              fontSize: "16px",
-              fontWeight: "bold",
-              maxWidth: "120px",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-              wordBreak: "break-all",
-              mb: 1,
-            }}
-          >
-            할일 title
-          </Box>
-          <Box
-            component="span"
-            sx={{
-              color: "#858585",
-              fontSize: "12px",
-              fontWeight: "bold",
-            }}
-          >
-            마감일 날짜
-          </Box>
-        </Box>
-      </Box>
-      <Box
-        component="li"
-        sx={{
-          mb: "4px",
-          width: "90%",
-          height: "40px",
-          marginX: "16px",
-          paddingY: "8px",
-          display: "inline-flex",
-          alignItems: "center",
-          // justifyContent: "space-between",
-          border: "1px solid #cecece",
-          borderRadius: "15px",
-        }}
-      >
-        {/* 날짜 */}
-        <Box
-          component="div"
-          sx={{
-            lineHeight: "40px",
-            color: "white",
-            bgcolor: "#346B8A",
-            height: "100%",
-            paddingY: "8px",
-            width: "25%",
-            textAlign: "center",
-            borderTopLeftRadius: "6px",
-            borderBottomLeftRadius: "6px",
-          }}
-        >
-          D-3
-        </Box>
-        {/* 내용 */}
-        <Box
-          component="div"
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            marginLeft: "12px",
-          }}
-        >
-          <Box
-            component="span"
-            sx={{
-              color: "#3c5f52",
-              fontSize: "16px",
-              fontWeight: "bold",
-              maxWidth: "120px",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-              wordBreak: "break-all",
-              mb: 1,
-            }}
-          >
-            할일 title
-          </Box>
-          <Box
-            component="span"
-            sx={{
-              color: "#858585",
-              fontSize: "12px",
-              fontWeight: "bold",
-            }}
-          >
-            마감일 날짜
-          </Box>
-        </Box>
+      <Box p={1}>
+        {/* 할일 item */}
+        {memoTasks.map(task => (
+          <DeadlineTask key={task.taskId} task={task} />
+        ))}
       </Box>
     </Box>
   )
