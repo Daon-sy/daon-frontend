@@ -1,8 +1,17 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import { Box, Button, Container, Stack, TextField } from "@mui/material"
-import { signUpApi } from "api/member"
+import { Box, Button, LinearProgress, Stack, TextField } from "@mui/material"
+import {
+  addEmailApi,
+  checkUsernameApi,
+  checkVerificationEmailApi,
+  sendVerificationEmailApi,
+  signUpApi,
+} from "api/member"
 import { useAlert } from "hooks/useAlert"
+import Typography from "@mui/material/Typography"
+import CheckCircleIcon from "@mui/icons-material/CheckCircle"
+import ErrorIcon from "@mui/icons-material/Error"
 
 interface SignUpForm {
   username: string
@@ -15,6 +24,16 @@ interface SignUpForm {
 const SignUp = () => {
   const navigate = useNavigate()
   const { addSuccess, addError } = useAlert()
+  const [email, setEmail] = React.useState<string>("")
+  const [sendEmail, setSendEmail] = React.useState<boolean>(false)
+  const [code, setCode] = React.useState<string>("")
+  const [checkCode, setCheckCode] = React.useState<boolean | null>(null)
+  const [progress, setProgress] = React.useState<number>(-1)
+
+  const [isUsernameDuplicate, setIsUsernameDuplicate] = React.useState<
+    boolean | null
+  >(null)
+  const [isEmailValid, setIsEmailValid] = React.useState<boolean>(true)
 
   const [formData, setFormData] = React.useState<SignUpForm>({
     username: "",
@@ -59,6 +78,66 @@ const SignUp = () => {
     })
   }
 
+  const MINUTES_IN_MS = 30 * 60 * 1000
+  const INTERVAL = 1000
+  const [timeLeft, setTimeLeft] = React.useState<number>(MINUTES_IN_MS)
+  const minutes = String(Math.floor((timeLeft / (1000 * 60)) % 60)).padStart(
+    2,
+    "0",
+  )
+  const second = String(Math.floor((timeLeft / 1000) % 60)).padStart(2, "0")
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(prevTime => prevTime - INTERVAL)
+    }, INTERVAL)
+
+    if (timeLeft <= 0) {
+      clearInterval(timer)
+    }
+
+    return () => {
+      clearInterval(timer)
+    }
+  }, [timeLeft])
+
+  const handleSendEmailClick = async () => {
+    setProgress(0)
+    const progressInterval = setInterval(() => {
+      setProgress(prevProgress =>
+        prevProgress >= 100 ? 0 : prevProgress + 12.33,
+      )
+    }, 500)
+
+    try {
+      await sendVerificationEmailApi({ email: formData.email })
+    } finally {
+      clearInterval(progressInterval)
+      setProgress(100)
+    }
+    setSendEmail(true)
+    setTimeLeft(MINUTES_IN_MS)
+  }
+
+  const handleCheckVerificationCodeClick = async () => {
+    const verifiedData = await checkVerificationEmailApi({
+      email: formData.email,
+      code,
+    })
+    if (verifiedData.data.verified) {
+      setCheckCode(true)
+    } else {
+      setCheckCode(false)
+    }
+  }
+
+  const onCancelButtonClick = () => {
+    navigate(-1)
+  }
+
+  // 유효성 검사
+
+  // 1. 빈칸이 있는지
   const checkFormData = (): boolean =>
     !(
       !formData.email ||
@@ -67,15 +146,72 @@ const SignUp = () => {
       !formData.name
     )
 
-  const onCancelButtonClick = () => {
-    navigate(-1)
+  // 2. '아이디'가 이미 존재하는지
+  const checkUsername = async () => {
+    try {
+      const response = await checkUsernameApi({
+        username: formData.username,
+      })
+      setIsUsernameDuplicate(response.data.isDuplicate)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
+  // 3. '비밀번호'가 6자리 이상인지
+  const checkPassword = () => formData.password.length >= 6
+
+  // 4. '비밀번호'와 '비밀번호 확인'의 값이 똑같은지
+  const checkPasswordMatching = () =>
+    formData.password === formData.passwordCheck
+
+  // 5. '이름'이 한국어로 기입되었는지
+  const checkNameKorean = () => /^[가-힣]+$/.test(formData.name)
+
+  // 6. '이메일'이 이메일 형식에 맞는지
+  const checkEmailValid = () =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+
   const onSignUpButtonClick = () => {
-    // TODO 데이터 유효성 검사
+    // 1. 빈칸이 있는지
     if (!checkFormData()) {
       addError("입력값을 확인해주세요")
+      return
+    }
 
+    // 2. '아이디'가 이미 존재하는지
+    if (isUsernameDuplicate === true) {
+      addError("이미 사용 중인 아이디입니다.")
+      return
+    }
+
+    // 3. '비밀번호'가 6자리 이상인지
+    if (!checkPassword()) {
+      addError("비밀번호는 6자리 이상이어야 합니다.")
+      return
+    }
+
+    // 4. '비밀번호'와 '비밀번호 확인'의 값이 똑같은지
+    if (!checkPasswordMatching()) {
+      addError("비밀번호와 비밀번호 확인이 일치하지 않습니다.")
+      return
+    }
+
+    // 5. '이름'이 한국어로 기입되었는지
+    if (!checkNameKorean()) {
+      addError("이름은 한글로 기입해주세요.")
+      return
+    }
+
+    // 6. '이메일'이 이메일 형식에 맞는지
+    if (!checkEmailValid()) {
+      addError("올바른 이메일 형식이 아닙니다.")
+      return
+    }
+
+    // 7. '이메일'인증을 했는지
+    if (!checkCode) {
+      addError("이메일을 인증해주세요.")
       return
     }
 
@@ -108,11 +244,15 @@ const SignUp = () => {
   }
 
   return (
-    <Container
+    <Box
       sx={{
+        width: "100%",
+        height: "100%",
+        m: 0,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        bgcolor: "white",
       }}
     >
       <Box
@@ -120,10 +260,22 @@ const SignUp = () => {
           width: 500,
           marginTop: 10, // 상단 공백 임시
           padding: 5,
-          backgroundColor: "gray", // 임시 색상
+          backgroundColor: "white",
         }}
       >
         <Stack spacing={2}>
+          <Box>
+            <Typography
+              variant="h4"
+              component="h2"
+              sx={{
+                textAlign: "center",
+                marginBottom: 3,
+              }}
+            >
+              회원가입
+            </Typography>
+          </Box>
           <Stack spacing={2}>
             <TextField
               required
@@ -131,7 +283,7 @@ const SignUp = () => {
               variant="outlined"
               value={formData.username}
               onChange={onUsernameChanged}
-              helperText="usermail@email.com"
+              helperText="usermail"
             />
             <TextField
               required
@@ -159,56 +311,151 @@ const SignUp = () => {
               onChange={onNameChanged}
               helperText="실명 입력"
             />
-            <TextField
-              required
-              label="이메일"
-              variant="outlined"
-              value={formData.email}
-              onChange={onEmailChanged}
-              helperText="usermail@email.com"
-            />
-          </Stack>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
             <Box
+              component="form"
               sx={{
-                width: 300,
-                marginTop: 1,
+                display: "flex",
+                width: "500px",
+                justifyContent: "space-between",
               }}
             >
-              <Stack
-                direction="row"
-                spacing={2}
+              <TextField
+                required
+                label="이메일"
+                variant="outlined"
+                value={formData.email}
+                onChange={onEmailChanged}
+                helperText="usermail@email.com"
+                sx={{ flexGrow: 1 }}
+              />
+              <Button
                 sx={{
-                  height: 50,
+                  color: "white",
+                  backgroundColor: "#FFBE00",
+                  width: 120,
+                  ml: 1,
+                  height: "56px",
+                  postion: "relative",
+                  top: 0,
+                }}
+                onClick={handleSendEmailClick}
+              >
+                인증번호 전송
+              </Button>
+            </Box>
+            {!sendEmail && progress > 0 && progress <= 100 && (
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Box sx={{ width: "90%", mr: 1 }}>
+                  <LinearProgress
+                    variant="determinate"
+                    value={progress}
+                    sx={{
+                      mt: 2,
+                      width: "100%",
+                      height: 10,
+                      borderRadius: 5,
+                    }}
+                  />
+                </Box>
+                <Box sx={{ minWitdh: 35 }}>
+                  <Typography
+                    mt={2}
+                    variant="body2"
+                    color="text.secondary"
+                  >{`${Math.round(progress)}`}</Typography>
+                </Box>
+              </Box>
+            )}
+            {sendEmail ? (
+              <Box>
+                <Typography sx={{ m: 0.5, fontSize: 14, color: "#787878" }}>
+                  입력하신 이메일로 6자리 코드가 전송되었습니다.
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <TextField
+                    sx={{ width: 200 }}
+                    required
+                    label="인증번호 입력"
+                    error={checkCode === false}
+                    value={code}
+                    onChange={e => setCode(e.target.value)}
+                    inputProps={{ maxLength: 6 }}
+                  />
+                  <Typography sx={{ color: "#3A4CA8" }}>
+                    {minutes} : {second}
+                  </Typography>
+                  <Button
+                    sx={{
+                      color: "white",
+                      backgroundColor: "#1F4838",
+                      width: 120,
+                      ml: 1,
+                      height: "56px",
+                      postion: "relative",
+                      top: 0,
+                    }}
+                    onClick={handleCheckVerificationCodeClick}
+                  >
+                    인증번호 확인
+                  </Button>
+                </Box>
+                {checkCode !== null && (
+                  <Typography sx={{ mt: 0.5, fontSize: 14, color: "#787878" }}>
+                    {checkCode
+                      ? "이메일 인증이 완료되었습니다."
+                      : "이메일 인증에 실패하였습니다. 다시 입력해 주세요."}
+                  </Typography>
+                )}
+              </Box>
+            ) : null}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Box
+                sx={{
+                  width: 300,
+                  marginTop: 1,
                 }}
               >
-                <Button
-                  fullWidth
-                  size="large"
-                  variant="outlined"
-                  onClick={onCancelButtonClick}
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  sx={{
+                    height: 50,
+                  }}
                 >
-                  취소
-                </Button>
-                <Button
-                  fullWidth
-                  size="large"
-                  variant="contained"
-                  onClick={onSignUpButtonClick}
-                >
-                  가입
-                </Button>
-              </Stack>
+                  <Button
+                    fullWidth
+                    size="large"
+                    variant="outlined"
+                    onClick={onCancelButtonClick}
+                  >
+                    취소
+                  </Button>
+                  <Button
+                    fullWidth
+                    size="large"
+                    variant="contained"
+                    onClick={onSignUpButtonClick}
+                  >
+                    가입
+                  </Button>
+                </Stack>
+              </Box>
             </Box>
-          </Box>
+          </Stack>
         </Stack>
       </Box>
-    </Container>
+    </Box>
   )
 }
 
