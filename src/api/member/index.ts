@@ -32,6 +32,10 @@ export interface CheckVerificationEmailRequestBody {
   code: string
 }
 
+export interface CheckUsernameRequestBody {
+  username: string
+}
+
 // ========== RESPONSE ==========
 export type MyMemberDetailResponseBody = MemberDetail
 
@@ -104,4 +108,10 @@ export const checkVerificationEmailApi = async (
   requestBody: CheckVerificationEmailRequestBody,
 ): Promise<AxiosResponse<CheckVerificationEmailResponseBody>> => {
   return authAxios.post(`${EMAIL_API_PREFIX}/check`, requestBody)
+}
+
+export const checkUsernameApi = async (
+  requestBody: CheckUsernameRequestBody,
+): Promise<AxiosResponse> => {
+  return basicAxios.post(`${EMAIL_API_PREFIX}/check`, requestBody)
 }

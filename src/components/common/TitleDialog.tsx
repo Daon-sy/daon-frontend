@@ -16,7 +16,7 @@ interface Props {
   titleFontSize?: number
   children?: React.ReactNode
   maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false | number
-  height?: number
+  height?: number | string
   padding?: number
   disableCloseButton?: boolean
   minWidth?: number | string

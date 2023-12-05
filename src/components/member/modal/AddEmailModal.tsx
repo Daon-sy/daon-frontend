@@ -1,12 +1,6 @@
 import React from "react"
 import TitleModal from "components/common/TitleModal"
-import {
-  Box,
-  Button,
-  LinearProgress,
-  TextField,
-  Typography,
-} from "@mui/material"
+import { Box, Button, TextField, Typography } from "@mui/material"
 import {
   addEmailApi,
   checkVerificationEmailApi,
@@ -28,7 +22,7 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
   const [sendEmail, setSendEmail] = React.useState<boolean>(false)
   const [code, setCode] = React.useState<string>("")
   const [checkCode, setCheckCode] = React.useState<boolean | null>(null)
-  const [progress, setProgress] = React.useState<number>(-1)
+  const [error, setError] = React.useState<string | null>(null)
 
   const MINUTES_IN_MS = 30 * 60 * 1000
   const INTERVAL = 1000
@@ -38,6 +32,11 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
     "0",
   )
   const second = String(Math.floor((timeLeft / 1000) % 60)).padStart(2, "0")
+  const validateEmail = (typedEmail: string) => {
+    const emailRegex =
+      /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/
+    return emailRegex.test(typedEmail)
+  }
 
   React.useEffect(() => {
     const timer = setInterval(() => {
@@ -54,24 +53,31 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
   }, [timeLeft])
 
   const handleSendEmailClick = async () => {
-    setProgress(0)
-    const progressInterval = setInterval(() => {
-      setProgress(prevProgress =>
-        prevProgress >= 100 ? 0 : prevProgress + 12.33,
-      )
-    }, 500)
+    if (!email) {
+      setError("* 이메일을 입력해 주세요.")
+      return
+    }
+    if (!validateEmail(email)) {
+      setError("* 올바르지 않은 이메일 양식입니다.")
+      return
+    }
 
     try {
+      setError(null)
+      setSendEmail(true)
+      setTimeLeft(MINUTES_IN_MS)
+      setCheckCode(null)
       await sendVerificationEmailApi({ email })
-    } finally {
-      clearInterval(progressInterval)
-      setProgress(100)
+    } catch (e) {
+      setError("이메일 전송에 실패했습니다. 다시 요청해 주세요.")
     }
-    setSendEmail(true)
-    setTimeLeft(MINUTES_IN_MS)
   }
 
   const handleCheckVerificationCodeClick = async () => {
+    if (!code) {
+      setCheckCode(false)
+      return
+    }
     const verifiedData = await checkVerificationEmailApi({ email, code })
     if (verifiedData.data.verified) {
       setCheckCode(true)
@@ -81,7 +87,7 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
   }
 
   const handleAddEmailClick = async () => {
-    if (!checkCode) {
+    if (!checkCode || !validateEmail) {
       return
     }
     await addEmailApi({ email })
@@ -114,38 +120,24 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
           placeholder="gildong@email.com"
           value={email}
           onChange={e => setEmail(e.target.value)}
-          inputProps={{ maxLength: 20 }}
+          inputProps={{ maxLength: 100 }}
+          error={!!error}
+          helperText={error}
         />
         <Button
-          sx={{ color: "white", backgroundColor: "#FFBE00" }}
+          sx={{
+            height: 40,
+            color: "white",
+            backgroundColor: "#FFBE00",
+            ":hover": {
+              backgroundColor: "#1F4838",
+            },
+          }}
           onClick={handleSendEmailClick}
         >
           인증번호 전송
         </Button>
       </Box>
-      {!sendEmail && progress > 0 && progress <= 100 && (
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Box sx={{ width: "90%", mr: 1 }}>
-            <LinearProgress
-              variant="determinate"
-              value={progress}
-              sx={{
-                mt: 2,
-                width: "100%",
-                height: 10,
-                borderRadius: 5,
-              }}
-            />
-          </Box>
-          <Box sx={{ minWitdh: 35 }}>
-            <Typography
-              mt={2}
-              variant="body2"
-              color="text.secondary"
-            >{`${Math.round(progress)}`}</Typography>
-          </Box>
-        </Box>
-      )}
       {sendEmail ? (
         <Box>
           <Typography sx={{ mt: 0.5, fontSize: 14, color: "#787878" }}>
@@ -192,7 +184,14 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
               {minutes} : {second}
             </Typography>
             <Button
-              sx={{ ml: 3, color: "white", backgroundColor: "#1F4838" }}
+              sx={{
+                ml: 3,
+                color: "white",
+                backgroundColor: "#1F4838",
+                ":hover": {
+                  backgroundColor: "#FFBE00",
+                },
+              }}
               onClick={handleCheckVerificationCodeClick}
             >
               인증번호 확인
@@ -218,6 +217,9 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
             border: 1,
             color: "white",
             backgroundColor: "#1F4838",
+            ":hover": {
+              backgroundColor: "#FFBE00",
+            },
           }}
         >
           추 가

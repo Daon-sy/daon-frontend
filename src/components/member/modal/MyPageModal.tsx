@@ -1,8 +1,9 @@
 import React from "react"
-import { Box, Typography } from "@mui/material"
-import { getMyMemberDetailStore } from "store/userStore"
-import MenuModal, { MenuWithPage } from "components/common/MenuModal"
-import MyPageDataManage from "../MyPage"
+import TitleDialog from "components/common/TitleDialog"
+import { Box, Divider } from "@mui/material"
+import MemberInfoSection from "../MemberInfoSection"
+import EmailInfoSection from "../EmailInfoSection"
+import WithdrawSection from "../WithdrawSection"
 
 interface MyPageProps {
   open: boolean
@@ -10,28 +11,23 @@ interface MyPageProps {
 }
 
 const MyPageModal = ({ open = false, handleClose }: MyPageProps) => {
-  const { myDetail } = getMyMemberDetailStore()
-
-  const menuWithPageList: MenuWithPage[] = [
-    {
-      pageName: "Home",
-      pageValue: "Home",
-      pageComponent: <MyPageDataManage />,
-    },
-  ]
-
   return (
-    <MenuModal
+    <TitleDialog
+      title="마이페이지"
       open={open}
       handleClose={handleClose}
-      title="마이페이지"
-      subTitle={
-        <Box>
-          <Typography> 사용자 : {myDetail?.name} </Typography>
-        </Box>
-      }
-      menuWithPageList={menuWithPageList}
-    />
+      maxWidth={750}
+      minWidth={750}
+      height={600}
+    >
+      <Box>
+        <MemberInfoSection />
+        <Divider />
+        <EmailInfoSection />
+        <Divider />
+        <WithdrawSection />
+      </Box>
+    </TitleDialog>
   )
 }
 

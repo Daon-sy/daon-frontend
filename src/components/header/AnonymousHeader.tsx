@@ -2,7 +2,6 @@ import React from "react"
 import { Link } from "react-router-dom"
 import { Box, Button, Stack, AppBar, Toolbar } from "@mui/material"
 import Logo from "components/header/Logo"
-import LoginModal from "components/auth/modal/LoginModal"
 
 const AnonymousHeader = () => {
   const [loginModalOpen, setLoginModalOpen] = React.useState<boolean>(false)
@@ -24,11 +23,13 @@ const AnonymousHeader = () => {
             >
               <Button color="inherit">회원가입</Button>
             </Link>
-            <Button color="inherit" onClick={openLoginModal}>
-              로그인
-            </Button>
+            <Link
+              to="/sign-in"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <Button color="inherit">로그인</Button>
+            </Link>
           </Stack>
-          <LoginModal open={loginModalOpen} handleClose={closeLoginModal} />
         </Box>
       </Toolbar>
     </AppBar>

@@ -16,8 +16,8 @@ import {
 } from "_types/workspace"
 import { getWorkspaceStore } from "store/userStore"
 import { workspaceParticipantListApi } from "api/workspace"
-import TitleModal from "./TitleModal"
 import ParticipantCard from "./ParticipantCard"
+import TitleDialog from "./TitleDialog"
 
 interface Props {
   open: boolean
@@ -68,12 +68,12 @@ const ParticipantsModal = ({ open, handleClose }: Props) => {
   }
 
   return (
-    <TitleModal
+    <TitleDialog
       title="구성원 목록"
       open={open}
       handleClose={handleClose}
-      maxWidth={728}
-      height={550}
+      maxWidth="sm"
+      height="65vh"
     >
       <Box
         sx={{
@@ -125,7 +125,7 @@ const ParticipantsModal = ({ open, handleClose }: Props) => {
       </Box>
       <Box
         sx={{
-          width: "598px",
+          width: "100%",
           display: "flex",
           flexWrap: "wrap",
         }}
@@ -221,7 +221,7 @@ const ParticipantsModal = ({ open, handleClose }: Props) => {
           />
         ))}
       </Box>
-    </TitleModal>
+    </TitleDialog>
   )
 }
 
