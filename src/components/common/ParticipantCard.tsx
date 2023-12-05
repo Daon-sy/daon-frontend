@@ -31,18 +31,17 @@ const ParticipantCard: React.FC<ParticipantItemProps> = ({ participant }) => {
   return (
     <Card
       sx={{
-        width: "133.515px",
-        height: "180px",
+        width: "22%",
         my: 2,
         mx: 1,
-        justifyItems: "center",
       }}
     >
       <CardActionArea>
         <CardMedia
           sx={{
-            mt: 1.5,
-            ml: "15.5px",
+            mt: "8.845px",
+            ml: "8.845px",
+            mr: "8.845px",
             width: 100,
             height: 100,
             borderRadius: "50%",
