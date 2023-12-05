@@ -16,7 +16,6 @@ const Main = styled.div`
   width: 100%;
   height: calc(100vh - 70px);
   box-sizing: border-box;
-  border: 3px solid red;
 `
 
 const SideBarWrapper = styled.div`
@@ -46,9 +45,9 @@ const UserLayout = () => {
         <SideBarWrapper>
           <Sidebar />
         </SideBarWrapper>
-        {/* <Page>
+        <Page>
           <Outlet />
-        </Page> */}
+        </Page>
       </Main>
     </DefaultLayout>
   )

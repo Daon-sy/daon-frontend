@@ -87,7 +87,7 @@ const SidebarMenu: React.FC = () => {
               width: "0.2rem",
             },
             "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "#ffbe00",
+              backgroundColor: "#b2b2b2",
             },
           }}
         >
