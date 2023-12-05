@@ -1,8 +1,8 @@
 import React from "react"
-import { Box, Chip, Typography } from "@mui/material"
-import { TaskSummary } from "_types/task"
+import { Box, Typography } from "@mui/material"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFire } from "@fortawesome/free-solid-svg-icons"
+import { TaskSummary } from "_types/task"
 import { getWorkspaceStore } from "store/userStore"
 import { getTaskDetailViewStore } from "store/taskStore"
 
@@ -87,35 +87,20 @@ const DeadlineTask: React.FC<Props> = ({ task }) => {
           overflow: "hidden",
         }}
       >
-        <Box
-          sx={{
-            color: "deepGray.main",
-            mb: 1,
-            display: "flex",
-            alignItems: "center",
-            overflow: "hidden",
-          }}
-        >
+        <Box fontSize={12} color="#858585">
+          {task.project.title}
+        </Box>
+        <Box>
           {task.emergency ? (
-            <Typography mr={0.5}>
+            <Typography mr={0.5} component="span">
               <FontAwesomeIcon icon={faFire} color="red" />
             </Typography>
           ) : null}
-          <Chip
-            label={task.project.title}
-            color="secondary"
-            size="small"
-            sx={{
-              mr: 0.5,
-              fontSize: 12,
-              borderRadius: 1.5,
-              fontWeight: 900,
-              maxWidth: 70,
-            }}
-          />
           <Typography
+            component="span"
             sx={{
               pr: 1,
+              color: "deepGray.main",
               fontSize: "16px",
               fontWeight: 600,
               overflow: "hidden",
@@ -127,13 +112,7 @@ const DeadlineTask: React.FC<Props> = ({ task }) => {
             {task.title}
           </Typography>
         </Box>
-        <Box
-          sx={{
-            color: "#858585",
-            fontSize: "12px",
-            fontWeight: 500,
-          }}
-        >
+        <Box color="#858585" fontSize={12} fontWeight={500}>
           {task.endDate}
         </Box>
       </Box>
