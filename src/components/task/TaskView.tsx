@@ -50,9 +50,16 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
           />
         )
       case "table":
-        return <TaskTableWrapper tasks={tasks} />
+        return (
+          <TaskTableWrapper tasks={tasks} renderProject={!params?.projectId} />
+        )
       default:
-        return <TaskKanbansWrapper tasks={tasks} />
+        return (
+          <TaskKanbansWrapper
+            tasks={tasks}
+            renderProject={!params?.projectId}
+          />
+        )
     }
   }
 

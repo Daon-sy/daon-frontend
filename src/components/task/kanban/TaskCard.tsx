@@ -68,7 +68,7 @@ const TaskCard: React.FC<Props> = React.memo(
                       fontWeight: 900,
                       overflow: "hidden",
                       textOverflow: "ellipsis",
-                      maxWidth: task.board ? 80 : undefined,
+                      maxWidth: task.board ? 80 : 150,
                     }}
                   />
                 ) : null}
@@ -82,12 +82,20 @@ const TaskCard: React.FC<Props> = React.memo(
                     fontWeight: 900,
                     overflow: "hidden",
                     textOverflow: "ellipsis",
-                    maxWidth: renderProject ? 80 : undefined,
+                    maxWidth: renderProject ? 80 : 150,
                   }}
                 />
               </Box>
               {task.emergency ? (
-                <Typography mr={0.5}>
+                <Typography
+                  sx={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    height: "24px",
+                    position: "relative",
+                    top: -1,
+                  }}
+                >
                   <FontAwesomeIcon icon={faFire} color="red" />
                 </Typography>
               ) : null}

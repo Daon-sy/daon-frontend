@@ -1,12 +1,11 @@
 import * as React from "react"
 import { Box } from "@mui/material"
-import { TEST_IMAGE_URL } from "env"
 import { getWorkspaceStore } from "store/userStore"
 import WorkspaceProfileModifyModal from "components/workspace/modal/WorkspaceProfileModifyModal"
 import EditIcon from "@mui/icons-material/Edit"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCrown, faLeaf } from "@fortawesome/free-solid-svg-icons"
-
+import ColorAvatar from "components/common/ColorAvatar"
 import SubIconBtn from "./SubIconBtn"
 
 const WorkSpaceProfile: React.FC = () => {
@@ -59,17 +58,10 @@ const WorkSpaceProfile: React.FC = () => {
           <FontAwesomeIcon icon={icon} />
         </Box>
       ) : null}
-
-      <Box
-        component="img"
-        src={myProfile?.imageUrl || TEST_IMAGE_URL}
-        sx={{
-          objectFit: "cover",
-          width: "30%",
-          minWidth: "80px",
-          height: "80px",
-          borderRadius: "50%",
-        }}
+      <ColorAvatar
+        src={myProfile?.imageUrl}
+        stringToChangeColor={`${myProfile?.name}-${myProfile?.workspaceParticipantId.toString()}`}
+        sx={{ width: 65, height: 65 }}
       />
       <Box
         sx={{
