@@ -57,13 +57,14 @@ const WorkspaceSelectButton = () => {
                     stringToChangeColor={`${workspace.title}-${workspace.workspaceId}`}
                     name={workspace?.title}
                     sx={{
-                      width: 24,
-                      height: 24,
+                      width: 28,
+                      height: 28,
                     }}
                   />
                   <Typography
                     sx={{
-                      fontSize: 14,
+                      fontSize: 16,
+                      fontWeight: 500,
                       maxWidth: 150,
                       overflow: "hidden",
                       textOverflow: "ellipsis",
@@ -100,80 +101,94 @@ const WorkspaceSelectButton = () => {
             },
           }}
         >
-          <Box p={1}>
-            <TextField
-              fullWidth
-              autoComplete="off"
-              size="small"
-              sx={{
-                // mx: 2,
-                fontSize: 14,
-                height: 40,
-              }}
-              placeholder="워크스페이스 검색"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setWorkspaceFilterKeyword(e.target.value)
-              }
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon fontSize="small" />
-                  </InputAdornment>
-                ),
-                style: { fontSize: 14 },
-              }}
-            />
+          <Box position="sticky" top={0} bgcolor="white" zIndex={1}>
+            <Box p={1}>
+              <TextField
+                fullWidth
+                autoComplete="off"
+                size="small"
+                sx={{
+                  // mx: 2,
+                  fontSize: 14,
+                  height: 40,
+                }}
+                placeholder="워크스페이스 검색"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setWorkspaceFilterKeyword(e.target.value)
+                }
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon fontSize="small" />
+                    </InputAdornment>
+                  ),
+                  style: { fontSize: 14 },
+                }}
+              />
+            </Box>
+            <Divider />
           </Box>
-          {workspaces
-            .filter(ws =>
-              workspace ? ws.workspaceId !== workspace.workspaceId : true,
-            )
-            .filter(ws =>
-              ws.title
-                .toUpperCase()
-                .includes(workspaceFilterKeyword.toUpperCase()),
-            )
-            .map(ws => (
-              <Link
-                to={`/workspace/${ws.workspaceId}`}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <Tooltip
-                  arrow
-                  title={ws.description ? ws.description : "설명 없음"}
+
+          <Box>
+            {workspaces
+              .filter(ws =>
+                workspace ? ws.workspaceId !== workspace.workspaceId : true,
+              )
+              .filter(ws =>
+                ws.title
+                  .toUpperCase()
+                  .includes(workspaceFilterKeyword.toUpperCase()),
+              )
+              .map(ws => (
+                <Link
+                  to={`/workspace/${ws.workspaceId}`}
+                  style={{ textDecoration: "none", color: "inherit" }}
                 >
-                  <MenuItem
-                    key={ws.workspaceId}
-                    onClick={handleCloseMenu}
-                    dense
+                  <Tooltip
+                    arrow
+                    title={ws.description ? ws.description : "설명 없음"}
                   >
-                    <Box display="flex" alignItems="center">
-                      <ColorAvatar
-                        src={ws.imageUrl}
-                        stringToChangeColor={`${ws.title}-${ws.workspaceId}`}
-                        name={ws.title}
-                      />
-                      <Typography variant="button" textAlign="center" py={0.2}>
-                        {ws.title}
-                      </Typography>
-                    </Box>
-                  </MenuItem>
-                </Tooltip>
-              </Link>
-            ))}
-          {workspaces
-            .filter(ws =>
-              workspace ? ws.workspaceId !== workspace.workspaceId : true,
-            )
-            .filter(ws =>
-              ws.title
-                .toUpperCase()
-                .includes(workspaceFilterKeyword.toUpperCase()),
-            ).length <= 0 ? (
-            <Typography textAlign="center" p={1}>
-              검색 결과 없음
-            </Typography>
-          ) : null}
+                    <MenuItem
+                      key={ws.workspaceId}
+                      onClick={handleCloseMenu}
+                      dense
+                      sx={{ px: 1 }}
+                    >
+                      <Box display="flex" alignItems="center">
+                        <ColorAvatar
+                          src={ws.imageUrl}
+                          stringToChangeColor={`${ws.title}-${ws.workspaceId}`}
+                          name={ws.title}
+                        />
+                        <Typography
+                          variant="button"
+                          textAlign="center"
+                          pl={0.5}
+                          py={0.3}
+                        >
+                          {ws.title}
+                        </Typography>
+                      </Box>
+                    </MenuItem>
+                  </Tooltip>
+                </Link>
+              ))}
+
+            {workspaces
+              .filter(ws =>
+                workspace ? ws.workspaceId !== workspace.workspaceId : true,
+              )
+              .filter(ws =>
+                ws.title
+                  .toUpperCase()
+                  .includes(workspaceFilterKeyword.toUpperCase()),
+              ).length <= 0 ? (
+              <Typography textAlign="center" p={1}>
+                검색 결과 없음
+              </Typography>
+            ) : null}
+          </Box>
+
           <Box sx={{ position: "sticky", bottom: 0, bgcolor: "white" }}>
             <Divider />
             <MenuItem
