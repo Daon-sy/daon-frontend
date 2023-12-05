@@ -5,6 +5,7 @@ import { Box, Typography, Breadcrumbs } from "@mui/material"
 import HomeIcon from "@mui/icons-material/Home"
 import DvrIcon from "@mui/icons-material/Dvr"
 import { getProjectStore, getWorkspaceStore } from "store/userStore"
+import NavigateNextIcon from "@mui/icons-material/NavigateNext"
 
 const BreadcrumbLink = styled(Link)`
   color: gray;
@@ -20,7 +21,10 @@ const IconBreadcrumbs = () => {
 
   return (
     <Box>
-      <Breadcrumbs aria-label="breadcrumb">
+      <Breadcrumbs
+        separator={<NavigateNextIcon fontSize="small" />}
+        aria-label="breadcrumb"
+      >
         {workspace ? (
           <BreadcrumbLink
             color="inherit"

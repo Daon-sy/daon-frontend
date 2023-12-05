@@ -9,16 +9,18 @@ interface TaskTableStore {
 
 export const getTaskTableStore = create<TaskTableStore>(set => ({
   cellWidth: {
-    titleCellWidth: 400,
-    boardCellWidth: 120,
+    titleCellWidth: 350,
+    boardCellWidth: 90,
+    projectCellWidth: 90,
     endDateCellWidth: 80,
     taskManagerCellWidth: 100,
   },
   init: () =>
     set({
       cellWidth: {
-        titleCellWidth: 400,
-        boardCellWidth: 120,
+        titleCellWidth: 350,
+        boardCellWidth: 90,
+        projectCellWidth: 90,
         endDateCellWidth: 80,
         taskManagerCellWidth: 100,
       },

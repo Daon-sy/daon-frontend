@@ -4,18 +4,23 @@ import {
   Box,
   Button,
   Divider,
+  InputAdornment,
   Menu,
   MenuItem,
+  TextField,
   Tooltip,
   Typography,
 } from "@mui/material"
+import SearchIcon from "@mui/icons-material/Search"
 import { getWorkspaceStore } from "store/userStore"
 import useFetchWorkspaceList from "hooks/workspace/useFetchWorkspaceList"
 import { useTitleDialog } from "components/common/TitleDialog"
+import ColorAvatar from "components/common/ColorAvatar"
 import CreateWorkspace from "components/workspace/CreateWorkspace"
 
 const WorkspaceSelectButton = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const [workspaceFilterKeyword, setWorkspaceFilterKeyword] = React.useState("")
 
   const { workspace } = getWorkspaceStore()
   const { workspaces, fetchWorkspaceList } = useFetchWorkspaceList(false)
@@ -44,7 +49,35 @@ const WorkspaceSelectButton = () => {
             onClick={handleOpenMenu}
             sx={{ my: 2, display: "block" }}
           >
-            {workspace ? workspace.title : "워크스페이스 선택"}
+            <Box display="flex" alignItems="center">
+              {workspace ? (
+                <>
+                  <ColorAvatar
+                    src={workspace?.imageUrl}
+                    stringToChangeColor={`${workspace.title}-${workspace.workspaceId}`}
+                    name={workspace?.title}
+                    sx={{
+                      width: 28,
+                      height: 28,
+                    }}
+                  />
+                  <Typography
+                    sx={{
+                      fontSize: 16,
+                      fontWeight: 500,
+                      maxWidth: 150,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {workspace.title}
+                  </Typography>
+                </>
+              ) : (
+                "워크스페이스 선택"
+              )}
+            </Box>
           </Button>
         </Tooltip>
         <Menu
@@ -62,39 +95,111 @@ const WorkspaceSelectButton = () => {
           }}
           open={Boolean(anchorEl)}
           onClose={handleCloseMenu}
+          slotProps={{
+            paper: {
+              sx: { maxHeight: 400, p: 0, "& .MuiList-root": { p: 0 } },
+            },
+          }}
         >
-          {workspaces
-            .filter(ws =>
-              workspace ? ws.workspaceId !== workspace.workspaceId : true,
-            )
-            .map(ws => (
-              <Link
-                to={`/workspace/${ws.workspaceId}`}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <Tooltip
-                  arrow
-                  title={ws.description ? ws.description : "설명 없음"}
+          <Box position="sticky" top={0} bgcolor="white" zIndex={1}>
+            <Box p={1}>
+              <TextField
+                fullWidth
+                autoComplete="off"
+                size="small"
+                sx={{
+                  // mx: 2,
+                  fontSize: 14,
+                  height: 40,
+                }}
+                placeholder="워크스페이스 검색"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setWorkspaceFilterKeyword(e.target.value)
+                }
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon fontSize="small" />
+                    </InputAdornment>
+                  ),
+                  style: { fontSize: 14 },
+                }}
+              />
+            </Box>
+            <Divider />
+          </Box>
+
+          <Box>
+            {workspaces
+              .filter(ws =>
+                workspace ? ws.workspaceId !== workspace.workspaceId : true,
+              )
+              .filter(ws =>
+                ws.title
+                  .toUpperCase()
+                  .includes(workspaceFilterKeyword.toUpperCase()),
+              )
+              .map(ws => (
+                <Link
+                  to={`/workspace/${ws.workspaceId}`}
+                  style={{ textDecoration: "none", color: "inherit" }}
                 >
-                  <MenuItem key={ws.workspaceId} onClick={handleCloseMenu}>
-                    <Typography variant="button" textAlign="center">
-                      {ws.title}
-                    </Typography>
-                  </MenuItem>
-                </Tooltip>
-              </Link>
-            ))}
-          <Divider />
-          <MenuItem
-            onClick={() => {
-              handleCloseMenu()
-              openCreateWorkspaceDialog()
-            }}
-          >
-            <Typography variant="button" textAlign="center">
-              워크스페이스 생성
-            </Typography>
-          </MenuItem>
+                  <Tooltip
+                    arrow
+                    title={ws.description ? ws.description : "설명 없음"}
+                  >
+                    <MenuItem
+                      key={ws.workspaceId}
+                      onClick={handleCloseMenu}
+                      dense
+                      sx={{ px: 1 }}
+                    >
+                      <Box display="flex" alignItems="center">
+                        <ColorAvatar
+                          src={ws.imageUrl}
+                          stringToChangeColor={`${ws.title}-${ws.workspaceId}`}
+                          name={ws.title}
+                        />
+                        <Typography
+                          variant="button"
+                          textAlign="center"
+                          pl={0.5}
+                          py={0.3}
+                        >
+                          {ws.title}
+                        </Typography>
+                      </Box>
+                    </MenuItem>
+                  </Tooltip>
+                </Link>
+              ))}
+
+            {workspaces
+              .filter(ws =>
+                workspace ? ws.workspaceId !== workspace.workspaceId : true,
+              )
+              .filter(ws =>
+                ws.title
+                  .toUpperCase()
+                  .includes(workspaceFilterKeyword.toUpperCase()),
+              ).length <= 0 ? (
+              <Typography textAlign="center" p={1}>
+                검색 결과 없음
+              </Typography>
+            ) : null}
+          </Box>
+
+          <Box sx={{ position: "sticky", bottom: 0, bgcolor: "white" }}>
+            <Divider />
+            <MenuItem
+              onClick={() => {
+                handleCloseMenu()
+                openCreateWorkspaceDialog()
+              }}
+            >
+              <Typography variant="button">워크스페이스 생성</Typography>
+            </MenuItem>
+          </Box>
         </Menu>
       </Box>
       <TitleDialog title="워크스페이스 생성" maxWidth="sm">

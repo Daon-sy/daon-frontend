@@ -8,11 +8,15 @@ declare module "@mui/material/styles" {
   interface Palette {
     green: Palette["primary"]
     lightRed: Palette["primary"]
+    gray: Palette["primary"]
+    deepGray: Palette["primary"]
   }
 
   interface PaletteOptions {
     green?: PaletteOptions["primary"]
     lightRed?: PaletteOptions["primary"]
+    gray?: PaletteOptions["primary"]
+    deepGray?: PaletteOptions["primary"]
   }
 }
 
@@ -57,6 +61,20 @@ let theme = createTheme({
       textTransform: "none",
     },
   },
+  components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: props =>
+          props.ownerState.type === "password"
+            ? {
+                "& .MuiInputBase-input": {
+                  fontFamily: "Pretendard-Regular !important",
+                },
+              }
+            : undefined,
+      },
+    },
+  },
 })
 
 theme = createTheme(theme, {
@@ -74,6 +92,18 @@ theme = createTheme(theme, {
         contrastText: "#FFFFFF",
       },
       name: "lightRed",
+    }),
+    gray: theme.palette.augmentColor({
+      color: {
+        main: "#C8C8C8FF",
+        contrastText: "#000000",
+      },
+    }),
+    deepGray: theme.palette.augmentColor({
+      color: {
+        main: "#585858",
+        contrastText: "#FFFFFF",
+      },
     }),
   },
 })

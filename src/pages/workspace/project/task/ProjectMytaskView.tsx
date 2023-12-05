@@ -32,7 +32,11 @@ const ProjectMytaskView: React.FC = () => {
       }}
     >
       <h1>프로젝트 내 할일 View 페이지</h1>
-      <TaskView tasks={tasks} />
+      <TaskView
+        params={{
+          my: true,
+        }}
+      />
     </Box>
   )
 }
