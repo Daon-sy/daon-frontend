@@ -10,15 +10,14 @@ interface Props {
 const RoleButton: React.FC<Props> = ({ colorRole }) => {
   return (
     <Button
-      variant="contained"
+      variant="outlined"
       disableElevation
-      color={colorRole.color}
+      // color={colorRole.color}
+      color="primary"
       size="small"
       sx={{
         width: 160,
-        "&:hover": {
-          backgroundColor: `${colorRole.color}.main`,
-        },
+        borderWidth: 1,
       }}
     >
       <Typography pl={0} sx={{ fontSize: 14, fontWeight: 500 }} flexGrow={1}>

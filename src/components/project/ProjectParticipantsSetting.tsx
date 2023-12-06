@@ -376,23 +376,7 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
                 </Typography>
               </Box>
               <Box>
-                <Button
-                  variant="contained"
-                  disableElevation
-                  color={
-                    roles.find(r => r.role === projectParticipantToDrop.role)
-                      ?.color || "primary"
-                  }
-                  sx={{
-                    "&:hover": {
-                      backgroundColor: `${
-                        roles.find(
-                          r => r.role === projectParticipantToDrop.role,
-                        )?.color || "primary"
-                      }.main`,
-                    },
-                  }}
-                >
+                <Button variant="outlined" disableElevation color="primary">
                   {roles.find(r => r.role === projectParticipantToDrop.role)
                     ?.description || ""}
                 </Button>

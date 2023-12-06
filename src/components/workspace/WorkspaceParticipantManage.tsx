@@ -378,23 +378,7 @@ const WorkspaceParticipantManage = () => {
                 </Typography>
               </Box>
               <Box>
-                <Button
-                  variant="contained"
-                  disableElevation
-                  color={
-                    roles.find(r => r.role === workspaceParticipantToDrop.role)
-                      ?.color || "primary"
-                  }
-                  sx={{
-                    "&:hover": {
-                      backgroundColor: `${
-                        roles.find(
-                          r => r.role === workspaceParticipantToDrop.role,
-                        )?.color || "primary"
-                      }.main`,
-                    },
-                  }}
-                >
+                <Button variant="outlined" disableElevation color="primary">
                   {roles.find(r => r.role === workspaceParticipantToDrop.role)
                     ?.description || ""}
                 </Button>
