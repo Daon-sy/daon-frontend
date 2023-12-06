@@ -51,6 +51,7 @@ const ParticipantsModal = ({ open, handleClose }: Props) => {
 
   const getFilteredParticipants = () => {
     let filteredParticipants = participants
+    const searchKeywordToLowerCase = searchKeyword.trim().toLowerCase()
 
     if (selectedRole !== "전체") {
       filteredParticipants = filteredParticipants.filter(
@@ -58,9 +59,9 @@ const ParticipantsModal = ({ open, handleClose }: Props) => {
       )
     }
 
-    if (searchKeyword.trim() !== "") {
+    if (searchKeywordToLowerCase !== "") {
       filteredParticipants = filteredParticipants.filter(participant =>
-        participant.name.includes(searchKeyword),
+        participant.name.toLowerCase().includes(searchKeywordToLowerCase),
       )
     }
 
@@ -130,90 +131,6 @@ const ParticipantsModal = ({ open, handleClose }: Props) => {
           flexWrap: "wrap",
         }}
       >
-        {getFilteredParticipants().map(participant => (
-          <ParticipantCard
-            key={participant.workspaceParticipantId}
-            participant={participant}
-          />
-        ))}
-        {getFilteredParticipants().map(participant => (
-          <ParticipantCard
-            key={participant.workspaceParticipantId}
-            participant={participant}
-          />
-        ))}
-        {getFilteredParticipants().map(participant => (
-          <ParticipantCard
-            key={participant.workspaceParticipantId}
-            participant={participant}
-          />
-        ))}
-        {getFilteredParticipants().map(participant => (
-          <ParticipantCard
-            key={participant.workspaceParticipantId}
-            participant={participant}
-          />
-        ))}
-        {getFilteredParticipants().map(participant => (
-          <ParticipantCard
-            key={participant.workspaceParticipantId}
-            participant={participant}
-          />
-        ))}
-        {getFilteredParticipants().map(participant => (
-          <ParticipantCard
-            key={participant.workspaceParticipantId}
-            participant={participant}
-          />
-        ))}
-        {getFilteredParticipants().map(participant => (
-          <ParticipantCard
-            key={participant.workspaceParticipantId}
-            participant={participant}
-          />
-        ))}
-        {getFilteredParticipants().map(participant => (
-          <ParticipantCard
-            key={participant.workspaceParticipantId}
-            participant={participant}
-          />
-        ))}
-        {getFilteredParticipants().map(participant => (
-          <ParticipantCard
-            key={participant.workspaceParticipantId}
-            participant={participant}
-          />
-        ))}
-        {getFilteredParticipants().map(participant => (
-          <ParticipantCard
-            key={participant.workspaceParticipantId}
-            participant={participant}
-          />
-        ))}
-        {getFilteredParticipants().map(participant => (
-          <ParticipantCard
-            key={participant.workspaceParticipantId}
-            participant={participant}
-          />
-        ))}
-        {getFilteredParticipants().map(participant => (
-          <ParticipantCard
-            key={participant.workspaceParticipantId}
-            participant={participant}
-          />
-        ))}
-        {getFilteredParticipants().map(participant => (
-          <ParticipantCard
-            key={participant.workspaceParticipantId}
-            participant={participant}
-          />
-        ))}
-        {getFilteredParticipants().map(participant => (
-          <ParticipantCard
-            key={participant.workspaceParticipantId}
-            participant={participant}
-          />
-        ))}
         {getFilteredParticipants().map(participant => (
           <ParticipantCard
             key={participant.workspaceParticipantId}
