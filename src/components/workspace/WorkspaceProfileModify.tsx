@@ -168,7 +168,7 @@ const WorkspaceProfileModify = () => {
         </Box>
       </Stack>
 
-      <Box mt={1} sx={{ position: "absolute", bottom: 10, right: 30 }}>
+      <Box mt={1} sx={{ position: "absolute", bottom: 10, right: 0 }}>
         <Button
           sx={{ color: "#c9c9c9" }}
           onClick={() => setWorkspaceWithdrawModalOpen(true)}

@@ -38,19 +38,6 @@ const WorkspaceSettingsModal = ({ open = false, handleClose }: Props) => {
       open={open}
       title="워크스페이스 설정"
       handleClose={handleClose}
-      // subTitle={
-      //   <Box display="flex" alignItems="center">
-      //     <Typography fontSize={15}>사용자 : {myProfile?.name}</Typography>
-      //     <Chip
-      //       label={roles.find(p => p.role === myProfile?.role)?.description}
-      //       size="small"
-      //       sx={{
-      //         fontSize: 12,
-      //         marginLeft: 1,
-      //       }}
-      //     />
-      //   </Box>
-      // }
       menuWithPageList={menuWithPageList}
     />
   )
