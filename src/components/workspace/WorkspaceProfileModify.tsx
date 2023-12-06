@@ -132,6 +132,7 @@ const WorkspaceProfileModify = () => {
                 <FormControl
                   fullWidth
                   sx={{
+                    fontSize: 14,
                     minWidth: 80,
                     "&:hover": {
                       backgroundColor: "rgb(242,242,242)",
@@ -140,15 +141,18 @@ const WorkspaceProfileModify = () => {
                 >
                   <Select
                     autoWidth
-                    style={{ height: 50 }}
-                    size="medium"
+                    style={{ height: 40 }}
+                    size="small"
                     value={email}
                     onChange={e =>
                       updateMyWorkspaceProfile({ email: e.target.value })
                     }
                   >
                     {memberEmails?.map(memberEmail => (
-                      <MenuItem value={memberEmail.email} sx={{ minWidth: 80 }}>
+                      <MenuItem
+                        value={memberEmail.email}
+                        sx={{ minWidth: 80, fontSize: 14 }}
+                      >
                         {memberEmail.email}
                       </MenuItem>
                     ))}
