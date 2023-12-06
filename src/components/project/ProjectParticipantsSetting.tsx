@@ -172,9 +172,9 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
               >
                 <ListItemAvatar>
                   <ColorAvatar
+                    id={myProjectProfile.projectParticipantId}
                     src={myProjectProfile?.imageUrl}
                     sx={{ width: 36, height: 36 }}
-                    stringToChangeColor={myProjectProfile?.email}
                   />
                 </ListItemAvatar>
                 <ListItemText>
@@ -282,9 +282,9 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
                   >
                     <ListItemAvatar>
                       <ColorAvatar
+                        id={participant.projectParticipantId}
                         src={participant.imageUrl}
                         sx={{ width: 36, height: 36 }}
-                        stringToChangeColor={participant.email}
                       />
                     </ListItemAvatar>
                     <ListItemText>
@@ -361,13 +361,14 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
             >
               <Box ml={1}>
                 <ColorAvatar
-                  stringToChangeColor={projectParticipantToDrop?.name}
-                  name={projectParticipantToDrop?.name}
+                  id={projectParticipantToDrop.projectParticipantId}
+                  src={projectParticipantToDrop.imageUrl}
+                  name={projectParticipantToDrop.name}
                 />
               </Box>
               <Box ml={1} flexGrow={1} maxWidth={120}>
                 <Typography fontSize={14} fontWeight={600}>
-                  {projectParticipantToDrop?.name}
+                  {projectParticipantToDrop.name}
                 </Typography>
               </Box>
               <Box flexGrow={1}>
@@ -376,23 +377,7 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
                 </Typography>
               </Box>
               <Box>
-                <Button
-                  variant="contained"
-                  disableElevation
-                  color={
-                    roles.find(r => r.role === projectParticipantToDrop.role)
-                      ?.color || "primary"
-                  }
-                  sx={{
-                    "&:hover": {
-                      backgroundColor: `${
-                        roles.find(
-                          r => r.role === projectParticipantToDrop.role,
-                        )?.color || "primary"
-                      }.main`,
-                    },
-                  }}
-                >
+                <Button variant="outlined" disableElevation color="primary">
                   {roles.find(r => r.role === projectParticipantToDrop.role)
                     ?.description || ""}
                 </Button>

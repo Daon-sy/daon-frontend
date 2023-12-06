@@ -35,15 +35,17 @@ const SelectRoleButton: React.FC<Props> = ({ initValue = 2, onChange }) => {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={openList}
-        variant="contained"
+        variant="outlined"
         disableElevation
-        color={roles[selectedIndex].color}
+        // color={roles[selectedIndex].color}
+        color="primary"
         sx={{
           px: 1,
           width: 160,
           display: "flex",
           alignItems: "center",
           borderRadius: 1,
+          borderWidth: 1,
         }}
         size="small"
       >

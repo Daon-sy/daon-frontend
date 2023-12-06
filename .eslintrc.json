@@ -32,6 +32,7 @@
       "mem",
       "styled-components",
       "@mui/types",
+      "@mui/system/styleFunctionSx",
       "@mui/x-date-pickers",
       "@mui/x-date-pickers/AdapterDayjs",
       "@mui/x-date-pickers/internals/demo",

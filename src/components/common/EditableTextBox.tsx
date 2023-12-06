@@ -1,9 +1,11 @@
 import React from "react"
 import Box from "@mui/material/Box"
-import { Button, ButtonGroup, TextField } from "@mui/material"
+import { Button, ButtonGroup, TextField, Theme } from "@mui/material"
 import CheckIcon from "@mui/icons-material/Check"
 import ClearIcon from "@mui/icons-material/Clear"
 import { styled } from "@mui/material/styles"
+import { InputBaseProps } from "@mui/material/InputBase"
+import { SxProps } from "@mui/system/styleFunctionSx"
 
 const StyledTextField = styled(TextField)({
   width: "100%",
@@ -20,6 +22,8 @@ interface Props {
   fontSize?: number | string
   fontWeight?: number | string
   borderStyle?: "none" | "solid"
+  inputProps?: InputBaseProps["inputProps"]
+  sx?: SxProps<Theme>
 }
 
 const EditableTextBox = ({
@@ -33,6 +37,8 @@ const EditableTextBox = ({
   fontSize = 14,
   fontWeight = 500,
   borderStyle = "solid",
+  inputProps,
+  sx,
 }: Props) => {
   const [inputValue, setInputValue] = React.useState("")
   const [editable, setEditable] = React.useState(false)
@@ -63,14 +69,11 @@ const EditableTextBox = ({
       inputProps={{
         readOnly: !editable,
         maxLength: maxTextLength,
+        ...inputProps,
         style: {
           fontSize,
           fontWeight,
-          lineHeight: !multiline ? 2 : undefined,
-          paddingTop: !multiline ? 4 : undefined,
-          paddingBottom: !multiline ? 4 : undefined,
-          paddingLeft: !multiline ? 8 : undefined,
-          paddingRight: !multiline ? 8 : undefined,
+          ...inputProps?.style,
         },
       }}
       onClick={enableEdit}
@@ -79,9 +82,10 @@ const EditableTextBox = ({
         "& .MuiOutlinedInput-root": {
           "& fieldset": {
             borderStyle,
-            borderColor: "#E0E3E7",
+            // borderColor: "#E0E3E7",
           },
         },
+        ...sx,
       }}
     />
   ) : (
@@ -93,14 +97,11 @@ const EditableTextBox = ({
         rows={rows}
         inputProps={{
           maxLength: maxTextLength,
+          ...inputProps,
           style: {
             fontSize,
             fontWeight,
-            lineHeight: !multiline ? 2 : undefined,
-            paddingTop: !multiline ? 4 : undefined,
-            paddingBottom: !multiline ? 4 : undefined,
-            paddingLeft: !multiline ? 8 : undefined,
-            paddingRight: !multiline ? 8 : undefined,
+            ...inputProps?.style,
           },
         }}
         onBlur={() => disableEdit()}
@@ -111,6 +112,9 @@ const EditableTextBox = ({
             handleUpdate(inputValue)
             disableEdit(false)
           }
+        }}
+        sx={{
+          ...sx,
         }}
       />
       <Box display="flex" justifyContent="end" position="relative" zIndex={1}>

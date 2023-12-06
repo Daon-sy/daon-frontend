@@ -21,6 +21,7 @@ import { WORKSPACE_PARTICIPANT_ROLE } from "_types/workspace"
 import EditableBox from "components/common/EditableBox"
 import ConfirmDialog from "components/common/ConfirmDialog"
 import { useNavigate } from "react-router-dom"
+import EditableTextBox from "components/common/EditableTextBox"
 
 const allowedEdit: Array<WORKSPACE_PARTICIPANT_ROLE> = [
   "WORKSPACE_ADMIN",
@@ -142,36 +143,29 @@ const ProjectGeneralSetting = ({ workspaceId, projectId }: Props) => {
           <Typography variant="inherit" p={0.5} fontSize={15} fontWeight={500}>
             프로젝트 이름
           </Typography>
-          <EditableBox
-            autoFocus
+          <EditableTextBox
             enterComplete
             text={projectTitle}
             handleUpdate={value => value && updateProject({ title: value })}
-            blockEdit={!allowedEdit.includes(myProfile.role)}
+            fontSize={14}
             maxTextLength={20}
-            style={{
-              borderColor: "rgba(200,200,200)",
-              borderWidth: 1,
-            }}
+            blockEdit={!allowedEdit.includes(myProfile.role)}
           />
         </Box>
         <Box mt={1}>
           <Typography variant="inherit" p={0.5} fontSize={15} fontWeight={500}>
             프로젝트 설명
           </Typography>
-          <EditableBox
+          <EditableTextBox
             multiline
-            autoFocus
+            rows={8}
             text={description}
             handleUpdate={value =>
               value && updateProject({ description: value })
             }
-            blockEdit={!allowedEdit.includes(myProfile.role)}
+            fontSize={14}
             maxTextLength={100}
-            style={{
-              borderColor: "rgba(200,200,200)",
-              borderWidth: 1,
-            }}
+            blockEdit={!allowedEdit.includes(myProfile.role)}
           />
         </Box>
       </Box>
@@ -231,19 +225,15 @@ const ProjectGeneralSetting = ({ workspaceId, projectId }: Props) => {
                     }}
                   >
                     <Box width="100%">
-                      <EditableBox
-                        autoFocus
+                      <EditableTextBox
                         enterComplete
                         text={board.title}
                         handleUpdate={value =>
                           value && updateBoard(board.boardId, value)
                         }
                         blockEdit={!allowedEdit.includes(myProfile.role)}
+                        fontSize={14}
                         maxTextLength={20}
-                        style={{
-                          borderColor: "rgba(200,200,200)",
-                          borderWidth: 1,
-                        }}
                       />
                     </Box>
                     {allowedEdit.includes(myProfile.role) ? (

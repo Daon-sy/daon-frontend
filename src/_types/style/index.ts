@@ -12,3 +12,11 @@ export type ColorOptions = OverridableStringUnion<
   | "warning",
   ButtonPropsColorOverrides | ChipPropsColorOverrides
 >
+export const avatarColors = [
+  "#fedc7a",
+  "#eceb5f",
+  "#8dcfb0",
+  "#9bd9e5",
+  "#8e82bd",
+  "#76bc61",
+]

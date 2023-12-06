@@ -13,9 +13,9 @@ import {
   withdrawWorkspaceApi,
 } from "api/workspace"
 import useImageUrlInputRef from "hooks/useImageUrlInputRef"
-import EditableBox from "components/common/EditableBox"
 import { MemberEmail } from "_types/member"
 import { myEmailsApi } from "api/member"
+import EditableTextBox from "components/common/EditableTextBox"
 import ConfirmDialog from "components/common/ConfirmDialog"
 import { useNavigate } from "react-router-dom"
 
@@ -109,21 +109,14 @@ const WorkspaceProfileModify = () => {
                 >
                   프로필 이름
                 </Typography>
-                <EditableBox
-                  autoFocus
+                <EditableTextBox
                   enterComplete
                   text={name}
                   handleUpdate={value =>
                     value && updateMyWorkspaceProfile({ name: value })
                   }
+                  fontSize={14}
                   maxTextLength={20}
-                  style={{
-                    borderColor: "rgba(200,200,200)",
-                    borderWidth: 1,
-                    height: 30,
-                    display: "flex",
-                    alignItems: "center",
-                  }}
                 />
               </Box>
               <Box>
@@ -139,7 +132,7 @@ const WorkspaceProfileModify = () => {
                 <FormControl
                   fullWidth
                   sx={{
-                    height: 50,
+                    fontSize: 14,
                     minWidth: 80,
                     "&:hover": {
                       backgroundColor: "rgb(242,242,242)",
@@ -148,15 +141,18 @@ const WorkspaceProfileModify = () => {
                 >
                   <Select
                     autoWidth
-                    style={{ height: 50 }}
-                    size="medium"
+                    style={{ height: 40 }}
+                    size="small"
                     value={email}
                     onChange={e =>
                       updateMyWorkspaceProfile({ email: e.target.value })
                     }
                   >
                     {memberEmails?.map(memberEmail => (
-                      <MenuItem value={memberEmail.email} sx={{ minWidth: 80 }}>
+                      <MenuItem
+                        value={memberEmail.email}
+                        sx={{ minWidth: 80, fontSize: 14 }}
+                      >
                         {memberEmail.email}
                       </MenuItem>
                     ))}
