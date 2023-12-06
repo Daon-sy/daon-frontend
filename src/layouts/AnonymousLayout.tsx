@@ -7,16 +7,23 @@ const DefaultLayout = styled.div`
   width: 100%;
   height: 100vh;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `
 const Main = styled.div`
   display: flex;
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 70px);
+  overflow: auto;
+  box-sizing: border-box;
 `
 const AnonymousPage = styled.div`
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: white;
+  position: relative;
+  top: 0;
 `
 
 const AnonymousLayout = () => {

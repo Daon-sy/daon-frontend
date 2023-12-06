@@ -12,6 +12,7 @@ const DefaultLayout = styled.div`
   overflow: hidden;
 `
 const Main = styled.div`
+  background-color: #f6f7f9;
   display: flex;
   width: 100%;
   height: calc(100vh - 70px);
@@ -19,6 +20,7 @@ const Main = styled.div`
 `
 
 const SideBarWrapper = styled.div`
+  background-color: white;
   box-sizing: border-box;
   width: 15%;
   min-width: 256px;
@@ -28,7 +30,7 @@ const SideBarWrapper = styled.div`
 const Page = styled.div`
   width: 85%;
   height: 100%;
-  padding-left: 32px;
+  margin-left: 32px;
   padding-right: 32px;
   min-width: 1184px;
   background-color: #f6f7f9;
