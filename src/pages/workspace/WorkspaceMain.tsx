@@ -63,6 +63,7 @@ const WorkspaceMain: React.FC = () => {
           </SectionTitleWrapper>
           <SectionTitleWrapper
             width="20vw"
+            minWidth="243px"
             color="#3A4CA8"
             icon={faPeopleGroup}
             title="구성원"
