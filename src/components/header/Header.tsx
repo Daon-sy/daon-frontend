@@ -11,9 +11,11 @@ const Header: React.FC = () => {
     <AppBar
       position="static"
       sx={{
+        boxShadow: "5px 5px 10px 3px rgba(0, 0, 0, 0.1)",
         bgcolor: "#ffffff",
         color: "#818181",
         height: 70,
+        mb: "10px",
       }}
     >
       <Toolbar

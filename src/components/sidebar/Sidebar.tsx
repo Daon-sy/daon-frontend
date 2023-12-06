@@ -9,27 +9,17 @@ const Sidebar: React.FC = () => {
     <Box
       component="section"
       sx={{
-        msOverflowStyle: "none",
-        scrollbarWidth: "none",
-        WebkitScrollSnapType: "none",
-        overflowY: "scroll",
-        height: "92%",
-        "&::-webkit-scrollbar": {
-          width: "0",
-        },
-        "&::-webkit-scrollbar-thumb": {
-          backgroundColor: "transparent",
-        },
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
       }}
     >
       <Box
         component="div"
         sx={{
-          height: "30%",
-          minHeight: "235px",
-          maxHeight: "360px",
+          height: "240px",
           width: "100%",
-          position: "sticky",
           top: 0,
           zIndex: 100,
           bgcolor: "white",
@@ -38,7 +28,13 @@ const Sidebar: React.FC = () => {
         <WorkSpaceProfile />
         <IconBtnWrapper />
       </Box>
-      <Box component="section" sx={{ height: "63%", minHeight: "400px" }}>
+      <Box
+        component="div"
+        sx={{
+          boxSizing: "border-box",
+          height: "calc(100vh - 315px)",
+        }}
+      >
         <SidebarMenu />
       </Box>
     </Box>

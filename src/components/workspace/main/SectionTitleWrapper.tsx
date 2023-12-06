@@ -7,6 +7,7 @@ import {
 
 interface SectionTitleWrapperProp {
   width: number | string
+  minWidth?: string
   maxWidth?: string
   height?: number | string
   color: string
@@ -17,6 +18,7 @@ interface SectionTitleWrapperProp {
 }
 const SectionTitleWrapper: React.FC<SectionTitleWrapperProp> = ({
   width,
+  minWidth,
   maxWidth,
   color,
   icon,
@@ -29,10 +31,12 @@ const SectionTitleWrapper: React.FC<SectionTitleWrapperProp> = ({
     <Box
       component="section"
       sx={{
+        minWidth,
         maxWidth,
         width,
         pl,
         height: "100%",
+        boxSizing: "border-box",
       }}
     >
       {/* title */}
@@ -41,11 +45,12 @@ const SectionTitleWrapper: React.FC<SectionTitleWrapperProp> = ({
         sx={{
           display: "flex",
           alignItems: "center",
-          mb: "16px",
+          mb: "8px",
           color,
           fontSize: "20px",
           fontWeight: "800",
           height,
+          width: "100%",
         }}
       >
         <Box
@@ -65,7 +70,7 @@ const SectionTitleWrapper: React.FC<SectionTitleWrapperProp> = ({
         </Box>
         {title}
       </Box>
-      {children}
+      <Box width="100%">{children}</Box>
     </Box>
   )
 }

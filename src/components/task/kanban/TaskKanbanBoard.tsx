@@ -76,9 +76,8 @@ const TaskKanbanBoard: React.FC<Props> = ({
           <Box
             sx={{
               marginX: 1,
-              paddingBottom: 1,
               borderRadius: 2,
-              height: "100%",
+              minHeight: " calc(100vh - 360px)",
             }}
           >
             {tasks.map((task, index) => (
