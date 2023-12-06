@@ -1,30 +1,8 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import TaskView from "components/task/TaskView"
-import { TaskSummary } from "_types/task"
-import { taskListApi } from "api/task"
 import Box from "@mui/material/Box"
 
 const ProjectMytaskView: React.FC = () => {
-  const [tasks, setTasks] = useState<TaskSummary[]>([])
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const workspaceId = location.pathname.split("/")[2]
-        const projectId = location.pathname.split("/")[4]
-        const response = await taskListApi(+workspaceId, {
-          projectId: +projectId,
-          my: true,
-        })
-        setTasks(response.data.tasks)
-      } catch (error) {
-        console.error("Error fetching tasks:", error)
-      }
-    }
-
-    fetchData()
-  }, [])
-
   return (
     <Box
       sx={{
