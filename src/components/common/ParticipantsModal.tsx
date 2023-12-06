@@ -68,6 +68,10 @@ const ParticipantsModal = ({ open, handleClose }: Props) => {
     return filteredParticipants
   }
 
+  const onSendMessageButtonClick = () => {
+    handleClose()
+  }
+
   return (
     <TitleDialog
       title="구성원 목록"
@@ -135,6 +139,7 @@ const ParticipantsModal = ({ open, handleClose }: Props) => {
           <ParticipantCard
             key={participant.workspaceParticipantId}
             participant={participant}
+            onSendMessageClick={onSendMessageButtonClick}
           />
         ))}
       </Box>

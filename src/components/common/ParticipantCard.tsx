@@ -5,6 +5,8 @@ import {
   CardActionArea,
   CardContent,
   CardMedia,
+  Menu,
+  MenuItem,
   Typography,
 } from "@mui/material"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -14,9 +16,29 @@ import { WorkspaceParticipant } from "_types/workspace"
 
 interface ParticipantItemProps {
   participant: WorkspaceParticipant
+  onSendMessageClick: () => void
 }
 
-const ParticipantCard: React.FC<ParticipantItemProps> = ({ participant }) => {
+const ParticipantCard: React.FC<ParticipantItemProps> = ({
+  participant,
+  onSendMessageClick,
+}) => {
+  const [anchorMenu, setAnchorMenu] = React.useState<null | HTMLElement>(null)
+  const open = Boolean(anchorMenu)
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorMenu(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorMenu(null)
+  }
+
+  const handleSendMessageClick = () => {
+    onSendMessageClick()
+    handleClose()
+  }
+
   const getRoleIcon = (role: string) => {
     switch (role) {
       case "WORKSPACE_ADMIN":
@@ -35,6 +57,7 @@ const ParticipantCard: React.FC<ParticipantItemProps> = ({ participant }) => {
         my: 2,
         mx: 1,
       }}
+      onClick={handleClick}
     >
       <CardActionArea>
         <CardMedia
@@ -70,6 +93,17 @@ const ParticipantCard: React.FC<ParticipantItemProps> = ({ participant }) => {
           </Typography>
         </CardContent>
       </CardActionArea>
+      <Menu
+        anchorEl={anchorMenu}
+        open={open}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 100,
+          horizontal: 40,
+        }}
+      >
+        <MenuItem onClick={handleSendMessageClick}>쪽지 보내기</MenuItem>
+      </Menu>
     </Card>
   )
 }
