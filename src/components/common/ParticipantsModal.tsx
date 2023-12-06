@@ -91,7 +91,7 @@ const ParticipantsModal = ({ open, handleClose }: Props) => {
             sx={{
               fontSize: 14,
             }}
-            placeholder="구성원 검색"
+            placeholder="구성원 이름으로 검색"
             value={searchKeyword}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setSearchKeyworkd(e.target.value)
