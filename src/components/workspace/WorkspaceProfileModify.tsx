@@ -63,34 +63,34 @@ const WorkspaceProfileModify = () => {
   return (
     <Box>
       <Stack spacing={2}>
-        <Typography variant="h6">내 프로필 정보</Typography>
         <Box display="flex" justifyContent="center">
-          <Box mr={2}>
-            <ImageInput
-              width={160}
-              height={160}
-              borderRadius={20}
-              imageUrl={imageUrl}
-              onImageChange={onImageChange}
-            />
-            <input
-              hidden
-              type="text"
-              name="imageUrl"
-              ref={ref}
-              onChange={e =>
-                updateMyWorkspaceProfile({ imageUrl: e.currentTarget.value })
-              }
-            />
-          </Box>
+          <ImageInput
+            width={200}
+            height={200}
+            borderRadius={50}
+            border="none"
+            imageUrl={imageUrl}
+            onImageChange={onImageChange}
+          />
+          <input
+            hidden
+            type="text"
+            name="imageUrl"
+            ref={ref}
+            onChange={e =>
+              updateMyWorkspaceProfile({ imageUrl: e.currentTarget.value })
+            }
+          />
+
           <Box width="100%">
-            <Stack spacing={2}>
+            <Stack spacing={2} justifyContent="center" height="100%">
               <Box>
                 <Typography
                   variant="inherit"
-                  p={0.5}
+                  pb={1}
                   fontSize={15}
-                  fontWeight={500}
+                  fontWeight={700}
+                  color="primary.main"
                 >
                   프로필 이름
                 </Typography>
@@ -105,21 +105,26 @@ const WorkspaceProfileModify = () => {
                   style={{
                     borderColor: "rgba(200,200,200)",
                     borderWidth: 1,
+                    height: 30,
+                    display: "flex",
+                    alignItems: "center",
                   }}
                 />
               </Box>
               <Box>
                 <Typography
                   variant="inherit"
-                  p={0.5}
+                  pb={1}
                   fontSize={15}
-                  fontWeight={500}
+                  fontWeight={700}
+                  color="primary.main"
                 >
                   이메일
                 </Typography>
                 <FormControl
                   fullWidth
                   sx={{
+                    height: 50,
                     minWidth: 80,
                     "&:hover": {
                       backgroundColor: "rgb(242,242,242)",
@@ -128,14 +133,15 @@ const WorkspaceProfileModify = () => {
                 >
                   <Select
                     autoWidth
-                    size="small"
+                    style={{ height: 50 }}
+                    size="medium"
                     value={email}
                     onChange={e =>
                       updateMyWorkspaceProfile({ email: e.target.value })
                     }
                   >
                     {memberEmails?.map(memberEmail => (
-                      <MenuItem value={memberEmail.email}>
+                      <MenuItem value={memberEmail.email} sx={{ minWidth: 80 }}>
                         {memberEmail.email}
                       </MenuItem>
                     ))}
