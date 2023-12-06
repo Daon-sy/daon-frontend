@@ -34,9 +34,10 @@ const WorkspaceParticipants: React.FC = () => {
     <Box
       component="ul"
       sx={{
+        boxSizing: "border-box",
         p: 1,
-        borderRadius: "15px",
-        height: "calc(30vh - 60px)",
+        borderRadius: "6px",
+        height: "calc(30vh - 44px)",
         bgcolor: "#ffffff",
         scrollbarWidth: "0.5em",
         WebkitScrollSnapType: "none",

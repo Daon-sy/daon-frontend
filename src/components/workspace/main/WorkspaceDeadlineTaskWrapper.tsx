@@ -57,7 +57,7 @@ const WorkspaceDeadlineTaskWrapper: React.FC<Props> = ({ tasks }) => {
         },
       }}
     >
-      <Box p={1}>
+      <Box p={1} boxSizing="border-box">
         {/* 할일 item */}
         {memoTasks.map(task => (
           <DeadlineTask key={task.taskId} task={task} />

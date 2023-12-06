@@ -7,7 +7,7 @@ const WorkspaceNotice: React.FC = () => {
       component="ul"
       sx={{
         height: "calc(30vh - 44px)",
-        borderRadius: "15px",
+        borderRadius: "6px",
         width: "100%",
         bgcolor: "#ffffff",
         display: "flex",

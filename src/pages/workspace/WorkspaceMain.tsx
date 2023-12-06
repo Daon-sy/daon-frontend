@@ -50,9 +50,9 @@ const WorkspaceMain: React.FC = () => {
         {workspace.title}에 오신 것을 환영합니다.
       </Box>
 
-      <Stack mt={2} spacing={2} direction="row" height="30vh">
+      <Stack mt={2} spacing={2} direction="row" height="30vh" width="100%">
         <SectionTitleWrapper
-          width="80%"
+          width="80vw"
           color="#E25860"
           icon={faBullhorn}
           title="공지사항"
@@ -60,7 +60,7 @@ const WorkspaceMain: React.FC = () => {
           <WorkspaceNotice />
         </SectionTitleWrapper>
         <SectionTitleWrapper
-          width="20%"
+          width="20vw"
           color="#3A4CA8"
           icon={faPeopleGroup}
           title="구성원"
@@ -69,22 +69,29 @@ const WorkspaceMain: React.FC = () => {
         </SectionTitleWrapper>
       </Stack>
 
-      <Stack mt={3} spacing={2} direction="row" height="calc(68vh - 160px)">
+      <Stack
+        mt={2}
+        spacing={2}
+        direction="row"
+        height="calc(80vh - 240px)"
+        width="100%"
+      >
         <SectionTitleWrapper
-          width="25%"
-          color="#7DB249"
-          icon={faFileCircleExclamation}
-          title="할일 D-3"
-        >
-          <WorkspaceDeadlineTaskWrapper tasks={tasks} />
-        </SectionTitleWrapper>
-        <SectionTitleWrapper
-          width="75%"
+          width="calc(80vw - 270px)"
+          minWidth="912px"
           color="#B96BC6"
           icon={faStopwatch}
           title="타임라인"
         >
           <TaskTimelineView tasks={tasks} height="calc(68vh - 160px - 44px)" />
+        </SectionTitleWrapper>
+        <SectionTitleWrapper
+          width="calc(20vw - 67.2px)"
+          color="#7DB249"
+          icon={faFileCircleExclamation}
+          title="할일 D-3"
+        >
+          <WorkspaceDeadlineTaskWrapper tasks={tasks} />
         </SectionTitleWrapper>
       </Stack>
     </Box>
