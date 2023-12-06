@@ -12,9 +12,9 @@ import {
   myWorkspaceParticipantDetailApi,
 } from "api/workspace"
 import useImageUrlInputRef from "hooks/useImageUrlInputRef"
-import EditableBox from "components/common/EditableBox"
 import { MemberEmail } from "_types/member"
 import { myEmailsApi } from "api/member"
+import EditableTextBox from "components/common/EditableTextBox"
 
 const WorkspaceProfileModify = () => {
   const { workspace, myProfile, setMyProfile } = getWorkspaceStore()
@@ -94,18 +94,14 @@ const WorkspaceProfileModify = () => {
                 >
                   프로필 이름
                 </Typography>
-                <EditableBox
-                  autoFocus
+                <EditableTextBox
                   enterComplete
                   text={name}
                   handleUpdate={value =>
                     value && updateMyWorkspaceProfile({ name: value })
                   }
+                  fontSize={14}
                   maxTextLength={20}
-                  style={{
-                    borderColor: "rgba(200,200,200)",
-                    borderWidth: 1,
-                  }}
                 />
               </Box>
               <Box>

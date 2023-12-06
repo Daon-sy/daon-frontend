@@ -330,6 +330,15 @@ const TaskDetailModal: React.FC<Props> = ({
                           title: value,
                         })
                       }}
+                      inputProps={{
+                        style: {
+                          lineHeight: 2,
+                          paddingTop: 4,
+                          paddingBottom: 4,
+                          paddingLeft: 8,
+                          paddingRight: 8,
+                        },
+                      }}
                     />
                   </Box>
                 </Tooltip>
@@ -361,8 +370,8 @@ const TaskDetailModal: React.FC<Props> = ({
                     padding: 1,
                     border: "solid",
                     borderWidth: 1,
-                    borderRadius: 2,
-                    borderColor: "rgb(224,224,224)",
+                    borderRadius: 1,
+                    borderColor: "#bdbdbd",
                     display: "flex",
                     alignItems: "center",
                     height: 40,
