@@ -5,6 +5,7 @@ import PersonIcon from "@mui/icons-material/Person"
 import { getWorkspaceStore } from "store/userStore"
 import { WorkspaceParticipant } from "_types/workspace"
 import { workspaceParticipantListApi } from "api/workspace"
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCrown, faLeaf } from "@fortawesome/free-solid-svg-icons"
 
@@ -63,7 +64,7 @@ const WorkspaceParticipants: React.FC = () => {
           sx={{
             width: "100%",
             height: "40px",
-            paddingY: "5px",
+            paddingY: "8px",
             paddingX: "5px",
             display: "inline-flex",
             alignItems: "center",
@@ -154,6 +155,24 @@ const WorkspaceParticipants: React.FC = () => {
             >
               {participant.email}
             </Box>
+          </Box>
+
+          <Box
+            component="button"
+            sx={{
+              mx: "auto",
+              py: 1,
+              px: 1,
+              bgcolor: "transparent",
+              border: "none",
+              borderRadius: "50%",
+              color: "#a5a5a5",
+              "&:hover": {
+                bgcolor: "#dcdcdc",
+              },
+            }}
+          >
+            <ArrowForwardIosIcon />
           </Box>
         </Box>
       ))}
