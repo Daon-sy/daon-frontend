@@ -31,6 +31,7 @@ const SideBarWrapper = styled.div`
   height: calc(100vh - 70px);
 `
 const Page = styled.div`
+  width: calc(100vw - 300px);
   height: calc(100vh - 90px);
   margin-left: 32px;
   padding-right: 32px;

@@ -81,7 +81,8 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
       <Box
         mt={2}
         mb={2}
-        height="70%"
+        height="calc(100vh - 300px)"
+        minHeight="330px"
         overflow="hidden"
         sx={{
           overflowY: "scroll",
