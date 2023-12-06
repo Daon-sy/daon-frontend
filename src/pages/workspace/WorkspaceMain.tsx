@@ -55,6 +55,7 @@ const WorkspaceMain: React.FC = () => {
         <Stack mt={2} spacing={2} direction="row" height="30vh" width="100%">
           <SectionTitleWrapper
             width="80vw"
+            minWidth="912px"
             color="#E25860"
             icon={faBullhorn}
             title="공지사항"
