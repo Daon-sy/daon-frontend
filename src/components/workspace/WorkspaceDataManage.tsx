@@ -89,9 +89,10 @@ const WorkspaceDataManage = () => {
                 <ImageInput
                   width={200}
                   height={200}
+                  borderRadius={50}
+                  border="none"
                   imageUrl={imageUrl}
                   onImageChange={onImageChange}
-                  borderRadius={50}
                 />
                 <input
                   hidden
@@ -107,10 +108,10 @@ const WorkspaceDataManage = () => {
                     <Box>
                       <Typography
                         variant="inherit"
-                        p={0.5}
+                        pb={1}
                         fontSize={15}
                         fontWeight={700}
-                        color="#1f4838"
+                        color="primary.main"
                       >
                         워크스페이스 명
                       </Typography>
@@ -128,10 +129,10 @@ const WorkspaceDataManage = () => {
                     <Box>
                       <Typography
                         variant="inherit"
-                        p={0.5}
+                        pb={1}
                         fontSize={15}
                         fontWeight={700}
-                        color="#1f4838"
+                        color="primary.main"
                       >
                         워크스페이스 목적
                       </Typography>
@@ -149,7 +150,7 @@ const WorkspaceDataManage = () => {
                   </Stack>
                 </Box>
               </Box>
-              <Box sx={{ mt: 3 }}>
+              <Box sx={{ mt: 1 }}>
                 <Typography
                   variant="inherit"
                   p={0.5}

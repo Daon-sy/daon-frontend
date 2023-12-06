@@ -19,6 +19,7 @@ export interface MenuWithPage {
 interface Props {
   open: boolean
   title: string
+  minWidth: string
   handleClose: () => void
   menuWithPageList: MenuWithPage[]
 }
@@ -26,6 +27,7 @@ interface Props {
 const MenuModal = ({
   open,
   title,
+  minWidth,
   handleClose,
   menuWithPageList = [],
 }: Props) => {
@@ -38,7 +40,8 @@ const MenuModal = ({
       open={open}
       handleClose={handleClose}
       padding={0}
-      height={600}
+      minWidth={minWidth}
+      height={560}
       color="#727272"
       right={20}
     >
