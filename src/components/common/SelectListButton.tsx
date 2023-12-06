@@ -7,9 +7,10 @@ import {
   MenuProps,
   Box,
   Chip,
+  Typography,
 } from "@mui/material"
 import { styled } from "@mui/material/styles"
-import Typography from "@mui/material/Typography"
+import { ColorOptions } from "_types/style"
 
 const StyledMenu = styled((props: MenuProps) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -41,7 +42,7 @@ const StyledMenu = styled((props: MenuProps) => (
 export interface ItemType {
   id: number
   text: string
-  color?: "info" | "primary" | "success" | "warning"
+  color?: ColorOptions
 }
 
 interface Props<T extends ItemType> {
@@ -58,12 +59,15 @@ interface Props<T extends ItemType> {
   changeButtonColor?: true | false
   disableChangeButtonText?: true | false
   variant?: "outlined" | "contained"
-  color?: "primary" | "secondary" | "green"
+  color?: ColorOptions
   clearOnListUpdated?: true | false
   fontSize?: number
   fontWeight?: number | string
   buttonSize?: "small" | "large" | "medium"
   readonly?: boolean
+  width?: number | string
+  height?: number | string
+  borderRadius?: number | string
 }
 
 const SelectListButton = <T extends ItemType>({
@@ -84,6 +88,9 @@ const SelectListButton = <T extends ItemType>({
   fontWeight = 500,
   buttonSize = "medium",
   readonly = false,
+  width,
+  height,
+  borderRadius,
 }: Props<T>) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -94,7 +101,9 @@ const SelectListButton = <T extends ItemType>({
   const findValueById = (valueId: number) =>
     valueList?.find(item => item.id === valueId)
 
-  const [selectedValue, setSelectedValue] = React.useState<T | undefined>()
+  const [selectedValue, setSelectedValue] = React.useState<T | undefined>(
+    findValueById(defaultValueId || 0),
+  )
 
   React.useEffect(() => {
     if (defaultValueId) setSelectedValue(findValueById(defaultValueId))
@@ -131,23 +140,28 @@ const SelectListButton = <T extends ItemType>({
         disableElevation
         color={
           changeButtonColor && selectedValue && selectedValue.color
-            ? (selectedValue.color as
-                | "info"
-                | "primary"
-                | "success"
-                | "warning")
-            : color || "info"
+            ? selectedValue.color
+            : color
         }
-        endIcon={endMuiIcon}
         sx={{
           px: 1,
+          width,
+          height,
+          display: "flex",
+          alignItems: "center",
+          borderRadius,
         }}
         size={buttonSize}
       >
         {leftMuiIcon}
-        <Typography pl={leftMuiIcon ? 1 : 0} sx={{ fontSize, fontWeight }}>
+        <Typography
+          pl={leftMuiIcon ? 1 : 0}
+          sx={{ fontSize, fontWeight }}
+          flexGrow={1}
+        >
           {selectedValue ? selectedValue.text : unsetButtonText}
         </Typography>
+        {endMuiIcon}
       </Button>
       <StyledMenu
         anchorEl={anchorEl}
@@ -175,15 +189,7 @@ const SelectListButton = <T extends ItemType>({
                 <Chip
                   label={item.text}
                   size="small"
-                  color={
-                    item.color
-                      ? (item.color as
-                          | "info"
-                          | "primary"
-                          | "success"
-                          | "warning")
-                      : "info"
-                  }
+                  // color={item.color || "primary"}
                   sx={{
                     fontSize: 12,
                   }}

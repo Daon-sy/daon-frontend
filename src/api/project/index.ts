@@ -131,6 +131,15 @@ export const deportationProjectParticipantApi = async (
   )
 }
 
+export const myProjectParticipantDetailApi = async (
+  workspaceId: number,
+  projectId: number,
+): Promise<AxiosResponse<ProjectParticipant>> => {
+  return authAxios.get(
+    `/api/workspaces/${workspaceId}/projects/${projectId}/participants/me`,
+  )
+}
+
 // 프로젝트 보드 목록 조회
 export const projectBoardListApi = async (
   workspaceId: number,

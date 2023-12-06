@@ -45,12 +45,14 @@ const PageRoutes = () => {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       )}
-      <Backdrop
-        sx={{ color: "#fff", zIndex: theme => theme.zIndex.drawer + 1 }}
-        open={backdropOpen}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      {backdropOpen ? (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: theme => theme.zIndex.drawer + 1 }}
+          open={backdropOpen}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      ) : null}
     </BrowserRouter>
   )
 }

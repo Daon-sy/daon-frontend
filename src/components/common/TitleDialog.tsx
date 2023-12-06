@@ -6,6 +6,7 @@ import {
   IconButton,
   Box,
   Typography,
+  Divider,
 } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
 
@@ -48,13 +49,13 @@ export const TitleDialog = ({
       disableEscapeKeyDown
       onKeyUp={e => e.key === "Escape" && handleClose()}
     >
-      <DialogTitle sx={{ px: 3, py: 1.5, backgroundColor: "#1F4838" }}>
+      <DialogTitle sx={{ px: 3, py: 1.5 }}>
         <Box display="flex" alignItems="center" pr={7}>
           <Box flexGrow={1}>
             <Typography
               variant="inherit"
               fontSize={titleFontSize}
-              color="#FFFFFF"
+              color="deepGray.main"
               fontWeight={700}
             >
               {title || "\u00A0"}
@@ -62,6 +63,7 @@ export const TitleDialog = ({
           </Box>
         </Box>
       </DialogTitle>
+      <Divider />
 
       {disableCloseButton ? null : (
         <IconButton
@@ -70,7 +72,7 @@ export const TitleDialog = ({
             position: "absolute",
             right: 8,
             top: 8,
-            color: () => "#FFFFFF",
+            // color: () => "#FFFFFF",
           }}
         >
           <CloseIcon />
