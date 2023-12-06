@@ -28,6 +28,7 @@ import JoinWorkspace from "components/workspace/JoinWorkspace"
 const StyledTypography = styled((props: TypographyProps) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <Typography {...props} />
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
 ))(({ theme }) => ({
   fontSize: 14,
 }))
