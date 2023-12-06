@@ -4,16 +4,9 @@ import { Box, Button, Stack, AppBar, Toolbar } from "@mui/material"
 import Logo from "components/header/Logo"
 
 const AnonymousHeader = () => {
-  const [loginModalOpen, setLoginModalOpen] = React.useState<boolean>(false)
-
-  const openLoginModal = () => setLoginModalOpen(true)
-
-  const closeLoginModal = () => setLoginModalOpen(false)
-
   return (
-    <AppBar position="static">
-      <Toolbar>
-        {/* Nav */}
+    <AppBar position="sticky" sx={{ top: 0, height: 70 }}>
+      <Toolbar sx={{ height: 70 }}>
         <Logo />
         <Box>
           <Stack spacing={2} direction="row">

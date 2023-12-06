@@ -76,13 +76,11 @@ const SignIn: React.FC = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        bgcolor: "white",
       }}
     >
       <Box
         sx={{
           width: 500,
-          marginTop: 10, // 상단 공백 임시
           padding: 5,
           backgroundColor: "white",
         }}
@@ -143,18 +141,18 @@ const SignIn: React.FC = () => {
                 <Button
                   fullWidth
                   size="large"
-                  variant="outlined"
-                  onClick={onCancelButtonClick}
-                >
-                  취소
-                </Button>
-                <Button
-                  fullWidth
-                  size="large"
                   variant="contained"
                   onClick={onLoginButtonClick}
                 >
                   로그인
+                </Button>
+                <Button
+                  fullWidth
+                  size="large"
+                  variant="outlined"
+                  onClick={onCancelButtonClick}
+                >
+                  취소
                 </Button>
               </Stack>
             </Box>

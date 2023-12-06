@@ -85,13 +85,13 @@ const WorkspaceDataManage = () => {
         <Box>
           <Stack spacing={10}>
             <Box>
-              <Typography variant="h6">워크스페이스 정보</Typography>
               <Box display="flex" alignItems="center">
                 <ImageInput
-                  width={160}
-                  height={160}
+                  width={200}
+                  height={200}
                   imageUrl={imageUrl}
                   onImageChange={onImageChange}
+                  borderRadius={50}
                 />
                 <input
                   hidden
@@ -109,9 +109,10 @@ const WorkspaceDataManage = () => {
                         variant="inherit"
                         p={0.5}
                         fontSize={15}
-                        fontWeight={500}
+                        fontWeight={700}
+                        color="#1f4838"
                       >
-                        워크스페이스 이름
+                        워크스페이스 명
                       </Typography>
                       <EditableBox
                         autoFocus
@@ -125,6 +126,7 @@ const WorkspaceDataManage = () => {
                         style={{
                           borderColor: "rgba(200,200,200)",
                           borderWidth: 1,
+                          height: 30,
                         }}
                       />
                     </Box>
@@ -133,7 +135,8 @@ const WorkspaceDataManage = () => {
                         variant="inherit"
                         p={0.5}
                         fontSize={15}
-                        fontWeight={500}
+                        fontWeight={700}
+                        color="#1f4838"
                       >
                         워크스페이스 목적
                       </Typography>
@@ -149,18 +152,20 @@ const WorkspaceDataManage = () => {
                         style={{
                           borderColor: "rgba(200,200,200)",
                           borderWidth: 1,
+                          height: 30,
                         }}
                       />
                     </Box>
                   </Stack>
                 </Box>
               </Box>
-              <Box>
+              <Box sx={{ mt: 3 }}>
                 <Typography
                   variant="inherit"
                   p={0.5}
                   fontSize={15}
-                  fontWeight={500}
+                  fontWeight={700}
+                  color="#1f4838"
                 >
                   워크스페이스 설명
                 </Typography>
@@ -177,6 +182,7 @@ const WorkspaceDataManage = () => {
                     style={{
                       borderColor: "rgba(200,200,200)",
                       borderWidth: 1,
+                      height: 90,
                     }}
                   />
                 </Box>

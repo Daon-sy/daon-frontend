@@ -20,6 +20,8 @@ interface Props {
   padding?: number
   disableCloseButton?: boolean
   minWidth?: number | string
+  color?: string
+  right?: number
 }
 
 export const TitleDialog = ({
@@ -33,6 +35,8 @@ export const TitleDialog = ({
   padding,
   disableCloseButton = false,
   minWidth,
+  color = "#FFFFFF",
+  right = 8,
 }: Props) => {
   return (
     <Dialog
@@ -48,29 +52,31 @@ export const TitleDialog = ({
       disableEscapeKeyDown
       onKeyUp={e => e.key === "Escape" && handleClose()}
     >
-      <DialogTitle sx={{ px: 3, py: 1.5, backgroundColor: "#1F4838" }}>
-        <Box display="flex" alignItems="center" pr={7}>
-          <Box flexGrow={1}>
-            <Typography
-              variant="inherit"
-              fontSize={titleFontSize}
-              color="#FFFFFF"
-              fontWeight={700}
-            >
-              {title || "\u00A0"}
-            </Typography>
+      {title ? (
+        <DialogTitle sx={{ px: 3, py: 1.5, backgroundColor: "#1F4838" }}>
+          <Box display="flex" alignItems="center" pr={7}>
+            <Box flexGrow={1}>
+              <Typography
+                variant="inherit"
+                fontSize={titleFontSize}
+                color={color}
+                fontWeight={700}
+              >
+                {title || "\u00A0"}
+              </Typography>
+            </Box>
           </Box>
-        </Box>
-      </DialogTitle>
+        </DialogTitle>
+      ) : null}
 
       {disableCloseButton ? null : (
         <IconButton
           onClick={handleClose}
           sx={{
             position: "absolute",
-            right: 8,
+            right: { right },
             top: 8,
-            color: () => "#FFFFFF",
+            color: { color },
           }}
         >
           <CloseIcon />

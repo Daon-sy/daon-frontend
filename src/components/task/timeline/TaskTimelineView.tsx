@@ -124,7 +124,7 @@ const TaskTimelineView = ({ tasks = [], height = 300 }: TaskViewProps) => {
       <Box
         ref={boxRef}
         sx={{
-          height: "100%",
+          height,
           display: "flex",
           width: "100%",
           minWidth: 600,
@@ -299,7 +299,7 @@ const TaskTimelineView = ({ tasks = [], height = 300 }: TaskViewProps) => {
             ))}
           </Box>
           <Box display="flex" position="absolute">
-            {yearMonthDateCountList.map((ymdc, index) => (
+            {yearMonthDateCountList.map(ymdc => (
               <Box
                 sx={{
                   width: dateWidth * ymdc.dateCount,
