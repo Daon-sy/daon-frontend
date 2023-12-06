@@ -22,6 +22,8 @@ import {
   RegisteredTaskManagerNotification,
 } from "_types/notification"
 import useReadNotification from "hooks/notification/useReadNotification"
+import useFetchNotifications from "hooks/notification/useFetchNotifications"
+import useNotification from "hooks/sse/useNotification"
 import { useTitleDialog } from "components/common/TitleDialog"
 import JoinWorkspace from "components/workspace/JoinWorkspace"
 
@@ -138,6 +140,11 @@ const NotificationButton = () => {
   const handleClose = () => {
     setAnchorEl(null)
   }
+
+  useFetchNotifications()
+  useNotification({
+    ssePath: "/api/notifications/subscribe",
+  })
 
   const { fetch: readNotification } = useReadNotification()
 
