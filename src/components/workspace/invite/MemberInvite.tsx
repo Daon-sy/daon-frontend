@@ -103,10 +103,7 @@ const MemberInvite = () => {
                     }}
                   >
                     <Box>
-                      <ColorAvatar
-                        stringToChangeColor={member.username}
-                        name={member.name}
-                      />
+                      <ColorAvatar id={member.username} name={member.name} />
                     </Box>
                     <Box ml={2} flexGrow={1}>
                       <Typography fontSize={14} fontWeight={600}>
@@ -211,7 +208,7 @@ const MemberInvite = () => {
             >
               <Box>
                 <ColorAvatar
-                  stringToChangeColor={selectedMember?.username}
+                  id={selectedMember?.username}
                   name={selectedMember?.name}
                 />
               </Box>

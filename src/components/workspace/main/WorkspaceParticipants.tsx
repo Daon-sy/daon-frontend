@@ -1,13 +1,13 @@
 /* eslint-disable no-nested-ternary */
 import React from "react"
 import { Box } from "@mui/material"
-import PersonIcon from "@mui/icons-material/Person"
 import { getWorkspaceStore } from "store/userStore"
 import { WorkspaceParticipant } from "_types/workspace"
 import { workspaceParticipantListApi } from "api/workspace"
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCrown, faLeaf } from "@fortawesome/free-solid-svg-icons"
+import ColorAvatar from "components/common/ColorAvatar"
 
 const WorkspaceParticipants: React.FC = () => {
   const { workspace, myProfile } = getWorkspaceStore()
@@ -25,11 +25,6 @@ const WorkspaceParticipants: React.FC = () => {
   React.useEffect(() => {
     fetchWorkspaceParticipants()
   }, [myProfile])
-
-  const getColorByIndex = (index: number) => {
-    const colors = ["#9bd9e5", "#f2625a", "#fedc7a", "#8dcfb0"]
-    return colors[index % colors.length]
-  }
 
   return (
     <Box
@@ -71,33 +66,14 @@ const WorkspaceParticipants: React.FC = () => {
             justifyContent: "space-between",
           }}
         >
-          {participant.imageUrl ? (
-            <Box
-              component="img"
-              sx={{
-                height: "35px",
-                width: "35px",
-                borderRadius: "50%",
-                display: "block",
-              }}
-              src={participant.imageUrl}
-            />
-          ) : (
-            <Box
-              component="div"
-              sx={{
-                height: "35px",
-                width: "35px",
-                borderRadius: "50%",
-                backgroundColor: getColorByIndex(index),
-              }}
-            >
-              <PersonIcon
-                sx={{ fontSize: "32px", color: "#ffffff", ml: "1.5px" }}
-              />
-            </Box>
-          )}
-
+          <ColorAvatar
+            id={participant.workspaceParticipantId}
+            src={participant.imageUrl}
+            sx={{
+              width: "36px",
+              height: "36px",
+            }}
+          />
           <Box
             component="div"
             sx={{

@@ -59,8 +59,8 @@ const WorkSpaceProfile: React.FC = () => {
         </Box>
       ) : null}
       <ColorAvatar
+        id={myProfile?.workspaceParticipantId}
         src={myProfile?.imageUrl}
-        stringToChangeColor={`${myProfile?.name}-${myProfile?.workspaceParticipantId.toString()}`}
         sx={{ width: 65, height: 65 }}
       />
       <Box

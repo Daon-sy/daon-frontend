@@ -53,8 +53,8 @@ const WorkspaceSelectButton = () => {
               {workspace ? (
                 <>
                   <ColorAvatar
+                    id={workspace.workspaceId}
                     src={workspace?.imageUrl}
-                    stringToChangeColor={`${workspace.title}-${workspace.workspaceId}`}
                     name={workspace?.title}
                     sx={{
                       width: 28,
@@ -156,8 +156,8 @@ const WorkspaceSelectButton = () => {
                     >
                       <Box display="flex" alignItems="center">
                         <ColorAvatar
+                          id={ws.workspaceId}
                           src={ws.imageUrl}
-                          stringToChangeColor={`${ws.title}-${ws.workspaceId}`}
                           name={ws.title}
                         />
                         <Typography

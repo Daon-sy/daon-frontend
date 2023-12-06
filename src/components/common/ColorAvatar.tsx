@@ -3,7 +3,9 @@ import Avatar from "@mui/material/Avatar"
 // eslint-disable-next-line
 import { SxProps } from "@mui/system"
 import { Theme } from "@mui/material"
+import { avatarColors } from "../../_types/style"
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const stringToColor = (string: string) => {
   let hash = 0
   let i
@@ -24,14 +26,27 @@ const stringToColor = (string: string) => {
   return color
 }
 
+const getColor = (id: number | string): string => {
+  if (typeof id === "number") return avatarColors[id % avatarColors.length]
+
+  let hash = 0
+  let i
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < id.length; i += 1) {
+    hash = id.charCodeAt(i) + ((hash << 5) - hash)
+  }
+  return avatarColors[hash % avatarColors.length]
+  /* eslint-enable no-bitwise */
+}
+
 interface Props {
   src?: string
-  stringToChangeColor?: string
+  id?: number | string
   name?: string
   sx?: SxProps<Theme>
 }
 
-const ColorAvatar = ({ src, stringToChangeColor, name, sx }: Props) => (
+const ColorAvatar = ({ id, src, name, sx }: Props) => (
   <Avatar
     src={src}
     sx={{
@@ -39,10 +54,7 @@ const ColorAvatar = ({ src, stringToChangeColor, name, sx }: Props) => (
       height: 28,
       mr: 0.5,
       fontSize: 14,
-      bgcolor:
-        src || !stringToChangeColor
-          ? undefined
-          : stringToColor(stringToChangeColor),
+      bgcolor: id ? getColor(id) : undefined,
       ...sx,
     }}
   >

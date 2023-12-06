@@ -159,9 +159,9 @@ const WorkspaceParticipantManage = () => {
               >
                 <ListItemAvatar>
                   <ColorAvatar
+                    id={myProfile?.workspaceParticipantId}
                     src={myProfile?.imageUrl}
                     sx={{ width: 36, height: 36 }}
-                    stringToChangeColor={myProfile?.email}
                   />
                 </ListItemAvatar>
                 <ListItemText>
@@ -284,9 +284,9 @@ const WorkspaceParticipantManage = () => {
                   >
                     <ListItemAvatar>
                       <ColorAvatar
+                        id={participant.workspaceParticipantId}
                         src={participant.imageUrl}
                         sx={{ width: 36, height: 36 }}
-                        stringToChangeColor={participant.email}
                       />
                     </ListItemAvatar>
                     <ListItemText>
@@ -363,18 +363,19 @@ const WorkspaceParticipantManage = () => {
             >
               <Box ml={1}>
                 <ColorAvatar
-                  stringToChangeColor={workspaceParticipantToDrop?.name}
-                  name={workspaceParticipantToDrop?.name}
+                  id={workspaceParticipantToDrop.workspaceParticipantId}
+                  src={workspaceParticipantToDrop.imageUrl}
+                  name={workspaceParticipantToDrop.name}
                 />
               </Box>
               <Box ml={1} flexGrow={1} maxWidth={120}>
                 <Typography fontSize={14} fontWeight={600}>
-                  {workspaceParticipantToDrop?.name}
+                  {workspaceParticipantToDrop.name}
                 </Typography>
               </Box>
               <Box flexGrow={1}>
                 <Typography fontSize={12}>
-                  {workspaceParticipantToDrop?.email}
+                  {workspaceParticipantToDrop.email}
                 </Typography>
               </Box>
               <Box>
