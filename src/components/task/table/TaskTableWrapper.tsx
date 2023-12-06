@@ -213,9 +213,22 @@ const TaskTableWrapper: React.FC<TaskTableWrapperProps> = ({
       <Box
         sx={{
           width: "100%",
-          height: "90%",
-          overflow: "scroll",
+          height: "100%",
+          overflowY: "auto",
           overflowX: "hidden",
+          "&::-webkit-scrollbar": {
+            width: "8px",
+            borderColor: "#C8C8C8FF",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            position: "absolute",
+            backgroundColor: "#495e57",
+            borderRadius: "4px",
+          },
+          "&::-webkit-scrollbar-button": {
+            width: "0px",
+            height: "0px",
+          },
         }}
       >
         <Stack

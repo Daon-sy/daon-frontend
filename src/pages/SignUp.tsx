@@ -246,213 +246,208 @@ const SignUp = () => {
   return (
     <Box
       sx={{
-        width: "100%",
-        height: "100%",
-        m: 0,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        height: "calc(100vh - 70px);",
+        boxShadow: "border-box",
         bgcolor: "white",
       }}
     >
       <Box
         sx={{
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          marginX: "auto",
+          justifyContent: "space-evenly",
           width: 500,
-          marginTop: 10, // 상단 공백 임시
-          padding: 5,
           backgroundColor: "white",
         }}
       >
+        <Typography
+          variant="h4"
+          component="h2"
+          sx={{
+            textAlign: "center",
+            mb: 2,
+          }}
+        >
+          회원가입
+        </Typography>
         <Stack spacing={2}>
-          <Box>
-            <Typography
-              variant="h4"
-              component="h2"
+          <TextField
+            required
+            label="아이디"
+            variant="outlined"
+            value={formData.username}
+            onChange={onUsernameChanged}
+            helperText="usermail"
+          />
+          <TextField
+            required
+            type="password"
+            label="비밀번호"
+            variant="outlined"
+            value={formData.password}
+            onChange={onPasswordChanged}
+            helperText="6자리 이상. 영문,숫자,특수기호 조합."
+          />
+          <TextField
+            required
+            type="password"
+            label="비밀번호 확인"
+            variant="outlined"
+            value={formData.passwordCheck}
+            onChange={onPasswordCheckChanged}
+            helperText="6자리 이상. 영문,숫자,특수기호 조합."
+          />
+          <TextField
+            required
+            label="이름"
+            variant="outlined"
+            value={formData.name}
+            onChange={onNameChanged}
+            helperText="실명 입력"
+          />
+          <Box
+            component="form"
+            sx={{
+              display: "flex",
+              width: "500px",
+              justifyContent: "space-between",
+            }}
+          >
+            <TextField
+              required
+              label="이메일"
+              variant="outlined"
+              value={formData.email}
+              onChange={onEmailChanged}
+              helperText="usermail@email.com"
+              sx={{ flexGrow: 1 }}
+            />
+            <Button
               sx={{
-                textAlign: "center",
-                marginBottom: 3,
+                color: "white",
+                backgroundColor: "#FFBE00",
+                width: 120,
+                ml: 1,
+                height: "56px",
+                postion: "relative",
+                top: 0,
               }}
+              onClick={handleSendEmailClick}
             >
-              회원가입
-            </Typography>
+              인증번호 전송
+            </Button>
           </Box>
-          <Stack spacing={2}>
-            <TextField
-              required
-              label="아이디"
-              variant="outlined"
-              value={formData.username}
-              onChange={onUsernameChanged}
-              helperText="usermail"
-            />
-            <TextField
-              required
-              type="password"
-              label="비밀번호"
-              variant="outlined"
-              value={formData.password}
-              onChange={onPasswordChanged}
-              helperText="6자리 이상. 영문,숫자,특수기호 조합."
-            />
-            <TextField
-              required
-              type="password"
-              label="비밀번호 확인"
-              variant="outlined"
-              value={formData.passwordCheck}
-              onChange={onPasswordCheckChanged}
-              helperText="6자리 이상. 영문,숫자,특수기호 조합."
-            />
-            <TextField
-              required
-              label="이름"
-              variant="outlined"
-              value={formData.name}
-              onChange={onNameChanged}
-              helperText="실명 입력"
-            />
-            <Box
-              component="form"
-              sx={{
-                display: "flex",
-                width: "500px",
-                justifyContent: "space-between",
-              }}
-            >
-              <TextField
-                required
-                label="이메일"
-                variant="outlined"
-                value={formData.email}
-                onChange={onEmailChanged}
-                helperText="usermail@email.com"
-                sx={{ flexGrow: 1 }}
-              />
-              <Button
-                sx={{
-                  color: "white",
-                  backgroundColor: "#FFBE00",
-                  width: 120,
-                  ml: 1,
-                  height: "56px",
-                  postion: "relative",
-                  top: 0,
-                }}
-                onClick={handleSendEmailClick}
-              >
-                인증번호 전송
-              </Button>
-            </Box>
-            {!sendEmail && progress > 0 && progress <= 100 && (
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <Box sx={{ width: "90%", mr: 1 }}>
-                  <LinearProgress
-                    variant="determinate"
-                    value={progress}
-                    sx={{
-                      mt: 2,
-                      width: "100%",
-                      height: 10,
-                      borderRadius: 5,
-                    }}
-                  />
-                </Box>
-                <Box sx={{ minWitdh: 35 }}>
-                  <Typography
-                    mt={2}
-                    variant="body2"
-                    color="text.secondary"
-                  >{`${Math.round(progress)}`}</Typography>
-                </Box>
-              </Box>
-            )}
-            {sendEmail ? (
-              <Box>
-                <Typography sx={{ m: 0.5, fontSize: 14, color: "#787878" }}>
-                  입력하신 이메일로 6자리 코드가 전송되었습니다.
-                </Typography>
-                <Box
+          {!sendEmail && progress > 0 && progress <= 100 && (
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Box sx={{ width: "90%", mr: 1 }}>
+                <LinearProgress
+                  variant="determinate"
+                  value={progress}
                   sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
+                    mt: 2,
+                    width: "100%",
+                    height: 10,
+                    borderRadius: 5,
                   }}
-                >
-                  <TextField
-                    sx={{ width: 200 }}
-                    required
-                    label="인증번호 입력"
-                    error={checkCode === false}
-                    value={code}
-                    onChange={e => setCode(e.target.value)}
-                    inputProps={{ maxLength: 6 }}
-                  />
-                  <Typography sx={{ color: "#3A4CA8" }}>
-                    {minutes} : {second}
-                  </Typography>
-                  <Button
-                    sx={{
-                      color: "white",
-                      backgroundColor: "#1F4838",
-                      width: 120,
-                      ml: 1,
-                      height: "56px",
-                      postion: "relative",
-                      top: 0,
-                    }}
-                    onClick={handleCheckVerificationCodeClick}
-                  >
-                    인증번호 확인
-                  </Button>
-                </Box>
-                {checkCode !== null && (
-                  <Typography sx={{ mt: 0.5, fontSize: 14, color: "#787878" }}>
-                    {checkCode
-                      ? "이메일 인증이 완료되었습니다."
-                      : "이메일 인증에 실패하였습니다. 다시 입력해 주세요."}
-                  </Typography>
-                )}
+                />
               </Box>
-            ) : null}
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
+              <Box sx={{ minWitdh: 35 }}>
+                <Typography
+                  mt={2}
+                  variant="body2"
+                  color="text.secondary"
+                >{`${Math.round(progress)}`}</Typography>
+              </Box>
+            </Box>
+          )}
+          {sendEmail ? (
+            <Box>
+              <Typography sx={{ m: 0.5, fontSize: 14, color: "#787878" }}>
+                입력하신 이메일로 6자리 코드가 전송되었습니다.
+              </Typography>
               <Box
                 sx={{
-                  width: 300,
-                  marginTop: 1,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
                 }}
               >
-                <Stack
-                  direction="row"
-                  spacing={2}
+                <TextField
+                  sx={{ width: 200 }}
+                  required
+                  label="인증번호 입력"
+                  error={checkCode === false}
+                  value={code}
+                  onChange={e => setCode(e.target.value)}
+                  inputProps={{ maxLength: 6 }}
+                />
+                <Typography sx={{ color: "#3A4CA8" }}>
+                  {minutes} : {second}
+                </Typography>
+                <Button
                   sx={{
-                    height: 50,
+                    color: "white",
+                    backgroundColor: "#1F4838",
+                    width: 120,
+                    ml: 1,
+                    height: "56px",
+                    postion: "relative",
+                    top: 0,
                   }}
+                  onClick={handleCheckVerificationCodeClick}
                 >
-                  <Button
-                    fullWidth
-                    size="large"
-                    variant="outlined"
-                    onClick={onCancelButtonClick}
-                  >
-                    취소
-                  </Button>
-                  <Button
-                    fullWidth
-                    size="large"
-                    variant="contained"
-                    onClick={onSignUpButtonClick}
-                  >
-                    가입
-                  </Button>
-                </Stack>
+                  인증번호 확인
+                </Button>
               </Box>
+              {checkCode !== null && (
+                <Typography sx={{ mt: 0.5, fontSize: 14, color: "#787878" }}>
+                  {checkCode
+                    ? "이메일 인증이 완료되었습니다."
+                    : "이메일 인증에 실패하였습니다. 다시 입력해 주세요."}
+                </Typography>
+              )}
             </Box>
-          </Stack>
+          ) : null}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Box
+              sx={{
+                width: 300,
+                marginTop: 1,
+              }}
+            >
+              <Stack
+                direction="row"
+                spacing={2}
+                sx={{
+                  height: 50,
+                }}
+              >
+                <Button
+                  fullWidth
+                  size="large"
+                  variant="contained"
+                  onClick={onSignUpButtonClick}
+                >
+                  가입
+                </Button>
+                <Button
+                  fullWidth
+                  size="large"
+                  variant="outlined"
+                  onClick={onCancelButtonClick}
+                >
+                  취소
+                </Button>
+              </Stack>
+            </Box>
+          </Box>
         </Stack>
       </Box>
     </Box>

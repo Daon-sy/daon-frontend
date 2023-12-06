@@ -13,9 +13,10 @@ const CreateBtn = ({ handleClick, children }: CreateBtnProps) => {
       component="button"
       onClick={handleClick}
       sx={{
-        position: "absolute",
-        top: "-5px",
+        position: "relative",
         right: 0,
+        display: "flex",
+        alignItems: "center",
         bgcolor: "transparent",
         color: "#48634f",
         border: "none",

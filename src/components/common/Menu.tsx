@@ -11,20 +11,25 @@ const Menu: React.FC<MenuProps> = ({ title, children, btn }) => {
   return (
     <Box
       sx={{
-        bgcolor: "white",
+        display: "flex",
+        flexDirection: "column",
         position: "relative",
         pb: 1,
+        height: "calc(100vh - 330px)",
       }}
     >
       <Box
         component="div"
         sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           fontSize: "18px",
           fontWeight: "bold",
           color: "#48634f",
           textAlign: "center",
-          height: "20px",
-          marginY: 2,
+          height: "20",
+          marginY: 1,
         }}
       >
         {title}
@@ -32,8 +37,9 @@ const Menu: React.FC<MenuProps> = ({ title, children, btn }) => {
       </Box>
       <Box
         sx={{
-          position: "relative",
-          borderRadius: 2,
+          boxSizing: "border-box",
+          flexGrow: 1,
+          height: "calc(100vh - 370px)",
         }}
       >
         {children}

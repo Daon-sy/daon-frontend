@@ -3,7 +3,6 @@ import { Box } from "@mui/material"
 import { getWorkspaceStore } from "store/userStore"
 import { getTaskDetailViewStore } from "store/taskStore"
 import { TaskListApiParams } from "api/task"
-import IconBreadcrumbs from "components/common/IconBreadcrumbs"
 import TaskHeader from "components/task/TaskHeader"
 import TaskKanbansWrapper from "components/task/kanban/TaskKanbansWrapper"
 import TaskTableWrapper from "components/task/table/TaskTableWrapper"
@@ -11,6 +10,7 @@ import TaskDetailModal from "components/task/modal/TaskDetailModal"
 import useEventSource from "hooks/sse/useEventSource"
 import useFetchTaskList from "hooks/task/useFetchTaskList"
 import Typography from "@mui/material/Typography"
+import IconBreadcrumbs from "components/common/IconBreadcrumbs"
 
 interface TaskViewProps {
   params?: TaskListApiParams
@@ -81,7 +81,8 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
       <Box
         mt={2}
         mb={2}
-        height="70%"
+        height="calc(100vh - 300px)"
+        minHeight="330px"
         overflow="hidden"
         sx={{
           overflowY: "scroll",
