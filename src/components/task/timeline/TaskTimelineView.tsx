@@ -124,7 +124,7 @@ const TaskTimelineView = ({ tasks = [], height = 300 }: TaskViewProps) => {
       <Box
         ref={boxRef}
         sx={{
-          height: "100%",
+          height,
           display: "flex",
           width: "100%",
           minWidth: 600,

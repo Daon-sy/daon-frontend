@@ -36,8 +36,7 @@ const WorkspaceParticipants: React.FC = () => {
       sx={{
         p: 1,
         borderRadius: "15px",
-        // width: "100%",
-        height: "200px",
+        height: "calc(30vh - 60px)",
         bgcolor: "#ffffff",
         scrollbarWidth: "0.5em",
         WebkitScrollSnapType: "none",

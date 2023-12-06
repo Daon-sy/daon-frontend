@@ -34,9 +34,9 @@ const WorkspaceMain: React.FC = () => {
     <Box
       component="div"
       sx={{
+        boxSizing: "border-box",
         width: "100%",
-        minHeight: "600px",
-        height: "100%",
+        height: "calc(100vh - 100px)",
       }}
     >
       <Box
@@ -50,7 +50,7 @@ const WorkspaceMain: React.FC = () => {
         {workspace.title}에 오신 것을 환영합니다.
       </Box>
 
-      <Stack mt={2} spacing={2} direction="row">
+      <Stack mt={2} spacing={2} direction="row" height="30vh">
         <SectionTitleWrapper
           width="80%"
           color="#E25860"
@@ -69,7 +69,7 @@ const WorkspaceMain: React.FC = () => {
         </SectionTitleWrapper>
       </Stack>
 
-      <Stack mt={3} spacing={2} direction="row" height="40%">
+      <Stack mt={3} spacing={2} direction="row" height="calc(68vh - 160px)">
         <SectionTitleWrapper
           width="25%"
           color="#7DB249"
@@ -84,7 +84,7 @@ const WorkspaceMain: React.FC = () => {
           icon={faStopwatch}
           title="타임라인"
         >
-          <TaskTimelineView tasks={tasks} />
+          <TaskTimelineView tasks={tasks} height="calc(68vh - 160px - 44px)" />
         </SectionTitleWrapper>
       </Stack>
     </Box>

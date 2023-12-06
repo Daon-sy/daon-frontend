@@ -37,9 +37,8 @@ const WorkspaceDeadlineTaskWrapper: React.FC<Props> = ({ tasks }) => {
     <Box
       component="ul"
       sx={{
-        // p: 1,
         borderRadius: "6px",
-        height: "100%",
+        height: "calc(68vh - 160px - 44px)",
         bgcolor: "#ffffff",
         scrollbarWidth: "0.5em",
         WebkitScrollSnapType: "none",

@@ -33,6 +33,7 @@ const SectionTitleWrapper: React.FC<SectionTitleWrapperProp> = ({
         width,
         pl,
         height: "100%",
+        boxSizing: "border-box",
       }}
     >
       {/* title */}
@@ -41,7 +42,7 @@ const SectionTitleWrapper: React.FC<SectionTitleWrapperProp> = ({
         sx={{
           display: "flex",
           alignItems: "center",
-          mb: "16px",
+          mb: "8px",
           color,
           fontSize: "20px",
           fontWeight: "800",
