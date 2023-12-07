@@ -30,8 +30,8 @@ import { useTitleDialog } from "components/common/TitleDialog"
 import MemberInvite from "components/workspace/invite/MemberInvite"
 import ColorAvatar from "components/common/ColorAvatar"
 import SearchIcon from "@mui/icons-material/Search"
-import SelectRoleButton from "./role/SelectRoleButton"
-import RoleButton from "./role/RoleButton"
+import SelectRoleButton from "components/workspace/role/SelectRoleButton"
+import RoleButton from "components/workspace/role/RoleButton"
 
 type Filter = "name" | "email"
 

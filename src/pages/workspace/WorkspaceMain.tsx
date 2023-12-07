@@ -30,8 +30,6 @@ const WorkspaceMain: React.FC = () => {
 
   if (!workspace) return null
 
-  console.log(workspace)
-
   return (
     <Box
       component="div"

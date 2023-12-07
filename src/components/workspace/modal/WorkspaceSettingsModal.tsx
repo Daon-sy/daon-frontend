@@ -1,14 +1,14 @@
 import React from "react"
 import { getMyWorkspaceIdStore, getWorkspaceStore } from "store/userStore"
 import MenuModal, { MenuWithPage } from "components/common/MenuModal"
-import WorkspaceDataManage from "components/workspace/WorkspaceDataManage"
-import WorkspaceProfileModify from "components/workspace/WorkspaceProfileModify"
-import WorkspaceParticipantManage from "components/workspace/WorkspaceParticipantManage"
+import WorkspaceDataManage from "components/workspace/settings/WorkspaceDataManage"
+import WorkspaceParticipantManage from "components/workspace/settings/WorkspaceParticipantManage"
 import { Box, Button } from "@mui/material"
 import ConfirmDialog from "components/common/ConfirmDialog"
 import { useNavigate } from "react-router-dom"
 import { removeWorkspaceApi } from "api/workspace"
 import { useAlert } from "hooks/useAlert"
+import WorkspaceProfileManage from "components/workspace/settings/WorkspaceProfileManage"
 
 interface Props {
   open: boolean
@@ -40,7 +40,7 @@ const WorkspaceSettingsModal = ({ open = false, handleClose }: Props) => {
     {
       pageName: "나의 프로필 관리",
       pageValue: "workspaceProfile",
-      pageComponent: <WorkspaceProfileModify />,
+      pageComponent: <WorkspaceProfileManage />,
     },
   ]
   if (workspace?.division !== "PERSONAL")
