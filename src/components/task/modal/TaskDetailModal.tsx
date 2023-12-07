@@ -1,6 +1,5 @@
 import React from "react"
 import {
-  Avatar,
   Button,
   Chip,
   Divider,
@@ -8,10 +7,8 @@ import {
   Stack,
   Tooltip,
   Typography,
-  MenuItem,
   Menu,
   Box,
-  Popper,
   ListItem,
   ListItemAvatar,
   ListItemText,
