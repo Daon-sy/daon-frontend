@@ -53,7 +53,7 @@ const WorkspaceParticipants: React.FC = () => {
       }}
     >
       {/* 구성원 Item */}
-      {workspaceParticipants.map((participant, index) => (
+      {workspaceParticipants.map(participant => (
         <Box
           component="li"
           sx={{
