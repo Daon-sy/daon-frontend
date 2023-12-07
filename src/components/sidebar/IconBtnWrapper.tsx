@@ -1,14 +1,18 @@
 import React from "react"
 import { Link as RouterLink, useParams } from "react-router-dom"
 import { Box, Divider } from "@mui/material"
-import GroupsIcon from "@mui/icons-material/Groups"
-import AddCircleIcon from "@mui/icons-material/AddCircle"
-import SettingsIcon from "@mui/icons-material/Settings"
-import BookmarkIcon from "@mui/icons-material/Bookmark"
-import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions"
+import {
+  Groups,
+  AddCircle,
+  Settings,
+  Bookmark,
+  EmojiEmotions,
+} from "@mui/icons-material"
+import { faBullhorn } from "@fortawesome/free-solid-svg-icons"
 import WorkspaceSettingsModal from "components/workspace/modal/WorkspaceSettingsModal"
 import ParticipantsModal from "components/common/ParticipantsModal"
 import { useCreateTaskModal } from "components/task/CreateTask"
+import WorkspaceNoticeModal from "components/workspace/modal/WorkspaceNoticeModal"
 import IconBtn from "./IconBtn"
 
 const IconBtnWrapper: React.FC = () => {
@@ -17,10 +21,15 @@ const IconBtnWrapper: React.FC = () => {
     React.useState(false)
   const [workspaceManageModalOpen, setWorkspaceManageModalOpen] =
     React.useState(false)
+  const [workspaceNoticeModalOpen, setWorkspaceNoticeModalOpen] =
+    React.useState(false)
   const { CreateTaskModal, open: openCreateTaskModal } = useCreateTaskModal()
   const openParticipantsModal = () => setParticipantsModalOpen(true)
   const openWorkspaceManageModal = () => {
     setWorkspaceManageModalOpen(true)
+  }
+  const openWorkspaceNoticeModal = () => {
+    setWorkspaceNoticeModalOpen(true)
   }
 
   return (
@@ -38,19 +47,19 @@ const IconBtnWrapper: React.FC = () => {
         <IconBtn
           component="button"
           text="워크스페이스 설정"
-          icon={<SettingsIcon fontSize="large" />}
+          icon={<Settings fontSize="large" />}
           onClick={openWorkspaceManageModal}
         />
         <IconBtn
           component="button"
           text="구성원보기"
-          icon={<GroupsIcon fontSize="large" />}
+          icon={<Groups fontSize="large" />}
           onClick={openParticipantsModal}
         />
         <IconBtn
           component="button"
           text="할일추가"
-          icon={<AddCircleIcon fontSize="large" />}
+          icon={<AddCircle fontSize="large" />}
           onClick={openCreateTaskModal}
         />
       </Box>
@@ -67,14 +76,20 @@ const IconBtnWrapper: React.FC = () => {
         <IconBtn
           component={RouterLink}
           text="북마크"
-          icon={<BookmarkIcon fontSize="large" />}
+          icon={<Bookmark fontSize="large" />}
           to={`/workspace/${workspaceId}/task/bookmark`}
         />
         <IconBtn
           component={RouterLink}
           text="나의 할일 모음"
-          icon={<EmojiEmotionsIcon fontSize="large" />}
+          icon={<EmojiEmotions fontSize="large" />}
           to={`/workspace/${workspaceId}/task/my`}
+        />
+        <IconBtn
+          component="button"
+          text="공지사항"
+          icon={faBullhorn}
+          onClick={openWorkspaceNoticeModal}
         />
       </Box>
       <Divider
@@ -92,13 +107,13 @@ const IconBtnWrapper: React.FC = () => {
           handleClose={() => setWorkspaceManageModalOpen(false)}
         />
       ) : null}
-      {/* <WorkspaceParticipantsModal
-        open={participantsModalOpen}
-        handleClose={() => setParticipantsModalOpen(false)}
-      /> */}
       <ParticipantsModal
         open={participantsModalOpen}
         handleClose={() => setParticipantsModalOpen(false)}
+      />
+      <WorkspaceNoticeModal
+        open={workspaceNoticeModalOpen}
+        handleClose={() => setWorkspaceNoticeModalOpen(false)}
       />
       <CreateTaskModal />
     </Box>
