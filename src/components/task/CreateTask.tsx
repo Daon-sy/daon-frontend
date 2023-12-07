@@ -256,23 +256,6 @@ const CreateTask: React.FC<Props> = ({ handleClose }: Props) => {
                   </Typography>
                 </Box>
               )}
-
-              {/* <Stack */}
-              {/*  direction="row" */}
-              {/*  spacing={1} */}
-              {/*  sx={{ display: "flex", alignItems: "center" }} */}
-              {/* > */}
-              {/*  <Box> */}
-              {/*    <ColorAvatar */}
-              {/*      id={taskManager?.projectParticipantId} */}
-              {/*      src={taskManager?.imageUrl} */}
-              {/*      sx={{ width: 24, height: 24 }} */}
-              {/*    /> */}
-              {/*  </Box> */}
-              {/*  <Typography fontSize={14}> */}
-              {/*    {taskManager ? taskManager.name : "없음"} */}
-              {/*  </Typography> */}
-              {/* </Stack> */}
             </Box>
           </Box>
         </Box>
@@ -287,14 +270,6 @@ const CreateTask: React.FC<Props> = ({ handleClose }: Props) => {
             spacing={2}
             sx={{ width: "60%", minWidth: 300 }}
           >
-            <Button
-              fullWidth
-              variant="outlined"
-              size="large"
-              onClick={handleClose}
-            >
-              취소
-            </Button>
             <Button
               fullWidth
               variant="contained"
@@ -312,6 +287,14 @@ const CreateTask: React.FC<Props> = ({ handleClose }: Props) => {
               }}
             >
               등록
+            </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              size="large"
+              onClick={handleClose}
+            >
+              취소
             </Button>
           </Stack>
         </Box>
