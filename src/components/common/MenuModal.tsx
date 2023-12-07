@@ -8,6 +8,7 @@ import {
   Radio,
   Typography,
 } from "@mui/material"
+import { getWorkspaceStore } from "store/userStore"
 import TitleDialog from "./TitleDialog"
 
 export interface MenuWithPage {
@@ -22,6 +23,7 @@ interface Props {
   minWidth: string
   handleClose: () => void
   menuWithPageList: MenuWithPage[]
+  removeButton?: React.ReactNode
 }
 
 const MenuModal = ({
@@ -30,10 +32,12 @@ const MenuModal = ({
   minWidth,
   handleClose,
   menuWithPageList = [],
+  removeButton,
 }: Props) => {
   const [selectedPage, setSelectedPage] = React.useState<string | undefined>(
     menuWithPageList.length > 0 ? menuWithPageList[0].pageValue : undefined,
   )
+  const { myProfile } = getWorkspaceStore()
 
   return (
     <TitleDialog
@@ -54,6 +58,7 @@ const MenuModal = ({
               bgcolor: "#1F4838",
               width: 300,
               border: "none",
+              overflowX: "hidden",
             }}
           >
             <Box height="100%" width="100%">
@@ -106,6 +111,11 @@ const MenuModal = ({
                 </RadioGroup>
               </Stack>
             </Box>
+            {myProfile?.role === "WORKSPACE_ADMIN" ? (
+              <Box mt={1} sx={{ position: "absolute", bottom: 10, left: 120 }}>
+                {removeButton}
+              </Box>
+            ) : null}
           </DialogContent>
 
           <DialogContent
