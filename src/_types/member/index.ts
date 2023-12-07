@@ -1,7 +1,9 @@
 export interface MemberDetail {
-  memberId: number
+  memberId: string
   name: string
   username: string
+  createdAt: string
+  modifiedAt: string
 }
 
 export interface MemberEmail {

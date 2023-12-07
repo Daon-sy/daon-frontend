@@ -1,6 +1,7 @@
 import React from "react"
 import { Route, Routes, useParams } from "react-router-dom"
 import { getBackdropStore } from "store/backdropStore"
+import { getLastWorkspaceStore, getMyMemberDetailStore } from "store/userStore"
 import UserLayout from "layouts/UserLayout"
 import ProjectRoutes from "pages/workspace/project"
 import TaskRoutes from "pages/workspace/task"
@@ -28,8 +29,15 @@ const WorkspaceDetailRoutes = () => {
   } = useFetchProjectList(Number(workspaceId), true)
   const { backdropOpen, handleBackdropOpen, handleBackdropClose } =
     getBackdropStore()
+  const { myDetail } = getMyMemberDetailStore()
+  const { setLastConnectedWs } = getLastWorkspaceStore()
 
   React.useEffect(() => {
+    setLastConnectedWs({
+      memberId: myDetail?.memberId || "",
+      lastConnectedWsId: Number(workspaceId),
+    })
+
     fetchWorkspaceDetail()
     fetchMyWorkspaceProfile()
     fetchProjectList()
@@ -41,7 +49,7 @@ const WorkspaceDetailRoutes = () => {
       isMyWorkspaceProfileFetching ||
       isProjectListFetching
     ) {
-      handleBackdropOpen()
+      if (!backdropOpen) handleBackdropOpen()
     } else if (backdropOpen) {
       handleBackdropClose()
     }

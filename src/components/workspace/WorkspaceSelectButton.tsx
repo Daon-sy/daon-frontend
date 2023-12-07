@@ -12,8 +12,7 @@ import {
   Typography,
 } from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
-import { getWorkspaceStore } from "store/userStore"
-import useFetchWorkspaceList from "hooks/workspace/useFetchWorkspaceList"
+import { getWorkspaceListStore, getWorkspaceStore } from "store/userStore"
 import { useTitleDialog } from "components/common/TitleDialog"
 import ColorAvatar from "components/common/ColorAvatar"
 import CreateWorkspace from "components/workspace/CreateWorkspace"
@@ -24,7 +23,7 @@ const WorkspaceSelectButton = () => {
   const [workspaceFilterKeyword, setWorkspaceFilterKeyword] = React.useState("")
 
   const { workspace } = getWorkspaceStore()
-  const { workspaces, fetchWorkspaceList } = useFetchWorkspaceList(false)
+  const { workspaceList: workspaces } = getWorkspaceListStore()
   const [workspaceManageModalOpen, setWorkspaceManageModalOpen] =
     React.useState(false)
 
@@ -35,7 +34,6 @@ const WorkspaceSelectButton = () => {
   } = useTitleDialog()
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
-    fetchWorkspaceList()
     setAnchorEl(event.currentTarget)
   }
 

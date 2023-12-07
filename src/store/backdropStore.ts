@@ -12,7 +12,7 @@ export const getBackdropStore = create<BackdropStore>(set => ({
   handleBackdropClose: () => {
     setTimeout(() => {
       set({ backdropOpen: false })
-    }, 500)
+    }, 1000)
   },
 }))
 

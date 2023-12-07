@@ -1,5 +1,10 @@
 import { create } from "zustand"
-import { WorkspaceDetail, WorkspaceParticipant } from "_types/workspace"
+import { persist, createJSONStorage } from "zustand/middleware"
+import {
+  Workspace,
+  WorkspaceDetail,
+  WorkspaceParticipant,
+} from "_types/workspace"
 import { ProjectDetail, Project } from "_types/project"
 import { MemberDetail } from "_types/member"
 
@@ -58,12 +63,49 @@ export const getProjectsStore = create<ProjectsStore>(set => ({
   setProjects: (projects: Project[]) => set(() => ({ projects })),
 }))
 
+interface WorkspaceListStore {
+  workspaceList: Workspace[]
+  setWorkspaceList: (workspaceList: Workspace[]) => void
+}
+
+export const getWorkspaceListStore = create<WorkspaceListStore>(set => ({
+  workspaceList: [],
+  setWorkspaceList: (workspaceList: Workspace[]) =>
+    set(() => ({ workspaceList })),
+}))
+
 interface MyWorkspaceId {
   myWorkspaceId: number | null | undefined
-  setMyWorkspaceId: (workspaceId: number) => void
+  setMyWorkspaceId: (workspaceId: number | undefined) => void
 }
 
 export const getMyWorkspaceIdStore = create<MyWorkspaceId>(set => ({
   myWorkspaceId: null,
-  setMyWorkspaceId: (myWorkspaceId: number) => set(() => ({ myWorkspaceId })),
+  setMyWorkspaceId: (myWorkspaceId: number | undefined) =>
+    set(() => ({ myWorkspaceId })),
 }))
+
+// persist
+interface LastWorkspace {
+  memberId: string
+  lastConnectedWsId: number
+}
+
+interface LastWorkspaceStore {
+  lastConnectedWs: LastWorkspace | undefined
+  setLastConnectedWs: (lastConnectedWs: LastWorkspace) => void
+}
+
+export const getLastWorkspaceStore = create(
+  persist<LastWorkspaceStore>(
+    set => ({
+      lastConnectedWs: undefined,
+      setLastConnectedWs: (lastConnectedWs: LastWorkspace | undefined) =>
+        set({ lastConnectedWs }),
+    }),
+    {
+      name: "last-workspace-store",
+      storage: createJSONStorage(() => localStorage),
+    },
+  ),
+)
