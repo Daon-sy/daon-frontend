@@ -163,9 +163,9 @@ const ProjectInvite: React.FC<Props> = ({
                 >
                   <Box>
                     <ColorAvatar
+                      id={workspaceParticipant.workspaceParticipantId}
                       src={workspaceParticipant.imageUrl}
                       sx={{ width: 36, height: 36 }}
-                      stringToChangeColor={workspaceParticipant.email}
                     />
                   </Box>
                   <Box flexGrow={1}>

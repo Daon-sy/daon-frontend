@@ -12,12 +12,12 @@ import {
   workspaceDetailApi,
 } from "api/workspace"
 import { getWorkspaceStore } from "store/userStore"
-import EditableBox from "components/common/EditableBox"
 import { useAlert } from "hooks/useAlert"
 import { imageUploadApi } from "api/image"
 import ConfirmDialog from "components/common/ConfirmDialog"
 import { useNavigate } from "react-router-dom"
 import { WORKSPACE_PARTICIPANT_ROLE } from "_types/workspace"
+import EditableTextBox from "components/common/EditableTextBox"
 
 const allowedEdit: Array<WORKSPACE_PARTICIPANT_ROLE> = ["WORKSPACE_ADMIN"]
 
@@ -89,9 +89,10 @@ const WorkspaceDataManage = () => {
                 <ImageInput
                   width={200}
                   height={200}
+                  borderRadius={50}
+                  border="none"
                   imageUrl={imageUrl}
                   onImageChange={onImageChange}
-                  borderRadius={50}
                 />
                 <input
                   hidden
@@ -107,59 +108,49 @@ const WorkspaceDataManage = () => {
                     <Box>
                       <Typography
                         variant="inherit"
-                        p={0.5}
+                        pb={1}
                         fontSize={15}
                         fontWeight={700}
-                        color="#1f4838"
+                        color="primary.main"
                       >
                         워크스페이스 명
                       </Typography>
-                      <EditableBox
-                        autoFocus
+                      <EditableTextBox
                         enterComplete
                         text={title}
                         handleUpdate={value =>
                           value && updateWorkspace({ title: value })
                         }
-                        blockEdit={!allowedEdit.includes(myProfile.role)}
+                        fontSize={14}
                         maxTextLength={20}
-                        style={{
-                          borderColor: "rgba(200,200,200)",
-                          borderWidth: 1,
-                          height: 30,
-                        }}
+                        blockEdit={!allowedEdit.includes(myProfile.role)}
                       />
                     </Box>
                     <Box>
                       <Typography
                         variant="inherit"
-                        p={0.5}
+                        pb={1}
                         fontSize={15}
                         fontWeight={700}
-                        color="#1f4838"
+                        color="primary.main"
                       >
                         워크스페이스 목적
                       </Typography>
-                      <EditableBox
-                        autoFocus
+                      <EditableTextBox
                         enterComplete
                         text={subject}
                         handleUpdate={value =>
                           value && updateWorkspace({ subject: value })
                         }
-                        blockEdit={!allowedEdit.includes(myProfile.role)}
+                        fontSize={14}
                         maxTextLength={10}
-                        style={{
-                          borderColor: "rgba(200,200,200)",
-                          borderWidth: 1,
-                          height: 30,
-                        }}
+                        blockEdit={!allowedEdit.includes(myProfile.role)}
                       />
                     </Box>
                   </Stack>
                 </Box>
               </Box>
-              <Box sx={{ mt: 3 }}>
+              <Box sx={{ mt: 1 }}>
                 <Typography
                   variant="inherit"
                   p={0.5}
@@ -170,20 +161,19 @@ const WorkspaceDataManage = () => {
                   워크스페이스 설명
                 </Typography>
                 <Box>
-                  <EditableBox
+                  <EditableTextBox
                     multiline
-                    autoFocus
+                    rows={8}
                     text={description}
                     handleUpdate={value =>
                       value && updateWorkspace({ description: value })
                     }
-                    blockEdit={!allowedEdit.includes(myProfile.role)}
+                    fontSize={14}
                     maxTextLength={100}
-                    style={{
-                      borderColor: "rgba(200,200,200)",
-                      borderWidth: 1,
-                      height: 90,
+                    inputProps={{
+                      style: {},
                     }}
+                    blockEdit={!allowedEdit.includes(myProfile.role)}
                   />
                 </Box>
               </Box>

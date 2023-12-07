@@ -6,6 +6,7 @@ interface ImageInputProps {
   width: number
   height: number
   borderRadius?: number
+  border: string
   imageUrl: string | null | undefined
   onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
@@ -14,6 +15,7 @@ const ImageInput = ({
   width,
   height,
   borderRadius = 5,
+  border = "solid 1px",
   imageUrl,
   onImageChange,
 }: ImageInputProps) => {
@@ -28,7 +30,7 @@ const ImageInput = ({
         sx={{
           overflow: "hidden",
           marginRight: 2,
-          border: "solid 1px",
+          border,
           borderColor: "rgba(0, 0, 0, 0.23)",
           borderRadius,
           "&:hover": {
