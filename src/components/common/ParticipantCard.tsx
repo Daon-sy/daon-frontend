@@ -13,18 +13,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCrown, faLeaf } from "@fortawesome/free-solid-svg-icons"
 import { TEST_IMAGE_URL } from "env"
 import { WorkspaceParticipant } from "_types/workspace"
+import MessageBoxModal from "components/message/modal/MessageBoxModal"
 
 interface ParticipantItemProps {
   participant: WorkspaceParticipant
-  onSendMessageClick: () => void
 }
 
-const ParticipantCard: React.FC<ParticipantItemProps> = ({
-  participant,
-  onSendMessageClick,
-}) => {
+const ParticipantCard: React.FC<ParticipantItemProps> = ({ participant }) => {
   const [anchorMenu, setAnchorMenu] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorMenu)
+
+  const [sendMessageModalOpen, setSendMessageModalOpen] =
+    React.useState<boolean>(false)
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorMenu(event.currentTarget)
@@ -32,11 +32,6 @@ const ParticipantCard: React.FC<ParticipantItemProps> = ({
 
   const handleClose = () => {
     setAnchorMenu(null)
-  }
-
-  const handleSendMessageClick = () => {
-    onSendMessageClick()
-    handleClose()
   }
 
   const getRoleIcon = (role: string) => {
@@ -50,6 +45,11 @@ const ParticipantCard: React.FC<ParticipantItemProps> = ({
     }
   }
 
+  const handleSendMessageClick = () => {
+    setSendMessageModalOpen(true)
+    handleClose()
+  }
+
   return (
     <Card
       sx={{
@@ -57,9 +57,8 @@ const ParticipantCard: React.FC<ParticipantItemProps> = ({
         my: 2,
         mx: 1,
       }}
-      onClick={handleClick}
     >
-      <CardActionArea>
+      <CardActionArea onClick={handleClick}>
         <CardMedia
           sx={{
             mt: "8.845px",
@@ -73,7 +72,7 @@ const ParticipantCard: React.FC<ParticipantItemProps> = ({
           src={participant.imageUrl || TEST_IMAGE_URL}
           alt="프로필 이미지"
         />
-        <CardContent>
+        <CardContent onClick={handleClick}>
           <Box
             sx={{
               display: "flex",
@@ -104,6 +103,13 @@ const ParticipantCard: React.FC<ParticipantItemProps> = ({
       >
         <MenuItem onClick={handleSendMessageClick}>쪽지 보내기</MenuItem>
       </Menu>
+      {sendMessageModalOpen ? (
+        <MessageBoxModal
+          open={sendMessageModalOpen}
+          handleClose={() => setSendMessageModalOpen(false)}
+          category="MessageList"
+        />
+      ) : null}
     </Card>
   )
 }
