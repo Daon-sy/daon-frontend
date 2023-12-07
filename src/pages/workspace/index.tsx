@@ -51,7 +51,14 @@ const WorkspaceDetailRoutes = () => {
     isProjectListFetching,
   ])
 
-  return workspaceDetail && myWorkspaceProfile && projects ? (
+  return !(
+    isWorkspaceDetailFetching ||
+    isMyWorkspaceProfileFetching ||
+    isProjectListFetching
+  ) &&
+    workspaceDetail &&
+    myWorkspaceProfile &&
+    projects ? (
     <Routes>
       <Route element={<UserLayout />}>
         <Route index element={<WorkspaceMain />} />

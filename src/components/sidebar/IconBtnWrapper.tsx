@@ -96,10 +96,12 @@ const IconBtnWrapper: React.FC = () => {
         open={participantsModalOpen}
         handleClose={() => setParticipantsModalOpen(false)}
       /> */}
-      <ParticipantsModal
-        open={participantsModalOpen}
-        handleClose={() => setParticipantsModalOpen(false)}
-      />
+      {participantsModalOpen ? (
+        <ParticipantsModal
+          open={participantsModalOpen}
+          handleClose={() => setParticipantsModalOpen(false)}
+        />
+      ) : null}
       <CreateTaskModal />
     </Box>
   )

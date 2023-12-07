@@ -40,7 +40,7 @@ const WorkspaceSettingsModal = ({ open = false, handleClose }: Props) => {
     {
       pageName: "나의 프로필 관리",
       pageValue: "workspaceProfile",
-      pageComponent: <WorkspaceProfileManage />,
+      pageComponent: <WorkspaceProfileManage handleWithdraw={handleClose} />,
     },
   ]
   if (workspace?.division !== "PERSONAL")
