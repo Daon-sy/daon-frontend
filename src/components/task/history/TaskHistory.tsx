@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Typography, Avatar, Chip, Stack } from "@mui/material"
+import { Box, Typography, Chip, Stack, Tooltip } from "@mui/material"
 import EastIcon from "@mui/icons-material/East"
 import {
   HistoryBoard,
@@ -7,7 +7,7 @@ import {
   TASK_STATUS_SET,
   TaskHistory as TaskHistoryType,
 } from "_types/task"
-import Tooltip from "@mui/material/Tooltip"
+import ColorAvatar from "components/common/ColorAvatar"
 
 interface Props {
   taskHistory: TaskHistoryType
@@ -95,15 +95,10 @@ const TaskHistory = ({ taskHistory }: Props) => {
                   sx={{ display: "flex", alignItems: "center" }}
                 >
                   <Box>
-                    <Avatar
+                    <ColorAvatar
+                      id={taskManagerFrom.projectParticipantId}
                       src={taskManagerFrom.imageUrl}
-                      sx={{
-                        width: 20,
-                        height: 20,
-                        borderStyle: "solid",
-                        borderWidth: 1,
-                        borderColor: "#C8C8C8FF",
-                      }}
+                      sx={{ width: 20, height: 20 }}
                     />
                   </Box>
                   <Typography fontSize={12}>{taskManagerFrom.name}</Typography>
@@ -125,15 +120,10 @@ const TaskHistory = ({ taskHistory }: Props) => {
                   sx={{ display: "flex", alignItems: "center" }}
                 >
                   <Box>
-                    <Avatar
+                    <ColorAvatar
+                      id={taskManagerTo.projectParticipantId}
                       src={taskManagerTo.imageUrl}
-                      sx={{
-                        width: 20,
-                        height: 20,
-                        borderStyle: "solid",
-                        borderWidth: 1,
-                        borderColor: "#C8C8C8FF",
-                      }}
+                      sx={{ width: 20, height: 20 }}
                     />
                   </Box>
                   <Typography fontSize={12}>{taskManagerTo.name}</Typography>
@@ -203,30 +193,25 @@ const TaskHistory = ({ taskHistory }: Props) => {
       >
         <Stack
           direction="row"
-          spacing={1}
+          spacing={0.5}
           sx={{ display: "flex", alignItems: "center" }}
         >
           <Box>
-            <Avatar
+            <ColorAvatar
+              id={taskHistory.modifier.projectParticipantId}
               src={taskHistory.modifier.imageUrl}
-              sx={{
-                width: 20,
-                height: 20,
-                borderStyle: "solid",
-                borderWidth: 1,
-                borderColor: "#C8C8C8FF",
-              }}
+              sx={{ width: 20, height: 20 }}
             />
           </Box>
           <Typography fontSize={12}>
-            <Box component="span" fontSize={14} fontWeight={900} mr={0.5}>
+            <Box component="span" fontSize={14} fontWeight={600} mr={0.5}>
               {taskHistory.modifier.name}
             </Box>
             참여자가
             <Box
               component="span"
               fontSize={14}
-              fontWeight={900}
+              fontWeight={600}
               mx={0.5}
               bgcolor="rgb(244,244,244)"
               borderRadius={1}

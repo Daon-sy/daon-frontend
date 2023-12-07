@@ -117,12 +117,23 @@ const TaskDetailModal: React.FC<Props> = ({
                 <HistoryIcon />
               </IconButton>
             </Tooltip>
-            <Popper
+            <Menu
               id={id}
               open={openhistory}
               anchorEl={historyAnchorEl}
-              placement="bottom-end"
-              sx={{ zIndex: 10000 }}
+              onClose={handleCloseHistory}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              elevation={0}
+              sx={{
+                ".MuiList-root": { p: 0 },
+              }}
             >
               <Box
                 sx={{
@@ -130,7 +141,6 @@ const TaskDetailModal: React.FC<Props> = ({
                   border: 1,
                   p: 1,
                   height: "200px",
-                  bgcolor: "#ffffff",
                   cursor: "default",
                   scrollbarWidth: "0.5em",
                   WebkitScrollSnapType: "none",
@@ -189,7 +199,7 @@ const TaskDetailModal: React.FC<Props> = ({
                   )}
                 </Box>
               </Box>
-            </Popper>
+            </Menu>
           </Box>
 
           {/* 삭제 */}
@@ -205,27 +215,6 @@ const TaskDetailModal: React.FC<Props> = ({
                 <DeleteIcon />
               </IconButton>
             </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              anchorEl={moreButtonAnchorEl}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(moreButtonAnchorEl)}
-              onClose={() => setMoreButtonAnchorEl(null)}
-            >
-              <MenuItem onClick={() => setTaskRemoveModalOpen(true)}>
-                <Typography textAlign="center" fontSize={14}>
-                  삭제하기
-                </Typography>
-              </MenuItem>
-            </Menu>
           </Box>
 
           {/* 닫기 */}
