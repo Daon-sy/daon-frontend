@@ -1,9 +1,14 @@
 import React from "react"
-import { getWorkspaceStore } from "store/userStore"
+import { getMyWorkspaceIdStore, getWorkspaceStore } from "store/userStore"
 import MenuModal, { MenuWithPage } from "components/common/MenuModal"
 import WorkspaceDataManage from "components/workspace/WorkspaceDataManage"
 import WorkspaceProfileModify from "components/workspace/WorkspaceProfileModify"
 import WorkspaceParticipantManage from "components/workspace/WorkspaceParticipantManage"
+import { Box, Button } from "@mui/material"
+import ConfirmDialog from "components/common/ConfirmDialog"
+import { useNavigate } from "react-router-dom"
+import { removeWorkspaceApi } from "api/workspace"
+import { useAlert } from "hooks/useAlert"
 
 interface Props {
   open: boolean
@@ -11,7 +16,20 @@ interface Props {
 }
 
 const WorkspaceSettingsModal = ({ open = false, handleClose }: Props) => {
+  const navigate = useNavigate()
+  const { addSuccess } = useAlert()
   const { workspace } = getWorkspaceStore()
+  const { myWorkspaceId } = getMyWorkspaceIdStore()
+  const [workspaceRemoveModalOpen, setWorkspaceRemoveModalOpen] =
+    React.useState(false)
+  const removeWorkspace = async () => {
+    if (workspace?.workspaceId) {
+      removeWorkspaceApi(workspace.workspaceId)
+      handleClose()
+      addSuccess("워크스페이스가 삭제되었습니다")
+      navigate(`/workspace/${myWorkspaceId}`)
+    }
+  }
 
   const menuWithPageList: MenuWithPage[] = [
     {
@@ -32,26 +50,38 @@ const WorkspaceSettingsModal = ({ open = false, handleClose }: Props) => {
       pageComponent: <WorkspaceParticipantManage />,
     })
 
+  const removeButton =
+    workspace?.division === "PERSONAL" ? null : (
+      <Box>
+        <Button
+          sx={{ color: "#c9c9c9" }}
+          onClick={() => setWorkspaceRemoveModalOpen(true)}
+        >
+          워크스페이스 삭제
+        </Button>
+        <ConfirmDialog
+          open={workspaceRemoveModalOpen}
+          maxWidth="xs"
+          handleConfirm={removeWorkspace}
+          handleClose={() => {
+            setWorkspaceRemoveModalOpen(false)
+          }}
+        >
+          워크스페이스 내의 모든 정보가 삭제됩니다.
+          <br />
+          정말로 이 워크스페이스를 삭제하시겠습니까?
+        </ConfirmDialog>
+      </Box>
+    )
+
   return (
     <MenuModal
       minWidth="900px"
       open={open}
       title="워크스페이스 설정"
       handleClose={handleClose}
-      // subTitle={
-      //   <Box display="flex" alignItems="center">
-      //     <Typography fontSize={15}>사용자 : {myProfile?.name}</Typography>
-      //     <Chip
-      //       label={roles.find(p => p.role === myProfile?.role)?.description}
-      //       size="small"
-      //       sx={{
-      //         fontSize: 12,
-      //         marginLeft: 1,
-      //       }}
-      //     />
-      //   </Box>
-      // }
       menuWithPageList={menuWithPageList}
+      removeButton={removeButton}
     />
   )
 }
