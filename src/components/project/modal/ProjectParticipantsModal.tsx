@@ -1,17 +1,26 @@
 import React from "react"
 import {
   Box,
-  Avatar,
   FormControl,
   MenuItem,
   Select,
   SelectChangeEvent,
   Stack,
   TextField,
+  Typography,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Button,
 } from "@mui/material"
 import { ProjectParticipant } from "_types/project"
-import { projectParticipantListApi } from "api/project"
-import TitleModal from "components/common/TitleModal"
+import {
+  myProjectParticipantDetailApi,
+  projectParticipantListApi,
+} from "api/project"
+import ColorAvatar from "components/common/ColorAvatar"
+import TitleDialog from "components/common/TitleDialog"
 
 type Filter = "name" | "email"
 
@@ -49,12 +58,25 @@ const ProjectParticipantsModal = ({
     Array<ProjectParticipant> | undefined
   >()
 
+  const [myProjectProfile, setMyProjectProfile] =
+    React.useState<ProjectParticipant>()
+
   React.useEffect(() => {
     if (open) {
       const fetchData = async () => {
+        const { data: myProjectParticipantDetail } =
+          await myProjectParticipantDetailApi(workspaceId, projectId)
+        setMyProjectProfile({ ...myProjectParticipantDetail })
+
         const { data } = await projectParticipantListApi(workspaceId, projectId)
         const { projectParticipants: participants } = data
-        setProjectParticipants(participants)
+        setProjectParticipants(
+          participants.filter(
+            p =>
+              p.projectParticipantId !==
+              myProjectParticipantDetail.projectParticipantId,
+          ),
+        )
       }
       fetchData()
     }
@@ -72,27 +94,51 @@ const ProjectParticipantsModal = ({
   }
 
   return (
-    <TitleModal
+    <TitleDialog
       open={open}
       handleClose={modalClose}
       title={title}
-      maxWidth="xs"
+      maxWidth={480}
+      height={450}
     >
       <Box
         sx={{
           margin: 1,
-          height: "100%",
+          marginTop: 0,
+          // height: "100%",
         }}
       >
         <Box>
-          <Stack direction="row" spacing={0.5}>
+          <Stack direction="row" spacing={1} justifyContent="end">
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => {
+                handleItemClick()
+                handleClose()
+              }}
+            >
+              담당자 없음
+            </Button>
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => {
+                handleItemClick(myProjectProfile)
+                handleClose()
+              }}
+            >
+              나에게 할당
+            </Button>
+          </Stack>
+          <Stack mt={1} direction="row" spacing={0.5}>
             <FormControl sx={{ minWidth: 100 }} size="small">
               <Select
                 value={filter}
                 onChange={(e: SelectChangeEvent) =>
                   setFilter(e.target.value as Filter)
                 }
-                sx={{ fontSize: 14, height: 40 }}
+                sx={{ fontSize: 14 }}
               >
                 {filters.map(item => (
                   <MenuItem
@@ -109,10 +155,7 @@ const ProjectParticipantsModal = ({
             <TextField
               fullWidth
               size="small"
-              sx={{
-                fontSize: 14,
-                height: 40,
-              }}
+              inputProps={{ style: { fontSize: 14 } }}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setFilterText(e.target.value)
               }
@@ -123,97 +166,134 @@ const ProjectParticipantsModal = ({
           sx={{
             marginTop: 1,
             overflowY: "auto",
-            height: 390,
             scrollbarWidth: "thin",
           }}
         >
           <Box
             sx={{
-              display: "flex",
-              alignItems: "center",
-              borderRadius: 1,
-              padding: 1,
-              "&:hover": {
-                backgroundColor: "rgb(242,242,242)",
-              },
-            }}
-            onClick={() => {
-              handleItemClick()
-              handleClose()
+              borderStyle: "solid",
+              borderColor: "rgb(200,200,200)",
+              borderWidth: 1,
+              borderRadius: 2,
             }}
           >
-            <Stack
-              direction="row"
-              spacing={1}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
-              <Box>
-                <Avatar sx={{ width: 36, height: 36 }} />
-              </Box>
-              <Stack spacing={0.5}>
-                <Box sx={{ marginLeft: 1, fontSize: 16, fontWeight: 900 }}>
-                  없음
-                </Box>
-              </Stack>
-            </Stack>
+            <List sx={{ paddingY: 0 }}>
+              {projectParticipants
+                ?.filter(participant =>
+                  participant[filter]
+                    .toUpperCase()
+                    .includes(filterText.toUpperCase()),
+                )
+                .map((participant, index) => (
+                  <ListItem
+                    divider={index < projectParticipants.length - 1}
+                    secondaryAction={
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() => {
+                          handleItemClick(participant)
+                          handleClose()
+                        }}
+                      >
+                        할당하기
+                      </Button>
+                    }
+                  >
+                    <ListItemAvatar>
+                      <ColorAvatar
+                        id={participant.projectParticipantId}
+                        src={participant.imageUrl}
+                        sx={{ width: 36, height: 36 }}
+                      />
+                    </ListItemAvatar>
+                    <ListItemText>
+                      <Box>
+                        <Typography
+                          fontSize={14}
+                          color="primary"
+                          fontWeight={600}
+                        >
+                          {participant.name}
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography fontSize={12} color="gray">
+                          {participant.email}
+                        </Typography>
+                      </Box>
+                    </ListItemText>
+                  </ListItem>
+                ))}
+              {projectParticipants?.length === 0 ? (
+                <Typography fontSize={14} p={1}>
+                  참여자들이 존재하지 않습니다.
+                </Typography>
+              ) : null}
+              {projectParticipants &&
+              projectParticipants.length > 0 &&
+              filterText &&
+              projectParticipants?.filter(participant =>
+                participant[filter]
+                  .toUpperCase()
+                  .includes(filterText.toUpperCase()),
+              ).length === 0 ? (
+                <Typography fontSize={14} p={1}>
+                  검색 결과가 없습니다.
+                </Typography>
+              ) : null}
+            </List>
           </Box>
-          {projectParticipants
-            ?.filter(item =>
-              item[filter].toUpperCase().includes(filterText.toUpperCase()),
-            )
-            .map(participant => (
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  borderRadius: 1,
-                  padding: 1,
-                  "&:hover": {
-                    backgroundColor: "rgb(242,242,242)",
-                  },
-                }}
-                onClick={() => {
-                  handleItemClick(participant)
-                  handleClose()
-                }}
-              >
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  sx={{ display: "flex", alignItems: "center" }}
-                >
-                  <Box>
-                    <Avatar
-                      src={participant.imageUrl}
-                      sx={{
-                        width: 36,
-                        height: 36,
-                        borderStyle: "solid",
-                        borderWidth: 1,
-                        borderColor: "#C8C8C8FF",
-                      }}
-                    />
-                  </Box>
-                  <Stack spacing={0.5}>
-                    <Box sx={{ marginLeft: 1, fontSize: 15 }}>
-                      {participant.name}
-                    </Box>
-                    <Box
-                      sx={{
-                        marginLeft: 1,
-                        fontSize: 12,
-                        color: "rgb(100,100,100)",
-                      }}
-                    >
-                      {participant.email}
-                    </Box>
-                  </Stack>
-                </Stack>
-              </Box>
-            ))}
+
+          {/* {projectParticipants */}
+          {/*  ?.filter(item => */}
+          {/*    item[filter].toUpperCase().includes(filterText.toUpperCase()), */}
+          {/*  ) */}
+          {/*  .map(participant => ( */}
+          {/*    <Box */}
+          {/*      sx={{ */}
+          {/*        display: "flex", */}
+          {/*        alignItems: "center", */}
+          {/*        borderRadius: 1, */}
+          {/*        padding: 1, */}
+          {/*        "&:hover": { */}
+          {/*          backgroundColor: "rgb(242,242,242)", */}
+          {/*        }, */}
+          {/*      }} */}
+          {/*      onClick={() => { */}
+          {/*        handleItemClick(participant) */}
+          {/*        handleClose() */}
+          {/*      }} */}
+          {/*    > */}
+          {/*      <Stack */}
+          {/*        direction="row" */}
+          {/*        spacing={0.5} */}
+          {/*        sx={{ display: "flex", alignItems: "center" }} */}
+          {/*      > */}
+          {/*        <Box> */}
+          {/*          <ColorAvatar */}
+          {/*            id={participant.projectParticipantId} */}
+          {/*            src={participant.imageUrl} */}
+          {/*            sx={{ */}
+          {/*              width: 36, */}
+          {/*              height: 36, */}
+          {/*            }} */}
+          {/*          /> */}
+          {/*        </Box> */}
+          {/*        <Box ml={0.5}> */}
+          {/*          <Typography fontSize={14} fontWeight={600}> */}
+          {/*            {participant.name} */}
+          {/*          </Typography> */}
+          {/*          <Typography fontSize={12} color="gray"> */}
+          {/*            {participant.email} */}
+          {/*          </Typography> */}
+          {/*        </Box> */}
+          {/*      </Stack> */}
+          {/*    </Box> */}
+          {/*  ))} */}
         </Box>
       </Box>
-    </TitleModal>
+    </TitleDialog>
   )
 }
 
