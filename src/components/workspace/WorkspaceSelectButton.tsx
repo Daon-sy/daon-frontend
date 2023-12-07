@@ -17,6 +17,7 @@ import useFetchWorkspaceList from "hooks/workspace/useFetchWorkspaceList"
 import { useTitleDialog } from "components/common/TitleDialog"
 import ColorAvatar from "components/common/ColorAvatar"
 import CreateWorkspace from "components/workspace/CreateWorkspace"
+import WorkspaceSettingsModal from "components/workspace/modal/WorkspaceSettingsModal"
 
 const WorkspaceSelectButton = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -24,6 +25,8 @@ const WorkspaceSelectButton = () => {
 
   const { workspace } = getWorkspaceStore()
   const { workspaces, fetchWorkspaceList } = useFetchWorkspaceList(false)
+  const [workspaceManageModalOpen, setWorkspaceManageModalOpen] =
+    React.useState(false)
 
   const {
     TitleDialog,
@@ -102,7 +105,32 @@ const WorkspaceSelectButton = () => {
           }}
         >
           <Box position="sticky" top={0} bgcolor="white" zIndex={1}>
+            {/* <MenuItem */}
+            {/*  onClick={() => { */}
+            {/*    handleCloseMenu() */}
+            {/*    setWorkspaceManageModalOpen(true) */}
+            {/*  }} */}
+            {/*  sx={{ ".MuiDivider-root": { marginTop: 0 } }} */}
+            {/* > */}
+            {/*  <Typography variant="button" fontWeight={500} color="primary"> */}
+            {/*    워크스페이스 설정 */}
+            {/*  </Typography> */}
+            {/* </MenuItem> */}
             <Box p={1}>
+              <Button
+                fullWidth
+                size="small"
+                variant="outlined"
+                onClick={() => {
+                  handleCloseMenu()
+                  setWorkspaceManageModalOpen(true)
+                }}
+              >
+                워크스페이스 설정
+              </Button>
+            </Box>
+            <Divider sx={{ fontSize: 10 }}>워크스페이스 목록</Divider>
+            <Box px={1} pt={1}>
               <TextField
                 fullWidth
                 autoComplete="off"
@@ -126,7 +154,6 @@ const WorkspaceSelectButton = () => {
                 }}
               />
             </Box>
-            <Divider />
           </Box>
 
           <Box>
@@ -189,22 +216,43 @@ const WorkspaceSelectButton = () => {
             ) : null}
           </Box>
 
-          <Box sx={{ position: "sticky", bottom: 0, bgcolor: "white" }}>
+          <Box
+            sx={{ pt: 0.3, position: "sticky", bottom: 0, bgcolor: "white" }}
+          >
             <Divider />
-            <MenuItem
-              onClick={() => {
-                handleCloseMenu()
-                openCreateWorkspaceDialog()
-              }}
-            >
-              <Typography variant="button">워크스페이스 생성</Typography>
-            </MenuItem>
+            {/* <MenuItem */}
+            {/*  onClick={() => { */}
+            {/*    handleCloseMenu() */}
+            {/*    openCreateWorkspaceDialog() */}
+            {/*  }} */}
+            {/* > */}
+            {/*  <Typography variant="button">워크스페이스 생성</Typography> */}
+            {/* </MenuItem> */}
+            <Box p={1}>
+              <Button
+                fullWidth
+                size="small"
+                variant="outlined"
+                onClick={() => {
+                  handleCloseMenu()
+                  openCreateWorkspaceDialog()
+                }}
+              >
+                워크스페이스 생성
+              </Button>
+            </Box>
           </Box>
         </Menu>
       </Box>
       <TitleDialog title="워크스페이스 생성" maxWidth="sm">
         <CreateWorkspace handleCancel={closeCreateWorkspaceDialog} />
       </TitleDialog>
+      {workspaceManageModalOpen ? (
+        <WorkspaceSettingsModal
+          open={workspaceManageModalOpen}
+          handleClose={() => setWorkspaceManageModalOpen(false)}
+        />
+      ) : null}
     </Box>
   )
 }
