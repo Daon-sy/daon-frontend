@@ -21,7 +21,7 @@ export interface ModifyWorkspaceNoticeRequestBody {
 
 export interface WorkspaceNoticeListResponseBody {
   totalCount: number
-  WorkspaceNotices: Array<WorkspaceNoticeDetail>
+  workspaceNotices: Array<WorkspaceNoticeDetail>
 }
 
 export type WorkspaceNoticDetailResponseBody = WorkspaceNoticeDetail

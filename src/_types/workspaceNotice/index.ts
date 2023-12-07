@@ -4,7 +4,7 @@ export interface WorkspaceNoticeDetail {
   noticeId: number
   title: string
   content: string
-  createAt: string
+  createdAt: string
   modifiedAt: string
   writer: {
     workspaceParticipantId: number
