@@ -82,6 +82,11 @@ let theme = createTheme({
             : undefined,
       },
     },
+    MuiTooltip: {
+      defaultProps: {
+        disableInteractive: true,
+      },
+    },
   },
 })
 
