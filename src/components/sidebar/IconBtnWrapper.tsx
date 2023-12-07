@@ -7,7 +7,7 @@ import SettingsIcon from "@mui/icons-material/Settings"
 import BookmarkIcon from "@mui/icons-material/Bookmark"
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions"
 import WorkspaceSettingsModal from "components/workspace/modal/WorkspaceSettingsModal"
-import ParticipantsModal from "components/common/ParticipantsModal"
+import ParticipantsModal from "components/workspace/ParticipantsModal"
 import { useCreateTaskModal } from "components/task/CreateTask"
 import IconBtn from "./IconBtn"
 

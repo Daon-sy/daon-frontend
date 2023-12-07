@@ -9,8 +9,8 @@ import {
 } from "@mui/material"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCrown, faLeaf } from "@fortawesome/free-solid-svg-icons"
-import { TEST_IMAGE_URL } from "env"
 import { WorkspaceParticipant } from "_types/workspace"
+import ColorAvatar from "components/common/ColorAvatar"
 
 interface ParticipantItemProps {
   participant: WorkspaceParticipant
@@ -31,25 +31,28 @@ const ParticipantCard: React.FC<ParticipantItemProps> = ({ participant }) => {
   return (
     <Card
       sx={{
-        width: "22%",
+        width: 120,
         my: 2,
         mx: 1,
       }}
     >
       <CardActionArea>
-        <CardMedia
-          sx={{
-            mt: "8.845px",
-            ml: "8.845px",
-            mr: "8.845px",
-            width: 100,
-            height: 100,
-            borderRadius: "50%",
-          }}
-          component="img"
-          src={participant.imageUrl || TEST_IMAGE_URL}
-          alt="프로필 이미지"
-        />
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          width="100%"
+          pt={2}
+        >
+          <ColorAvatar
+            id={participant.workspaceParticipantId}
+            src={participant.imageUrl}
+            sx={{
+              width: 80,
+              height: 80,
+            }}
+          />
+        </Box>
         <CardContent>
           <Box
             sx={{
