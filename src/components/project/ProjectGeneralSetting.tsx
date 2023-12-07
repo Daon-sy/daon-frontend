@@ -18,7 +18,6 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import { useAlert } from "hooks/useAlert"
 import { getWorkspaceStore } from "store/userStore"
 import { WORKSPACE_PARTICIPANT_ROLE } from "_types/workspace"
-import EditableBox from "components/common/EditableBox"
 import ConfirmDialog from "components/common/ConfirmDialog"
 import { useNavigate } from "react-router-dom"
 import EditableTextBox from "components/common/EditableTextBox"
@@ -252,15 +251,13 @@ const ProjectGeneralSetting = ({ workspaceId, projectId }: Props) => {
               <ConfirmDialog
                 open={!!boardIdToRemove}
                 maxWidth="xs"
-                title="주의!!"
-                content={
-                  "해당 보드에 포함된 모든 할 일이 함게 삭제됩니다.\n그래도 보드를 삭제하시겠습니까?"
-                }
                 handleConfirm={handleBoardRemove}
                 handleClose={() => {
                   setBoardIdToRemove(undefined)
                 }}
-              />
+              >
+                보드를 삭제하시겠습니까? 보드 내의 모든 할 일이 함께 삭제됩니다.
+              </ConfirmDialog>
             </Box>
           </Box>
         </Box>
@@ -286,15 +283,13 @@ const ProjectGeneralSetting = ({ workspaceId, projectId }: Props) => {
             <ConfirmDialog
               open={projectRemoveModalOpen}
               maxWidth="xs"
-              title="주의!!"
-              content={
-                "프로젝트 내의 모든 정보가 삭제됩니다.\n정말로 이 프로젝트를 삭제하시겠습니까?"
-              }
               handleConfirm={removeProject}
               handleClose={() => {
                 setProjectRemoveModalOpen(false)
               }}
-            />
+            >
+              프로젝트를 삭제하시겠습니까? 프로젝트 내의 모든 정보가 삭제됩니다.
+            </ConfirmDialog>
           </Box>
         ) : null}
         <Box>
@@ -313,13 +308,13 @@ const ProjectGeneralSetting = ({ workspaceId, projectId }: Props) => {
           <ConfirmDialog
             open={projectWithdrawModalOpen}
             maxWidth="xs"
-            title="주의!!"
-            content="정말로 이 프로젝트를 탈퇴하시겠습니까?"
             handleConfirm={withdrawProject}
             handleClose={() => {
               setProjectWithdrawModalOpen(false)
             }}
-          />
+          >
+            프로젝트를 탈퇴하시겠습니까?
+          </ConfirmDialog>
         </Box>
       </Box>
     </Box>

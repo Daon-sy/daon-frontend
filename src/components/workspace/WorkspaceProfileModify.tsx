@@ -3,9 +3,7 @@ import { FormControl, MenuItem, Select, Stack, Button } from "@mui/material"
 import Typography from "@mui/material/Typography"
 import Box from "@mui/material/Box"
 import { useAlert } from "hooks/useAlert"
-import ImageInput from "components/image/ImageInput"
 import { getWorkspaceStore } from "store/userStore"
-import { imageUploadApi } from "api/image"
 import {
   modifyMyWorkspaceParticipantInfoApi,
   ModifyMyWorkspaceParticipantInfoRequestBody,
@@ -18,6 +16,9 @@ import { myEmailsApi } from "api/member"
 import EditableTextBox from "components/common/EditableTextBox"
 import ConfirmDialog from "components/common/ConfirmDialog"
 import { useNavigate } from "react-router-dom"
+import ColorAvatar from "components/common/ColorAvatar"
+import MenuBox from "../common/MenuBox"
+import useImageUpload from "../../hooks/image/useImageUpload"
 
 const WorkspaceProfileModify = () => {
   const { workspace, myProfile, setMyProfile } = getWorkspaceStore()
@@ -37,21 +38,10 @@ const WorkspaceProfileModify = () => {
     fetchMemberEmails()
   }, [])
 
-  if (!(workspace && myProfile)) return <Box />
-  const { imageUrl, name, email } = myProfile
+  const { ImageInput, selectFile } = useImageUpload()
 
-  const onImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target
-    const file = files?.[0]
-    if (file) {
-      try {
-        const { data: responseBody } = await imageUploadApi({ image: file })
-        changeRef(responseBody.imageUrl)
-      } catch (err) {
-        console.error(err)
-      }
-    }
-  }
+  if (!(workspace && myProfile)) return <Box />
+  const { workspaceParticipantId, imageUrl, name, email } = myProfile
 
   const updateMyWorkspaceProfile = async (
     data: ModifyMyWorkspaceParticipantInfoRequestBody,
@@ -79,14 +69,34 @@ const WorkspaceProfileModify = () => {
     <Box>
       <Stack spacing={2}>
         <Box display="flex" justifyContent="center">
-          <ImageInput
-            width={200}
-            height={200}
-            borderRadius={50}
-            border="none"
-            imageUrl={imageUrl}
-            onImageChange={onImageChange}
-          />
+          <MenuBox
+            menus={[
+              {
+                disabled: !imageUrl,
+                children: "기본이미지",
+                onClick: () => updateMyWorkspaceProfile({ imageUrl: "" }),
+              },
+              {
+                children: "이미지 선택",
+                onClick: () =>
+                  selectFile({
+                    autoFetch: true,
+                    fetchCallback: changeRef,
+                  }),
+              },
+            ]}
+          >
+            <ImageInput>
+              <ColorAvatar
+                id={workspaceParticipantId}
+                src={imageUrl}
+                sx={{
+                  width: 140,
+                  height: 140,
+                }}
+              />
+            </ImageInput>
+          </MenuBox>
           <input
             hidden
             type="text"
@@ -97,7 +107,7 @@ const WorkspaceProfileModify = () => {
             }
           />
 
-          <Box width="100%">
+          <Box ml={4} width="100%">
             <Stack spacing={2} justifyContent="center" height="100%">
               <Box>
                 <Typography
