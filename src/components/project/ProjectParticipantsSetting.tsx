@@ -62,7 +62,7 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
   const { myProfile } = getWorkspaceStore()
   const [filter, setFilter] = React.useState<Filter>("name")
   const [filterText, setFilterText] = React.useState("")
-  const [isIviteOpen, setIsInviteOpen] = React.useState(false)
+  const [isInviteOpen, setIsInviteOpen] = React.useState(false)
   const [projectParticipants, setProjectParticipants] =
     React.useState<Array<ProjectParticipant>>()
   const [projectParticipantToDrop, setProjectParticipantToDrop] =
@@ -128,9 +128,9 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
                     초대하기
                   </Button>
                 </Box>
-                {isIviteOpen ? (
+                {isInviteOpen ? (
                   <TitleDialog
-                    open={isIviteOpen}
+                    open={isInviteOpen}
                     title="프로젝트 초대"
                     maxWidth="xs"
                     height={400}
