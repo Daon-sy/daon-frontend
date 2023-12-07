@@ -9,7 +9,7 @@ import {
   EmojiEmotions,
 } from "@mui/icons-material"
 import { faBullhorn } from "@fortawesome/free-solid-svg-icons"
-import ParticipantsModal from "components/common/ParticipantsModal"
+import ParticipantsModal from "components/workspace/ParticipantsModal"
 import { useCreateTaskModal } from "components/task/CreateTask"
 import WorkspaceNoticeModal from "components/workspace/modal/WorkspaceNoticeModal"
 import IconBtn from "./IconBtn"

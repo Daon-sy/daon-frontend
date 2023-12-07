@@ -3,6 +3,7 @@ import Avatar from "@mui/material/Avatar"
 // eslint-disable-next-line
 import { SxProps } from "@mui/system"
 import { Theme } from "@mui/material"
+import PersonIcon from "@mui/icons-material/Person"
 import { avatarColors } from "../../_types/style"
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -44,9 +45,11 @@ interface Props {
   id?: number | string
   name?: string
   sx?: SxProps<Theme>
+  onClick?: () => void
+  icon?: React.ReactNode
 }
 
-const ColorAvatar = ({ id, src, name, sx }: Props) => (
+const ColorAvatar = ({ id, src, name, sx, onClick, icon }: Props) => (
   <Avatar
     src={src}
     sx={{
@@ -57,8 +60,13 @@ const ColorAvatar = ({ id, src, name, sx }: Props) => (
       bgcolor: id ? getColor(id) : undefined,
       ...sx,
     }}
+    onClick={onClick}
   >
-    {name ? name[0] : undefined}
+    {!icon && !name ? (
+      <PersonIcon sx={{ width: 3 / 4, height: 3 / 4 }} />
+    ) : undefined}
+    {!icon && name ? name[0] : undefined}
+    {icon || undefined}
   </Avatar>
 )
 

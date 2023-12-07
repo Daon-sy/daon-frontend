@@ -1,7 +1,6 @@
 import { Box, Stack } from "@mui/material"
 import React from "react"
 import Typography from "@mui/material/Typography"
-import ImageInput from "components/image/ImageInput"
 import useImageUrlInputRef from "hooks/useImageUrlInputRef"
 import {
   modifyWorkspaceApi,
@@ -10,9 +9,11 @@ import {
 } from "api/workspace"
 import { getWorkspaceStore } from "store/userStore"
 import { useAlert } from "hooks/useAlert"
-import { imageUploadApi } from "api/image"
 import { WORKSPACE_PARTICIPANT_ROLE } from "_types/workspace"
 import EditableTextBox from "components/common/EditableTextBox"
+import MenuBox from "components/common/MenuBox"
+import ColorAvatar from "components/common/ColorAvatar"
+import useImageUpload from "hooks/image/useImageUpload"
 
 const allowedEdit: Array<WORKSPACE_PARTICIPANT_ROLE> = ["WORKSPACE_ADMIN"]
 
@@ -21,24 +22,13 @@ const WorkspaceDataManage = () => {
   const { addSuccess } = useAlert()
   const [ref, changeRef] = useImageUrlInputRef()
 
+  const { ImageInput, selectFile } = useImageUpload()
+
   if (!(workspace && myProfile)) {
     return <Box />
   }
 
   const { workspaceId, title, imageUrl, subject, description } = workspace
-
-  const onImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target
-    const file = files?.[0]
-    if (file) {
-      try {
-        const { data: responseBody } = await imageUploadApi({ image: file })
-        changeRef(responseBody.imageUrl)
-      } catch (err) {
-        console.error(err)
-      }
-    }
-  }
 
   const updateWorkspace = async (data: ModifyWorkspaceRequestBody) => {
     await modifyWorkspaceApi(workspaceId, { ...data })
@@ -56,24 +46,61 @@ const WorkspaceDataManage = () => {
           <Stack>
             <Box>
               <Box display="flex" alignItems="center">
-                <ImageInput
-                  width={200}
-                  height={200}
-                  borderRadius={50}
-                  border="none"
-                  imageUrl={imageUrl}
-                  onImageChange={onImageChange}
-                />
-                <input
-                  hidden
-                  type="text"
-                  name="imageUrl"
-                  ref={ref}
-                  onChange={e =>
-                    updateWorkspace({ imageUrl: e.currentTarget.value })
-                  }
-                />
-                <Box width="100%">
+                {allowedEdit.includes(myProfile.role) ? (
+                  <>
+                    <MenuBox
+                      menus={[
+                        {
+                          disabled: !imageUrl,
+                          children: "기본이미지",
+                          onClick: () => updateWorkspace({ imageUrl: "" }),
+                        },
+                        {
+                          children: "이미지 선택",
+                          onClick: () =>
+                            selectFile({
+                              autoFetch: true,
+                              fetchCallback: changeRef,
+                            }),
+                        },
+                      ]}
+                    >
+                      <ImageInput>
+                        <ColorAvatar
+                          id={workspaceId}
+                          src={imageUrl}
+                          sx={{
+                            width: 120,
+                            height: 120,
+                            fontSize: 80,
+                          }}
+                          name={title}
+                        />
+                      </ImageInput>
+                    </MenuBox>
+                    <input
+                      hidden
+                      type="text"
+                      name="imageUrl"
+                      ref={ref}
+                      onChange={e => {
+                        updateWorkspace({ imageUrl: e.currentTarget.value })
+                      }}
+                    />
+                  </>
+                ) : (
+                  <ColorAvatar
+                    id={workspaceId}
+                    src={imageUrl}
+                    sx={{
+                      width: 120,
+                      height: 120,
+                      fontSize: 80,
+                    }}
+                    name={title}
+                  />
+                )}
+                <Box ml={3} width="100%">
                   <Stack spacing={2}>
                     <Box>
                       <Typography

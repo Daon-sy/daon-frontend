@@ -1,6 +1,6 @@
 import React from "react"
 import {
-  Avatar,
+  Typography,
   Button,
   Chip,
   Divider,
@@ -8,6 +8,9 @@ import {
   Stack,
   TextField,
   Box,
+  ListItemAvatar,
+  ListItemText,
+  ListItem,
 } from "@mui/material"
 import { Dayjs } from "dayjs"
 import { ProjectParticipant } from "_types/project"
@@ -19,6 +22,7 @@ import ProjectSelectButton from "components/task/ProjectSelectButton"
 import ProjectParticipantsModal from "components/project/modal/ProjectParticipantsModal"
 import { useAlert } from "hooks/useAlert"
 import useCreateTask from "hooks/task/useCreateTask"
+import ColorAvatar from "components/common/ColorAvatar"
 
 interface Props {
   handleClose: () => void
@@ -200,31 +204,58 @@ const CreateTask: React.FC<Props> = ({ handleClose }: Props) => {
                 setProjectParticipantsModalOpen(true)
               }}
               sx={{
+                height: "100%",
                 display: "flex",
                 flexGrow: 1,
                 alignItems: "center",
                 borderRadius: 1,
-                padding: 1,
+                pl: 1,
                 "&:hover": {
-                  backgroundColor: "rgb(242,242,242)",
+                  backgroundColor: "background.default",
                 },
               }}
             >
-              <Stack
-                direction="row"
-                spacing={1}
-                sx={{ display: "flex", alignItems: "center" }}
-              >
-                <Box>
-                  <Avatar
-                    src={taskManager?.imageUrl}
-                    sx={{ width: 24, height: 24 }}
-                  />
+              {taskManager ? (
+                <ListItem
+                  slotProps={{
+                    root: {
+                      style: {
+                        padding: 0,
+                      },
+                    },
+                  }}
+                >
+                  <ListItemAvatar sx={{ minWidth: 0, pr: 1 }}>
+                    <ColorAvatar
+                      id={taskManager.projectParticipantId}
+                      src={taskManager.imageUrl}
+                      sx={{ width: 28, height: 28 }}
+                    />
+                  </ListItemAvatar>
+                  <ListItemText>
+                    <Box>
+                      <Typography
+                        fontSize={14}
+                        color="primary"
+                        fontWeight={600}
+                      >
+                        {taskManager.name}
+                      </Typography>
+                    </Box>
+                    <Box>
+                      <Typography fontSize={12} color="gray">
+                        {taskManager.email}
+                      </Typography>
+                    </Box>
+                  </ListItemText>
+                </ListItem>
+              ) : (
+                <Box height="100%" display="flex" alignItems="center">
+                  <Typography fontSize={14} fontWeight={500}>
+                    없음
+                  </Typography>
                 </Box>
-                <Box sx={{ marginLeft: 1 }}>
-                  {taskManager ? taskManager.name : "없음"}
-                </Box>
-              </Stack>
+              )}
             </Box>
           </Box>
         </Box>
@@ -239,14 +270,6 @@ const CreateTask: React.FC<Props> = ({ handleClose }: Props) => {
             spacing={2}
             sx={{ width: "60%", minWidth: 300 }}
           >
-            <Button
-              fullWidth
-              variant="outlined"
-              size="large"
-              onClick={handleClose}
-            >
-              취소
-            </Button>
             <Button
               fullWidth
               variant="contained"
@@ -264,6 +287,14 @@ const CreateTask: React.FC<Props> = ({ handleClose }: Props) => {
               }}
             >
               등록
+            </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              size="large"
+              onClick={handleClose}
+            >
+              취소
             </Button>
           </Stack>
         </Box>
