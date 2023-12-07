@@ -1,38 +1,28 @@
 import React from "react"
-import { FormControl, MenuItem, Select, Stack, Button } from "@mui/material"
+import { FormControl, MenuItem, Select, Stack } from "@mui/material"
 import Typography from "@mui/material/Typography"
 import Box from "@mui/material/Box"
 import { useAlert } from "hooks/useAlert"
-import { getMyWorkspaceIdStore, getWorkspaceStore } from "store/userStore"
+import { getWorkspaceStore } from "store/userStore"
 import {
   modifyMyWorkspaceParticipantInfoApi,
   ModifyMyWorkspaceParticipantInfoRequestBody,
   myWorkspaceParticipantDetailApi,
-  resetPersonalWorkspaceApi,
-  withdrawWorkspaceApi,
 } from "api/workspace"
 import useImageUrlInputRef from "hooks/useImageUrlInputRef"
 import { MemberEmail } from "_types/member"
 import { myEmailsApi } from "api/member"
 import EditableTextBox from "components/common/EditableTextBox"
-import ConfirmDialog from "components/common/ConfirmDialog"
-import { useNavigate } from "react-router-dom"
 import ColorAvatar from "components/common/ColorAvatar"
-import MenuBox from "../common/MenuBox"
-import useImageUpload from "../../hooks/image/useImageUpload"
+import MenuBox from "components/common/MenuBox"
+import useImageUpload from "hooks/image/useImageUpload"
 
 const WorkspaceProfileModify = () => {
   const { workspace, myProfile, setMyProfile } = getWorkspaceStore()
-  const { myWorkspaceId } = getMyWorkspaceIdStore()
-  const workspaceId = workspace?.workspaceId
   const { addSuccess } = useAlert()
-  const navigate = useNavigate()
   const [ref, changeRef] = useImageUrlInputRef()
   const [memberEmails, setMemberEmails] = React.useState<Array<MemberEmail>>([])
-  const [workspaceWithdrawModalOpen, setWorkspaceWithdrawModalOpen] =
-    React.useState(false)
-  const [resetPersonalWorkspaceModalOpen, setResetPersonalWorkspaceModalOpen] =
-    React.useState(false)
+
   const fetchMemberEmails = async () => {
     const { data } = await myEmailsApi()
     setMemberEmails(data.memberEmails)
@@ -58,22 +48,6 @@ const WorkspaceProfileModify = () => {
       workspace.workspaceId,
     )
     setMyProfile(myWorkspaceProfile)
-  }
-
-  const withdrawWorkspace = async () => {
-    if (workspaceId) {
-      await withdrawWorkspaceApi(workspaceId)
-      addSuccess("워크스페이스를 탈퇴하였습니다")
-      // 개인워크스페이스로 이동
-      navigate(`/workspace/${myWorkspaceId}`)
-    }
-  }
-
-  const resetPersonalWorkspace = async () => {
-    if (workspaceId) {
-      await resetPersonalWorkspaceApi(workspaceId)
-      addSuccess("초기화 완료")
-    }
   }
 
   return (
@@ -184,54 +158,6 @@ const WorkspaceProfileModify = () => {
           </Box>
         </Box>
       </Stack>
-      {workspace.division !== "GROUP" ? (
-        <Box>
-          <Box mt={1} sx={{ position: "absolute", bottom: 10, right: 10 }}>
-            <Button
-              sx={{ color: "#c9c9c9" }}
-              color="error"
-              onClick={() => setResetPersonalWorkspaceModalOpen(true)}
-            >
-              초기화하기
-            </Button>
-          </Box>
-          {resetPersonalWorkspaceModalOpen ? (
-            <ConfirmDialog
-              open={resetPersonalWorkspaceModalOpen}
-              maxWidth="xs"
-              handleConfirm={resetPersonalWorkspace}
-              handleClose={() => {
-                setResetPersonalWorkspaceModalOpen(false)
-              }}
-            >
-              정말로 이 워크스페이스를 초기화 하시겠습니까?
-            </ConfirmDialog>
-          ) : null}
-        </Box>
-      ) : (
-        <Box>
-          <Box mt={1} sx={{ position: "absolute", bottom: 10, right: 10 }}>
-            <Button
-              sx={{ color: "#c9c9c9" }}
-              onClick={() => setWorkspaceWithdrawModalOpen(true)}
-            >
-              워크스페이스 탈퇴
-            </Button>
-          </Box>
-          {workspaceWithdrawModalOpen ? (
-            <ConfirmDialog
-              open={workspaceWithdrawModalOpen}
-              maxWidth="xs"
-              handleConfirm={withdrawWorkspace}
-              handleClose={() => {
-                setWorkspaceWithdrawModalOpen(false)
-              }}
-            >
-              정말로 이 워크스페이스를 탈퇴하시겠습니까?
-            </ConfirmDialog>
-          ) : null}
-        </Box>
-      )}
     </Box>
   )
 }

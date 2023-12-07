@@ -12,8 +12,8 @@ import { useAlert } from "hooks/useAlert"
 import { WORKSPACE_PARTICIPANT_ROLE } from "_types/workspace"
 import EditableTextBox from "components/common/EditableTextBox"
 import MenuBox from "components/common/MenuBox"
-import ColorAvatar from "../common/ColorAvatar"
-import useImageUpload from "../../hooks/image/useImageUpload"
+import ColorAvatar from "components/common/ColorAvatar"
+import useImageUpload from "hooks/image/useImageUpload"
 
 const allowedEdit: Array<WORKSPACE_PARTICIPANT_ROLE> = ["WORKSPACE_ADMIN"]
 
