@@ -133,7 +133,7 @@ const MenuModal = ({
             >
               {title}
             </Typography>
-            <Box sx={{ paddingX: 4, paddingBottom: 10 }}>
+            <Box sx={{ paddingX: 4 }}>
               {
                 menuWithPageList.find(mwp => mwp.pageValue === selectedPage)
                   ?.pageComponent
