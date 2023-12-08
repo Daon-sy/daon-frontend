@@ -66,6 +66,7 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
       setError(null)
       setSendEmail(true)
       setTimeLeft(MINUTES_IN_MS)
+      setCode("")
       setCheckCode(null)
       await sendVerificationEmailApi({ email })
     } catch (e) {

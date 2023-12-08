@@ -52,6 +52,21 @@ export interface WorkspaceParticipant {
   role: WORKSPACE_PARTICIPANT_ROLE
 }
 
+export interface MessageSender {
+  workspaceParticipantId: number
+  name: string
+  email: string
+  imageUrl: string
+}
+export interface MessageSummary {
+  messageId: number
+  title: string
+  content: string
+  createdAt: string
+  readed: boolean
+  sender: MessageSender
+}
+
 export type ColorRole = { color: ColorOptions } & WorkspaceParticipantRoleDetail
 
 export const roleColors: Array<ColorRole> = [
