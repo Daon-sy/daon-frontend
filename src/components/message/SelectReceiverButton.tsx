@@ -18,12 +18,14 @@ import SearchIcon from "@mui/icons-material/Search"
 interface SelectReceiverButtonProps {
   workspaceId: number | undefined
   messageSender: MessageSender | null
+  messageReceiver: WorkspaceParticipant | undefined | null
   onReceiverClick: (workspaceParticipantId: number) => void
 }
 
 const SelectReceiverButton = ({
   workspaceId,
   messageSender,
+  messageReceiver,
   onReceiverClick,
 }: SelectReceiverButtonProps) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -51,6 +53,14 @@ const SelectReceiverButton = ({
         email: messageSender.email,
         imageUrl: messageSender.imageUrl,
         role: "BASIC_PARTICIPANT",
+      })
+    } else if (messageReceiver) {
+      setSelectedReceiver({
+        workspaceParticipantId: messageReceiver.workspaceParticipantId,
+        name: messageReceiver.name,
+        email: messageReceiver.email,
+        imageUrl: messageReceiver.imageUrl,
+        role: messageReceiver.role,
       })
     }
   }, [])

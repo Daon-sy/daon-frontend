@@ -47,7 +47,7 @@ const CheckPasswordModal = ({
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogContent>
+      <DialogContent sx={{ pb: 1 }}>
         <Typography>현재 비밀번호 입력</Typography>
         <TextField
           size="small"
@@ -60,7 +60,7 @@ const CheckPasswordModal = ({
           helperText={error}
         />
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{ mb: 2, display: "flex", justifyContent: "center" }}>
         <Button
           sx={{
             height: 30,

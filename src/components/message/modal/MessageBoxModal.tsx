@@ -1,6 +1,10 @@
 import React from "react"
 import TitleDialog from "components/common/TitleDialog"
-import { MessageSender, MessageSummary } from "_types/workspace"
+import {
+  MessageSender,
+  MessageSummary,
+  WorkspaceParticipant,
+} from "_types/workspace"
 import { getWorkspaceStore } from "store/userStore"
 import MessageListSection from "../MessageListSection"
 import SendMessageSection from "../SendMessageSection"
@@ -10,12 +14,14 @@ interface MessageBoxProps {
   open: boolean
   handleClose: () => void
   category?: string
+  receiver?: WorkspaceParticipant | undefined | null
 }
 
 const MessageBoxModal = ({
   open = false,
   handleClose,
   category,
+  receiver,
 }: MessageBoxProps) => {
   const { workspace } = getWorkspaceStore()
 
@@ -71,6 +77,7 @@ const MessageBoxModal = ({
           <SendMessageSection
             onBackButtonClick={handleBackButtonClick}
             messageSender={messageSender}
+            messageReceiver={receiver}
           />
         )
       case READ_MESSAGE:

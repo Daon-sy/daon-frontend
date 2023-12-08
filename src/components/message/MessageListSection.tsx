@@ -7,6 +7,7 @@ import {
   FormControl,
   InputAdornment,
   MenuItem,
+  Pagination,
   Select,
   TextField,
   Typography,
@@ -19,6 +20,9 @@ import {
   findMessageListApi,
   readAllMessageListApi,
 } from "api/workspace"
+import { Stack } from "@mui/system"
+import { ConfirmDialog } from "components/common/ConfirmDialog"
+import { useAlert } from "hooks/useAlert"
 import MessageCard from "./MessageCard"
 
 interface MessageListSectionProps {
@@ -35,43 +39,26 @@ const MessageListSection = ({
   onSendMessageClick,
   onReadMessageClick,
 }: MessageListSectionProps) => {
-  const [allMessages, setAllMessages] = React.useState<MessageSummary[]>([])
-  const [searchOption, setSearchOption] = React.useState<string>("title")
-  const [searchText, setSearchText] = React.useState<string>("")
-  const [filteredMessages, setFilterMessages] = React.useState<
-    MessageSummary[]
-  >([])
+  const { addSuccess } = useAlert()
 
-  const filterMessages = (
-    option: string,
-    text: string,
-    messages: MessageSummary[],
-  ) => {
-    const filtered = messages.filter(message => {
-      switch (option) {
-        case "title":
-          return message.title
-            .toLowerCase()
-            .trim()
-            .includes(text.toLowerCase().trim())
-        case "sender":
-          return message.sender.name
-            .toLowerCase()
-            .trim()
-            .includes(text.toLowerCase().trim())
-        default:
-          return null
-      }
-    })
-    setFilterMessages(filtered)
-  }
+  const [allMessages, setAllMessages] = React.useState<MessageSummary[]>([])
+  const [searchOption, setSearchOption] = React.useState<string>("none")
+  const [searchText, setSearchText] = React.useState<string>("")
+  const [totalPage, setTotalPage] = React.useState<number>(1)
+  const [currentPage, setCurrentPage] = React.useState<number>(1)
+  const [readAllMessagesModalOpen, setReadAllMessagesModalOpen] =
+    React.useState<boolean>(false)
 
   const fetchMessages = async () => {
     if (workspace?.workspaceId !== undefined) {
-      const response = await findMessageListApi(workspace?.workspaceId)
+      const response = await findMessageListApi(
+        workspace?.workspaceId,
+        searchOption,
+        searchText,
+      )
       const messages = response.data.content
       setAllMessages(messages)
-      filterMessages(searchOption, searchText, messages)
+      setTotalPage(response.data.totalPage)
     }
   }
 
@@ -81,13 +68,14 @@ const MessageListSection = ({
     }
   }, [])
 
-  React.useEffect(() => {
-    filterMessages(searchOption, searchText, allMessages)
-  }, [searchOption, searchText, allMessages])
+  const handleSearchClick = () => {
+    fetchMessages()
+  }
 
   const handleDeleteMessageClick = async (messageId: number) => {
     if (workspace?.workspaceId !== undefined) {
       await deleteMessageApi(workspace?.workspaceId, messageId)
+      addSuccess("쪽지가 삭제되었습니다.")
       fetchMessages()
     }
   }
@@ -102,12 +90,26 @@ const MessageListSection = ({
     }
   }
 
-  const handleReadAllMessages = async () => {
+  const readAllMessages = async () => {
     if (workspace?.workspaceId !== undefined) {
       await readAllMessageListApi(workspace.workspaceId)
+      addSuccess("쪽지가 모두 읽음 처리되었습니다.")
       fetchMessages()
+      setReadAllMessagesModalOpen(false)
     }
   }
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number,
+  ) => {
+    setCurrentPage(value)
+  }
+
+  const pageSize = 7
+  const startIndex = (currentPage - 1) * pageSize
+  const endIndex = startIndex + pageSize
+  const currentMessages = allMessages.slice(startIndex, endIndex)
 
   return (
     <Box>
@@ -128,44 +130,31 @@ const MessageListSection = ({
             backgroundColor: "rgb(229,229,229)",
           }}
         />
-        <Button
-          sx={{ pt: 2, fontSize: 12 }}
-          onClick={() => handleReadAllMessages()}
-        >
-          쪽지 모두 읽기
-        </Button>
       </Box>
-      <Divider sx={{ mb: 2 }} />
+      <Divider />
       <Box>
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <FormControl sx={{ width: "29%" }}>
-            <Select
-              size="small"
-              value={searchOption}
-              onChange={e => setSearchOption(e.target.value as string)}
-            >
-              <MenuItem value="title">제목</MenuItem>
-              <MenuItem value="sender">보낸이</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField
-            autoComplete="off"
-            size="small"
-            sx={{
-              width: "45%",
-              fontSize: 14,
-            }}
-            placeholder="쪽지 검색"
-            value={searchText}
-            onChange={e => setSearchText(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
+        <Box
+          sx={{
+            mt: 2,
+            mb: 1,
+            display: "flex",
+            justifyContent: "end",
+            alignItems: "center",
+          }}
+        >
+          <Button
+            sx={{ pt: 2, fontSize: 12 }}
+            onClick={() => setReadAllMessagesModalOpen(true)}
+          >
+            쪽지 모두 읽기
+          </Button>
+          <ConfirmDialog
+            open={readAllMessagesModalOpen}
+            handleClose={() => setReadAllMessagesModalOpen(false)}
+            handleConfirm={readAllMessages}
+          >
+            <Typography>모든 쪽지를 읽음 처리하시겠습니까?</Typography>
+          </ConfirmDialog>
           <Button
             sx={{
               border: 1,
@@ -181,24 +170,67 @@ const MessageListSection = ({
             쪽지 보내기
           </Button>
         </Box>
-        <Box>
-          {filteredMessages.map(message => (
-            <MessageCard
-              key={message.messageId}
-              message={message}
-              onDeleteMessageClick={() =>
-                handleDeleteMessageClick(message.messageId)
-              }
-              onReadMessageClick={() =>
-                handleReadMessageClick(message, workspace?.workspaceId)
-              }
-            />
-          ))}
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <FormControl sx={{ width: "29%" }}>
+            <Select
+              size="small"
+              value={searchOption}
+              onChange={e => setSearchOption(e.target.value as string)}
+            >
+              <MenuItem value="none">없음</MenuItem>
+              <MenuItem value="title">제목</MenuItem>
+              <MenuItem value="sender">보낸이</MenuItem>
+            </Select>
+          </FormControl>
+          <TextField
+            autoComplete="off"
+            size="small"
+            sx={{
+              width: "51%",
+              fontSize: 14,
+            }}
+            placeholder="쪽지 검색"
+            value={searchText}
+            onChange={e => setSearchText(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <Button
+            sx={{ width: "10%", border: 1, borderColor: "lightGray" }}
+            onClick={handleSearchClick}
+          >
+            검색
+          </Button>
         </Box>
-        <Box sx={{ mt: 5, display: "flex", justifyContent: "center" }}>
-          <Typography m={1}>1</Typography>
-          <Typography m={1}>2</Typography>
-          <Typography m={1}>3</Typography>
+        <Box mt={3}>
+          <Box height={370}>
+            <Stack spacing={1.5}>
+              {currentMessages.map(message => (
+                <MessageCard
+                  key={message.messageId}
+                  message={message}
+                  onDeleteMessageClick={() =>
+                    handleDeleteMessageClick(message.messageId)
+                  }
+                  onReadMessageClick={() =>
+                    handleReadMessageClick(message, workspace?.workspaceId)
+                  }
+                />
+              ))}
+            </Stack>
+          </Box>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <Pagination
+              count={totalPage}
+              page={currentPage}
+              onChange={handlePageChange}
+            />
+          </Box>
         </Box>
       </Box>
     </Box>

@@ -3,20 +3,24 @@ import { Box, Button, Divider, TextField, Typography } from "@mui/material"
 import { getWorkspaceStore } from "store/userStore"
 import { sendMessageApi } from "api/workspace"
 import WorkspaceParticipantsModal from "components/workspace/modal/WorkspaceParticipantsModal"
-import { MessageSender } from "_types/workspace"
+import { MessageSender, WorkspaceParticipant } from "_types/workspace"
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos"
+import { useAlert } from "hooks/useAlert"
 import SelectReceiverButton from "./SelectReceiverButton"
 
 interface SendMessageSectionProps {
   onBackButtonClick: () => void
   messageSender: MessageSender | null
+  messageReceiver: WorkspaceParticipant | undefined | null
 }
 
 const SendMessageSection = ({
   onBackButtonClick,
   messageSender,
+  messageReceiver,
 }: SendMessageSectionProps) => {
   const { workspace } = getWorkspaceStore()
+  const { addSuccess } = useAlert()
 
   const [workspaceParticipantsModalOpen, setWorkspaceParticipantsModalOpen] =
     React.useState<boolean>(false)
@@ -29,6 +33,8 @@ const SendMessageSection = ({
   React.useEffect(() => {
     if (messageSender) {
       setSelectedReceiverId(messageSender.workspaceParticipantId)
+    } else if (messageReceiver) {
+      setSelectedReceiverId(messageReceiver.workspaceParticipantId)
     }
   }, [])
 
@@ -40,6 +46,7 @@ const SendMessageSection = ({
         workspaceParticipantId: selectedReceiverId,
       }
       sendMessageApi(workspace?.workspaceId, requestBody)
+      addSuccess("쪽지가 전송되었습니다.")
       onBackButtonClick()
     }
   }
@@ -63,6 +70,7 @@ const SendMessageSection = ({
           <SelectReceiverButton
             workspaceId={workspace?.workspaceId}
             messageSender={messageSender}
+            messageReceiver={messageReceiver}
             onReceiverClick={workspaceParticipantId =>
               setSelectedReceiverId(workspaceParticipantId)
             }
