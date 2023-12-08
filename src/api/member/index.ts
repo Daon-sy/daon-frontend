@@ -89,15 +89,6 @@ export const removeEmailApi = async (
   return authAxios.delete(`${MEMBER_API_PREFIX}/me/emails/${memberEmailId}`)
 }
 
-export interface SearchMemberByUsernameResponseBody {
-  members: Array<{ username: string; name: string }>
-}
-export const searchMemberByUsernameApi = async (
-  username: string,
-): Promise<AxiosResponse<SearchMemberByUsernameResponseBody>> => {
-  return authAxios.get(`${MEMBER_API_PREFIX}`, { params: { username } })
-}
-
 export const sendVerificationEmailApi = async (
   requestBody: SendVerificationEmailRequestBody,
 ): Promise<AxiosResponse> => {

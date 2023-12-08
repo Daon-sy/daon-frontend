@@ -22,7 +22,7 @@ const ProjectSelectButton: React.FC<Props> = ({
     <SelectListButton
       color="secondary"
       variant="contained"
-      fontWeight={900}
+      fontWeight={500}
       unsetButtonText="프로젝트 선택"
       valueList={projects?.map(
         (project: Project): ProjectItemType => ({

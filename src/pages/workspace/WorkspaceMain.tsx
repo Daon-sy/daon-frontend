@@ -49,25 +49,28 @@ const WorkspaceMain: React.FC = () => {
       >
         {workspace.title}에 오신 것을 환영합니다.
       </Box>
-
-      <Stack mt={2} spacing={2} direction="row" height="30vh" width="100%">
-        <SectionTitleWrapper
-          width="80vw"
-          color="#E25860"
-          icon={faBullhorn}
-          title="공지사항"
-        >
-          <WorkspaceNotice />
-        </SectionTitleWrapper>
-        <SectionTitleWrapper
-          width="20vw"
-          color="#3A4CA8"
-          icon={faPeopleGroup}
-          title="구성원"
-        >
-          <WorkspaceParticipants />
-        </SectionTitleWrapper>
-      </Stack>
+      {workspace.division === "PERSONAL" ? null : (
+        <Stack mt={2} spacing={2} direction="row" height="30vh" width="100%">
+          <SectionTitleWrapper
+            width="80vw"
+            minWidth="912px"
+            color="#E25860"
+            icon={faBullhorn}
+            title="공지사항"
+          >
+            <WorkspaceNotice />
+          </SectionTitleWrapper>
+          <SectionTitleWrapper
+            width="20vw"
+            minWidth="243px"
+            color="#3A4CA8"
+            icon={faPeopleGroup}
+            title="구성원"
+          >
+            <WorkspaceParticipants />
+          </SectionTitleWrapper>
+        </Stack>
+      )}
 
       <Stack
         mt={2}

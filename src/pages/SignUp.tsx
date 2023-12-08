@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react"
 import { useNavigate } from "react-router-dom"
 import { Box, Button, LinearProgress, Stack, TextField } from "@mui/material"

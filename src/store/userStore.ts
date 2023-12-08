@@ -57,3 +57,13 @@ export const getProjectsStore = create<ProjectsStore>(set => ({
   clear: () => set({ projects: [] }),
   setProjects: (projects: Project[]) => set(() => ({ projects })),
 }))
+
+interface MyWorkspaceId {
+  myWorkspaceId: number | null | undefined
+  setMyWorkspaceId: (workspaceId: number) => void
+}
+
+export const getMyWorkspaceIdStore = create<MyWorkspaceId>(set => ({
+  myWorkspaceId: null,
+  setMyWorkspaceId: (myWorkspaceId: number) => set(() => ({ myWorkspaceId })),
+}))

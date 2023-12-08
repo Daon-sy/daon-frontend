@@ -1,10 +1,17 @@
 import React from "react"
-import Box from "@mui/material/Box"
-import { FormHelperText, Stack, TextField, Typography } from "@mui/material"
-import { imageUploadApi } from "api/image"
+import {
+  FormHelperText,
+  Stack,
+  TextField,
+  Typography,
+  Box,
+} from "@mui/material"
+import InsertPhotoIcon from "@mui/icons-material/InsertPhoto"
 import { WorkspaceInfo } from "api/workspace"
 import useImageUrlInputRef from "hooks/useImageUrlInputRef"
-import ImageInput from "components/image/ImageInput"
+import useImageUpload from "hooks/image/useImageUpload"
+import ColorAvatar from "components/common/ColorAvatar"
+import MenuBox from "components/common/MenuBox"
 
 interface Props {
   workspaceInfo: WorkspaceInfo
@@ -18,31 +25,42 @@ const InputWorkspaceInfo: React.FC<Props> = ({
   const { title, subject, description, imageUrl } = workspaceInfo
   const [ref, changeRef] = useImageUrlInputRef()
 
-  const onImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target
-    const file = files?.[0]
-    if (file) {
-      try {
-        const { data: responseBody } = await imageUploadApi({ image: file })
-        changeRef(responseBody.imageUrl)
-      } catch (err) {
-        console.error(err)
-      }
-    }
-  }
+  const { ImageInput, selectFile } = useImageUpload()
 
   return (
     <Box>
       <Stack spacing={2}>
         <Typography variant="h6">워크스페이스 정보 입력</Typography>
         <Box display="flex" justifyContent="center">
-          <ImageInput
-            width={150}
-            height={150}
-            borderRadius={20}
-            imageUrl={imageUrl}
-            onImageChange={onImageChange}
-          />
+          <MenuBox
+            menus={[
+              {
+                disabled: !workspaceInfo.imageUrl,
+                children: "기본이미지",
+                onClick: () =>
+                  handleDataChange({ ...workspaceInfo, imageUrl: "" }),
+              },
+              {
+                children: "이미지 선택",
+                onClick: () =>
+                  selectFile({
+                    autoFetch: true,
+                    fetchCallback: changeRef,
+                  }),
+              },
+            ]}
+          >
+            <ImageInput>
+              <ColorAvatar
+                icon={<InsertPhotoIcon sx={{ width: 2 / 4, height: 2 / 4 }} />}
+                src={imageUrl}
+                sx={{
+                  width: 140,
+                  height: 140,
+                }}
+              />
+            </ImageInput>
+          </MenuBox>
           <input
             hidden
             type="text"
@@ -51,7 +69,7 @@ const InputWorkspaceInfo: React.FC<Props> = ({
               handleDataChange({ ...workspaceInfo, imageUrl: e.target.value })
             }
           />
-          <Box width="100%">
+          <Box ml={3} width="100%">
             <Stack spacing={1}>
               <Box>
                 <TextField

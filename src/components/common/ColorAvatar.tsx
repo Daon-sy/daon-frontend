@@ -3,7 +3,10 @@ import Avatar from "@mui/material/Avatar"
 // eslint-disable-next-line
 import { SxProps } from "@mui/system"
 import { Theme } from "@mui/material"
+import PersonIcon from "@mui/icons-material/Person"
+import { avatarColors } from "../../_types/style"
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const stringToColor = (string: string) => {
   let hash = 0
   let i
@@ -24,14 +27,29 @@ const stringToColor = (string: string) => {
   return color
 }
 
-interface Props {
-  src?: string
-  stringToChangeColor?: string
-  name?: string
-  sx?: SxProps<Theme>
+const getColor = (id: number | string): string => {
+  if (typeof id === "number") return avatarColors[id % avatarColors.length]
+
+  let hash = 0
+  let i
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < id.length; i += 1) {
+    hash = id.charCodeAt(i) + ((hash << 5) - hash)
+  }
+  return avatarColors[hash % avatarColors.length]
+  /* eslint-enable no-bitwise */
 }
 
-const ColorAvatar = ({ src, stringToChangeColor, name, sx }: Props) => (
+interface Props {
+  src?: string
+  id?: number | string
+  name?: string
+  sx?: SxProps<Theme>
+  onClick?: () => void
+  icon?: React.ReactNode
+}
+
+const ColorAvatar = ({ id, src, name, sx, onClick, icon }: Props) => (
   <Avatar
     src={src}
     sx={{
@@ -39,14 +57,16 @@ const ColorAvatar = ({ src, stringToChangeColor, name, sx }: Props) => (
       height: 28,
       mr: 0.5,
       fontSize: 14,
-      bgcolor:
-        src || !stringToChangeColor
-          ? undefined
-          : stringToColor(stringToChangeColor),
+      bgcolor: id ? getColor(id) : undefined,
       ...sx,
     }}
+    onClick={onClick}
   >
-    {name ? name[0] : undefined}
+    {!icon && !name ? (
+      <PersonIcon sx={{ width: 3 / 4, height: 3 / 4 }} />
+    ) : undefined}
+    {!icon && name ? name[0] : undefined}
+    {icon || undefined}
   </Avatar>
 )
 

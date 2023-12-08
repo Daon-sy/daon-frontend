@@ -48,6 +48,7 @@ export interface DeportationWorkspaceParticipantRequestBody {
 
 export interface InviteWorkspaceRequestBody {
   username: string
+  role: WORKSPACE_PARTICIPANT_ROLE
 }
 
 export interface ModifyWorkspaceParticipantRoleRequestBody {
@@ -216,6 +217,7 @@ export const resetPersonalWorkspaceApi = async (
   return authAxios.put(`${WORKSPACE_API_PREFIX}/${workspaceId}/reset`)
 }
 
+
 // 쪽지 보내기
 export const sendMessageApi = async (
   workspaceId: number,
@@ -254,4 +256,17 @@ export const readAllMessageListApi = async (
   workspaceId: number,
 ): Promise<AxiosResponse> => {
   return authAxios.post(`/api/workspaces/${workspaceId}/messages/me`)
+
+export interface SearchMembersToInviteResponseBody {
+  members: Array<{ username: string; name: string; invited: boolean }>
+}
+
+// 회원 검색 [초대]
+export const searchMembersToInviteApi = (
+  workspaceId: number,
+  username: string,
+): Promise<AxiosResponse<SearchMembersToInviteResponseBody>> => {
+  return authAxios.get(`${WORKSPACE_API_PREFIX}/${workspaceId}/search-member`, {
+    params: { username },
+  })
 }

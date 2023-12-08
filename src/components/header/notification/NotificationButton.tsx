@@ -22,12 +22,15 @@ import {
   RegisteredTaskManagerNotification,
 } from "_types/notification"
 import useReadNotification from "hooks/notification/useReadNotification"
+import useFetchNotifications from "hooks/notification/useFetchNotifications"
+import useNotification from "hooks/sse/useNotification"
 import { useTitleDialog } from "components/common/TitleDialog"
 import JoinWorkspace from "components/workspace/JoinWorkspace"
 
 const StyledTypography = styled((props: TypographyProps) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <Typography {...props} />
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
 ))(({ theme }) => ({
   fontSize: 14,
 }))
@@ -137,6 +140,11 @@ const NotificationButton = () => {
   const handleClose = () => {
     setAnchorEl(null)
   }
+
+  useFetchNotifications()
+  useNotification({
+    ssePath: "/api/notifications/subscribe",
+  })
 
   const { fetch: readNotification } = useReadNotification()
 

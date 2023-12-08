@@ -1,3 +1,5 @@
+import { ColorOptions } from "../style"
+
 export type DIVISION = "PERSONAL" | "GROUP"
 
 export interface Workspace {
@@ -24,19 +26,22 @@ export interface WorkspaceParticipantRoleDetail {
   description: string
 }
 
+export const WS_ADMIN: WorkspaceParticipantRoleDetail = {
+  role: "WORKSPACE_ADMIN",
+  description: "워크스페이스 관리자",
+}
+export const PJ_ADMIN: WorkspaceParticipantRoleDetail = {
+  role: "PROJECT_ADMIN",
+  description: "프로젝트 관리자",
+}
+export const PARTICIPANT: WorkspaceParticipantRoleDetail = {
+  role: "BASIC_PARTICIPANT",
+  description: "구성원",
+}
 export const roles: Array<WorkspaceParticipantRoleDetail> = [
-  {
-    role: "WORKSPACE_ADMIN",
-    description: "워크스페이스 관리자",
-  },
-  {
-    role: "PROJECT_ADMIN",
-    description: "프로젝트 관리자",
-  },
-  {
-    role: "BASIC_PARTICIPANT",
-    description: "일반 참여자",
-  },
+  WS_ADMIN,
+  PJ_ADMIN,
+  PARTICIPANT,
 ]
 
 export interface WorkspaceParticipant {
@@ -61,3 +66,11 @@ export interface MessageSummary {
   readed: boolean
   sender: MessageSender
 }
+
+export type ColorRole = { color: ColorOptions } & WorkspaceParticipantRoleDetail
+
+export const roleColors: Array<ColorRole> = [
+  { ...WS_ADMIN, color: "yellow" },
+  { ...PJ_ADMIN, color: "green" },
+  { ...PARTICIPANT, color: "blue" },
+]

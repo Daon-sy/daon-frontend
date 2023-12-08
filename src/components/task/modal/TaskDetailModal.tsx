@@ -12,6 +12,9 @@ import {
   Menu,
   Box,
   Popper,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
 } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
 import DeleteIcon from "@mui/icons-material/Delete"
@@ -32,6 +35,7 @@ import useRemoveTask from "hooks/task/useRemoveTask"
 import TaskBookmarkButton from "components/task/TaskBookmarkButton"
 import EditableTextBox from "components/common/EditableTextBox"
 import TitleDialog from "components/common/TitleDialog"
+import ColorAvatar from "components/common/ColorAvatar"
 import TaskReply from "../reply/TaskReply"
 import ProgressRadioButton from "../ProgressRadioButton"
 
@@ -330,6 +334,15 @@ const TaskDetailModal: React.FC<Props> = ({
                           title: value,
                         })
                       }}
+                      inputProps={{
+                        style: {
+                          lineHeight: 2,
+                          paddingTop: 4,
+                          paddingBottom: 4,
+                          paddingLeft: 8,
+                          paddingRight: 8,
+                        },
+                      }}
                     />
                   </Box>
                 </Tooltip>
@@ -361,8 +374,8 @@ const TaskDetailModal: React.FC<Props> = ({
                     padding: 1,
                     border: "solid",
                     borderWidth: 1,
-                    borderRadius: 2,
-                    borderColor: "rgb(224,224,224)",
+                    borderRadius: 1,
+                    borderColor: "#bdbdbd",
                     display: "flex",
                     alignItems: "center",
                     height: 40,
@@ -386,52 +399,65 @@ const TaskDetailModal: React.FC<Props> = ({
                     <Box
                       onClick={() => setProjectParticipantsModalOpen(true)}
                       sx={{
+                        height: "100%",
                         display: "flex",
                         flexGrow: 1,
                         alignItems: "center",
                         borderRadius: 1,
-                        padding: 1,
+                        pl: 1,
                         "&:hover": {
-                          backgroundColor: "rgb(242,242,242)",
+                          backgroundColor: "background.default",
                         },
                       }}
                     >
-                      <Stack
-                        direction="row"
-                        spacing={1}
-                        sx={{ display: "flex", alignItems: "center" }}
-                      >
-                        <Box>
-                          <Avatar
-                            src={taskDetail.taskManager?.imageUrl}
-                            sx={{
-                              width: 28,
-                              height: 28,
-                              borderStyle: "solid",
-                              borderWidth: 1,
-                              borderColor: "#C8C8C8FF",
-                            }}
-                          />
+                      {taskDetail.taskManager ? (
+                        <ListItem
+                          slotProps={{
+                            root: {
+                              style: {
+                                padding: 0,
+                              },
+                            },
+                          }}
+                        >
+                          <ListItemAvatar sx={{ minWidth: 0, pr: 1 }}>
+                            <ColorAvatar
+                              id={taskDetail.taskManager.projectParticipantId}
+                              src={taskDetail.taskManager.imageUrl}
+                              sx={{ width: 28, height: 28 }}
+                            />
+                          </ListItemAvatar>
+                          <ListItemText>
+                            <Box>
+                              <Typography
+                                fontSize={14}
+                                color="primary"
+                                fontWeight={600}
+                              >
+                                {taskDetail.taskManager.name}
+                              </Typography>
+                            </Box>
+                          </ListItemText>
+                        </ListItem>
+                      ) : (
+                        <Box height="100%" display="flex" alignItems="center">
+                          <Typography fontSize={14} fontWeight={500}>
+                            없음
+                          </Typography>
                         </Box>
-                        <Box sx={{ marginLeft: 1 }}>
-                          {taskDetail.taskManager
-                            ? taskDetail.taskManager.name
-                            : "없음"}
-                        </Box>
-                      </Stack>
+                      )}
                     </Box>
                   </Tooltip>
                 </Box>
               </Box>
             </Box>
+            <Divider orientation="vertical" flexItem color="#e0e0e0" />
             {/* right */}
             <Box
               id="right-container"
               sx={{
                 width: "100%",
                 height: "100%",
-                pl: 5,
-                borderLeft: "1px solid #c3c3c3",
               }}
             >
               <Box>

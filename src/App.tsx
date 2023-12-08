@@ -7,6 +7,8 @@ import RefreshComponent from "auth/RefreshComponent"
 declare module "@mui/material/styles" {
   interface Palette {
     green: Palette["primary"]
+    yellow: Palette["primary"]
+    blue: Palette["primary"]
     lightRed: Palette["primary"]
     gray: Palette["primary"]
     deepGray: Palette["primary"]
@@ -14,6 +16,8 @@ declare module "@mui/material/styles" {
 
   interface PaletteOptions {
     green?: PaletteOptions["primary"]
+    yellow?: PaletteOptions["primary"]
+    blue?: PaletteOptions["primary"]
     lightRed?: PaletteOptions["primary"]
     gray?: PaletteOptions["primary"]
     deepGray?: PaletteOptions["primary"]
@@ -24,12 +28,16 @@ declare module "@mui/material/styles" {
 declare module "@mui/material/Button" {
   interface ButtonPropsColorOverrides {
     green: true
+    yellow: true
+    blue: true
   }
 }
 
 declare module "@mui/material/Chip" {
   interface ChipPropsColorOverrides {
     green: true
+    yellow: true
+    blue: true
   }
 }
 
@@ -82,6 +90,20 @@ theme = createTheme(theme, {
     green: theme.palette.augmentColor({
       color: {
         main: "#7DB249",
+        contrastText: "#FFFFFF",
+      },
+      name: "green",
+    }),
+    yellow: theme.palette.augmentColor({
+      color: {
+        main: "#FFBE00",
+        contrastText: "#FFFFFF",
+      },
+      name: "green",
+    }),
+    blue: theme.palette.augmentColor({
+      color: {
+        main: "#1187CF",
         contrastText: "#FFFFFF",
       },
       name: "green",

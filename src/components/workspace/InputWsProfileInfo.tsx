@@ -10,12 +10,14 @@ import {
   Typography,
   Box,
 } from "@mui/material"
-import { imageUploadApi } from "api/image"
 import { myEmailsApi } from "api/member"
 import { WsProfileInfo } from "api/workspace"
 import { MemberEmail } from "_types/member"
 import useImageUrlInputRef from "hooks/useImageUrlInputRef"
-import ImageInput from "components/image/ImageInput"
+import InsertPhotoIcon from "@mui/icons-material/InsertPhoto"
+import ColorAvatar from "components/common/ColorAvatar"
+import MenuBox from "components/common/MenuBox"
+import useImageUpload from "hooks/image/useImageUpload"
 
 interface Props {
   wsProfileInfo: WsProfileInfo
@@ -39,43 +41,51 @@ const InputWsProfileInfo: React.FC<Props> = ({
     fetchMemberEmails()
   }, [])
 
-  const onImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target
-    const file = files?.[0]
-    if (file) {
-      try {
-        const { data: responseBody } = await imageUploadApi({ image: file })
-        changeRef(responseBody.imageUrl)
-      } catch (err) {
-        console.error(err)
-      }
-    }
-  }
+  const { ImageInput, selectFile } = useImageUpload()
 
   return (
     <Box>
       <Stack spacing={2}>
         <Typography variant="h6">워크스페이스 프로필 입력</Typography>
         <Box display="flex" justifyContent="center">
-          <Box>
-            <ImageInput
-              width={150}
-              height={150}
-              borderRadius={20}
-              imageUrl={imageUrl}
-              onImageChange={onImageChange}
-            />
-            <input
-              hidden
-              type="text"
-              name="imageUrl"
-              ref={ref}
-              onChange={e =>
-                handleDataChange({ ...wsProfileInfo, imageUrl: e.target.value })
-              }
-            />
-          </Box>
-          <Box display="flex" sx={{ width: "100%" }}>
+          <MenuBox
+            menus={[
+              {
+                disabled: !wsProfileInfo.imageUrl,
+                children: "기본이미지",
+                onClick: () =>
+                  handleDataChange({ ...wsProfileInfo, imageUrl: "" }),
+              },
+              {
+                children: "이미지 선택",
+                onClick: () =>
+                  selectFile({
+                    autoFetch: true,
+                    fetchCallback: changeRef,
+                  }),
+              },
+            ]}
+          >
+            <ImageInput>
+              <ColorAvatar
+                src={imageUrl}
+                sx={{
+                  width: 140,
+                  height: 140,
+                }}
+              />
+            </ImageInput>
+          </MenuBox>
+          <input
+            hidden
+            type="text"
+            name="imageUrl"
+            ref={ref}
+            onChange={e =>
+              handleDataChange({ ...wsProfileInfo, imageUrl: e.target.value })
+            }
+          />
+          <Box ml={3} display="flex" sx={{ width: "100%" }}>
             <Stack spacing={1} sx={{ width: "100%" }}>
               <Box>
                 <TextField

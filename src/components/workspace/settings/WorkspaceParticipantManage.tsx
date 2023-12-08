@@ -11,33 +11,27 @@ import {
   SelectChangeEvent,
   Stack,
   TextField,
-  ListItemText,
-  Typography,
-  Button,
 } from "@mui/material"
-import { ProjectParticipant } from "_types/project"
-import {
-  deportationProjectParticipantApi,
-  myProjectParticipantDetailApi,
-  projectParticipantListApi,
-} from "api/project"
-import { useAlert } from "hooks/useAlert"
+import Typography from "@mui/material/Typography"
+import Button from "@mui/material/Button"
 import { getWorkspaceStore } from "store/userStore"
 import {
-  roleColors as roles,
-  WORKSPACE_PARTICIPANT_ROLE,
-} from "_types/workspace"
+  deportationWorkspaceParticipantApi,
+  modifyWorkspaceParticipantRoleApi,
+  ModifyWorkspaceParticipantRoleRequestBody,
+  myWorkspaceParticipantDetailApi,
+  workspaceParticipantListApi,
+} from "api/workspace"
+import { roleColors as roles, WorkspaceParticipant } from "_types/workspace"
+import ListItemText from "@mui/material/ListItemText"
+import { useAlert } from "hooks/useAlert"
 import ConfirmDialog from "components/common/ConfirmDialog"
+import { useTitleDialog } from "components/common/TitleDialog"
+import MemberInvite from "components/workspace/invite/MemberInvite"
+import ColorAvatar from "components/common/ColorAvatar"
 import SearchIcon from "@mui/icons-material/Search"
-import { TitleDialog } from "components/common/TitleDialog"
-import RoleButton from "../workspace/role/RoleButton"
-import ColorAvatar from "../common/ColorAvatar"
-import ProjectInvite from "./invite/ProjectInvite"
-
-const allowedEdit: Array<WORKSPACE_PARTICIPANT_ROLE> = [
-  "WORKSPACE_ADMIN",
-  "PROJECT_ADMIN",
-]
+import SelectRoleButton from "components/workspace/role/SelectRoleButton"
+import RoleButton from "components/workspace/role/RoleButton"
 
 type Filter = "name" | "email"
 
@@ -52,63 +46,70 @@ const filters = [
   },
 ]
 
-interface Props {
-  workspaceId: number
-  projectId: number
-}
-
-const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
+const WorkspaceParticipantManage = () => {
   const { addSuccess } = useAlert()
-  const { myProfile } = getWorkspaceStore()
+  const { workspace, myProfile, setMyProfile } = getWorkspaceStore()
+  const [workspaceParticipants, setWorkspaceParticipants] = React.useState<
+    Array<WorkspaceParticipant>
+  >([])
+  const [workspaceParticipantToDrop, setWorkspaceParticipantToDrop] =
+    React.useState<WorkspaceParticipant>()
   const [filter, setFilter] = React.useState<Filter>("name")
   const [filterText, setFilterText] = React.useState("")
-  const [isInviteOpen, setIsInviteOpen] = React.useState(false)
-  const [projectParticipants, setProjectParticipants] =
-    React.useState<Array<ProjectParticipant>>()
-  const [projectParticipantToDrop, setProjectParticipantToDrop] =
-    React.useState<ProjectParticipant>()
+  const { TitleDialog, open: openInviteMember } = useTitleDialog()
 
-  const [myProjectProfile, setMyProjectProfile] =
-    React.useState<ProjectParticipant>()
+  const fetchWorkspaceParticipants = async () => {
+    if (workspace) {
+      const { data } = await workspaceParticipantListApi(workspace.workspaceId)
+      setWorkspaceParticipants(
+        data.workspaceParticipants.filter(
+          participant =>
+            participant.workspaceParticipantId !==
+            myProfile?.workspaceParticipantId,
+        ),
+      )
+    }
+  }
+
+  const fetchMyWorkspaceProfile = async () => {
+    if (workspace) {
+      const { data } = await myWorkspaceParticipantDetailApi(
+        workspace.workspaceId,
+      )
+      setMyProfile(data)
+    }
+  }
 
   React.useEffect(() => {
-    const fetch = async () => {
-      const { data } = await myProjectParticipantDetailApi(
-        workspaceId,
-        projectId,
-      )
-      setMyProjectProfile({ ...data })
-    }
-    fetch()
+    fetchWorkspaceParticipants()
   }, [])
 
-  const fetchProjectParticipants = async () => {
-    const { data } = await projectParticipantListApi(workspaceId, projectId)
-    setProjectParticipants(
-      data.projectParticipants.filter(
-        participant =>
-          participant.projectParticipantId !==
-          myProjectProfile?.projectParticipantId,
-      ),
-    )
-  }
-
-  React.useEffect(() => {
-    if (myProjectProfile) fetchProjectParticipants()
-  }, [myProjectProfile])
-
-  const handleProjectParticipantDropClick = async () => {
-    if (projectParticipantToDrop) {
-      await deportationProjectParticipantApi(workspaceId, projectId, {
-        projectParticipantId: projectParticipantToDrop.projectParticipantId,
+  const updateWorkspaceParticipantRole = async (
+    data: ModifyWorkspaceParticipantRoleRequestBody,
+  ) => {
+    if (workspace) {
+      await modifyWorkspaceParticipantRoleApi(workspace.workspaceId, {
+        ...data,
       })
-      addSuccess(`사용자 [${projectParticipantToDrop.name}]를 내보냈습니다.`)
+      addSuccess("참여자 권한 변경 완료")
+      await fetchWorkspaceParticipants()
 
-      await fetchProjectParticipants()
+      if (data.workspaceParticipantId === myProfile?.workspaceParticipantId)
+        await fetchMyWorkspaceProfile()
     }
   }
 
-  if (!(myProfile && myProjectProfile && projectParticipants)) return <Box />
+  const handleWorkspaceParticipantDropClick = async () => {
+    if (workspace && workspaceParticipantToDrop) {
+      await deportationWorkspaceParticipantApi(workspace.workspaceId, {
+        workspaceParticipantId:
+          workspaceParticipantToDrop.workspaceParticipantId,
+      })
+      addSuccess(`사용자 [${workspaceParticipantToDrop.name}]를 내보냈습니다.`)
+
+      await fetchWorkspaceParticipants()
+    }
+  }
 
   return (
     <Box>
@@ -118,33 +119,20 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
             <Typography fontSize={20} fontWeight={500} flexGrow={1}>
               내 정보
             </Typography>
-            {allowedEdit.includes(myProfile?.role) ? (
+            {myProfile?.role === "WORKSPACE_ADMIN" ? (
               <>
                 <Box display="flex" justifyContent="end">
-                  <Button
-                    variant="outlined"
-                    onClick={() => setIsInviteOpen(true)}
-                  >
+                  <Button variant="outlined" onClick={openInviteMember}>
                     초대하기
                   </Button>
                 </Box>
-                {isInviteOpen ? (
-                  <TitleDialog
-                    open={isInviteOpen}
-                    title="프로젝트 초대"
-                    maxWidth="xs"
-                    height={400}
-                    handleClose={() => setIsInviteOpen(false)}
-                  >
-                    <ProjectInvite
-                      workspaceId={workspaceId}
-                      projectId={projectId}
-                      myProjectProfile={myProjectProfile}
-                      projectParticipants={projectParticipants}
-                      onInviteClick={fetchProjectParticipants}
-                    />
-                  </TitleDialog>
-                ) : null}
+                <TitleDialog
+                  title="워크스페이스 초대"
+                  maxWidth="xs"
+                  height={400}
+                >
+                  <MemberInvite />
+                </TitleDialog>
               </>
             ) : null}
           </Box>
@@ -163,8 +151,7 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
                   <Box display="flex" alignItems="center">
                     <RoleButton
                       colorRole={
-                        roles.find(r => r.role === myProjectProfile?.role) ||
-                        roles[2]
+                        roles.find(r => r.role === myProfile?.role) || roles[2]
                       }
                     />
                   </Box>
@@ -172,20 +159,20 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
               >
                 <ListItemAvatar>
                   <ColorAvatar
-                    id={myProjectProfile.projectParticipantId}
-                    src={myProjectProfile?.imageUrl}
+                    id={myProfile?.workspaceParticipantId}
+                    src={myProfile?.imageUrl}
                     sx={{ width: 36, height: 36 }}
                   />
                 </ListItemAvatar>
                 <ListItemText>
                   <Box>
                     <Typography fontSize={14} color="primary" fontWeight={600}>
-                      {myProjectProfile?.name}
+                      {myProfile?.name}
                     </Typography>
                   </Box>
                   <Box>
                     <Typography fontSize={12} color="gray">
-                      {myProjectProfile?.email}
+                      {myProfile?.email}
                     </Typography>
                   </Box>
                 </ListItemText>
@@ -248,7 +235,7 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
             }}
           >
             <List sx={{ paddingY: 0 }}>
-              {projectParticipants
+              {workspaceParticipants
                 .filter(participant =>
                   participant[filter]
                     .toUpperCase()
@@ -256,22 +243,37 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
                 )
                 .map((participant, index) => (
                   <ListItem
-                    divider={index < projectParticipants.length - 1}
+                    divider={index < workspaceParticipants.length - 1}
                     secondaryAction={
                       <Box display="flex" alignItems="center">
-                        <RoleButton
-                          colorRole={
-                            roles.find(r => r.role === participant?.role) ||
-                            roles[2]
-                          }
-                        />
-                        {allowedEdit.includes(myProfile?.role) ? (
+                        {myProfile?.role === "WORKSPACE_ADMIN" ? (
+                          <SelectRoleButton
+                            initValue={roles.findIndex(
+                              r => r.role === participant.role,
+                            )}
+                            onChange={item => {
+                              updateWorkspaceParticipantRole({
+                                workspaceParticipantId:
+                                  participant.workspaceParticipantId,
+                                role: item.role,
+                              })
+                            }}
+                          />
+                        ) : (
+                          <RoleButton
+                            colorRole={
+                              roles.find(r => r.role === participant?.role) ||
+                              roles[2]
+                            }
+                          />
+                        )}
+                        {myProfile?.role === "WORKSPACE_ADMIN" ? (
                           <Button
                             color="error"
                             size="small"
                             sx={{ ml: 1, fontSize: 12 }}
                             onClick={() =>
-                              setProjectParticipantToDrop(participant)
+                              setWorkspaceParticipantToDrop(participant)
                             }
                           >
                             내보내기
@@ -282,7 +284,7 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
                   >
                     <ListItemAvatar>
                       <ColorAvatar
-                        id={participant.projectParticipantId}
+                        id={participant.workspaceParticipantId}
                         src={participant.imageUrl}
                         sx={{ width: 36, height: 36 }}
                       />
@@ -305,14 +307,14 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
                     </ListItemText>
                   </ListItem>
                 ))}
-              {projectParticipants.length === 0 ? (
+              {workspaceParticipants.length === 0 ? (
                 <Typography fontSize={14} p={1}>
                   참여자들이 존재하지 않습니다.
                 </Typography>
               ) : null}
-              {projectParticipants.length > 0 &&
+              {workspaceParticipants.length > 0 &&
               filterText &&
-              projectParticipants.filter(participant =>
+              workspaceParticipants.filter(participant =>
                 participant[filter]
                   .toUpperCase()
                   .includes(filterText.toUpperCase()),
@@ -325,13 +327,13 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
           </Box>
         </Box>
       </Stack>
-      {projectParticipantToDrop ? (
+      {workspaceParticipantToDrop ? (
         <ConfirmDialog
-          open={!!projectParticipantToDrop}
+          open={!!workspaceParticipantToDrop}
           maxWidth="sm"
-          handleConfirm={handleProjectParticipantDropClick}
+          handleConfirm={handleWorkspaceParticipantDropClick}
           handleClose={() => {
-            setProjectParticipantToDrop(undefined)
+            setWorkspaceParticipantToDrop(undefined)
           }}
           confirmButtonText="내보내기"
         >
@@ -361,24 +363,24 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
             >
               <Box ml={1}>
                 <ColorAvatar
-                  id={projectParticipantToDrop.projectParticipantId}
-                  src={projectParticipantToDrop.imageUrl}
-                  name={projectParticipantToDrop.name}
+                  id={workspaceParticipantToDrop.workspaceParticipantId}
+                  src={workspaceParticipantToDrop.imageUrl}
+                  name={workspaceParticipantToDrop.name}
                 />
               </Box>
               <Box ml={1} flexGrow={1} maxWidth={120}>
                 <Typography fontSize={14} fontWeight={600}>
-                  {projectParticipantToDrop.name}
+                  {workspaceParticipantToDrop.name}
                 </Typography>
               </Box>
               <Box flexGrow={1}>
                 <Typography fontSize={12}>
-                  {projectParticipantToDrop?.email}
+                  {workspaceParticipantToDrop.email}
                 </Typography>
               </Box>
               <Box>
                 <Button variant="outlined" disableElevation color="primary">
-                  {roles.find(r => r.role === projectParticipantToDrop.role)
+                  {roles.find(r => r.role === workspaceParticipantToDrop.role)
                     ?.description || ""}
                 </Button>
               </Box>
@@ -390,4 +392,4 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
   )
 }
 
-export default ProjectParticipantsSetting
+export default WorkspaceParticipantManage
