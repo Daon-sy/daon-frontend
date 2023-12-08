@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCrown, faLeaf } from "@fortawesome/free-solid-svg-icons"
 import { WorkspaceParticipant } from "_types/workspace"
 import ColorAvatar from "components/common/ColorAvatar"
+import MessageBoxModal from "components/message/modal/MessageBoxModal"
 
 interface ParticipantItemProps {
   participant: WorkspaceParticipant
@@ -56,7 +57,7 @@ const ParticipantCard: React.FC<ParticipantItemProps> = ({ participant }) => {
         mx: 1,
       }}
     >
-      <CardActionArea>
+      <CardActionArea onClick={handleClick}>
         <Box
           display="flex"
           justifyContent="center"
