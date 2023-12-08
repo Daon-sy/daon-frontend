@@ -15,19 +15,49 @@ const MessageCard: React.FC<MessageCardProps> = ({
   onDeleteMessageClick,
   onReadMessageClick,
 }) => {
-  const handleReadMessageClick = () => {
+  const handleReadMessageClick = async () => {
     onReadMessageClick(message)
   }
   return (
-    <Box sx={{ display: "flex", border: 1 }}>
-      <Avatar src={message.sender.imageUrl || TEST_IMAGE_URL} />
-      <Typography>{message.sender.name}</Typography>
-      <Typography onClick={handleReadMessageClick}>
-        {message.content}
-      </Typography>
-      <Button onClick={() => onDeleteMessageClick(message.messageId)}>
-        <DeleteIcon sx={{ color: "lightGray" }} />
-      </Button>
+    <Box
+      sx={{
+        my: 1,
+        display: "flex",
+        border: 1,
+        borderRadius: 1,
+        borderColor: "lightGray",
+        backgroundColor: message.readed ? "#FFF8DC" : "white",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
+      <Box width="10%">
+        <Avatar src={message.sender.imageUrl || TEST_IMAGE_URL} />
+      </Box>
+      <Box width="30%">
+        <Typography
+          overflow="hidden"
+          whiteSpace="nowrap"
+          textOverflow="ellipsis"
+        >
+          {message.sender.name}
+        </Typography>
+      </Box>
+      <Box width="50%">
+        <Typography
+          overflow="hidden"
+          whiteSpace="nowrap"
+          textOverflow="ellipsis"
+          onClick={handleReadMessageClick}
+        >
+          {message.title}
+        </Typography>
+      </Box>
+      <Box width="10%" sx={{ pr: 1.5 }}>
+        <Button onClick={() => onDeleteMessageClick(message.messageId)}>
+          <DeleteIcon sx={{ color: "lightGray" }} />
+        </Button>
+      </Box>
     </Box>
   )
 }

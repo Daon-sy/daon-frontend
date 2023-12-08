@@ -107,7 +107,7 @@ const ParticipantCard: React.FC<ParticipantItemProps> = ({ participant }) => {
         <MessageBoxModal
           open={sendMessageModalOpen}
           handleClose={() => setSendMessageModalOpen(false)}
-          category="MessageList"
+          category="SendMessage"
         />
       ) : null}
     </Card>

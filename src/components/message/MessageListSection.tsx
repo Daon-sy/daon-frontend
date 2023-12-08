@@ -15,6 +15,7 @@ import SearchIcon from "@mui/icons-material/Search"
 import { MessageSummary, Workspace } from "_types/workspace"
 import {
   deleteMessageApi,
+  findMessageApi,
   findMessageListApi,
   readAllMessageListApi,
 } from "api/workspace"
@@ -34,12 +35,43 @@ const MessageListSection = ({
   onSendMessageClick,
   onReadMessageClick,
 }: MessageListSectionProps) => {
-  const [messages, setMessages] = React.useState<MessageSummary[]>([])
+  const [allMessages, setAllMessages] = React.useState<MessageSummary[]>([])
+  const [searchOption, setSearchOption] = React.useState<string>("title")
+  const [searchText, setSearchText] = React.useState<string>("")
+  const [filteredMessages, setFilterMessages] = React.useState<
+    MessageSummary[]
+  >([])
+
+  const filterMessages = (
+    option: string,
+    text: string,
+    messages: MessageSummary[],
+  ) => {
+    const filtered = messages.filter(message => {
+      switch (option) {
+        case "title":
+          return message.title
+            .toLowerCase()
+            .trim()
+            .includes(text.toLowerCase().trim())
+        case "sender":
+          return message.sender.name
+            .toLowerCase()
+            .trim()
+            .includes(text.toLowerCase().trim())
+        default:
+          return null
+      }
+    })
+    setFilterMessages(filtered)
+  }
 
   const fetchMessages = async () => {
     if (workspace?.workspaceId !== undefined) {
       const response = await findMessageListApi(workspace?.workspaceId)
-      setMessages(response.data.content)
+      const messages = response.data.content
+      setAllMessages(messages)
+      filterMessages(searchOption, searchText, messages)
     }
   }
 
@@ -49,6 +81,10 @@ const MessageListSection = ({
     }
   }, [])
 
+  React.useEffect(() => {
+    filterMessages(searchOption, searchText, allMessages)
+  }, [searchOption, searchText, allMessages])
+
   const handleDeleteMessageClick = async (messageId: number) => {
     if (workspace?.workspaceId !== undefined) {
       await deleteMessageApi(workspace?.workspaceId, messageId)
@@ -56,11 +92,14 @@ const MessageListSection = ({
     }
   }
 
-  const handleReadMessageClick = (
+  const handleReadMessageClick = async (
     message: MessageSummary,
     workspaceId: number | undefined,
   ) => {
-    onReadMessageClick(message, workspaceId)
+    if (workspaceId) {
+      await findMessageApi(workspaceId, message.messageId)
+      onReadMessageClick(message, workspaceId)
+    }
   }
 
   const handleReadAllMessages = async () => {
@@ -72,40 +111,53 @@ const MessageListSection = ({
 
   return (
     <Box>
-      <Box sx={{ display: "flex" }}>
-        <Typography>다온 쪽지</Typography>
+      <Box sx={{ height: 30, mb: 2, display: "flex", alignItems: "center" }}>
+        <Typography variant="h6" sx={{ color: "#1F4838" }}>
+          다온 쪽지
+        </Typography>
         <Chip
-          label="2"
+          label={allMessages.length}
           variant="outlined"
           size="small"
           sx={{
             border: 0,
             marginLeft: 1,
-            fontSize: 16,
+            fontSize: 10,
             fontWeight: 900,
             color: "rgba(150, 150, 150)",
             backgroundColor: "rgb(229,229,229)",
           }}
         />
-        <Button onClick={() => handleReadAllMessages()}>쪽지 모두 읽기</Button>
+        <Button
+          sx={{ pt: 2, fontSize: 12 }}
+          onClick={() => handleReadAllMessages()}
+        >
+          쪽지 모두 읽기
+        </Button>
       </Box>
-      <Divider />
+      <Divider sx={{ mb: 2 }} />
       <Box>
-        <Box sx={{ display: "flex" }}>
-          <FormControl>
-            <Select size="small">
-              <MenuItem>제목</MenuItem>
-              <MenuItem>내용</MenuItem>
-              <MenuItem>보낸이</MenuItem>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <FormControl sx={{ width: "29%" }}>
+            <Select
+              size="small"
+              value={searchOption}
+              onChange={e => setSearchOption(e.target.value as string)}
+            >
+              <MenuItem value="title">제목</MenuItem>
+              <MenuItem value="sender">보낸이</MenuItem>
             </Select>
           </FormControl>
           <TextField
             autoComplete="off"
             size="small"
             sx={{
+              width: "45%",
               fontSize: 14,
             }}
             placeholder="쪽지 검색"
+            value={searchText}
+            onChange={e => setSearchText(e.target.value)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -114,10 +166,23 @@ const MessageListSection = ({
               ),
             }}
           />
-          <Button onClick={onSendMessageClick}>쪽지 보내기</Button>
+          <Button
+            sx={{
+              border: 1,
+              backgroundColor: "#1F4838",
+              color: "white",
+              ":hover": {
+                backgroundColor: "#FFBE00",
+                borderColor: "#FFBE00",
+              },
+            }}
+            onClick={onSendMessageClick}
+          >
+            쪽지 보내기
+          </Button>
         </Box>
         <Box>
-          {messages.map(message => (
+          {filteredMessages.map(message => (
             <MessageCard
               key={message.messageId}
               message={message}
@@ -129,6 +194,11 @@ const MessageListSection = ({
               }
             />
           ))}
+        </Box>
+        <Box sx={{ mt: 5, display: "flex", justifyContent: "center" }}>
+          <Typography m={1}>1</Typography>
+          <Typography m={1}>2</Typography>
+          <Typography m={1}>3</Typography>
         </Box>
       </Box>
     </Box>
