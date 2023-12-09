@@ -2,7 +2,7 @@ import React from "react"
 import { AppBar, Box, Toolbar } from "@mui/material"
 import Logo from "components/header/Logo"
 import User from "components/header/UserInfo"
-import SearchInput from "components/header/SearchInput"
+import SearchInput from "components/search/SearchInput"
 import WorkspaceSelectButton from "components/workspace/WorkspaceSelectButton"
 import NotificationButton from "components/header/notification/NotificationButton"
 
@@ -31,7 +31,7 @@ const Header: React.FC = () => {
           <WorkspaceSelectButton />
         </Box>
         {/* 검색창 */}
-        <Box sx={{ width: "50%", height: "100%", minWidth: 400 }}>
+        <Box sx={{ width: "40%", height: "100%", minWidth: 300 }}>
           <SearchInput />
         </Box>
         <Box sx={{ height: "100%", display: "flex", alignItems: "center" }}>

@@ -16,6 +16,27 @@ export interface SliceResponse<T> {
   content: Array<T>
 }
 
+export interface PageResponse<T> extends SliceResponse<T> {
+  totalPage: number
+  totalCount: number
+}
+
+export interface PageParams {
+  page?: number
+  size?: number
+  sort?: string
+}
+
+export interface PageInfo {
+  first: boolean
+  last: boolean
+  pageSize: number
+  pageNumber: number
+  contentSize: number
+  totalPage: number
+  totalCount: number
+}
+
 export const basicAxios = axios.create({
   baseURL: `${API_SERVER_URL}`,
   headers: {

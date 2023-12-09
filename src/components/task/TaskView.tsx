@@ -11,6 +11,7 @@ import useEventSource from "hooks/sse/useEventSource"
 import useFetchTaskList from "hooks/task/useFetchTaskList"
 import Typography from "@mui/material/Typography"
 import IconBreadcrumbs from "components/common/IconBreadcrumbs"
+import { useLocation } from "react-router-dom"
 
 interface TaskViewProps {
   params?: TaskListApiParams
@@ -20,7 +21,8 @@ interface TaskViewProps {
 const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
   const [viewType, setViewType] = React.useState<string>("kanban")
   const { workspace } = getWorkspaceStore()
-  const { taskDetailParam, clear } = getTaskDetailViewStore()
+  const { taskDetailParam, setTaskDetailParam, clear } =
+    getTaskDetailViewStore()
   const { tasks, fetchTaskList } = useFetchTaskList(
     {
       workspaceId: workspace?.workspaceId || 0,
@@ -39,6 +41,17 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
   React.useEffect(() => {
     fetchTaskList()
   }, [params?.projectId])
+
+  const { state: locSate } = useLocation()
+  React.useEffect(() => {
+    if (locSate && locSate.openTaskId) {
+      setTaskDetailParam({
+        workspaceId: workspace?.workspaceId || 0,
+        projectId: Number(params?.projectId),
+        taskId: locSate.openTaskId,
+      })
+    }
+  }, [locSate])
 
   const renderView = () => {
     switch (viewType) {
