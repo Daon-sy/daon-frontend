@@ -4,7 +4,10 @@ import { ErrorResponse } from "api"
 import { workspaceNoticeListApi } from "api/workspaceNotice"
 import { WorkspaceNoticeDetail } from "_types/workspaceNotice"
 
-const useFetchWorkspaceNoticeList = (workspaceId: number) => {
+const useFetchWorkspaceNoticeList = (
+  workspaceId: number,
+  callback?: () => void,
+) => {
   const [workspaceNotices, setWorkspaceNotices] = React.useState<
     WorkspaceNoticeDetail[]
   >([])
@@ -15,6 +18,8 @@ const useFetchWorkspaceNoticeList = (workspaceId: number) => {
     try {
       setIsFetching(true)
       const { data } = await workspaceNoticeListApi(workspaceId)
+      if (callback) callback()
+
       setWorkspaceNotices(data.workspaceNotices)
     } catch (e) {
       if (axios.isAxiosError(e)) {
@@ -30,7 +35,12 @@ const useFetchWorkspaceNoticeList = (workspaceId: number) => {
     fetchWorkspaceNoticeList()
   }, [workspaceId])
 
-  return { workspaceNotices, fetchWorkspaceNoticeList, isFetching, error }
+  return {
+    workspaceNotices,
+    fetchWorkspaceNoticeList,
+    isFetching,
+    error,
+  }
 }
 
 export default useFetchWorkspaceNoticeList

@@ -60,7 +60,7 @@ export const modifyWorkspaceNoticeApi = async (
   )
 }
 // 워크스페이스 공지사항 삭제
-export const removeWorkspaceNoticeListApi = async (
+export const removeWorkspaceNoticeApi = async (
   workspaceId: number,
   noticeId: number,
 ): Promise<AxiosResponse> => {
