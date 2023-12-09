@@ -2,30 +2,24 @@ import React from "react"
 import { Box, Typography } from "@mui/material"
 import useFetchWorkspaceNoticeList from "hooks/workspace/useFetchWorkspaceNoticeList"
 import { useParams } from "react-router-dom"
-import nodata from "../../../assets/svg/no_data.png"
+import nodata from "assets/svg/no_data.png"
 
 const WorkspaceNotice: React.FC = () => {
   const { workspaceId } = useParams()
-  const { workspaceNotices, fetchWorkspaceNoticeList } =
-    useFetchWorkspaceNoticeList(Number(workspaceId))
-
-  React.useEffect(() => {
-    if (workspaceId) {
-      fetchWorkspaceNoticeList()
-    }
-  }, [workspaceId])
+  const { workspaceNotices } = useFetchWorkspaceNoticeList(Number(workspaceId))
 
   return (
     <Box
       component="ul"
       sx={{
+        boxSizing: "border-box",
+        paddingX: "1vw",
         height: "calc(30vh - 44px)",
         borderRadius: "6px",
         width: "100%",
         bgcolor: "#ffffff",
         display: "flex",
         alignItems: "center",
-        scrollbarWidth: "0.5em",
         WebkitScrollSnapType: "none",
         overflowX: "scroll",
         overflowY: "hidden",
@@ -34,12 +28,11 @@ const WorkspaceNotice: React.FC = () => {
           height: "8px",
         },
         "&::-webkit-scrollbar-thumb": {
-          cursor: "",
           backgroundColor: "#495e57",
           borderRadius: "15px",
         },
         "&::-webkit-scrollbar-button": {
-          width: "8px",
+          width: "0px",
         },
       }}
     >
@@ -61,6 +54,7 @@ const WorkspaceNotice: React.FC = () => {
       )}
       {workspaceNotices.map(workspaceNotice => (
         <Box
+          key={workspaceNotice.noticeId}
           component="li"
           sx={{
             display: "flex",
@@ -70,9 +64,9 @@ const WorkspaceNotice: React.FC = () => {
             height: "calc(30vh - 104px)",
             minHeight: "130px",
             maxHeight: "165px",
-            width: "200px",
+            width: "212px",
             border: "2px solid #e3e3e3",
-            marginX: "2vh",
+            marginX: "0.5vw",
             paddingY: "1vh",
             paddingX: "12px",
           }}
@@ -104,6 +98,7 @@ const WorkspaceNotice: React.FC = () => {
               WebkitLineClamp: "3",
               overflow: "hidden",
               textOverflow: "ellipsis",
+              wordBreak: "break-all",
               "-webkit-box-orient": "vertical",
             }}
           >
