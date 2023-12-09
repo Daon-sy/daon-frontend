@@ -2,21 +2,21 @@ import React, { useEffect } from "react"
 import { Box, Button } from "@mui/material"
 import useRemoveWorkspaceNotice from "hooks/workspace/useRemoveWorkspaceNotice"
 import { getWorkspaceStore } from "store/userStore"
-import { WorkspaceNoticeDetail } from "_types/workspaceNotice"
+import useFetchWorkspaceNoticeDetail from "hooks/workspace/useFetchWorkspaceNoticeDetail"
 import ModifyWorkspaceNotice from "./ModifyWorkspaceNotice"
 
 interface Props {
   workspaceId: number
   noticeId: number
-  notice: WorkspaceNoticeDetail
 }
 
 const WorkspaceNoticeDetailView: React.FC<Props> = ({
   workspaceId,
   noticeId,
-  notice,
 }: Props) => {
   const { myProfile } = getWorkspaceStore()
+  const { workspaceNotice, fetchWorkspaceNoticeDetail } =
+    useFetchWorkspaceNoticeDetail(workspaceId, noticeId)
   const { removeNotice } = useRemoveWorkspaceNotice(workspaceId, noticeId)
   const [noData, setIsNoData] = React.useState(false)
   const [isModifyMode, setIsModifyMode] = React.useState(false)
@@ -34,6 +34,10 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
     setIsNoData(false)
   }, [noticeId])
 
+  useEffect(() => {
+    fetchWorkspaceNoticeDetail()
+  }, [isModifyMode])
+
   return (
     <Box>
       {noData ? (
@@ -46,20 +50,22 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
               <Button onClick={handleRemoveNotice}>공지사항 삭제</Button>
             </Box>
           ) : null}
-          {isModifyMode ? (
+          {isModifyMode && workspaceNotice ? (
             <ModifyWorkspaceNotice
               workspaceId={workspaceId}
               noticeId={noticeId}
-              notice={notice}
+              notice={workspaceNotice}
               onCancel={() => setIsModifyMode(false)}
             />
           ) : (
-            <Box>
-              <Box>{notice.writer?.name}</Box>
-              <Box>title: {notice.title}</Box>
-              <Box>content: {notice.content}</Box>
-              <Box>createdAt: {notice.createdAt}</Box>
-            </Box>
+            workspaceNotice && (
+              <Box>
+                <Box>{workspaceNotice.writer?.name}</Box>
+                <Box>title: {workspaceNotice.title}</Box>
+                <Box>content: {workspaceNotice.content}</Box>
+                <Box>createdAt: {workspaceNotice.createdAt}</Box>
+              </Box>
+            )
           )}
         </Box>
       )}

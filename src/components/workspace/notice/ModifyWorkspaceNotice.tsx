@@ -50,11 +50,11 @@ const ModifyWorkspaceNotice: React.FC<Props> = ({
               title: e.target.value,
             }))
           }
-          inputProps={{ maxLength: 50 }}
+          inputProps={{ maxLength: 49 }}
         />
-        <FormHelperText
-          sx={{ textAlign: "end" }}
-        >{`${title.length}/50자`}</FormHelperText>
+        <FormHelperText sx={{ textAlign: "end" }}>{`${
+          (requestBody?.title || title).length
+        }/50자`}</FormHelperText>
       </Stack>
       <Stack direction="row">
         <Box component="div">내용</Box>
@@ -68,11 +68,11 @@ const ModifyWorkspaceNotice: React.FC<Props> = ({
               content: e.target.value,
             }))
           }
-          inputProps={{ maxLength: 500 }}
+          inputProps={{ maxLength: 499 }}
         />
-        <FormHelperText
-          sx={{ textAlign: "end" }}
-        >{`${content.length}/500자`}</FormHelperText>
+        <FormHelperText sx={{ textAlign: "end" }}>{`${
+          (requestBody?.content || content).length
+        }/500자`}</FormHelperText>
       </Stack>
       <Button onClick={handleModify}>수정</Button>
       <Button onClick={onCancel}>취소</Button>

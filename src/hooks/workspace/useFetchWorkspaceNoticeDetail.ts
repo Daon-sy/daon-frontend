@@ -32,7 +32,17 @@ const useFetchWorkspaceNoticeDetail = (
     fetchWorkspaceNoticeDetail()
   }, [workspaceId, noticeId])
 
-  return { workspaceNotice, fetchWorkspaceNoticeDetail, isFetching, error }
+  const memoizedWorkspaceNotice = React.useMemo(
+    () => workspaceNotice,
+    [workspaceNotice],
+  )
+
+  return {
+    workspaceNotice: memoizedWorkspaceNotice,
+    fetchWorkspaceNoticeDetail,
+    isFetching,
+    error,
+  }
 }
 
 export default useFetchWorkspaceNoticeDetail

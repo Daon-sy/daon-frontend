@@ -22,13 +22,9 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
   const { workspaceNotices } = getWorkspaceNoticesStore()
   const [selectedNoticeId, setSelectedNoticeId] = useState<number | null>(null)
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
-  const [notice, setNotice] = useState<WorkspaceNoticeDetail>()
+
   const handleNoticeClick = (noticeId: number) => {
     setSelectedNoticeId(noticeId)
-    const selectedNotice = workspaceNotices.find(
-      workspaceNotice => workspaceNotice.noticeId === noticeId,
-    )
-    setNotice(selectedNotice)
   }
 
   const handleCreateNotice = () => {
@@ -68,11 +64,10 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
             />
           </Container>
           <Container sx={{ border: 1, width: "65%" }}>
-            {workspaceId && selectedNoticeId && notice ? (
+            {workspaceId && selectedNoticeId ? (
               <WorkspaceNoticeDetailView
                 workspaceId={+workspaceId}
                 noticeId={selectedNoticeId}
-                notice={notice}
               />
             ) : (
               <Box>
