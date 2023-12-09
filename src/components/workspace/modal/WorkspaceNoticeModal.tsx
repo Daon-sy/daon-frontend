@@ -1,8 +1,8 @@
 import React, { useState } from "react"
-import { Container, Stack } from "@mui/material"
+import { Container, Stack, Box } from "@mui/material"
 import TitleDialog from "components/common/TitleDialog"
 import { useParams } from "react-router-dom"
-import useFetchWorkspaceNoticeList from "hooks/workspace/useFetchWorkspaceNoticeList"
+import { getWorkspaceNoticesStore } from "store/userStore"
 import WorkspaceNoticeTitle from "../notice/WorkspaceNoticeTitle"
 import WorkspaceNoticeList from "../notice/WorkspaceNoticeList"
 import WorkspaceNoticeDetailView from "../notice/WorkspaceNoticeDetailView"
@@ -17,7 +17,7 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
   handleClose,
 }: Props) => {
   const { workspaceId } = useParams()
-  const { workspaceNotices } = useFetchWorkspaceNoticeList(Number(workspaceId))
+  const { workspaceNotices } = getWorkspaceNoticesStore()
   const [selectedNoticeId, setSelectedNoticeId] = useState<number | null>(null)
 
   const handleNoticeClick = (noticeId: number) => {
@@ -49,7 +49,9 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
               workspaceId={+workspaceId}
               noticeId={selectedNoticeId}
             />
-          ) : null}
+          ) : (
+            <Box>공지사항 목록에서 상세보기 할 공지사항을 선택해주세요 😄</Box>
+          )}
         </Container>
       </Stack>
     </TitleDialog>

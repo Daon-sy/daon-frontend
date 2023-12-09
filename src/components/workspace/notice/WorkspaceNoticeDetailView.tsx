@@ -14,6 +14,7 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
   noticeId,
 }: Props) => {
   const { myProfile } = getWorkspaceStore()
+  const [noData, setIsNoData] = React.useState(false)
   const { workspaceNotice } = useFetchWorkspaceNoticeDetail(
     workspaceId,
     noticeId,
@@ -22,6 +23,7 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
 
   const handleRemoveNotice = () => {
     removeNotice()
+    setIsNoData(true)
   }
 
   return (
@@ -33,14 +35,16 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
           <Button onClick={handleRemoveNotice}>공지사항 삭제</Button>
         </Box>
       ) : null}
-      {workspaceNotice ? (
+      {workspaceNotice && !noData ? (
         <Box>
           <Box>{workspaceNotice.writer?.name}</Box>
           <Box>title: {workspaceNotice.title}</Box>
           <Box>content: {workspaceNotice.content}</Box>
           <Box>createdAt: {workspaceNotice.createdAt}</Box>
         </Box>
-      ) : null}
+      ) : (
+        <Box>공지사항 목록에서 상세보기 할 공지사항을 선택해주세요 😄</Box>
+      )}
     </Box>
   )
 }

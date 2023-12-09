@@ -2,6 +2,7 @@ import { create } from "zustand"
 import { WorkspaceDetail, WorkspaceParticipant } from "_types/workspace"
 import { ProjectDetail, Project } from "_types/project"
 import { MemberDetail } from "_types/member"
+import { WorkspaceNoticeDetail } from "_types/workspaceNotice"
 
 interface MyMemberDetailStore {
   myDetail: MemberDetail | null | undefined
@@ -66,4 +67,29 @@ interface MyWorkspaceId {
 export const getMyWorkspaceIdStore = create<MyWorkspaceId>(set => ({
   myWorkspaceId: null,
   setMyWorkspaceId: (myWorkspaceId: number) => set(() => ({ myWorkspaceId })),
+}))
+
+interface WorkspaceNoticeStore {
+  workspaceNotice: WorkspaceNoticeDetail | null | undefined
+  clear: () => void
+  setWorkspaceNotice: (workspaceNotice: WorkspaceNoticeDetail) => void
+}
+
+export const getWorkspaceNoticeStore = create<WorkspaceNoticeStore>(set => ({
+  workspaceNotice: null,
+  clear: () => set({ workspaceNotice: undefined }),
+  setWorkspaceNotice: (workspaceNotice: WorkspaceNoticeDetail) =>
+    set(() => ({ workspaceNotice })),
+}))
+
+interface WorkspaceNoticesStore {
+  workspaceNotices: WorkspaceNoticeDetail[]
+  clear: () => void
+  setWorkspaceNotices: (workspaceNotices: WorkspaceNoticeDetail[]) => void
+}
+export const getWorkspaceNoticesStore = create<WorkspaceNoticesStore>(set => ({
+  workspaceNotices: [],
+  clear: () => set({ workspaceNotices: [] }),
+  setWorkspaceNotices: (workspaceNotices: WorkspaceNoticeDetail[]) =>
+    set(() => ({ workspaceNotices })),
 }))

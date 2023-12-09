@@ -20,6 +20,7 @@ const WorkspaceNoticeList: React.FC<Props> = ({
     workspaceNotice,
     listValue: workspaceNotice.title,
   }))
+
   return (
     <Box>
       <Box width="100%" mb={1}>

@@ -2,15 +2,13 @@ import React from "react"
 import axios from "axios"
 import { ErrorResponse } from "api"
 import { workspaceNoticeListApi } from "api/workspaceNotice"
-import { WorkspaceNoticeDetail } from "_types/workspaceNotice"
+import { getWorkspaceNoticesStore } from "store/userStore"
 
 const useFetchWorkspaceNoticeList = (
   workspaceId: number,
   callback?: () => void,
 ) => {
-  const [workspaceNotices, setWorkspaceNotices] = React.useState<
-    WorkspaceNoticeDetail[]
-  >([])
+  const { workspaceNotices, setWorkspaceNotices } = getWorkspaceNoticesStore()
   const [isFetching, setIsFetching] = React.useState(false)
   const [error, setError] = React.useState<ErrorResponse>()
 
@@ -35,8 +33,13 @@ const useFetchWorkspaceNoticeList = (
     fetchWorkspaceNoticeList()
   }, [workspaceId])
 
+  const memoizedWorkspaceNotices = React.useMemo(
+    () => workspaceNotices,
+    [workspaceNotices],
+  )
+
   return {
-    workspaceNotices,
+    workspaceNotices: memoizedWorkspaceNotices,
     fetchWorkspaceNoticeList,
     isFetching,
     error,
