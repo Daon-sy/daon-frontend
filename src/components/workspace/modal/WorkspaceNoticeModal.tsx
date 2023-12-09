@@ -54,7 +54,7 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
           onCancel={() => setIsCreateMode(false)}
         />
       ) : (
-        <Stack direction="row" spacing={2} width="100%" height="100%">
+        <Stack direction="row" width="100%" height="100%">
           <Button
             sx={{ position: "absolute", right: 30 }}
             onClick={handleCreateNotice}

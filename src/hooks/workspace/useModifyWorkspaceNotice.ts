@@ -1,28 +1,24 @@
 import React from "react"
 import axios from "axios"
 import { ErrorResponse } from "api"
-import {
-  createWorkspaceNoticeApi,
-  CreateWorkspaceNoticeRequestBody,
-} from "api/workspaceNotice"
 import { useAlert } from "hooks/useAlert"
+import {
+  ModifyWorkspaceNoticeRequestBody,
+  modifyWorkspaceNoticeApi,
+} from "api/workspaceNotice"
 import useFetchWorkspaceNoticeList from "./useFetchWorkspaceNoticeList"
 
-const useCreateWorkspaceNotice = (workspaceId: number) => {
+const useModifyWorkspaceNotice = (workspaceId: number, noticeId: number) => {
   const [error, setError] = React.useState<ErrorResponse>()
   const { addSuccess } = useAlert()
   const { fetchWorkspaceNoticeList } = useFetchWorkspaceNoticeList(workspaceId)
 
-  const fetchCreateWorkspaceNotice = async (
-    data: CreateWorkspaceNoticeRequestBody,
+  const fetchModifyWorkspaceNotice = async (
+    requestBody: ModifyWorkspaceNoticeRequestBody,
   ) => {
     try {
-      const { data: responseBody } = await createWorkspaceNoticeApi(
-        workspaceId,
-        data,
-      )
-      const { noticeId } = responseBody
-      addSuccess(`공지사항이 생성되었습니다. id: ${noticeId}`)
+      await modifyWorkspaceNoticeApi(workspaceId, noticeId, requestBody)
+      addSuccess("공지사항이 수정되었습니다.")
       fetchWorkspaceNoticeList()
     } catch (e) {
       if (axios.isAxiosError(e)) {
@@ -31,8 +27,6 @@ const useCreateWorkspaceNotice = (workspaceId: number) => {
       }
     }
   }
-
-  return { fetchCreateWorkspaceNotice, error }
+  return { fetchModifyWorkspaceNotice, error }
 }
-
-export default useCreateWorkspaceNotice
+export default useModifyWorkspaceNotice

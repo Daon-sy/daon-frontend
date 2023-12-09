@@ -3,6 +3,7 @@ import { Box, Button } from "@mui/material"
 import useRemoveWorkspaceNotice from "hooks/workspace/useRemoveWorkspaceNotice"
 import { getWorkspaceStore } from "store/userStore"
 import { WorkspaceNoticeDetail } from "_types/workspaceNotice"
+import ModifyWorkspaceNotice from "./ModifyWorkspaceNotice"
 
 interface Props {
   workspaceId: number
@@ -16,12 +17,17 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
   notice,
 }: Props) => {
   const { myProfile } = getWorkspaceStore()
-  const [noData, setIsNoData] = React.useState(false)
   const { removeNotice } = useRemoveWorkspaceNotice(workspaceId, noticeId)
+  const [noData, setIsNoData] = React.useState(false)
+  const [isModifyMode, setIsModifyMode] = React.useState(false)
 
   const handleRemoveNotice = () => {
     removeNotice()
     setIsNoData(true)
+  }
+
+  const handleModifyNotice = () => {
+    setIsModifyMode(true)
   }
 
   useEffect(() => {
@@ -36,14 +42,25 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
         <Box>
           {myProfile?.role === "WORKSPACE_ADMIN" ? (
             <Box>
-              <Button>공지사항 수정</Button>
+              <Button onClick={handleModifyNotice}>공지사항 수정</Button>
               <Button onClick={handleRemoveNotice}>공지사항 삭제</Button>
             </Box>
           ) : null}
-          <Box>{notice.writer?.name}</Box>
-          <Box>title: {notice.title}</Box>
-          <Box>content: {notice.content}</Box>
-          <Box>createdAt: {notice.createdAt}</Box>
+          {isModifyMode ? (
+            <ModifyWorkspaceNotice
+              workspaceId={workspaceId}
+              noticeId={noticeId}
+              notice={notice}
+              onCancel={() => setIsModifyMode(false)}
+            />
+          ) : (
+            <Box>
+              <Box>{notice.writer?.name}</Box>
+              <Box>title: {notice.title}</Box>
+              <Box>content: {notice.content}</Box>
+              <Box>createdAt: {notice.createdAt}</Box>
+            </Box>
+          )}
         </Box>
       )}
     </Box>

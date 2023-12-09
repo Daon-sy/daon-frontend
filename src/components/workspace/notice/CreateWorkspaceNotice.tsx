@@ -14,7 +14,7 @@ const CreateWorkspaceNotice: React.FC<Props> = ({
 }: Props) => {
   const [title, setTitle] = React.useState<string>("")
   const [content, setContent] = React.useState<string>("")
-  const { fetchCreateWorkspaceNotice, isFetching, error } =
+  const { fetchCreateWorkspaceNotice, error } =
     useCreateWorkspaceNotice(workspaceId)
   const { addError } = useAlert()
   const handleCreate = async () => {
@@ -23,7 +23,7 @@ const CreateWorkspaceNotice: React.FC<Props> = ({
       return
     }
     await fetchCreateWorkspaceNotice({ title, content })
-    if (!isFetching && !error) {
+    if (!error) {
       onCancel()
     }
   }
