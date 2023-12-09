@@ -65,7 +65,7 @@ const WithdrawSection: React.FC = () => {
               color: "lightGray",
             }}
           >
-            <Typography sx={{ color: "gray", lineHeight: 2 }}>
+            <Typography sx={{ color: "#787878", lineHeight: 2 }}>
               회원 탈퇴가 진행되면 복구가 불가능합니다. 동의하시면 아래
               체크버튼을 클릭해 주세요.
             </Typography>
@@ -82,7 +82,9 @@ const WithdrawSection: React.FC = () => {
             />
           </FormGroup>
         </DialogContent>
-        <DialogActions>
+        <DialogActions
+          sx={{ mb: 1, display: "flex", justifyContent: "center" }}
+        >
           <Button sx={{ color: "red" }} onClick={withdraw}>
             회원 탈퇴
           </Button>

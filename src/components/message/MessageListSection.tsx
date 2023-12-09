@@ -39,7 +39,7 @@ const MessageListSection = ({
   onSendMessageClick,
   onReadMessageClick,
 }: MessageListSectionProps) => {
-  const { addSuccess } = useAlert()
+  const { addSuccess, addError } = useAlert()
 
   const [allMessages, setAllMessages] = React.useState<MessageSummary[]>([])
   const [searchOption, setSearchOption] = React.useState<string>("none")
@@ -49,8 +49,15 @@ const MessageListSection = ({
   const [readAllMessagesModalOpen, setReadAllMessagesModalOpen] =
     React.useState<boolean>(false)
 
+  const [isThrottled, setIsThrottled] = React.useState<boolean>(false)
+
   const fetchMessages = async () => {
     if (workspace?.workspaceId !== undefined) {
+      if (isThrottled) {
+        return
+      }
+      setIsThrottled(true)
+
       const response = await findMessageListApi(
         workspace?.workspaceId,
         searchOption,
@@ -59,6 +66,10 @@ const MessageListSection = ({
       const messages = response.data.content
       setAllMessages(messages)
       setTotalPage(response.data.totalPage)
+
+      setTimeout(() => {
+        setIsThrottled(false)
+      }, 500)
     }
   }
 
@@ -69,6 +80,11 @@ const MessageListSection = ({
   }, [])
 
   const handleSearchClick = () => {
+    if (searchOption === "none") {
+      addError("검색 카테고리를 선택해 주세요.")
+      return
+    }
+
     fetchMessages()
   }
 
@@ -209,20 +225,26 @@ const MessageListSection = ({
         </Box>
         <Box mt={3}>
           <Box height={370}>
-            <Stack spacing={1.5}>
-              {currentMessages.map(message => (
-                <MessageCard
-                  key={message.messageId}
-                  message={message}
-                  onDeleteMessageClick={() =>
-                    handleDeleteMessageClick(message.messageId)
-                  }
-                  onReadMessageClick={() =>
-                    handleReadMessageClick(message, workspace?.workspaceId)
-                  }
-                />
-              ))}
-            </Stack>
+            {currentMessages.length === 0 ? (
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Typography>조회된 쪽지가 없습니다.</Typography>
+              </Box>
+            ) : (
+              <Stack spacing={1.5}>
+                {currentMessages.map(message => (
+                  <MessageCard
+                    key={message.messageId}
+                    message={message}
+                    onDeleteMessageClick={() =>
+                      handleDeleteMessageClick(message.messageId)
+                    }
+                    onReadMessageClick={() =>
+                      handleReadMessageClick(message, workspace?.workspaceId)
+                    }
+                  />
+                ))}
+              </Stack>
+            )}
           </Box>
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <Pagination

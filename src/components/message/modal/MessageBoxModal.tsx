@@ -35,12 +35,21 @@ const MessageBoxModal = ({
   const [fromReadSection, setFromReadSection] = React.useState<boolean>(false)
   const [messageSender, setMessageSender] =
     React.useState<MessageSender | null>(null)
+  const [messageReceiver, setMessageReceiver] = React.useState<
+    WorkspaceParticipant | undefined | null
+  >(receiver)
 
   React.useEffect(() => {
     if (category) {
       setSectionCase(category)
     }
   }, [])
+
+  const handleSendMessageClick = () => {
+    setMessageSender(null)
+    setMessageReceiver(null)
+    setSectionCase(SEND_MESSAGE)
+  }
 
   const handleBackButtonClick = () => {
     if (fromReadSection) {
@@ -65,7 +74,7 @@ const MessageBoxModal = ({
         return (
           <MessageListSection
             workspace={workspace}
-            onSendMessageClick={() => setSectionCase(SEND_MESSAGE)}
+            onSendMessageClick={handleSendMessageClick}
             onReadMessageClick={e => {
               setSectionCase(READ_MESSAGE)
               setMessage(e)
@@ -77,7 +86,7 @@ const MessageBoxModal = ({
           <SendMessageSection
             onBackButtonClick={handleBackButtonClick}
             messageSender={messageSender}
-            messageReceiver={receiver}
+            messageReceiver={messageReceiver}
           />
         )
       case READ_MESSAGE:

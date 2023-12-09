@@ -2,7 +2,6 @@ import React from "react"
 import { Box, Button, Divider, TextField, Typography } from "@mui/material"
 import { getWorkspaceStore } from "store/userStore"
 import { sendMessageApi } from "api/workspace"
-import WorkspaceParticipantsModal from "components/workspace/modal/WorkspaceParticipantsModal"
 import { MessageSender, WorkspaceParticipant } from "_types/workspace"
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos"
 import { useAlert } from "hooks/useAlert"
@@ -19,16 +18,17 @@ const SendMessageSection = ({
   messageSender,
   messageReceiver,
 }: SendMessageSectionProps) => {
-  const { workspace } = getWorkspaceStore()
-  const { addSuccess } = useAlert()
+  const { workspace, myProfile } = getWorkspaceStore()
+  const { addSuccess, addError } = useAlert()
 
-  const [workspaceParticipantsModalOpen, setWorkspaceParticipantsModalOpen] =
-    React.useState<boolean>(false)
+  React.useState<boolean>(false)
   const [title, setTitle] = React.useState<string>("")
   const [content, setContent] = React.useState<string>("")
   const [selectedReceiverId, setSelectedReceiverId] = React.useState<
     number | null
   >(null)
+
+  const [isThrottled, setIsThrottled] = React.useState<boolean>(false)
 
   React.useEffect(() => {
     if (messageSender) {
@@ -39,22 +39,50 @@ const SendMessageSection = ({
   }, [])
 
   const handleSendMessageClick = async () => {
-    if (workspace && workspace.workspaceId && selectedReceiverId !== null) {
+    if (!selectedReceiverId) {
+      addError("받는이를 선택해 주세요.")
+      return
+    }
+
+    if (workspace && workspace.workspaceId) {
+      if (title.length === 0) {
+        addError("쪽지 제목은 필수값입니다.")
+        return
+      }
+      if (selectedReceiverId === myProfile?.workspaceParticipantId) {
+        addError("본인에게는 쪽지를 전송할 수 없습니다.")
+        return
+      }
+      if (isThrottled) {
+        return
+      }
+
       const requestBody = {
         title,
         content,
         workspaceParticipantId: selectedReceiverId,
       }
+
+      setIsThrottled(true)
+
       sendMessageApi(workspace?.workspaceId, requestBody)
+      setTimeout(() => {
+        setIsThrottled(false)
+      }, 3000)
       addSuccess("쪽지가 전송되었습니다.")
       onBackButtonClick()
     }
   }
 
+  const handleBackButtonClick = () => {
+    setSelectedReceiverId(null)
+    onBackButtonClick()
+  }
+
   return (
     <Box>
       <Box sx={{ height: 30, mb: 2, display: "flex", alignItems: "center" }}>
-        <Button sx={{ minWidth: 0 }} onClick={onBackButtonClick}>
+        <Button sx={{ minWidth: 0 }} onClick={handleBackButtonClick}>
           <ArrowBackIosIcon sx={{ color: "#1F4838" }} />
         </Button>
         <Typography variant="h6" sx={{ color: "#1F4838" }}>
@@ -76,10 +104,6 @@ const SendMessageSection = ({
             }
           />
         </Box>
-        <WorkspaceParticipantsModal
-          open={workspaceParticipantsModalOpen}
-          handleClose={() => setWorkspaceParticipantsModalOpen(false)}
-        />
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Typography sx={{ width: "20%", fontWeight: "bold" }}>
             제목
