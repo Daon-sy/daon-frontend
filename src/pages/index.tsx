@@ -1,36 +1,34 @@
 import React from "react"
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
-import Home from "pages/Home"
+import { Backdrop, CircularProgress } from "@mui/material"
 import { getTokenStore } from "store/tokenStore"
 import AnonymousLayout from "layouts/AnonymousLayout"
+import Home from "pages/Home"
 import Landing from "pages/Landing"
 import SignUp from "pages/SignUp"
 import SignIn from "pages/SignIn"
 import WorkspaceRoutes from "pages/workspace"
-import { Backdrop, CircularProgress } from "@mui/material"
 import { getBackdropStore } from "store/backdropStore"
-import { myMemberDetailApi } from "api/member"
-import { getMyMemberDetailStore } from "store/userStore"
+import useFetchMyMemberDetail from "hooks/member/useFetchMyMemberDetail"
 
 const PageRoutes = () => {
   const { token } = getTokenStore()
   const { backdropOpen } = getBackdropStore()
-  const { setMyDetail } = getMyMemberDetailStore()
-
-  const fetchMyMemberDetail = async () => {
-    if (token) {
-      const { data } = await myMemberDetailApi()
-      setMyDetail(data)
-    }
-  }
+  const {
+    myDetail,
+    fetch: fetchMyMemberDetail,
+    isFetching,
+  } = useFetchMyMemberDetail()
 
   React.useEffect(() => {
     fetchMyMemberDetail()
   }, [token])
 
+  if (isFetching) return null
+
   return (
     <BrowserRouter>
-      {token ? (
+      {token && myDetail ? (
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/workspace/*" element={<WorkspaceRoutes />} />

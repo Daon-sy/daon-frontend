@@ -33,10 +33,12 @@ const WorkspaceDetailRoutes = () => {
   const { setLastConnectedWs } = getLastWorkspaceStore()
 
   React.useEffect(() => {
-    setLastConnectedWs({
-      memberId: myDetail?.memberId || "",
-      lastConnectedWsId: Number(workspaceId),
-    })
+    if (myDetail && workspaceId) {
+      setLastConnectedWs({
+        memberId: myDetail.memberId || "",
+        lastConnectedWsId: Number(workspaceId),
+      })
+    }
 
     fetchWorkspaceDetail()
     fetchMyWorkspaceProfile()
