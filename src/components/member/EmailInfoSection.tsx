@@ -2,16 +2,8 @@ import React from "react"
 import { MemberEmail } from "_types/member"
 import { myEmailsApi, removeEmailApi } from "api/member"
 import { useAlert } from "hooks/useAlert"
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  Typography,
-} from "@mui/material"
+import { Box, Button, IconButton, Typography } from "@mui/material"
+import { ConfirmDialog } from "components/common/ConfirmDialog"
 import MailIcon from "@mui/icons-material/Mail"
 import DeleteIcon from "@mui/icons-material/Delete"
 import AddEmailModal from "./modal/AddEmailModal"
@@ -104,19 +96,13 @@ const EmailInfoSection: React.FC = () => {
           >
             <DeleteIcon />
           </IconButton>
-          <Dialog
+          <ConfirmDialog
             open={removeEmailModalOpen}
-            onClose={() => setRemoveEmailModalOpen(false)}
+            handleClose={() => setRemoveEmailModalOpen(false)}
+            handleConfirm={removeEmail}
           >
-            <DialogTitle>이메일 삭제</DialogTitle>
-            <DialogContent>이메일을 삭제하시겠습니까?</DialogContent>
-            <DialogActions>
-              <Button onClick={removeEmail}>삭제</Button>
-              <Button onClick={() => setRemoveEmailModalOpen(false)}>
-                취소
-              </Button>
-            </DialogActions>
-          </Dialog>
+            <Typography>이메일을 삭제하시겠습니까?</Typography>
+          </ConfirmDialog>
         </Box>
       ))}
     </Box>

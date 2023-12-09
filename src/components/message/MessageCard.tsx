@@ -1,8 +1,9 @@
 import React from "react"
 import { MessageSummary } from "_types/workspace"
-import { TEST_IMAGE_URL } from "env"
-import { Avatar, Box, Button, Typography } from "@mui/material"
+import { Box, Button, Typography } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
+import ColorAvatar from "components/common/ColorAvatar"
+import { ConfirmDialog } from "components/common/ConfirmDialog"
 
 interface MessageCardProps {
   message: MessageSummary
@@ -15,24 +16,35 @@ const MessageCard: React.FC<MessageCardProps> = ({
   onDeleteMessageClick,
   onReadMessageClick,
 }) => {
+  const [deleteMessageModalOpen, setDeleteMessageModalOpen] =
+    React.useState<boolean>(false)
+
   const handleReadMessageClick = async () => {
     onReadMessageClick(message)
   }
+
+  const deleteMessage = () => {
+    onDeleteMessageClick(message.messageId)
+  }
+
   return (
     <Box
       sx={{
-        my: 1,
         display: "flex",
         border: 1,
         borderRadius: 1,
         borderColor: "lightGray",
-        backgroundColor: message.readed ? "#FFF8DC" : "white",
+        backgroundColor: message.readed ? "white" : "#FFF8DC",
         justifyContent: "space-between",
         alignItems: "center",
       }}
     >
-      <Box width="10%">
-        <Avatar src={message.sender.imageUrl || TEST_IMAGE_URL} />
+      <Box sx={{ ml: 1, width: "10%" }}>
+        <ColorAvatar
+          sx={{ width: 27, height: 27 }}
+          src={message.sender.imageUrl}
+          id={message.sender.workspaceParticipantId}
+        />
       </Box>
       <Box width="30%">
         <Typography
@@ -45,6 +57,7 @@ const MessageCard: React.FC<MessageCardProps> = ({
       </Box>
       <Box width="50%">
         <Typography
+          sx={{ cursor: "pointer" }}
           overflow="hidden"
           whiteSpace="nowrap"
           textOverflow="ellipsis"
@@ -54,9 +67,16 @@ const MessageCard: React.FC<MessageCardProps> = ({
         </Typography>
       </Box>
       <Box width="10%" sx={{ pr: 1.5 }}>
-        <Button onClick={() => onDeleteMessageClick(message.messageId)}>
+        <Button onClick={() => setDeleteMessageModalOpen(true)}>
           <DeleteIcon sx={{ color: "lightGray" }} />
         </Button>
+        <ConfirmDialog
+          open={deleteMessageModalOpen}
+          handleClose={() => setDeleteMessageModalOpen(false)}
+          handleConfirm={deleteMessage}
+        >
+          <Typography>쪽지를 삭제하시겠습니까?</Typography>
+        </ConfirmDialog>
       </Box>
     </Box>
   )

@@ -3,7 +3,9 @@ import { Avatar, Box, Button, Divider, Typography } from "@mui/material"
 import { MessageSender, MessageSummary } from "_types/workspace"
 import { TEST_IMAGE_URL } from "env"
 import { deleteMessageApi } from "api/workspace"
+import { useAlert } from "hooks/useAlert"
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos"
+import ConfirmDialog from "components/common/ConfirmDialog"
 
 interface ReadMessageSectionProps {
   workspaceId: number | undefined
@@ -18,6 +20,11 @@ const ReadMessageSection = ({
   onBackButtonClick,
   onReplyClick,
 }: ReadMessageSectionProps) => {
+  const { addSuccess } = useAlert()
+
+  const [deleteMessageModalOpen, setDeleteMessageModalOpen] =
+    React.useState<boolean>(false)
+
   const handleReplyClick = () => {
     if (message) {
       onReplyClick(message.sender)
@@ -25,10 +32,15 @@ const ReadMessageSection = ({
   }
 
   const handleDeleteClick = async () => {
+    setDeleteMessageModalOpen(true)
+  }
+
+  const deleteMessage = async () => {
     if (message && workspaceId) {
       await deleteMessageApi(workspaceId, message?.messageId)
+      addSuccess("쪽지가 삭제되었습니다.")
+      onBackButtonClick()
     }
-    onBackButtonClick()
   }
 
   return (
@@ -97,6 +109,13 @@ const ReadMessageSection = ({
         >
           삭제하기
         </Button>
+        <ConfirmDialog
+          open={deleteMessageModalOpen}
+          handleClose={() => setDeleteMessageModalOpen(false)}
+          handleConfirm={deleteMessage}
+        >
+          <Typography>쪽지를 삭제하시겠습니까?</Typography>
+        </ConfirmDialog>
       </Box>
     </Box>
   )

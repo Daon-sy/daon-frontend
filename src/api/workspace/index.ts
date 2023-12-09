@@ -235,8 +235,15 @@ export const findMessageApi = async (
 // 쪽지 목록 조회
 export const findMessageListApi = async (
   workspaceId: number,
+  target: string,
+  keyword: string,
 ): Promise<AxiosResponse<FindMessageListResponseBody>> => {
-  return authAxios.get(`/api/workspaces/${workspaceId}/messages`)
+  return authAxios.get(`/api/workspaces/${workspaceId}/messages`, {
+    params: {
+      target,
+      keyword,
+    },
+  })
 }
 
 // 쪽지 삭제
