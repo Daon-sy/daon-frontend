@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@mui/material"
 import { modifyMyMemberInfoApi } from "api/member"
+import { useAlert } from "hooks/useAlert"
 
 interface Props {
   open: boolean
@@ -25,6 +26,7 @@ const CheckPasswordModal = ({
   onSuccess,
   modalInfo,
 }: Props) => {
+  const { addSuccess } = useAlert()
   const [prevPassword, setPrevPassword] = React.useState<string>("")
   const [error, setError] = useState<string | null>(null)
 
@@ -40,6 +42,7 @@ const CheckPasswordModal = ({
       onSuccess()
       handleClose()
       setError(null)
+      addSuccess("회원 정보가 수정되었습니다.")
     } catch (e) {
       setError("* 비밀번호가 일치하지 않습니다.")
     }

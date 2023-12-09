@@ -23,6 +23,10 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
   const [code, setCode] = React.useState<string>("")
   const [checkCode, setCheckCode] = React.useState<boolean | null>(null)
   const [error, setError] = React.useState<string | null>(null)
+  const [isThrottledForSend, setIsThrottledForSend] =
+    React.useState<boolean>(false)
+  const [isThrottledForCheck, setIsThrottledForCheck] =
+    React.useState<boolean>(false)
 
   const MINUTES_IN_MS = 30 * 60 * 1000
   const INTERVAL = 1000
@@ -62,15 +66,21 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
       return
     }
 
-    try {
-      setError(null)
-      setSendEmail(true)
-      setTimeLeft(MINUTES_IN_MS)
-      setCode("")
-      setCheckCode(null)
-      await sendVerificationEmailApi({ email })
-    } catch (e) {
-      setError("이메일 전송에 실패했습니다. 다시 요청해 주세요.")
+    if (!isThrottledForSend) {
+      try {
+        setError(null)
+        setSendEmail(true)
+        setTimeLeft(MINUTES_IN_MS)
+        setCode("")
+        setCheckCode(null)
+        setIsThrottledForSend(true)
+        await sendVerificationEmailApi({ email })
+        setTimeout(() => {
+          setIsThrottledForSend(false)
+        }, 3000)
+      } catch (e) {
+        setError("이메일 전송에 실패했습니다. 다시 요청해 주세요.")
+      }
     }
   }
 
@@ -79,11 +89,17 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
       setCheckCode(false)
       return
     }
-    const verifiedData = await checkVerificationEmailApi({ email, code })
-    if (verifiedData.data.verified) {
-      setCheckCode(true)
-    } else {
-      setCheckCode(false)
+    if (!isThrottledForCheck) {
+      setIsThrottledForCheck(true)
+      const verifiedData = await checkVerificationEmailApi({ email, code })
+      if (verifiedData.data.verified) {
+        setCheckCode(true)
+      } else {
+        setCheckCode(false)
+      }
+      setTimeout(() => {
+        setIsThrottledForCheck(false)
+      }, 500)
     }
   }
 
