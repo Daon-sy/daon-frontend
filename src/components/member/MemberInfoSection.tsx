@@ -14,6 +14,7 @@ interface PasswordModalInfo {
 
 const MemberInfoSection: React.FC = () => {
   const { myDetail, setMyDetail } = getMyMemberDetailStore()
+
   const [editMyInfoOpen, setEditMyInfoOpen] = React.useState<boolean>(false)
   const [editPasswordOpen, setEditPasswordOpen] = React.useState<boolean>(false)
   const [checkPasswordModalOpen, setCheckPasswordModalOpen] =
@@ -133,7 +134,14 @@ const MemberInfoSection: React.FC = () => {
               비밀번호
             </Typography>
             {editPasswordOpen ? (
-              <Box sx={{ position: "relative", mt: "13px", width: "78%" }}>
+              <Box
+                sx={{
+                  position: "relative",
+                  mt: "13px",
+                  width: "78%",
+                  height: 210,
+                }}
+              >
                 <Button sx={{ p: 0 }} onClick={handleCancleEditPasswordClick}>
                   취소
                 </Button>
@@ -178,6 +186,7 @@ const MemberInfoSection: React.FC = () => {
                 <Typography
                   sx={{
                     position: "absolute",
+                    top: 179.3,
                     right: 0,
                     fontSize: 12,
                     color: "gray",

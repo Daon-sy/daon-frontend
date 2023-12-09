@@ -15,10 +15,12 @@ import React from "react"
 import { useNavigate } from "react-router-dom"
 import { getTokenStore } from "store/tokenStore"
 import WarningAmberIcon from "@mui/icons-material/WarningAmber"
+import { useAlert } from "hooks/useAlert"
 
 const WithdrawSection: React.FC = () => {
   const tokenState = getTokenStore()
   const navigate = useNavigate()
+  const { addSuccess, addError } = useAlert()
 
   const [withdrawMemberModalOpen, setWithdrawMemberModalOpen] =
     React.useState<boolean>(false)
@@ -30,9 +32,11 @@ const WithdrawSection: React.FC = () => {
 
   const withdraw = async () => {
     if (!checkAgreement) {
+      addError("탈퇴 동의 버튼을 클릭해 주세요.")
       return
     }
     await withdrawApi()
+    addSuccess("회원 탈퇴가 정상 처리되었습니다.")
     tokenState.clear()
     navigate("/")
   }
@@ -65,7 +69,7 @@ const WithdrawSection: React.FC = () => {
               color: "lightGray",
             }}
           >
-            <Typography sx={{ color: "gray", lineHeight: 2 }}>
+            <Typography sx={{ color: "#787878", lineHeight: 2 }}>
               회원 탈퇴가 진행되면 복구가 불가능합니다. 동의하시면 아래
               체크버튼을 클릭해 주세요.
             </Typography>
@@ -82,7 +86,9 @@ const WithdrawSection: React.FC = () => {
             />
           </FormGroup>
         </DialogContent>
-        <DialogActions>
+        <DialogActions
+          sx={{ mb: 1, display: "flex", justifyContent: "center" }}
+        >
           <Button sx={{ color: "red" }} onClick={withdraw}>
             회원 탈퇴
           </Button>
