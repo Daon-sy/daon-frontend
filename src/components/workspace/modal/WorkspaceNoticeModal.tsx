@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Container, Stack, Box, Button } from "@mui/material"
 import TitleDialog from "components/common/TitleDialog"
 import { useParams } from "react-router-dom"
-import { getWorkspaceNoticesStore } from "store/userStore"
+import { getWorkspaceNoticesStore, getWorkspaceStore } from "store/userStore"
 import WorkspaceNoticeTitle from "../notice/WorkspaceNoticeTitle"
 import WorkspaceNoticeList from "../notice/WorkspaceNoticeList"
 import WorkspaceNoticeDetailView from "../notice/WorkspaceNoticeDetailView"
@@ -17,6 +17,7 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
   open,
   handleClose,
 }: Props) => {
+  const { myProfile } = getWorkspaceStore()
   const { workspaceId } = useParams()
   const { workspaceNotices } = getWorkspaceNoticesStore()
   const [selectedNoticeId, setSelectedNoticeId] = useState<number | null>(null)
@@ -50,12 +51,15 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
         />
       ) : (
         <Stack direction="row" width="100%" height="100%">
-          <Button
-            sx={{ position: "absolute", right: 30 }}
-            onClick={handleCreateNotice}
-          >
-            공지사항 생성
-          </Button>
+          {myProfile?.role === "WORKSPACE_ADMIN" ? (
+            <Button
+              sx={{ position: "absolute", right: 30 }}
+              onClick={handleCreateNotice}
+            >
+              공지사항 생성
+            </Button>
+          ) : null}
+
           <Container sx={{ border: 1, width: "35%" }}>
             <WorkspaceNoticeList
               workspaceNotices={workspaceNotices}
