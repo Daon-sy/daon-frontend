@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios"
 import { authAxios } from "api"
 import {
+  MessageSummary,
   Workspace,
   WORKSPACE_PARTICIPANT_ROLE,
   WorkspaceDetail,
@@ -56,6 +57,12 @@ export interface ModifyWorkspaceParticipantRoleRequestBody {
 
 export type JoinWorkspaceRequestBody = WsProfileInfo
 
+export interface SendMessageRequestBody {
+  title: string
+  content: string
+  workspaceParticipantId: number
+}
+
 // RESPONSE
 export interface CreateWorkspaceResponseBody {
   workspaceId: number
@@ -74,6 +81,19 @@ export interface WorkspaceParticipantListResponseBody {
 }
 
 export type MyWorkspaceParticipantDetailResponseBody = WorkspaceParticipant
+
+export type FindMessageResponseBody = MessageSummary
+
+export interface FindMessageListResponseBody {
+  totalPage: number
+  totalCount: number
+  content: Array<MessageSummary>
+  first: boolean
+  last: boolean
+  pageSize: number
+  pageNumber: number
+  contentSize: number
+}
 
 // API
 // 워크스페이스 생성
@@ -194,6 +214,53 @@ export const resetPersonalWorkspaceApi = async (
   workspaceId: number,
 ): Promise<AxiosResponse> => {
   return authAxios.put(`${WORKSPACE_API_PREFIX}/${workspaceId}/reset`)
+}
+
+// 쪽지 보내기
+export const sendMessageApi = async (
+  workspaceId: number,
+  requestBody: SendMessageRequestBody,
+): Promise<AxiosResponse> => {
+  return authAxios.post(`/api/workspaces/${workspaceId}/messages`, requestBody)
+}
+
+// 쪽지 단건 조회
+export const findMessageApi = async (
+  workspaceId: number,
+  messageId: number,
+): Promise<AxiosResponse<FindMessageResponseBody>> => {
+  return authAxios.get(`/api/workspaces/${workspaceId}/messages/${messageId}`)
+}
+
+// 쪽지 목록 조회
+export const findMessageListApi = async (
+  workspaceId: number,
+  target: string,
+  keyword: string,
+): Promise<AxiosResponse<FindMessageListResponseBody>> => {
+  return authAxios.get(`/api/workspaces/${workspaceId}/messages`, {
+    params: {
+      target,
+      keyword,
+    },
+  })
+}
+
+// 쪽지 삭제
+export const deleteMessageApi = async (
+  workspaceId: number,
+  messageId: number,
+): Promise<AxiosResponse> => {
+  return authAxios.delete(
+    `/api/workspaces/${workspaceId}/messages/${messageId}`,
+  )
+}
+
+// 쪽지 모두 읽기
+export const readAllMessageListApi = async (
+  workspaceId: number,
+): Promise<AxiosResponse> => {
+  return authAxios.post(`/api/workspaces/${workspaceId}/messages/me`)
 }
 
 export interface SearchMembersToInviteResponseBody {
