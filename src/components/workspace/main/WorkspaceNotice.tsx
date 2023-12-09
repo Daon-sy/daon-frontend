@@ -65,8 +65,9 @@ const WorkspaceNotice: React.FC = () => {
             minHeight: "130px",
             maxHeight: "165px",
             width: "212px",
+            minWidth: "212px",
             border: "2px solid #e3e3e3",
-            marginX: "0.5vw",
+            marginX: "6px",
             paddingY: "1vh",
             paddingX: "12px",
           }}

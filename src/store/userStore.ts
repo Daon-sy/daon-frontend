@@ -69,19 +69,6 @@ export const getMyWorkspaceIdStore = create<MyWorkspaceId>(set => ({
   setMyWorkspaceId: (myWorkspaceId: number) => set(() => ({ myWorkspaceId })),
 }))
 
-interface WorkspaceNoticeStore {
-  workspaceNotice: WorkspaceNoticeDetail | null | undefined
-  clear: () => void
-  setWorkspaceNotice: (workspaceNotice: WorkspaceNoticeDetail) => void
-}
-
-export const getWorkspaceNoticeStore = create<WorkspaceNoticeStore>(set => ({
-  workspaceNotice: null,
-  clear: () => set({ workspaceNotice: undefined }),
-  setWorkspaceNotice: (workspaceNotice: WorkspaceNoticeDetail) =>
-    set(() => ({ workspaceNotice })),
-}))
-
 interface WorkspaceNoticesStore {
   workspaceNotices: WorkspaceNoticeDetail[]
   clear: () => void
