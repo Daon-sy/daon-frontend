@@ -1,18 +1,30 @@
 import React from "react"
-import { Box, InputAdornment, TextField } from "@mui/material"
+import { Box, InputAdornment, TextField, Pagination } from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
-import { WorkspaceNoticeDetail } from "_types/workspaceNotice"
+import useFetchWorkspaceNoticeList from "hooks/workspace/useFetchWorkspaceNoticeList"
 import WorkspaceNoticeCard from "./WorkspaceNoticeCard"
 
 interface Props {
-  workspaceNotices: WorkspaceNoticeDetail[]
+  workspaceId: number
   onNoticeClick: (noticeId: number) => void
 }
 
 const WorkspaceNoticeList: React.FC<Props> = ({
-  workspaceNotices,
+  workspaceId,
   onNoticeClick,
 }: Props) => {
+  const { workspaceNotices, paginationInfo, fetchWorkspaceNoticeList } =
+    useFetchWorkspaceNoticeList(workspaceId)
+  const [currentPage, setCurrentPage] = React.useState(1)
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    page: number,
+  ) => {
+    setCurrentPage(page)
+    fetchWorkspaceNoticeList(page - 1)
+  }
+
   return (
     <Box>
       <Box width="100%" mb={1}>
@@ -44,6 +56,11 @@ const WorkspaceNoticeList: React.FC<Props> = ({
           onClick={() => onNoticeClick(workspaceNotice.noticeId)}
         />
       ))}
+      <Pagination
+        count={paginationInfo.totalPage}
+        page={currentPage}
+        onChange={handlePageChange}
+      />
     </Box>
   )
 }

@@ -2,7 +2,8 @@ import React, { useState } from "react"
 import { Container, Stack, Box, Button } from "@mui/material"
 import TitleDialog from "components/common/TitleDialog"
 import { useParams } from "react-router-dom"
-import { getWorkspaceNoticesStore, getWorkspaceStore } from "store/userStore"
+import { getWorkspaceStore } from "store/userStore"
+import useFetchWorkspaceNoticeList from "hooks/workspace/useFetchWorkspaceNoticeList"
 import WorkspaceNoticeTitle from "../notice/WorkspaceNoticeTitle"
 import WorkspaceNoticeList from "../notice/WorkspaceNoticeList"
 import WorkspaceNoticeDetailView from "../notice/WorkspaceNoticeDetailView"
@@ -19,9 +20,11 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
 }: Props) => {
   const { myProfile } = getWorkspaceStore()
   const { workspaceId } = useParams()
-  const { workspaceNotices } = getWorkspaceNoticesStore()
   const [selectedNoticeId, setSelectedNoticeId] = useState<number | null>(null)
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
+  const { fetchWorkspaceNoticeList } = useFetchWorkspaceNoticeList(
+    Number(workspaceId),
+  )
 
   const handleNoticeClick = (noticeId: number) => {
     setSelectedNoticeId(noticeId)
@@ -38,6 +41,7 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
       handleClose={() => {
         setSelectedNoticeId(null)
         setIsCreateMode(false)
+        fetchWorkspaceNoticeList(0)
         handleClose()
       }}
       height={500}
@@ -60,12 +64,15 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
             </Button>
           ) : null}
 
-          <Container sx={{ border: 1, width: "35%" }}>
-            <WorkspaceNoticeList
-              workspaceNotices={workspaceNotices}
-              onNoticeClick={handleNoticeClick}
-            />
-          </Container>
+          {workspaceId && (
+            <Container sx={{ border: 1, width: "35%" }}>
+              <WorkspaceNoticeList
+                workspaceId={+workspaceId}
+                onNoticeClick={handleNoticeClick}
+              />
+            </Container>
+          )}
+
           <Container sx={{ border: 1, width: "65%" }}>
             {workspaceId && selectedNoticeId ? (
               <WorkspaceNoticeDetailView

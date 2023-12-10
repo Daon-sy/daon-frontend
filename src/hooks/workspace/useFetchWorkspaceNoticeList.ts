@@ -6,7 +6,8 @@ import { getWorkspaceNoticesStore } from "store/userStore"
 
 const useFetchWorkspaceNoticeList = (
   workspaceId: number,
-  page = 0,
+  callback?: () => void,
+  page = 1,
   size = 4,
 ) => {
   const { workspaceNotices, setWorkspaceNotices } = getWorkspaceNoticesStore()
@@ -16,19 +17,20 @@ const useFetchWorkspaceNoticeList = (
     first: true,
     last: true,
     pageNumber: 0,
+    totalPage: 0,
   })
 
-  const fetchWorkspaceNoticeList = async () => {
+  const fetchWorkspaceNoticeList = async (fetchPage?: number) => {
     try {
       setIsFetching(true)
+      if (callback) callback()
       const { data } = await workspaceNoticeListApi(workspaceId, {
-        page,
+        page: fetchPage,
         size,
       })
-      const { first, last, pageNumber, content } = data
-
+      const { first, last, pageNumber, content, totalPage } = data
       setWorkspaceNotices(content)
-      setPaginationInfo({ first, last, pageNumber })
+      setPaginationInfo({ first, last, pageNumber, totalPage })
     } catch (e) {
       if (axios.isAxiosError(e)) {
         const { response } = e

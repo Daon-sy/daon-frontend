@@ -7,7 +7,6 @@ import nodata from "assets/svg/no_data.png"
 const WorkspaceNotice: React.FC = () => {
   const { workspaceId } = useParams()
   const { workspaceNotices } = useFetchWorkspaceNoticeList(Number(workspaceId))
-
   return (
     <Box
       component="ul"
