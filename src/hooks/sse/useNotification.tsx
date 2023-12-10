@@ -11,7 +11,9 @@ import {
   Notification,
   RegisteredTaskManagerNotification,
 } from "_types/notification"
-import { useAlert } from "hooks/useAlert"
+import { useSnackbar } from "notistack"
+import { IconButton } from "@mui/material"
+import CloseIcon from "@mui/icons-material/Close"
 
 type EventType =
   | "CONNECTED"
@@ -57,9 +59,29 @@ const useNotification = ({
   onDeportationProject,
   onRegisteredTaskManager,
 }: Props) => {
-  const { addInfo } = useAlert()
   const { token } = getTokenStore()
   const { addNotifications } = getNotificationsUnreadStore()
+
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+  const notiSnackbar = () => {
+    enqueueSnackbar("알림이 도착했습니다.", {
+      variant: "info",
+      style: { backgroundColor: "#FFBE00", fontWeight: 500 },
+      autoHideDuration: 3000,
+      anchorOrigin: { vertical: "top", horizontal: "right" },
+      SnackbarProps: { style: { marginTop: 60 } },
+      action: key => (
+        <IconButton
+          aria-label="close"
+          color="inherit"
+          sx={{ p: 0.5 }}
+          onClick={() => closeSnackbar(key)}
+        >
+          <CloseIcon />
+        </IconButton>
+      ),
+    })
+  }
 
   let eventSource: EventSourcePolyfill
   const subscribe = () => {
@@ -94,7 +116,7 @@ const useNotification = ({
           ) as Notification<RegisteredTaskManagerNotification>
           addNotifications([notification])
         }
-        addInfo("알림이 도착했습니다")
+        notiSnackbar()
       },
     })
 
@@ -110,7 +132,7 @@ const useNotification = ({
           ) as Notification<InviteWorkspaceNotification>
           addNotifications([notification])
         }
-        addInfo("알림이 도착했습니다")
+        notiSnackbar()
       },
     })
 
@@ -126,7 +148,7 @@ const useNotification = ({
           ) as Notification<InviteProjectNotification>
           addNotifications([notification])
         }
-        addInfo("알림이 도착했습니다")
+        notiSnackbar()
       },
     })
 
@@ -142,7 +164,7 @@ const useNotification = ({
           ) as Notification<DeportationWorkspaceNotification>
           addNotifications([notification])
         }
-        addInfo("알림이 도착했습니다")
+        notiSnackbar()
       },
     })
 
@@ -158,7 +180,7 @@ const useNotification = ({
           ) as Notification<DeportationProjectNotification>
           addNotifications([notification])
         }
-        addInfo("알림이 도착했습니다")
+        notiSnackbar()
       },
     })
 
