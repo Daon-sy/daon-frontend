@@ -64,7 +64,7 @@ export interface MessageSummary {
   content: string
   createdAt: string
   readed: boolean
-  sender: MessageSender
+  sender?: MessageSender
 }
 
 export type ColorRole = { color: ColorOptions } & WorkspaceParticipantRoleDetail
