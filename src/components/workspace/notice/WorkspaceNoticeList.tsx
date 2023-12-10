@@ -1,5 +1,12 @@
+// WorkspaceNoticeList.tsx
 import React from "react"
-import { Box, InputAdornment, TextField, Pagination } from "@mui/material"
+import {
+  Box,
+  InputAdornment,
+  TextField,
+  Pagination,
+  Button,
+} from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
 import useFetchWorkspaceNoticeList from "hooks/workspace/useFetchWorkspaceNoticeList"
 import WorkspaceNoticeCard from "./WorkspaceNoticeCard"
@@ -16,13 +23,18 @@ const WorkspaceNoticeList: React.FC<Props> = ({
   const { workspaceNotices, paginationInfo, fetchWorkspaceNoticeList } =
     useFetchWorkspaceNoticeList(workspaceId)
   const [currentPage, setCurrentPage] = React.useState(1)
+  const [searchKeyword, setSearchKeyword] = React.useState("")
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
     page: number,
   ) => {
     setCurrentPage(page)
-    fetchWorkspaceNoticeList(page - 1)
+    fetchWorkspaceNoticeList(page - 1, searchKeyword)
+  }
+
+  const handleSearch = () => {
+    fetchWorkspaceNoticeList(currentPage - 1, searchKeyword)
   }
 
   return (
@@ -39,6 +51,8 @@ const WorkspaceNoticeList: React.FC<Props> = ({
             height: 40,
           }}
           placeholder="공지사항 검색"
+          value={searchKeyword}
+          onChange={e => setSearchKeyword(e.target.value)}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -48,6 +62,7 @@ const WorkspaceNoticeList: React.FC<Props> = ({
             style: { fontSize: 15 },
           }}
         />
+        <Button onClick={handleSearch}>검색</Button>
       </Box>
       {workspaceNotices.map(workspaceNotice => (
         <WorkspaceNoticeCard

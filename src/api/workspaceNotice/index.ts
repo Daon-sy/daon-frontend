@@ -36,9 +36,11 @@ export const workspaceNoticeListApi = async (
   params: {
     page?: number
     size?: number
+    keyword?: string
   } = {
     page: 0,
     size: 4,
+    keyword: "",
   },
 ): Promise<AxiosResponse<SliceResponse<WorkspaceNoticeDetail>>> => {
   return authAxios.get(`/api/workspaces/${workspaceId}/notices`, { params })

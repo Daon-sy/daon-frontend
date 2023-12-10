@@ -9,6 +9,7 @@ const useFetchWorkspaceNoticeList = (
   callback?: () => void,
   page = 1,
   size = 4,
+  keyword = "",
 ) => {
   const { workspaceNotices, setWorkspaceNotices } = getWorkspaceNoticesStore()
   const [isFetching, setIsFetching] = React.useState(false)
@@ -20,13 +21,17 @@ const useFetchWorkspaceNoticeList = (
     totalPage: 0,
   })
 
-  const fetchWorkspaceNoticeList = async (fetchPage?: number) => {
+  const fetchWorkspaceNoticeList = async (
+    fetchPage?: number,
+    fetchKeyword?: string,
+  ) => {
     try {
       setIsFetching(true)
       if (callback) callback()
       const { data } = await workspaceNoticeListApi(workspaceId, {
         page: fetchPage,
         size,
+        keyword: fetchKeyword,
       })
       const { first, last, pageNumber, content, totalPage } = data
       setWorkspaceNotices(content)
@@ -43,7 +48,7 @@ const useFetchWorkspaceNoticeList = (
 
   React.useEffect(() => {
     fetchWorkspaceNoticeList()
-  }, [workspaceId, page, size])
+  }, [workspaceId, keyword, page, size])
 
   const memoizedWorkspaceNotices = React.useMemo(
     () => workspaceNotices,
