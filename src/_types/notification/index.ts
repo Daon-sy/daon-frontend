@@ -54,6 +54,7 @@ export interface Notification<
     | DeportationWorkspaceNotification,
 > {
   notificationId: number
-  data: (T & { time: string }) | string
+  data: T & { time: string }
   type: NotificationType
+  read: boolean
 }

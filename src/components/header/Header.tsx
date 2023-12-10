@@ -4,7 +4,7 @@ import Logo from "components/header/Logo"
 import User from "components/header/UserInfo"
 import SearchInput from "components/search/SearchInput"
 import WorkspaceSelectButton from "components/workspace/WorkspaceSelectButton"
-import NotificationButton from "components/header/notification/NotificationButton"
+import NotificationButton from "components/notification/NotificationButton"
 
 const Header: React.FC = () => {
   return (

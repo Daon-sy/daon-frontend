@@ -1,19 +1,23 @@
 import React from "react"
 import axios from "axios"
 import { ErrorResponse } from "api"
-import { readNotificationApi } from "api/notification"
+import { removeNotificationApi } from "api/notification"
 import { getNotificationsUnreadStore } from "store/notificationStore"
+import { useAlert } from "hooks/useAlert"
 
-const useReadNotification = () => {
+const useRemoveNotification = () => {
   const [isFetching, setIsFetching] = React.useState(false)
   const [error, setError] = React.useState<ErrorResponse>()
   const { removeNotification } = getNotificationsUnreadStore()
+  const { addSuccess } = useAlert()
 
-  const fetch = async (notificationId: number) => {
+  const fetch = async (notificationId: number, removeCallback?: () => void) => {
     try {
       setIsFetching(true)
-      await readNotificationApi(notificationId)
+      await removeNotificationApi(notificationId)
       removeNotification(notificationId)
+      addSuccess("알림 삭제 완료")
+      if (removeCallback) removeCallback()
     } catch (e) {
       if (axios.isAxiosError(e)) {
         const { response } = e
@@ -27,4 +31,4 @@ const useReadNotification = () => {
   return { fetch, isFetching, error }
 }
 
-export default useReadNotification
+export default useRemoveNotification
