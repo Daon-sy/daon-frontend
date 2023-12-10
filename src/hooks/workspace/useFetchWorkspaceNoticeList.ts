@@ -6,19 +6,29 @@ import { getWorkspaceNoticesStore } from "store/userStore"
 
 const useFetchWorkspaceNoticeList = (
   workspaceId: number,
-  callback?: () => void,
+  page = 0,
+  size = 4,
 ) => {
   const { workspaceNotices, setWorkspaceNotices } = getWorkspaceNoticesStore()
   const [isFetching, setIsFetching] = React.useState(false)
   const [error, setError] = React.useState<ErrorResponse>()
+  const [paginationInfo, setPaginationInfo] = React.useState({
+    first: true,
+    last: true,
+    pageNumber: 0,
+  })
 
   const fetchWorkspaceNoticeList = async () => {
     try {
       setIsFetching(true)
-      const { data } = await workspaceNoticeListApi(workspaceId)
-      if (callback) callback()
+      const { data } = await workspaceNoticeListApi(workspaceId, {
+        page,
+        size,
+      })
+      const { first, last, pageNumber, content } = data
 
-      setWorkspaceNotices(data.workspaceNotices)
+      setWorkspaceNotices(content)
+      setPaginationInfo({ first, last, pageNumber })
     } catch (e) {
       if (axios.isAxiosError(e)) {
         const { response } = e
@@ -31,7 +41,7 @@ const useFetchWorkspaceNoticeList = (
 
   React.useEffect(() => {
     fetchWorkspaceNoticeList()
-  }, [workspaceId])
+  }, [workspaceId, page, size])
 
   const memoizedWorkspaceNotices = React.useMemo(
     () => workspaceNotices,
@@ -43,6 +53,7 @@ const useFetchWorkspaceNoticeList = (
     fetchWorkspaceNoticeList,
     isFetching,
     error,
+    paginationInfo,
   }
 }
 

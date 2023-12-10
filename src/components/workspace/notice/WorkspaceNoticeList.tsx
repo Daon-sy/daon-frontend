@@ -13,14 +13,6 @@ const WorkspaceNoticeList: React.FC<Props> = ({
   workspaceNotices,
   onNoticeClick,
 }: Props) => {
-  const [workspaceNoticeFilterKeyword, setWorkspaceNoticeFilterKeyword] =
-    React.useState("")
-
-  const searchWorkspaceNotices = workspaceNotices.map(workspaceNotice => ({
-    workspaceNotice,
-    listValue: workspaceNotice.title,
-  }))
-
   return (
     <Box>
       <Box width="100%" mb={1}>
@@ -35,9 +27,6 @@ const WorkspaceNoticeList: React.FC<Props> = ({
             height: 40,
           }}
           placeholder="공지사항 검색"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setWorkspaceNoticeFilterKeyword(e.target.value)
-          }
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -48,17 +37,13 @@ const WorkspaceNoticeList: React.FC<Props> = ({
           }}
         />
       </Box>
-      {searchWorkspaceNotices
-        .filter(workspaceNotice =>
-          workspaceNotice.listValue.includes(workspaceNoticeFilterKeyword),
-        )
-        .map(list => (
-          <WorkspaceNoticeCard
-            key={list.workspaceNotice.noticeId}
-            workspaceNotice={list.workspaceNotice}
-            onClick={() => onNoticeClick(list.workspaceNotice.noticeId)}
-          />
-        ))}
+      {workspaceNotices.map(workspaceNotice => (
+        <WorkspaceNoticeCard
+          key={workspaceNotice.noticeId}
+          workspaceNotice={workspaceNotice}
+          onClick={() => onNoticeClick(workspaceNotice.noticeId)}
+        />
+      ))}
     </Box>
   )
 }

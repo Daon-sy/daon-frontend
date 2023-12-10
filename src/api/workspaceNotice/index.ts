@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios"
-import { authAxios } from "api"
+import { SliceResponse, authAxios } from "api"
 import { WorkspaceNoticeDetail } from "_types/workspaceNotice"
 
 export const WORKSPACE_API_PREFIX = "/api/workspaces"
@@ -19,11 +19,6 @@ export interface ModifyWorkspaceNoticeRequestBody {
   content?: string
 }
 
-export interface WorkspaceNoticeListResponseBody {
-  totalCount: number
-  workspaceNotices: Array<WorkspaceNoticeDetail>
-}
-
 export type WorkspaceNoticDetailResponseBody = WorkspaceNoticeDetail
 
 // API
@@ -38,8 +33,15 @@ export const createWorkspaceNoticeApi = async (
 // 워크스페이스 공지사항 목록조회
 export const workspaceNoticeListApi = async (
   workspaceId: number,
-): Promise<AxiosResponse<WorkspaceNoticeListResponseBody>> => {
-  return authAxios.get(`/api/workspaces/${workspaceId}/notices`)
+  params: {
+    page?: number
+    size?: number
+  } = {
+    page: 0,
+    size: 4,
+  },
+): Promise<AxiosResponse<SliceResponse<WorkspaceNoticeDetail>>> => {
+  return authAxios.get(`/api/workspaces/${workspaceId}/notices`, { params })
 }
 // 워크스페이스 공지사항 단건조회
 export const workspaceNoticeDetailApi = async (
