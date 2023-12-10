@@ -11,9 +11,6 @@ import {
   Notification,
   RegisteredTaskManagerNotification,
 } from "_types/notification"
-import { useSnackbar } from "notistack"
-import { IconButton } from "@mui/material"
-import CloseIcon from "@mui/icons-material/Close"
 
 type EventType =
   | "CONNECTED"
@@ -60,28 +57,7 @@ const useNotification = ({
   onRegisteredTaskManager,
 }: Props) => {
   const { token } = getTokenStore()
-  const { addNotifications } = getNotificationsUnreadStore()
-
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
-  const notiSnackbar = () => {
-    enqueueSnackbar("알림이 도착했습니다.", {
-      variant: "info",
-      style: { backgroundColor: "#FFBE00", fontWeight: 500 },
-      autoHideDuration: 3000,
-      anchorOrigin: { vertical: "top", horizontal: "right" },
-      SnackbarProps: { style: { marginTop: 60 } },
-      action: key => (
-        <IconButton
-          aria-label="close"
-          color="inherit"
-          sx={{ p: 0.5 }}
-          onClick={() => closeSnackbar(key)}
-        >
-          <CloseIcon />
-        </IconButton>
-      ),
-    })
-  }
+  const { addNotification, setIsNewIssued } = getNotificationsUnreadStore()
 
   let eventSource: EventSourcePolyfill
   const subscribe = () => {
@@ -114,9 +90,9 @@ const useNotification = ({
           const notification = JSON.parse(
             msgEvent.data,
           ) as Notification<RegisteredTaskManagerNotification>
-          addNotifications([notification])
+          addNotification(notification)
         }
-        notiSnackbar()
+        setIsNewIssued(true)
       },
     })
 
@@ -130,9 +106,9 @@ const useNotification = ({
           const notification = JSON.parse(
             msgEvent.data,
           ) as Notification<InviteWorkspaceNotification>
-          addNotifications([notification])
+          addNotification(notification)
         }
-        notiSnackbar()
+        setIsNewIssued(true)
       },
     })
 
@@ -146,9 +122,9 @@ const useNotification = ({
           const notification = JSON.parse(
             msgEvent.data,
           ) as Notification<InviteProjectNotification>
-          addNotifications([notification])
+          addNotification(notification)
         }
-        notiSnackbar()
+        setIsNewIssued(true)
       },
     })
 
@@ -162,9 +138,9 @@ const useNotification = ({
           const notification = JSON.parse(
             msgEvent.data,
           ) as Notification<DeportationWorkspaceNotification>
-          addNotifications([notification])
+          addNotification(notification)
         }
-        notiSnackbar()
+        setIsNewIssued(true)
       },
     })
 
@@ -178,9 +154,9 @@ const useNotification = ({
           const notification = JSON.parse(
             msgEvent.data,
           ) as Notification<DeportationProjectNotification>
-          addNotifications([notification])
+          addNotification(notification)
         }
-        notiSnackbar()
+        setIsNewIssued(true)
       },
     })
 

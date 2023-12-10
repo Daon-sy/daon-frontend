@@ -7,7 +7,7 @@ import { getNotificationsUnreadStore } from "store/notificationStore"
 const useFetchNotificationsUnread = (skip = false) => {
   const [isFetching, setIsFetching] = React.useState(false)
   const [error, setError] = React.useState<ErrorResponse>()
-  const { notifications, addNotifications } = getNotificationsUnreadStore()
+  const { notifications, setNotifications } = getNotificationsUnreadStore()
 
   const fetchNotifications = async () => {
     try {
@@ -15,7 +15,7 @@ const useFetchNotificationsUnread = (skip = false) => {
       const { data: responseData } = await notificationsUnreadListApi()
       const { notifications: fetchedNotifications } = responseData
 
-      addNotifications(fetchedNotifications)
+      setNotifications(fetchedNotifications)
     } catch (e) {
       if (axios.isAxiosError(e)) {
         const { response } = e

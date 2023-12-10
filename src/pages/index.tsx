@@ -10,6 +10,7 @@ import SignIn from "pages/SignIn"
 import WorkspaceRoutes from "pages/workspace"
 import { getBackdropStore } from "store/backdropStore"
 import useFetchMyMemberDetail from "hooks/member/useFetchMyMemberDetail"
+import useFetchMySettings from "hooks/member/useFetchMySettings"
 
 const PageRoutes = () => {
   const { token } = getTokenStore()
@@ -19,9 +20,11 @@ const PageRoutes = () => {
     fetch: fetchMyMemberDetail,
     isFetching,
   } = useFetchMyMemberDetail()
+  const { fetch: fetchMySettings } = useFetchMySettings()
 
   React.useEffect(() => {
     fetchMyMemberDetail()
+    fetchMySettings()
   }, [token])
 
   if (isFetching) return null

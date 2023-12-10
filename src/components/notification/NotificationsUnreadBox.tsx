@@ -13,6 +13,7 @@ import InvitedWorkspace from "components/notification/card/InvitedWorkspace"
 import InvitedProject from "components/notification/card/InvitedProject"
 import DeportatedWorkspace from "components/notification/card/DeportatedWorkspace"
 import DeportatedProject from "components/notification/card/DeportatedProject"
+import NotifyOnOffIconButton from "components/notification/button/NotifyOnOffIconButton"
 
 const renderNotification = (notification: Notification) => {
   switch (notification.type) {
@@ -112,6 +113,7 @@ const NotificationsUnreadBox: React.FC<Props> = ({
             }}
           />
         </Box>
+        <NotifyOnOffIconButton />
         <Button
           size="small"
           variant="outlined"

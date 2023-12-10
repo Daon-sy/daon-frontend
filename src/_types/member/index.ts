@@ -10,3 +10,7 @@ export interface MemberEmail {
   memberEmailId: number
   email: string
 }
+
+export interface MemberSettings {
+  notified: boolean
+}

@@ -1,5 +1,5 @@
 import React from "react"
-import { IconButton, Badge, Box, Menu } from "@mui/material"
+import { Badge, Box, IconButton, Menu } from "@mui/material"
 import { yellow } from "@mui/material/colors"
 import NotificationsIcon from "@mui/icons-material/Notifications"
 import { getNotificationsUnreadStore } from "store/notificationStore"
@@ -8,9 +8,39 @@ import useFetchNotificationsUnread from "hooks/notification/useFetchNotification
 import useFetchNotificationsRead from "hooks/notification/useFetchNotificationsRead"
 import NotificationsUnreadBox from "components/notification/NotificationsUnreadBox"
 import NotificationsReadBox from "components/notification/NotificationsReadBox"
+import { getMyMemberDetailStore } from "store/userStore"
+import CloseIcon from "@mui/icons-material/Close"
+import { useSnackbar } from "notistack"
+
+const useNotiSnackbar = () => {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+  const { mySettings } = getMyMemberDetailStore()
+  return () => {
+    if (mySettings?.notified) {
+      enqueueSnackbar("알림이 도착했습니다.", {
+        variant: "info",
+        style: { backgroundColor: "#FFBE00", fontWeight: 500 },
+        autoHideDuration: 3000,
+        anchorOrigin: { vertical: "top", horizontal: "right" },
+        SnackbarProps: { style: { top: 60 } },
+        action: key => (
+          <IconButton
+            aria-label="close"
+            color="inherit"
+            sx={{ p: 0.5 }}
+            onClick={() => closeSnackbar(key)}
+          >
+            <CloseIcon />
+          </IconButton>
+        ),
+      })
+    }
+  }
+}
 
 const NotificationButton = () => {
-  const { notifications } = getNotificationsUnreadStore()
+  const { notifications, isNewIssued, setIsNewIssued } =
+    getNotificationsUnreadStore()
   const [notificationsPage, setNotificationsPage] = React.useState<
     "unread" | "read"
   >("unread")
@@ -19,6 +49,14 @@ const NotificationButton = () => {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) =>
     setAnchorEl(event.currentTarget)
   const handleClose = () => setAnchorEl(null)
+
+  const notiSnackbar = useNotiSnackbar()
+  React.useEffect(() => {
+    if (isNewIssued) {
+      notiSnackbar()
+      setIsNewIssued(false)
+    }
+  }, [isNewIssued])
 
   React.useEffect(() => {
     return () => {

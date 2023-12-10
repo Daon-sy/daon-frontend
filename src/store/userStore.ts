@@ -6,19 +6,24 @@ import {
   WorkspaceParticipant,
 } from "_types/workspace"
 import { ProjectDetail, Project } from "_types/project"
-import { MemberDetail } from "_types/member"
+import { MemberDetail, MemberSettings } from "_types/member"
 
 interface MyMemberDetailStore {
   myDetail: MemberDetail | null | undefined
+  mySettings: MemberSettings | undefined
   clear: () => void
   setMyDetail: (memberDetail: MemberDetail) => void
+  setMySettings: (memberSettings: MemberSettings) => void
 }
 
 export const getMyMemberDetailStore = create<MyMemberDetailStore>(set => ({
   myDetail: undefined,
-  clear: () => set({ myDetail: undefined }),
+  mySettings: undefined,
+  clear: () => set({ myDetail: undefined, mySettings: undefined }),
   setMyDetail: (memberDetail: MemberDetail) =>
-    set(() => ({ myDetail: memberDetail })),
+    set(state => ({ ...state, myDetail: memberDetail })),
+  setMySettings: (memberSettings: MemberSettings) =>
+    set(state => ({ ...state, mySettings: memberSettings })),
 }))
 
 interface WorkspaceStore {
