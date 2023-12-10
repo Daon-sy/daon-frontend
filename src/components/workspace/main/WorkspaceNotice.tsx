@@ -1,12 +1,10 @@
 import React from "react"
 import { Box, Typography } from "@mui/material"
-import useFetchWorkspaceNoticeList from "hooks/workspace/useFetchWorkspaceNoticeList"
-import { useParams } from "react-router-dom"
 import nodata from "assets/svg/no_data.png"
+import { getWorkspaceNoticesStore } from "store/userStore"
 
 const WorkspaceNotice: React.FC = () => {
-  const { workspaceId } = useParams()
-  const { workspaceNotices } = useFetchWorkspaceNoticeList(Number(workspaceId))
+  const { workspaceNotices } = getWorkspaceNoticesStore()
   return (
     <Box
       component="ul"

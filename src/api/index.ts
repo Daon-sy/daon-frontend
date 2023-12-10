@@ -14,6 +14,7 @@ export interface SliceResponse<T> {
   pageNumber: number
   contentSize: number
   totalPage: number
+  totalCount: number
   content: Array<T>
 }
 
