@@ -60,11 +60,13 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
         <Stack direction="row" width="100%" height="100%">
           {myProfile?.role === "WORKSPACE_ADMIN" ? (
             <Button
+              variant="contained"
+              color="yellow"
               sx={{
                 position: "absolute",
-                left: 24,
-                top: 80,
-                height: 16,
+                right: 76,
+                top: 33,
+                height: 20,
               }}
               onClick={handleCreateNotice}
             >
