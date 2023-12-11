@@ -23,15 +23,17 @@ const PageRoutes = () => {
   const { fetch: fetchMySettings } = useFetchMySettings()
 
   React.useEffect(() => {
-    fetchMyMemberDetail()
-    fetchMySettings()
+    if (token) {
+      fetchMyMemberDetail()
+      fetchMySettings()
+    }
   }, [token])
 
   if (isFetching) return null
 
   return (
     <BrowserRouter>
-      {token && myDetail ? (
+      {!!token && !!myDetail ? (
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/workspace/*" element={<WorkspaceRoutes />} />

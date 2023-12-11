@@ -53,6 +53,8 @@ const Home: React.FC = () => {
           .includes(lastConnectedWs.lastConnectedWsId)
       ) {
         navigate(`/workspace/${lastConnectedWs.lastConnectedWsId}`)
+      } else {
+        navigate(`/workspace/${myWorkspaceId}`)
       }
     }
   }, [myWorkspaceId, workspaces, lastConnectedWs])
