@@ -30,8 +30,7 @@ const WorkspaceNoticeList: React.FC<Props> = ({
   }
 
   const handleSearch = () => {
-    setCurrentPage(1)
-    fetchWorkspaceNoticeList(currentPage - 1, searchKeyword)
+    fetchWorkspaceNoticeList(0, searchKeyword)
   }
 
   const handleNoticeClick = (noticeId: number) => {
