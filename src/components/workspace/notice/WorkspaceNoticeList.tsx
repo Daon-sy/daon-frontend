@@ -1,4 +1,3 @@
-// WorkspaceNoticeList.tsx
 import React from "react"
 import { Box, InputAdornment, TextField, Pagination } from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
@@ -18,6 +17,9 @@ const WorkspaceNoticeList: React.FC<Props> = ({
     useFetchWorkspaceNoticeList(workspaceId)
   const [currentPage, setCurrentPage] = React.useState(1)
   const [searchKeyword, setSearchKeyword] = React.useState("")
+  const [selectedNoticeId, setSelectedNoticeId] = React.useState<number | null>(
+    null,
+  )
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
@@ -28,7 +30,13 @@ const WorkspaceNoticeList: React.FC<Props> = ({
   }
 
   const handleSearch = () => {
+    setCurrentPage(1)
     fetchWorkspaceNoticeList(currentPage - 1, searchKeyword)
+  }
+
+  const handleNoticeClick = (noticeId: number) => {
+    onNoticeClick(noticeId)
+    setSelectedNoticeId(noticeId)
   }
 
   return (
@@ -45,7 +53,7 @@ const WorkspaceNoticeList: React.FC<Props> = ({
       <Box
         width="100%"
         mb={1}
-        sx={{ display: "flex", justifyContent: "space-between" }}
+        sx={{ display: "flex", justifyContent: "space-evenly" }}
       >
         <TextField
           fullWidth
@@ -90,12 +98,22 @@ const WorkspaceNoticeList: React.FC<Props> = ({
           검색
         </Box>
       </Box>
-      <Box border={1} flexGrow={1} mb={1} width="100%">
+      <Box
+        flexGrow={1}
+        mb={1}
+        width="100%"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
         {workspaceNotices.map(workspaceNotice => (
           <WorkspaceNoticeCard
             key={workspaceNotice.noticeId}
             workspaceNotice={workspaceNotice}
-            onClick={() => onNoticeClick(workspaceNotice.noticeId)}
+            onClick={() => handleNoticeClick(workspaceNotice.noticeId)}
+            isSelected={selectedNoticeId === workspaceNotice.noticeId}
           />
         ))}
       </Box>

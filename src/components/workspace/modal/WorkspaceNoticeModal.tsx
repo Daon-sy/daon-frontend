@@ -1,9 +1,10 @@
 import React, { useState } from "react"
-import { Container, Stack, Box, Button } from "@mui/material"
+import { Container, Stack, Box, Button, Typography } from "@mui/material"
 import TitleDialog from "components/common/TitleDialog"
 import { useParams } from "react-router-dom"
 import { getWorkspaceStore } from "store/userStore"
 import useFetchWorkspaceNoticeList from "hooks/workspace/useFetchWorkspaceNoticeList"
+import nodata from "assets/svg/no_data.png"
 import WorkspaceNoticeTitle from "../notice/WorkspaceNoticeTitle"
 import WorkspaceNoticeList from "../notice/WorkspaceNoticeList"
 import WorkspaceNoticeDetailView from "../notice/WorkspaceNoticeDetailView"
@@ -44,10 +45,11 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
         fetchWorkspaceNoticeList(0)
         handleClose()
       }}
-      height={500}
+      height={560}
       maxWidth="lg"
       minWidth={1200}
       top={24}
+      right={32}
     >
       {isCreateMode && workspaceId ? (
         <CreateWorkspaceNotice
@@ -58,13 +60,17 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
         <Stack direction="row" width="100%" height="100%">
           {myProfile?.role === "WORKSPACE_ADMIN" ? (
             <Button
-              sx={{ position: "absolute", right: 30 }}
+              sx={{
+                position: "absolute",
+                left: 24,
+                top: 80,
+                height: 16,
+              }}
               onClick={handleCreateNotice}
             >
-              공지사항 생성
+              +추가
             </Button>
           ) : null}
-
           {workspaceId && (
             <Box sx={{ width: "35%", padding: 0 }}>
               <WorkspaceNoticeList
@@ -74,15 +80,34 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
             </Box>
           )}
 
-          <Container sx={{ border: 1, width: "65%" }}>
+          <Container sx={{ width: "65%", overflow: "hidden" }}>
             {workspaceId && selectedNoticeId ? (
               <WorkspaceNoticeDetailView
                 workspaceId={+workspaceId}
                 noticeId={selectedNoticeId}
+                onCancel={() => setSelectedNoticeId(null)}
               />
             ) : (
-              <Box>
-                공지사항 목록에서 상세보기 할 공지사항을 선택해주세요 😄
+              <Box
+                sx={{
+                  border: "2px solid #dcdcdc",
+                  height: "98%",
+                  borderRadius: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Box
+                  width="320px"
+                  height="160px"
+                  component="img"
+                  src={nodata}
+                />
+                <Typography sx={{ mb: 6 }}>
+                  공지사항 목록에서 상세보기 할 공지사항을 선택해주세요
+                </Typography>
               </Box>
             )}
           </Container>

@@ -33,7 +33,7 @@ const WorkspaceNoticeTitle: React.FC = () => {
           label={totalCount}
         />
       </Stack>
-      <Typography color="#8d8d8d" fontSize={12} position="relative" right={-32}>
+      <Typography color="#8d8d8d" fontSize={12} position="relative" right={-4}>
         {workspace?.title}
       </Typography>
     </Box>

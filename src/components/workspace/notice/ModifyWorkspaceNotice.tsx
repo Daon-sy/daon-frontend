@@ -1,9 +1,17 @@
-import { Box, Button, FormHelperText, Stack, TextField } from "@mui/material"
+import {
+  Box,
+  Button,
+  Divider,
+  FormHelperText,
+  TextField,
+  Typography,
+} from "@mui/material"
 import { WorkspaceNoticeDetail } from "_types/workspaceNotice"
 import { useAlert } from "hooks/useAlert"
 import useModifyWorkspaceNotice from "hooks/workspace/useModifyWorkspaceNotice"
 import React from "react"
 import { ModifyWorkspaceNoticeRequestBody } from "api/workspaceNotice"
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew"
 
 interface Props {
   workspaceId: number
@@ -38,29 +46,96 @@ const ModifyWorkspaceNotice: React.FC<Props> = ({
   }
   return (
     <Box>
-      <Stack direction="row">
-        <Box component="div">제목</Box>
-        <TextField
-          required
-          size="small"
-          value={requestBody.title}
-          onChange={e =>
-            setRequestBody(data => ({
-              ...data,
-              title: e.target.value,
-            }))
-          }
-          inputProps={{ maxLength: 49 }}
-        />
-        <FormHelperText sx={{ textAlign: "end" }}>{`${
-          (requestBody?.title || title).length
-        }/50자`}</FormHelperText>
-      </Stack>
-      <Stack direction="row">
-        <Box component="div">내용</Box>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          mt: 0.5,
+          position: "relative",
+        }}
+      >
+        <Box
+          component="button"
+          onClick={onCancel}
+          sx={{
+            bgcolor: "white",
+            border: "none",
+            color: "#9e9e9e",
+            width: 30,
+            height: 30,
+            borderRadius: 50,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            "&:hover": {
+              bgcolor: "#e2e2e4",
+            },
+          }}
+        >
+          <ArrowBackIosNewIcon sx={{ width: 24, height: 24 }} />
+        </Box>
+        <Box
+          sx={{
+            fontSize: 24,
+            fontWeight: 600,
+            color: "#595959",
+            lineHeight: "28px",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            wordBreak: "break-word",
+            WebkitBoxOrient: "vertical",
+          }}
+        >
+          <TextField
+            required
+            size="small"
+            sx={{ width: "604px" }}
+            value={requestBody.title}
+            onChange={e =>
+              setRequestBody(data => ({
+                ...data,
+                title: e.target.value,
+              }))
+            }
+            inputProps={{ maxLength: 49 }}
+            placeholder="빈 값 입력시, 수정 전 값이 그대로 저장됩니다 :)"
+          />
+          <FormHelperText
+            sx={{ textAlign: "end", position: "absolute", top: 40, right: 0 }}
+          >{`${(requestBody?.title || title).length + 1}/50자`}</FormHelperText>
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          mt: 3,
+        }}
+      >
+        <Box sx={{ color: "#bababa" }}>{notice.createdAt}</Box>
+        <Typography sx={{ color: "#1f4838", fontSize: 12 }}>
+          {notice.writer?.name}
+        </Typography>
+      </Box>
+      <Divider sx={{ mt: 0.5, mb: 1 }} />
+      <Box
+        sx={{
+          height: 408,
+          lineHeight: "20px",
+          position: "relative",
+        }}
+      >
         <TextField
           required
           multiline
+          rows={15}
+          sx={{
+            width: "99%",
+            overflowY: "auto",
+            whiteSpace: "pre-wrap",
+          }}
           value={requestBody.content}
           onChange={e =>
             setRequestBody(data => ({
@@ -69,13 +144,20 @@ const ModifyWorkspaceNotice: React.FC<Props> = ({
             }))
           }
           inputProps={{ maxLength: 499 }}
+          placeholder="빈 값 입력시, 수정 전 값이 그대로 저장됩니다 :)"
         />
-        <FormHelperText sx={{ textAlign: "end" }}>{`${
-          (requestBody?.content || content).length
+        <FormHelperText
+          sx={{ textAlign: "end", position: "absolute", right: 0 }}
+        >{`${
+          (requestBody?.content || content).length + 1
         }/500자`}</FormHelperText>
-      </Stack>
-      <Button onClick={handleModify}>수정</Button>
-      <Button onClick={onCancel}>취소</Button>
+      </Box>
+      <Button onClick={handleModify} sx={{ position: "relative", top: -32 }}>
+        수정
+      </Button>
+      <Button onClick={onCancel} sx={{ position: "relative", top: -32 }}>
+        취소
+      </Button>
     </Box>
   )
 }

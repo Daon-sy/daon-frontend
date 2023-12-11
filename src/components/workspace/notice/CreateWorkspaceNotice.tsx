@@ -29,6 +29,9 @@ const CreateWorkspaceNotice: React.FC<Props> = ({
   }
   return (
     <Box>
+      <Box component="button" onClick={onCancel}>
+        뒤로
+      </Box>
       <Stack direction="row">
         <Box component="div">제목</Box>
         <TextField
@@ -49,7 +52,7 @@ const CreateWorkspaceNotice: React.FC<Props> = ({
           multiline
           value={content}
           onChange={e => setContent(e.target.value)}
-          inputProps={{ maxLength: 500 }}
+          inputProps={{ maxLength: 500, style: { whiteSpace: "pre-wrap" } }}
         />
         <FormHelperText
           sx={{ textAlign: "end" }}
