@@ -4,6 +4,7 @@ import { Box, Button, Stack, TextField } from "@mui/material"
 import { useAlert } from "hooks/useAlert"
 import { useNavigate } from "react-router-dom"
 import { signInApi, SignInRequestBody } from "api/auth"
+import InputLabel from "@mui/material/InputLabel"
 
 const SignIn: React.FC = () => {
   const navigate = useNavigate()
@@ -76,48 +77,82 @@ const SignIn: React.FC = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        bgcolor: "white",
+        scrollbarWidth: "0.5em",
       }}
     >
       <Box
         sx={{
-          width: 500,
+          width: 400,
           padding: 5,
-          backgroundColor: "white",
+          boxShadow: 1,
+          borderWidth: 1,
         }}
       >
-        <Stack spacing={2}>
+        <Stack spacing={1}>
           <Box>
             <Typography
-              variant="h4"
               component="h2"
               sx={{
                 textAlign: "center",
+                fontSize: "24px",
                 marginBottom: 3,
+                fontWeight: 900,
               }}
             >
               로그인
             </Typography>
           </Box>
-          <Stack spacing={2}>
-            <TextField
-              required
-              label="아이디"
-              variant="outlined"
-              value={signInRequest.username}
-              onChange={inUsernameChanged}
-              helperText="usermail@email.com"
-              onKeyDown={onEnterKeyDown}
-            />
-            <TextField
-              required
-              type="password"
-              label="비밀번호"
-              variant="outlined"
-              value={signInRequest.password}
-              onChange={inPasswordChanged}
-              helperText="6자리 이상. 영문,숫자,특수기호 조합."
-              onKeyDown={onEnterKeyDown}
-            />
+          <Stack spacing={1}>
+            <Stack spacing={1}>
+              <InputLabel htmlFor="username">
+                <span
+                  style={{
+                    fontWeight: "900",
+                    fontSize: "14px",
+                  }}
+                >
+                  아이디
+                </span>
+              </InputLabel>
+              <TextField
+                value={signInRequest.username}
+                onChange={inUsernameChanged}
+                onKeyDown={onEnterKeyDown}
+                placeholder="아이디"
+                variant="outlined"
+                margin="none"
+                size="small"
+                inputProps={{
+                  style: { fontSize: 12 },
+                }}
+              />
+            </Stack>
+            <Stack spacing={1}>
+              <InputLabel htmlFor="password">
+                <span
+                  style={{
+                    fontWeight: "900",
+                    fontSize: "14px",
+                  }}
+                >
+                  비밀번호
+                </span>
+              </InputLabel>
+              <TextField
+                type="password"
+                value={signInRequest.password}
+                onChange={inPasswordChanged}
+                onKeyDown={onEnterKeyDown}
+                placeholder="비밀번호"
+                variant="outlined"
+                margin="none"
+                size="small"
+                inputProps={{
+                  style: { fontSize: 12 },
+                }}
+              />
+            </Stack>
           </Stack>
           <Box
             sx={{
@@ -128,19 +163,19 @@ const SignIn: React.FC = () => {
             <Box
               sx={{
                 width: 300,
-                marginTop: 1,
+                marginTop: 5,
               }}
             >
               <Stack
                 direction="row"
-                spacing={2}
+                spacing={4}
                 sx={{
-                  height: 50,
+                  height: 40,
                 }}
               >
                 <Button
                   fullWidth
-                  size="large"
+                  size="small"
                   variant="contained"
                   onClick={onLoginButtonClick}
                 >
@@ -148,7 +183,7 @@ const SignIn: React.FC = () => {
                 </Button>
                 <Button
                   fullWidth
-                  size="large"
+                  size="small"
                   variant="outlined"
                   onClick={onCancelButtonClick}
                 >

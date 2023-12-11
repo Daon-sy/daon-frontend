@@ -32,8 +32,8 @@ export interface CheckVerificationEmailRequestBody {
   code: string
 }
 
-export interface CheckUsernameRequestBody {
-  username: string
+export interface CheckEmailRequestBody {
+  email: string
 }
 
 // ========== RESPONSE ==========
@@ -101,8 +101,8 @@ export const checkVerificationEmailApi = async (
   return authAxios.post(`${EMAIL_API_PREFIX}/check`, requestBody)
 }
 
-export const checkUsernameApi = async (
-  requestBody: CheckUsernameRequestBody,
+export const checkEmailApi = async (
+  requestBody: CheckEmailRequestBody,
 ): Promise<AxiosResponse> => {
   return basicAxios.post(`${EMAIL_API_PREFIX}/check`, requestBody)
 }
