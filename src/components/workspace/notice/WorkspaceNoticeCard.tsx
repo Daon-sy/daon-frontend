@@ -17,6 +17,7 @@ const WorkspaceNoticeCard: React.FC<Props> = ({
     <Box
       onClick={onClick}
       sx={{
+        mb: "10px",
         cursor: "pointer",
         border: "1px solid #d3d3d3",
         borderRadius: 1,

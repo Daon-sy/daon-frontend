@@ -105,7 +105,6 @@ const WorkspaceNoticeList: React.FC<Props> = ({
         sx={{
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
         }}
       >
         {workspaceNotices.map(workspaceNotice => (
