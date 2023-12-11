@@ -23,6 +23,7 @@ interface Props {
   minWidth?: number | string
   color?: string
   right?: number
+  top?: number
 }
 
 export const TitleDialog = ({
@@ -38,6 +39,7 @@ export const TitleDialog = ({
   minWidth,
   color = "primary",
   right = 8,
+  top = 8,
 }: Props) => {
   return (
     <Dialog
@@ -79,7 +81,7 @@ export const TitleDialog = ({
           sx={{
             position: "absolute",
             right: { right },
-            top: 8,
+            top: { top },
             color: { color },
           }}
         >

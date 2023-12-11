@@ -47,6 +47,7 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
       height={500}
       maxWidth="lg"
       minWidth={1200}
+      top={24}
     >
       {isCreateMode && workspaceId ? (
         <CreateWorkspaceNotice
@@ -65,12 +66,12 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
           ) : null}
 
           {workspaceId && (
-            <Container sx={{ border: 1, width: "35%" }}>
+            <Box sx={{ width: "35%", padding: 0 }}>
               <WorkspaceNoticeList
                 workspaceId={+workspaceId}
                 onNoticeClick={handleNoticeClick}
               />
-            </Container>
+            </Box>
           )}
 
           <Container sx={{ border: 1, width: "65%" }}>
