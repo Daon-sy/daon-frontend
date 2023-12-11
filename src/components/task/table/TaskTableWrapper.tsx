@@ -17,7 +17,7 @@ const list = [
   },
   {
     progressStatus: "PROCEEDING",
-    title: "진행중",
+    title: "진행",
     dividerColor: "secondary.main",
   },
   {
