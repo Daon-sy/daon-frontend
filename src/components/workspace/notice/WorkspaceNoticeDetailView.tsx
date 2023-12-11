@@ -35,6 +35,7 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
 
   useEffect(() => {
     setIsNoData(false)
+    setIsModifyMode(false)
   }, [noticeId])
 
   useEffect(() => {

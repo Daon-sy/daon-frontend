@@ -6,20 +6,22 @@ import {
   ModifyWorkspaceNoticeRequestBody,
   modifyWorkspaceNoticeApi,
 } from "api/workspaceNotice"
-import useFetchWorkspaceNoticeList from "./useFetchWorkspaceNoticeList"
+import useFetchWorkspaceNoticeDetail from "./useFetchWorkspaceNoticeDetail"
 
 const useModifyWorkspaceNotice = (workspaceId: number, noticeId: number) => {
   const [error, setError] = React.useState<ErrorResponse>()
   const { addSuccess } = useAlert()
-  const { fetchWorkspaceNoticeList } = useFetchWorkspaceNoticeList(workspaceId)
-
+  const { fetchWorkspaceNoticeDetail } = useFetchWorkspaceNoticeDetail(
+    workspaceId,
+    noticeId,
+  )
   const fetchModifyWorkspaceNotice = async (
     requestBody: ModifyWorkspaceNoticeRequestBody,
   ) => {
     try {
       await modifyWorkspaceNoticeApi(workspaceId, noticeId, requestBody)
       addSuccess("공지사항이 수정되었습니다.")
-      fetchWorkspaceNoticeList()
+      fetchWorkspaceNoticeDetail()
     } catch (e) {
       if (axios.isAxiosError(e)) {
         const { response } = e
