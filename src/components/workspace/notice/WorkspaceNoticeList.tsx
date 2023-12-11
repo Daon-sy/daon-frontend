@@ -1,12 +1,6 @@
 // WorkspaceNoticeList.tsx
 import React from "react"
-import {
-  Box,
-  InputAdornment,
-  TextField,
-  Pagination,
-  Button,
-} from "@mui/material"
+import { Box, InputAdornment, TextField, Pagination } from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
 import useFetchWorkspaceNoticeList from "hooks/workspace/useFetchWorkspaceNoticeList"
 import WorkspaceNoticeCard from "./WorkspaceNoticeCard"
