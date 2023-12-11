@@ -6,6 +6,7 @@ import {
   InviteProjectNotification,
   InviteWorkspaceNotification,
   Notification,
+  ReceiveMessageNotification,
   RegisteredTaskManagerNotification,
 } from "_types/notification"
 import RegisteredTaskManager from "components/notification/card/RegisteredTaskManager"
@@ -14,6 +15,7 @@ import InvitedProject from "components/notification/card/InvitedProject"
 import DeportatedWorkspace from "components/notification/card/DeportatedWorkspace"
 import DeportatedProject from "components/notification/card/DeportatedProject"
 import NotifyOnOffIconButton from "components/notification/button/NotifyOnOffIconButton"
+import ReceivedMessage from "components/notification/card/ReceivedMessage"
 
 const renderNotification = (notification: Notification) => {
   switch (notification.type) {
@@ -75,6 +77,17 @@ const renderNotification = (notification: Notification) => {
               DeportationProjectNotification & {
                 time: string
               }
+            >
+          }
+        />
+      )
+    }
+    case "RECEIVE_MESSAGE": {
+      return (
+        <ReceivedMessage
+          notification={
+            notification as Notification<
+              ReceiveMessageNotification & { time: string }
             >
           }
         />

@@ -9,6 +9,7 @@ import {
   InviteProjectNotification,
   InviteWorkspaceNotification,
   Notification,
+  ReceiveMessageNotification,
   RegisteredTaskManagerNotification,
 } from "_types/notification"
 
@@ -20,6 +21,7 @@ type EventType =
   | "DEPORTATION_WORKSPACE"
   | "DEPORTATION_PROJECT"
   | "REGISTERED_TASK_MANAGER"
+  | "RECEIVE_MESSAGE"
 
 const heartbeatTimeout = 140_000
 
@@ -156,6 +158,18 @@ const useNotification = ({
           ) as Notification<DeportationProjectNotification>
           addNotification(notification)
         }
+        setIsNewIssued(true)
+      },
+    })
+
+    addEventListener(eventSource, {
+      eventType: "RECEIVE_MESSAGE",
+      callback: event => {
+        const msgEvent = event as MessageEvent
+        const notification = JSON.parse(
+          msgEvent.data,
+        ) as Notification<ReceiveMessageNotification>
+        addNotification(notification)
         setIsNewIssued(true)
       },
     })

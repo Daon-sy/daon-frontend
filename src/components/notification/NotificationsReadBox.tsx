@@ -13,6 +13,7 @@ import {
   InviteProjectNotification,
   InviteWorkspaceNotification,
   Notification,
+  ReceiveMessageNotification,
   RegisteredTaskManagerNotification,
 } from "_types/notification"
 import { PageInfo, PageParams } from "api"
@@ -21,6 +22,7 @@ import InvitedWorkspace from "components/notification/card/InvitedWorkspace"
 import InvitedProject from "components/notification/card/InvitedProject"
 import DeportatedWorkspace from "components/notification/card/DeportatedWorkspace"
 import DeportatedProject from "components/notification/card/DeportatedProject"
+import ReceivedMessage from "components/notification/card/ReceivedMessage"
 
 const renderNotification = (
   notification: Notification,
@@ -89,6 +91,18 @@ const renderNotification = (
               DeportationProjectNotification & {
                 time: string
               }
+            >
+          }
+          removeCallback={removeCallback}
+        />
+      )
+    }
+    case "RECEIVE_MESSAGE": {
+      return (
+        <ReceivedMessage
+          notification={
+            notification as Notification<
+              ReceiveMessageNotification & { time: string }
             >
           }
           removeCallback={removeCallback}

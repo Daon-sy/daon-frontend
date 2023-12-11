@@ -11,29 +11,38 @@ import NotificationsReadBox from "components/notification/NotificationsReadBox"
 import { getMyMemberDetailStore } from "store/userStore"
 import CloseIcon from "@mui/icons-material/Close"
 import { useSnackbar } from "notistack"
+import { NotificationType } from "_types/notification"
 
 const useNotiSnackbar = () => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
   const { mySettings } = getMyMemberDetailStore()
-  return () => {
+  return (type: NotificationType) => {
     if (mySettings?.notified) {
-      enqueueSnackbar("알림이 도착했습니다.", {
-        variant: "info",
-        style: { backgroundColor: "#FFBE00", fontWeight: 500 },
-        autoHideDuration: 3000,
-        anchorOrigin: { vertical: "top", horizontal: "right" },
-        SnackbarProps: { style: { top: 60 } },
-        action: key => (
-          <IconButton
-            aria-label="close"
-            color="inherit"
-            sx={{ p: 0.5 }}
-            onClick={() => closeSnackbar(key)}
-          >
-            <CloseIcon />
-          </IconButton>
-        ),
-      })
+      enqueueSnackbar(
+        type === "RECEIVE_MESSAGE"
+          ? "쪽지가 도착했습니다."
+          : "알림이 도착했습니다.",
+        {
+          variant: "info",
+          style: {
+            backgroundColor: type === "RECEIVE_MESSAGE" ? "#7DB249" : "#FFBE00",
+            fontWeight: 500,
+          },
+          autoHideDuration: 3000,
+          anchorOrigin: { vertical: "top", horizontal: "right" },
+          SnackbarProps: { style: { top: 60 } },
+          action: key => (
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              sx={{ p: 0.5 }}
+              onClick={() => closeSnackbar(key)}
+            >
+              <CloseIcon />
+            </IconButton>
+          ),
+        },
+      )
     }
   }
 }
@@ -53,7 +62,9 @@ const NotificationButton = () => {
   const notiSnackbar = useNotiSnackbar()
   React.useEffect(() => {
     if (isNewIssued) {
-      notiSnackbar()
+      if (notifications.length > 0) {
+        notiSnackbar(notifications[0].type)
+      }
       setIsNewIssued(false)
     }
   }, [isNewIssued])
