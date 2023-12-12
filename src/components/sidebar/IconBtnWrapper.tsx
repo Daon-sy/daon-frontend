@@ -6,6 +6,7 @@ import { faBullhorn, faComment } from "@fortawesome/free-solid-svg-icons"
 import ParticipantsModal from "components/workspace/ParticipantsModal"
 import { useCreateTaskModal } from "components/task/CreateTask"
 import WorkspaceNoticeModal from "components/workspace/modal/WorkspaceNoticeModal"
+import MessageBoxModal from "components/message/modal/MessageBoxModal"
 import IconBtn from "./IconBtn"
 
 const IconBtnWrapper: React.FC = () => {
@@ -15,8 +16,11 @@ const IconBtnWrapper: React.FC = () => {
   const [workspaceNoticeModalOpen, setWorkspaceNoticeModalOpen] =
     React.useState(false)
   const { CreateTaskModal, open: openCreateTaskModal } = useCreateTaskModal()
-  const openParticipantsModal = () => setParticipantsModalOpen(true)
+  const [sendMessageModalOpen, setSendMessageModalOpen] =
+    React.useState<boolean>(false)
 
+  const openMessageModal = () => setSendMessageModalOpen(true)
+  const openParticipantsModal = () => setParticipantsModalOpen(true)
   const openWorkspaceNoticeModal = () => {
     setWorkspaceNoticeModalOpen(true)
   }
@@ -69,7 +73,12 @@ const IconBtnWrapper: React.FC = () => {
           icon={faBullhorn}
           onClick={openWorkspaceNoticeModal}
         />
-        <IconBtn component="button" text="쪽지" icon={faComment} />
+        <IconBtn
+          component="button"
+          text="쪽지"
+          icon={faComment}
+          onClick={openMessageModal}
+        />
         <IconBtn
           component="button"
           text="구성원보기"
@@ -95,6 +104,11 @@ const IconBtnWrapper: React.FC = () => {
         handleClose={() => setWorkspaceNoticeModalOpen(false)}
       />
       <CreateTaskModal />
+      <MessageBoxModal
+        open={sendMessageModalOpen}
+        handleClose={() => setSendMessageModalOpen(false)}
+        category="MessageList"
+      />
     </Box>
   )
 }
