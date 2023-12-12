@@ -9,11 +9,7 @@ interface BackdropStore {
 export const getBackdropStore = create<BackdropStore>(set => ({
   backdropOpen: false,
   handleBackdropOpen: () => set({ backdropOpen: true }),
-  handleBackdropClose: () => {
-    setTimeout(() => {
-      set({ backdropOpen: false })
-    }, 500)
-  },
+  handleBackdropClose: () => set({ backdropOpen: false }),
 }))
 
 export default { getBackdropStore }

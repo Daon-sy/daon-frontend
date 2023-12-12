@@ -2,6 +2,8 @@ import React from "react"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import PageRoutes from "pages"
 import RefreshComponent from "auth/RefreshComponent"
+import { AlertDialog } from "components/common/AlertDialog"
+import { getAlertStore } from "store/alertStore"
 
 // Augment the palette to include a salmon color
 declare module "@mui/material/styles" {
@@ -82,6 +84,11 @@ let theme = createTheme({
             : undefined,
       },
     },
+    MuiTooltip: {
+      defaultProps: {
+        disableInteractive: true,
+      },
+    },
   },
 })
 
@@ -131,11 +138,26 @@ theme = createTheme(theme, {
 })
 
 function App() {
+  const { alertProps, clear: clearAlertProps } = getAlertStore()
+  const handleConfirm = () => {
+    if (alertProps?.handleConfirm) alertProps.handleConfirm()
+    clearAlertProps()
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <RefreshComponent>
         <PageRoutes />
       </RefreshComponent>
+      {alertProps ? (
+        <AlertDialog
+          open={Boolean(alertProps)}
+          handleConfirm={handleConfirm}
+          handleClose={handleConfirm}
+        >
+          {alertProps.children}
+        </AlertDialog>
+      ) : null}
     </ThemeProvider>
   )
 }

@@ -1,10 +1,16 @@
 export interface MemberDetail {
-  memberId: number
+  memberId: string
   name: string
   username: string
+  createdAt: string
+  modifiedAt: string
 }
 
 export interface MemberEmail {
   memberEmailId: number
   email: string
+}
+
+export interface MemberSettings {
+  notified: boolean
 }

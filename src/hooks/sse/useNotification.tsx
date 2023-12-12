@@ -2,16 +2,16 @@ import React from "react"
 import { EventSourcePolyfill, Event, MessageEvent } from "event-source-polyfill"
 import { API_SERVER_URL } from "env"
 import { getTokenStore } from "store/tokenStore"
-import { getNotificationStore } from "store/notificationStore"
+import { getNotificationsUnreadStore } from "store/notificationStore"
 import {
   DeportationProjectNotification,
   DeportationWorkspaceNotification,
   InviteProjectNotification,
   InviteWorkspaceNotification,
   Notification,
+  ReceiveMessageNotification,
   RegisteredTaskManagerNotification,
 } from "_types/notification"
-import { useAlert } from "hooks/useAlert"
 
 type EventType =
   | "CONNECTED"
@@ -21,6 +21,7 @@ type EventType =
   | "DEPORTATION_WORKSPACE"
   | "DEPORTATION_PROJECT"
   | "REGISTERED_TASK_MANAGER"
+  | "RECEIVE_MESSAGE"
 
 const heartbeatTimeout = 140_000
 
@@ -57,9 +58,8 @@ const useNotification = ({
   onDeportationProject,
   onRegisteredTaskManager,
 }: Props) => {
-  const { addInfo } = useAlert()
   const { token } = getTokenStore()
-  const { addNotifications } = getNotificationStore()
+  const { addNotification, setIsNewIssued } = getNotificationsUnreadStore()
 
   let eventSource: EventSourcePolyfill
   const subscribe = () => {
@@ -89,19 +89,12 @@ const useNotification = ({
         if (onRegisteredTaskManager) onRegisteredTaskManager(event)
         else {
           const msgEvent = event as MessageEvent
-          const parsedNotification = JSON.parse(msgEvent.data)
-          const parsedData = JSON.parse(
-            parsedNotification.data,
-          ) as RegisteredTaskManagerNotification & { time: string }
-          const notification: Notification<RegisteredTaskManagerNotification> =
-            {
-              notificationId: parsedNotification.notificationId,
-              data: parsedData,
-              type: parsedNotification.type,
-            }
-          addNotifications([notification])
+          const notification = JSON.parse(
+            msgEvent.data,
+          ) as Notification<RegisteredTaskManagerNotification>
+          addNotification(notification)
         }
-        addInfo("알림이 도착했습니다")
+        setIsNewIssued(true)
       },
     })
 
@@ -112,18 +105,12 @@ const useNotification = ({
         if (onInviteWorkspace) onInviteWorkspace(event)
         else {
           const msgEvent = event as MessageEvent
-          const parsedNotification = JSON.parse(msgEvent.data)
-          const parsedData = JSON.parse(
-            parsedNotification.data,
-          ) as InviteWorkspaceNotification & { time: string }
-          const notification: Notification<InviteWorkspaceNotification> = {
-            notificationId: parsedNotification.notificationId,
-            data: parsedData,
-            type: parsedNotification.type,
-          }
-          addNotifications([notification])
+          const notification = JSON.parse(
+            msgEvent.data,
+          ) as Notification<InviteWorkspaceNotification>
+          addNotification(notification)
         }
-        addInfo("알림이 도착했습니다")
+        setIsNewIssued(true)
       },
     })
 
@@ -134,18 +121,12 @@ const useNotification = ({
         if (onInviteProject) onInviteProject(event)
         else {
           const msgEvent = event as MessageEvent
-          const parsedNotification = JSON.parse(msgEvent.data)
-          const parsedData = JSON.parse(
-            parsedNotification.data,
-          ) as InviteProjectNotification & { time: string }
-          const notification: Notification<InviteProjectNotification> = {
-            notificationId: parsedNotification.notificationId,
-            data: parsedData,
-            type: parsedNotification.type,
-          }
-          addNotifications([notification])
+          const notification = JSON.parse(
+            msgEvent.data,
+          ) as Notification<InviteProjectNotification>
+          addNotification(notification)
         }
-        addInfo("알림이 도착했습니다")
+        setIsNewIssued(true)
       },
     })
 
@@ -156,18 +137,12 @@ const useNotification = ({
         if (onDeportationWorkspace) onDeportationWorkspace(event)
         else {
           const msgEvent = event as MessageEvent
-          const parsedNotification = JSON.parse(msgEvent.data)
-          const parsedData = JSON.parse(
-            parsedNotification.data,
-          ) as DeportationWorkspaceNotification & { time: string }
-          const notification: Notification<DeportationWorkspaceNotification> = {
-            notificationId: parsedNotification.notificationId,
-            data: parsedData,
-            type: parsedNotification.type,
-          }
-          addNotifications([notification])
+          const notification = JSON.parse(
+            msgEvent.data,
+          ) as Notification<DeportationWorkspaceNotification>
+          addNotification(notification)
         }
-        addInfo("알림이 도착했습니다")
+        setIsNewIssued(true)
       },
     })
 
@@ -178,18 +153,24 @@ const useNotification = ({
         if (onDeportationProject) onDeportationProject(event)
         else {
           const msgEvent = event as MessageEvent
-          const parsedNotification = JSON.parse(msgEvent.data)
-          const parsedData = JSON.parse(
-            parsedNotification.data,
-          ) as DeportationProjectNotification & { time: string }
-          const notification: Notification<DeportationProjectNotification> = {
-            notificationId: parsedNotification.notificationId,
-            data: parsedData,
-            type: parsedNotification.type,
-          }
-          addNotifications([notification])
+          const notification = JSON.parse(
+            msgEvent.data,
+          ) as Notification<DeportationProjectNotification>
+          addNotification(notification)
         }
-        addInfo("알림이 도착했습니다")
+        setIsNewIssued(true)
+      },
+    })
+
+    addEventListener(eventSource, {
+      eventType: "RECEIVE_MESSAGE",
+      callback: event => {
+        const msgEvent = event as MessageEvent
+        const notification = JSON.parse(
+          msgEvent.data,
+        ) as Notification<ReceiveMessageNotification>
+        addNotification(notification)
+        setIsNewIssued(true)
       },
     })
 

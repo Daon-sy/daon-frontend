@@ -10,7 +10,7 @@ import {
 interface Props {
   open?: boolean
   children?: React.ReactNode
-  handleConfirm: () => void
+  handleConfirm?: () => void
   handleClose: () => void
   confirmButtonText?: string
   maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false
@@ -40,7 +40,7 @@ export const AlertDialog = ({
             color="primary"
             variant="contained"
             onClick={() => {
-              handleConfirm()
+              if (handleConfirm) handleConfirm()
               handleClose()
             }}
             sx={{
@@ -57,7 +57,7 @@ export const AlertDialog = ({
 
 interface useAlertDialogProps {
   children?: React.ReactNode
-  handleConfirm: () => void
+  handleConfirm?: () => void
   confirmButtonText?: string
   maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false
 }

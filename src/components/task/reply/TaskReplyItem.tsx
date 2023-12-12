@@ -1,9 +1,9 @@
 import React, { useState } from "react"
 import { Box, FormHelperText, TextField } from "@mui/material"
-import { TEST_IMAGE_URL } from "env"
 import { TaskReplyDetail } from "_types/task"
 import { removeTaskReply } from "api/task"
 
+import ColorAvatar from "components/common/ColorAvatar"
 import ReplyBtn from "./ReplyBtn"
 
 interface TaskReplyItemProps {
@@ -75,20 +75,10 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
             alignItems: "center",
           }}
         >
-          <Box
-            component="img"
-            alt="댓글 작성자 이미지"
-            sx={{
-              width: "20px",
-              height: "20px",
-              bgcolor: "grey",
-              fontSize: "10px",
-              borderRadius: "50%",
-              marginY: "8px",
-              marginLeft: "12px",
-              marginRight: "6px",
-            }}
-            src={reply.writer.imageUrl || TEST_IMAGE_URL}
+          <ColorAvatar
+            id={reply.writer.projectParticipantId}
+            src={reply.writer.imageUrl}
+            sx={{ width: 20, height: 20, ml: 12 / 8, mr: 6 / 8, my: 1 }}
           />
           <Box component="span" sx={{ fontSize: "10px" }}>
             {reply.writer.name}

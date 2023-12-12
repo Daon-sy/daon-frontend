@@ -1,14 +1,19 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
+import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
-import Header from "components/header/Header"
-import TitleWrapper from "components/common/TitleWrapper"
 import { Box } from "@mui/material"
+import {
+  getLastWorkspaceStore,
+  getMyMemberDetailStore,
+  getMyWorkspaceIdStore,
+  getProjectsStore,
+  getWorkspaceStore,
+} from "store/userStore"
+import TitleWrapper from "components/common/TitleWrapper"
+import Header from "components/header/Header"
 import WorkspaceCard from "components/workspace/list/WorkspaceCard"
-import { Workspace } from "_types/workspace"
-import { workspaceListApi } from "api/workspace"
-import { useNavigate, useSearchParams } from "react-router-dom"
-import { getTokenStore } from "store/tokenStore"
-import { getProjectsStore, getWorkspaceStore } from "store/userStore"
+import useFetchWorkspaceList from "hooks/workspace/useFetchWorkspaceList"
+import { getBackdropStore } from "store/backdropStore"
 
 const DefaultLayout = styled.div`
   width: 100%;
@@ -19,40 +24,46 @@ const DefaultLayout = styled.div`
 const Home: React.FC = () => {
   const navigate = useNavigate()
 
-  const [searchParams] = useSearchParams()
-  const { setToken } = getTokenStore()
-
-  React.useEffect(() => {
-    const testToken = searchParams.get("testToken")
-    if (testToken) {
-      setToken(testToken)
-      navigate("/")
-    }
-  }, [])
-
-  const [workspaces, setWorkspaces] = useState<Workspace[]>([])
-
   const { clear: clearWorkspaceStore } = getWorkspaceStore()
   const { clear: clearProjectsStore } = getProjectsStore()
 
-  useEffect(() => {
+  const { backdropOpen, handleBackdropOpen } = getBackdropStore()
+
+  React.useLayoutEffect(() => {
+    if (!backdropOpen) handleBackdropOpen()
     clearWorkspaceStore()
     clearProjectsStore()
+  }, [])
 
-    const fetchData = async () => {
-      try {
-        const response = await workspaceListApi()
-        setWorkspaces(response.data.workspaces)
-      } catch (error) {
-        console.error("Error fetching workspaces:", error)
+  const { workspaces } = useFetchWorkspaceList()
+  const { myDetail } = getMyMemberDetailStore()
+  const { lastConnectedWs } = getLastWorkspaceStore()
+  const { myWorkspaceId } = getMyWorkspaceIdStore()
+
+  React.useLayoutEffect(() => {
+    if (workspaces.length > 0 && myWorkspaceId) {
+      if (!lastConnectedWs || myDetail?.memberId !== lastConnectedWs.memberId) {
+        navigate(`/workspace/${myWorkspaceId}`)
+        return
+      }
+
+      if (
+        workspaces
+          .map(ws => ws.workspaceId)
+          .includes(lastConnectedWs.lastConnectedWsId)
+      ) {
+        navigate(`/workspace/${lastConnectedWs.lastConnectedWsId}`)
+      } else {
+        navigate(`/workspace/${myWorkspaceId}`)
       }
     }
-    fetchData()
-  }, [])
+  }, [myWorkspaceId, workspaces, lastConnectedWs])
 
   const uniqueDivisions = Array.from(
     new Set(workspaces.map(item => item.division)),
   )
+
+  if (backdropOpen) return null
 
   return (
     <DefaultLayout>
