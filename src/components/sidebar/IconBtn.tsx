@@ -31,22 +31,35 @@ const IconBtn = ({ text, icon, onClick, to, component }: IconBtnProps) => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        width: "35%",
+        width: "25%",
         bgcolor: "transparent",
         border: "none",
         color: "#303633",
         borderRadius: "10px",
         textDecoration: "none",
         cursor: "pointer",
+        paddingY: 0.4,
         "&:hover": {
           bgcolor: "rgba(146, 146, 146, 0.1)",
         },
       }}
     >
-      <Box component="div" sx={{ color: "#1f4838", fontSize: "30px" }}>
+      <Box
+        component="div"
+        sx={{
+          color: "#1f4838",
+          fontSize: "20px",
+          display: "flex",
+          height: "24px",
+          alignItems: "center",
+        }}
+      >
         {renderIcon()}
       </Box>
-      <Box component="span" sx={{ fontSize: "8px", fontWeight: "bold" }}>
+      <Box
+        component="span"
+        sx={{ lineHeight: "14px", fontSize: "10px", fontWeight: "bold" }}
+      >
         {text}
       </Box>
     </Box>

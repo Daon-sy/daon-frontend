@@ -18,7 +18,7 @@ const Sidebar: React.FC = () => {
       <Box
         component="div"
         sx={{
-          height: "240px",
+          height: "196px",
           width: "100%",
           top: 0,
           zIndex: 100,
@@ -32,7 +32,7 @@ const Sidebar: React.FC = () => {
         component="div"
         sx={{
           boxSizing: "border-box",
-          height: "calc(100vh - 315px)",
+          height: "calc(100vh - 330px)",
         }}
       >
         <SidebarMenu />

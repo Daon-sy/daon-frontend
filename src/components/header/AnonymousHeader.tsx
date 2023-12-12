@@ -5,22 +5,22 @@ import Logo from "components/header/Logo"
 
 const AnonymousHeader = () => {
   return (
-    <AppBar position="sticky" sx={{ top: 0, height: 70 }}>
-      <Toolbar sx={{ height: 70 }}>
+    <AppBar position="sticky" sx={{ top: 0, height: 70, bgcolor: "white" }}>
+      <Toolbar sx={{ height: 70, bgcolor: "white" }}>
         <Logo />
         <Box>
           <Stack spacing={2} direction="row">
             <Link
               to="/sign-up"
-              style={{ textDecoration: "none", color: "inherit" }}
+              style={{ textDecoration: "none", color: "#495e57" }}
             >
-              <Button color="inherit">회원가입</Button>
+              <Button color="green">회원가입</Button>
             </Link>
             <Link
               to="/sign-in"
               style={{ textDecoration: "none", color: "inherit" }}
             >
-              <Button color="inherit">로그인</Button>
+              <Button color="green">로그인</Button>
             </Link>
           </Stack>
         </Box>
