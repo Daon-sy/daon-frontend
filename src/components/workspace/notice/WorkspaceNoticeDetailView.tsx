@@ -6,6 +6,7 @@ import useFetchWorkspaceNoticeDetail from "hooks/workspace/useFetchWorkspaceNoti
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew"
 import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
+import ConfirmDialog from "components/common/ConfirmDialog"
 import ModifyWorkspaceNotice from "./ModifyWorkspaceNotice"
 
 interface Props {
@@ -25,7 +26,11 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
   const { removeNotice } = useRemoveWorkspaceNotice(workspaceId, noticeId)
   const [noData, setIsNoData] = React.useState(false)
   const [isModifyMode, setIsModifyMode] = React.useState(false)
+  const [confirmDialogOpen, setConfirmDialogOpen] = React.useState(false)
 
+  const openConfirmDialog = () => {
+    setConfirmDialogOpen(true)
+  }
   const handleRemoveNotice = () => {
     removeNotice()
     setIsNoData(true)
@@ -147,13 +152,20 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
               <Button onClick={handleModifyNotice}>
                 <EditIcon />
               </Button>
-              <Button onClick={handleRemoveNotice}>
+              <Button onClick={openConfirmDialog}>
                 <DeleteIcon />
               </Button>
             </Box>
           ) : null}
         </Box>
       )}
+      <ConfirmDialog
+        open={confirmDialogOpen}
+        handleConfirm={handleRemoveNotice}
+        handleClose={() => setConfirmDialogOpen(false)}
+      >
+        공지사항을 삭제하시겠습니까?
+      </ConfirmDialog>
     </Box>
   )
 }
