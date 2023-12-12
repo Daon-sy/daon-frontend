@@ -1,10 +1,10 @@
 import React, { useState } from "react"
-import { Container, Stack, Box, Button, Typography } from "@mui/material"
+import { Container, Stack, Box, Button } from "@mui/material"
 import TitleDialog from "components/common/TitleDialog"
 import { useParams } from "react-router-dom"
 import { getWorkspaceStore } from "store/userStore"
 import useFetchWorkspaceNoticeList from "hooks/workspace/useFetchWorkspaceNoticeList"
-import nodata from "assets/svg/no_data.png"
+import NoData from "components/common/NoData"
 import WorkspaceNoticeTitle from "../notice/WorkspaceNoticeTitle"
 import WorkspaceNoticeList from "../notice/WorkspaceNoticeList"
 import WorkspaceNoticeDetailView from "../notice/WorkspaceNoticeDetailView"
@@ -101,15 +101,7 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
                   justifyContent: "center",
                 }}
               >
-                <Box
-                  width="320px"
-                  height="160px"
-                  component="img"
-                  src={nodata}
-                />
-                <Typography sx={{ mb: 6 }}>
-                  공지사항 목록에서 상세보기 할 공지사항을 선택해주세요
-                </Typography>
+                <NoData content="공지사항 목록에서 상세보기 할 공지사항을 선택해주세요" />
               </Box>
             )}
           </Container>

@@ -1,7 +1,7 @@
 import React from "react"
-import { Box, Typography } from "@mui/material"
-import nodata from "assets/svg/no_data.png"
+import { Box } from "@mui/material"
 import { getWorkspaceNoticesStore } from "store/userStore"
+import NoData from "components/common/NoData"
 
 const WorkspaceNotice: React.FC = () => {
   const { workspaceNotices } = getWorkspaceNoticesStore()
@@ -38,15 +38,17 @@ const WorkspaceNotice: React.FC = () => {
           sx={{
             width: "100%",
             display: "flex",
+            flexDirection: "column",
             justifyContent: "center",
-            position: "relative",
-            pt: 4,
+            alignItems: "center",
+            pb: 2,
           }}
         >
-          <Box width="320px" height="160px" component="img" src={nodata} />
-          <Typography sx={{ position: "absolute" }}>
-            입력된 공지사항이 없어요
-          </Typography>
+          <NoData
+            content="입력된 공지사항이 없어요"
+            width="280px"
+            height="140px"
+          />
         </Box>
       )}
       {workspaceNotices.map(workspaceNotice => (
