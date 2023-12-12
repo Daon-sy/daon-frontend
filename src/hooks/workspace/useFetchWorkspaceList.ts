@@ -2,12 +2,12 @@ import React from "react"
 import axios from "axios"
 import { ErrorResponse } from "api"
 import { workspaceListApi } from "api/workspace"
-import { Workspace } from "_types/workspace"
-import { getMyWorkspaceIdStore } from "store/userStore"
+import { getMyWorkspaceIdStore, getWorkspaceListStore } from "store/userStore"
 
 const useFetchWorkspaceList = (skip = false) => {
-  const [workspaces, setWorkspaces] = React.useState<Workspace[]>([])
+  // const [workspaces, setWorkspaces] = React.useState<Workspace[]>([])
   const [isFetching, setIsFetching] = React.useState(false)
+  const { workspaceList, setWorkspaceList } = getWorkspaceListStore()
   const { setMyWorkspaceId } = getMyWorkspaceIdStore()
   const [error, setError] = React.useState<ErrorResponse>()
 
@@ -16,7 +16,7 @@ const useFetchWorkspaceList = (skip = false) => {
       setIsFetching(true)
       const { data } = await workspaceListApi()
       const fetchedWorkspaces = data.workspaces
-      setWorkspaces(data.workspaces)
+      setWorkspaceList(data.workspaces)
 
       const personalWorkspace = fetchedWorkspaces.find(
         workspace => workspace.division === "PERSONAL",
@@ -39,7 +39,7 @@ const useFetchWorkspaceList = (skip = false) => {
     fetchWorkspaceList()
   }, [])
 
-  return { workspaces, fetchWorkspaceList, isFetching, error }
+  return { workspaces: workspaceList, fetchWorkspaceList, isFetching, error }
 }
 
 export default useFetchWorkspaceList

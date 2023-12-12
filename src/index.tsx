@@ -12,11 +12,11 @@ root.render(
     <SnackbarProvider
       maxSnack={3}
       transitionDuration={{
-        enter: 100,
-        exit: 100,
+        enter: 200,
+        exit: 200,
       }}
-      preventDuplicate
-      autoHideDuration={1000}
+      // preventDuplicate
+      autoHideDuration={1500}
       anchorOrigin={{
         vertical: "bottom",
         horizontal: "center",

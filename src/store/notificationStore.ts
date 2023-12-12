@@ -1,30 +1,44 @@
 import { create } from "zustand"
 import { Notification } from "_types/notification"
 
-interface NotificationStore {
+interface NotificationsUnreadStore {
+  isNewIssued: boolean
+  setIsNewIssued: (value: boolean) => void
   notifications: Notification[]
   clear: () => void
-  addNotifications: (notifications: Notification[]) => void
-  removeNotification: (notiId: number) => void
+  setNotifications: (notifications: Notification[]) => void
+  addNotification: (notification: Notification) => void
+  removeNotification: (notificationId: number) => void
 }
 
-export const getNotificationStore = create<NotificationStore>(set => ({
-  notifications: [],
-  clear: () => set({ notifications: [] }),
-  addNotifications: (notifications: Notification[]) => {
-    set(({ notifications: prev }) => ({
-      notifications: [...notifications, ...prev].filter(
-        (noti, i, arr) =>
-          i ===
-          arr.findIndex(loc => loc.notificationId === noti.notificationId),
-      ),
-    }))
-  },
-  removeNotification: (notiId: number) => {
-    set(({ notifications: perv }) => ({
-      notifications: perv.filter(noti => noti.notificationId !== notiId),
-    }))
-  },
-}))
+export const getNotificationsUnreadStore = create<NotificationsUnreadStore>(
+  set => ({
+    isNewIssued: false,
+    setIsNewIssued: (value: boolean) => {
+      set(state => ({ ...state, isNewIssued: value }))
+    },
+    notifications: [],
+    clear: () => set({ notifications: [] }),
+    setNotifications: (notifications: Notification[]) => {
+      set(() => ({ notifications }))
+    },
+    addNotification: (notification: Notification) => {
+      set(({ notifications: prev }) => ({
+        notifications: [notification, ...prev].filter(
+          (noti, i, arr) =>
+            i ===
+            arr.findIndex(loc => loc.notificationId === noti.notificationId),
+        ),
+      }))
+    },
+    removeNotification: (notificationId: number) => {
+      set(({ notifications: perv }) => ({
+        notifications: perv.filter(
+          noti => noti.notificationId !== notificationId,
+        ),
+      }))
+    },
+  }),
+)
 
-export default { getNotificationStore }
+export default { getNotificationStore: getNotificationsUnreadStore }

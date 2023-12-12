@@ -33,6 +33,7 @@ const TaskKanbanBoard: React.FC<Props> = ({
           style={style}
           sx={{
             backgroundColor: "#FFFFFF",
+            boxShadow: "1px 1px 5px 1px rgba(0, 0, 0, 0.1)",
           }}
         >
           <Box

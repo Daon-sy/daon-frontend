@@ -92,7 +92,11 @@ const SidebarMenu: React.FC = () => {
           }}
         >
           {myProjects
-            .filter(project => project.listValue.includes(projectFilterKeyword))
+            .filter(project =>
+              project.listValue
+                .toUpperCase()
+                .includes(projectFilterKeyword.toUpperCase()),
+            )
             .map(list => (
               <Box key={list.projectId}>
                 <MenuItems to={list.link} listValue={list.listValue}>

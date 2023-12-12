@@ -7,7 +7,11 @@ import { useAlert } from "hooks/useAlert"
 import ConfirmDialog from "components/common/ConfirmDialog"
 import WorkspaceProfileModify from "components/workspace/WorkspaceProfileModify"
 
-const WorkspaceProfileManage = () => {
+interface Props {
+  handleWithdraw?: () => void
+}
+
+const WorkspaceProfileManage: React.FC<Props> = ({ handleWithdraw }) => {
   const { workspace, myProfile } = getWorkspaceStore()
   const { myWorkspaceId } = getMyWorkspaceIdStore()
   const workspaceId = workspace?.workspaceId
@@ -25,6 +29,7 @@ const WorkspaceProfileManage = () => {
       await withdrawWorkspaceApi(workspaceId)
       addSuccess("워크스페이스를 탈퇴하였습니다")
       // 개인워크스페이스로 이동
+      if (handleWithdraw) handleWithdraw()
       navigate(`/workspace/${myWorkspaceId}`)
     }
   }

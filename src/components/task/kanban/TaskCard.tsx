@@ -9,6 +9,7 @@ import { getTaskDetailViewStore } from "store/taskStore"
 import Typography from "@mui/material/Typography"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFire } from "@fortawesome/free-solid-svg-icons"
+import ColorAvatar from "components/common/ColorAvatar"
 
 interface Props {
   task: TaskSummary
@@ -131,7 +132,11 @@ const TaskCard: React.FC<Props> = React.memo(
                   {task.taskManager ? (
                     <>
                       <Box>
-                        <Avatar sx={{ width: 16, height: 16 }} />
+                        <ColorAvatar
+                          id={task.taskManager.projectParticipantId}
+                          src={task.taskManager.imageUrl}
+                          sx={{ width: 16, height: 16 }}
+                        />
                       </Box>
                       <Box
                         sx={{

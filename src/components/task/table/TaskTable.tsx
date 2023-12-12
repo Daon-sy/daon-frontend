@@ -17,6 +17,7 @@ const tableBorderColor = "rgba(224,224,224)"
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters {...props} />
 ))(() => ({
+  boxShadow: "1px 1px 5px 1px rgba(0, 0, 0, 0.1)",
   "&:not(:last-child)": {
     // borderBottom: 0,
   },
