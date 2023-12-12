@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios"
-import { SliceResponse, authAxios } from "api"
+import { PageResponse, authAxios } from "api"
 import { WorkspaceNoticeDetail } from "_types/workspaceNotice"
 
 export const WORKSPACE_API_PREFIX = "/api/workspaces"
@@ -42,7 +42,7 @@ export const workspaceNoticeListApi = async (
     size: 4,
     keyword: "",
   },
-): Promise<AxiosResponse<SliceResponse<WorkspaceNoticeDetail>>> => {
+): Promise<AxiosResponse<PageResponse<WorkspaceNoticeDetail>>> => {
   return authAxios.get(`/api/workspaces/${workspaceId}/notices`, { params })
 }
 // 워크스페이스 공지사항 단건조회

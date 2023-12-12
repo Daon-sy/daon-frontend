@@ -13,9 +13,12 @@ export interface SliceResponse<T> {
   pageSize: number
   pageNumber: number
   contentSize: number
+  content: Array<T>
+}
+
+export interface PageResponse<T> extends SliceResponse<T> {
   totalPage: number
   totalCount: number
-  content: Array<T>
 }
 
 export const basicAxios = axios.create({
