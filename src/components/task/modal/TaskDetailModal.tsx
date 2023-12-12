@@ -54,8 +54,6 @@ const TaskDetailModal: React.FC<Props> = ({
   const { addError } = useAlert()
   const [projectParticipantsModalOpen, setProjectParticipantsModalOpen] =
     React.useState(false)
-  const [moreButtonAnchorEl, setMoreButtonAnchorEl] =
-    React.useState<null | HTMLElement>(null)
   const [taskRemoveModalOpen, setTaskRemoveModalOpen] = React.useState(false)
 
   const taskFullPath = {
