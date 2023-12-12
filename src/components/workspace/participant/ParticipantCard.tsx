@@ -11,8 +11,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCrown, faLeaf } from "@fortawesome/free-solid-svg-icons"
 import { WorkspaceParticipant } from "_types/workspace"
-import MessageBoxModal from "components/message/modal/MessageBoxModal"
 import ColorAvatar from "components/common/ColorAvatar"
+import MessageBoxModal from "components/message/modal/MessageBoxModal"
 
 interface ParticipantItemProps {
   participant: WorkspaceParticipant

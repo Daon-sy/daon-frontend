@@ -12,19 +12,19 @@ import {
   Typography,
 } from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
-import { getWorkspaceStore } from "store/userStore"
-import useFetchWorkspaceList from "hooks/workspace/useFetchWorkspaceList"
+import { getWorkspaceListStore, getWorkspaceStore } from "store/userStore"
 import { useTitleDialog } from "components/common/TitleDialog"
 import ColorAvatar from "components/common/ColorAvatar"
 import CreateWorkspace from "components/workspace/CreateWorkspace"
 import WorkspaceSettingsModal from "components/workspace/modal/WorkspaceSettingsModal"
 
 const WorkspaceSelectButton = () => {
+  const wsSearchFieldRef = React.useRef<HTMLInputElement | null>(null)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const [workspaceFilterKeyword, setWorkspaceFilterKeyword] = React.useState("")
 
   const { workspace } = getWorkspaceStore()
-  const { workspaces, fetchWorkspaceList } = useFetchWorkspaceList(false)
+  const { workspaceList: workspaces } = getWorkspaceListStore()
   const [workspaceManageModalOpen, setWorkspaceManageModalOpen] =
     React.useState(false)
 
@@ -35,13 +35,18 @@ const WorkspaceSelectButton = () => {
   } = useTitleDialog()
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
-    fetchWorkspaceList()
     setAnchorEl(event.currentTarget)
   }
 
   const handleCloseMenu = () => {
     setAnchorEl(null)
   }
+
+  React.useEffect(() => {
+    if (anchorEl && wsSearchFieldRef) {
+      wsSearchFieldRef.current?.click()
+    }
+  }, [anchorEl, wsSearchFieldRef])
 
   return (
     <Box>
@@ -100,7 +105,12 @@ const WorkspaceSelectButton = () => {
           onClose={handleCloseMenu}
           slotProps={{
             paper: {
-              sx: { maxHeight: 400, p: 0, "& .MuiList-root": { p: 0 } },
+              sx: {
+                width: 230,
+                maxHeight: 400,
+                p: 0,
+                "& .MuiList-root": { p: 0 },
+              },
             },
           }}
         >
@@ -150,6 +160,7 @@ const WorkspaceSelectButton = () => {
                       <SearchIcon fontSize="small" />
                     </InputAdornment>
                   ),
+                  ref: wsSearchFieldRef,
                   style: { fontSize: 14 },
                 }}
               />
@@ -181,7 +192,7 @@ const WorkspaceSelectButton = () => {
                       dense
                       sx={{ px: 1 }}
                     >
-                      <Box display="flex" alignItems="center">
+                      <Box display="flex" alignItems="center" overflow="hidden">
                         <ColorAvatar
                           id={ws.workspaceId}
                           src={ws.imageUrl}
@@ -192,6 +203,8 @@ const WorkspaceSelectButton = () => {
                           textAlign="center"
                           pl={0.5}
                           py={0.3}
+                          overflow="hidden"
+                          textOverflow="ellipsis"
                         >
                           {ws.title}
                         </Typography>
@@ -201,7 +214,17 @@ const WorkspaceSelectButton = () => {
                 </Link>
               ))}
 
-            {workspaces
+            {workspaces.filter(ws =>
+              workspace ? ws.workspaceId !== workspace.workspaceId : true,
+            ).length <= 0 ? (
+              <Typography textAlign="center" p={1} fontSize={14}>
+                다른 워크스페이스가 없습니다.
+              </Typography>
+            ) : null}
+            {workspaces.filter(ws =>
+              workspace ? ws.workspaceId !== workspace.workspaceId : true,
+            ).length > 0 &&
+            workspaces
               .filter(ws =>
                 workspace ? ws.workspaceId !== workspace.workspaceId : true,
               )
@@ -210,7 +233,7 @@ const WorkspaceSelectButton = () => {
                   .toUpperCase()
                   .includes(workspaceFilterKeyword.toUpperCase()),
               ).length <= 0 ? (
-              <Typography textAlign="center" p={1}>
+              <Typography textAlign="center" p={1} fontSize={14}>
                 검색 결과 없음
               </Typography>
             ) : null}

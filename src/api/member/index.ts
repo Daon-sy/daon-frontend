@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios"
 import { authAxios, basicAxios } from "api/index"
-import { MemberDetail, MemberEmail } from "_types/member"
+import { MemberDetail, MemberEmail, MemberSettings } from "_types/member"
 
 export const MEMBER_API_PREFIX = "/api/members"
 export const EMAIL_API_PREFIX = "/api/emails/verification"
@@ -32,8 +32,8 @@ export interface CheckVerificationEmailRequestBody {
   code: string
 }
 
-export interface CheckUsernameRequestBody {
-  username: string
+export interface CheckEmailRequestBody {
+  email: string
 }
 
 // ========== RESPONSE ==========
@@ -101,8 +101,33 @@ export const checkVerificationEmailApi = async (
   return authAxios.post(`${EMAIL_API_PREFIX}/check`, requestBody)
 }
 
-export const checkUsernameApi = async (
-  requestBody: CheckUsernameRequestBody,
+export const checkEmailApi = async (
+  requestBody: CheckEmailRequestBody,
 ): Promise<AxiosResponse> => {
   return basicAxios.post(`${EMAIL_API_PREFIX}/check`, requestBody)
+}
+
+export interface ModifyMemberSettingsRequestBody {
+  notified: boolean
+}
+
+export const modifyMemberSettingsApi = async (
+  requestBody: ModifyMemberSettingsRequestBody,
+): Promise<AxiosResponse> => {
+  return authAxios.post("/api/members/settings", requestBody)
+}
+
+export type MemberSettingsResponseBody = MemberSettings
+
+export const memberSettingsApi = async (): Promise<
+  AxiosResponse<MemberSettingsResponseBody>
+> => {
+  return authAxios.get("/api/members/settings")
+
+export const checkUsernameApi = async (
+  username: string,
+): Promise<AxiosResponse> => {
+  return basicAxios.post(`${MEMBER_API_PREFIX}/username`, {
+    username,
+  })
 }

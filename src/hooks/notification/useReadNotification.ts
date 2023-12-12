@@ -2,12 +2,12 @@ import React from "react"
 import axios from "axios"
 import { ErrorResponse } from "api"
 import { readNotificationApi } from "api/notification"
-import { getNotificationStore } from "store/notificationStore"
+import { getNotificationsUnreadStore } from "store/notificationStore"
 
 const useReadNotification = () => {
   const [isFetching, setIsFetching] = React.useState(false)
   const [error, setError] = React.useState<ErrorResponse>()
-  const { removeNotification } = getNotificationStore()
+  const { removeNotification } = getNotificationsUnreadStore()
 
   const fetch = async (notificationId: number) => {
     try {

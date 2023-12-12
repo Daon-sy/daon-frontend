@@ -2,25 +2,16 @@
 import React from "react"
 import { Box } from "@mui/material"
 import { getWorkspaceStore } from "store/userStore"
-import { WorkspaceParticipant } from "_types/workspace"
-import { workspaceParticipantListApi } from "api/workspace"
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCrown, faLeaf } from "@fortawesome/free-solid-svg-icons"
 import ColorAvatar from "components/common/ColorAvatar"
+import useFetchWorkspaceParticipants from "hooks/workspace/useFetchWorkspaceParticipants"
 
 const WorkspaceParticipants: React.FC = () => {
   const { workspace, myProfile } = getWorkspaceStore()
-  const [workspaceParticipants, setWorkspaceParticipants] = React.useState<
-    Array<WorkspaceParticipant>
-  >([])
-
-  const fetchWorkspaceParticipants = async () => {
-    if (workspace) {
-      const { data } = await workspaceParticipantListApi(workspace.workspaceId)
-      setWorkspaceParticipants(data.workspaceParticipants)
-    }
-  }
+  const { fetch: fetchWorkspaceParticipants, workspaceParticipants } =
+    useFetchWorkspaceParticipants(workspace?.workspaceId || 0, true)
 
   React.useEffect(() => {
     fetchWorkspaceParticipants()
@@ -53,7 +44,7 @@ const WorkspaceParticipants: React.FC = () => {
       }}
     >
       {/* 구성원 Item */}
-      {workspaceParticipants.map(participant => (
+      {workspaceParticipants?.map(participant => (
         <Box
           component="li"
           sx={{
