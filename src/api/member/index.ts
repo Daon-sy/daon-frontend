@@ -123,7 +123,7 @@ export const memberSettingsApi = async (): Promise<
   AxiosResponse<MemberSettingsResponseBody>
 > => {
   return authAxios.get("/api/members/settings")
-
+}
 export const checkUsernameApi = async (
   username: string,
 ): Promise<AxiosResponse> => {

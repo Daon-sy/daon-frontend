@@ -1,5 +1,5 @@
 import React from "react"
-import { Avatar, Box, Card, Chip, Stack } from "@mui/material"
+import { Box, Card, Chip, Stack } from "@mui/material"
 import CommentIcon from "@mui/icons-material/Comment"
 import { getWorkspaceStore } from "store/userStore"
 import TaskBookmarkButton from "components/task/TaskBookmarkButton"

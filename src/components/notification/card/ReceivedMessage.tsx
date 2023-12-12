@@ -25,9 +25,7 @@ const ReceivedMessage: React.FC<Props> = ({ notification, removeCallback }) => {
       currentWorkspace &&
       currentWorkspace.workspaceId !== workspace.workspaceId
     ) {
-      console.log(123)
-    } else {
-      console.log(123)
+      console.error()
     }
   }
 

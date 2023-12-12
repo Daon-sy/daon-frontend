@@ -7,6 +7,7 @@ import {
 } from "_types/workspace"
 import { ProjectDetail, Project } from "_types/project"
 import { MemberDetail, MemberSettings } from "_types/member"
+import { WorkspaceNoticeDetail } from "_types/workspaceNotice"
 
 interface MyMemberDetailStore {
   myDetail: MemberDetail | null | undefined
@@ -88,6 +89,26 @@ export const getMyWorkspaceIdStore = create<MyWorkspaceId>(set => ({
   myWorkspaceId: null,
   setMyWorkspaceId: (myWorkspaceId: number | undefined) =>
     set(() => ({ myWorkspaceId })),
+}))
+
+interface WorkspaceNoticesStore {
+  workspaceNotices: WorkspaceNoticeDetail[]
+  totalCount: number
+  clear: () => void
+  setWorkspaceNotices: (
+    workspaceNotices: WorkspaceNoticeDetail[],
+    totalCount: number,
+  ) => void
+}
+
+export const getWorkspaceNoticesStore = create<WorkspaceNoticesStore>(set => ({
+  workspaceNotices: [],
+  totalCount: 0,
+  clear: () => set({ workspaceNotices: [], totalCount: 0 }),
+  setWorkspaceNotices: (
+    workspaceNotices: WorkspaceNoticeDetail[],
+    totalCount: number,
+  ) => set({ workspaceNotices, totalCount }),
 }))
 
 // persist

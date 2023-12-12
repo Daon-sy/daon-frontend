@@ -50,10 +50,10 @@ const WorkspaceMain: React.FC = () => {
         {workspace.title}에 오신 것을 환영합니다.
       </Box>
       {workspace.division === "PERSONAL" ? null : (
-        <Stack mt={2} spacing={2} direction="row" height="30vh" width="100%">
+        <Stack mt={3} spacing={2} direction="row" height="30vh" width="100%">
           <SectionTitleWrapper
             width="80vw"
-            minWidth="912px"
+            minWidth="928px"
             color="#E25860"
             icon={faBullhorn}
             title="공지사항"
@@ -81,7 +81,7 @@ const WorkspaceMain: React.FC = () => {
       >
         <SectionTitleWrapper
           width="calc(80vw - 270px)"
-          minWidth="912px"
+          minWidth="928px"
           color="#B96BC6"
           icon={faStopwatch}
           title="타임라인"
@@ -90,6 +90,7 @@ const WorkspaceMain: React.FC = () => {
         </SectionTitleWrapper>
         <SectionTitleWrapper
           width="calc(20vw - 67.2px)"
+          minWidth="243px"
           color="#7DB249"
           icon={faFileCircleExclamation}
           title="할일 D-3"

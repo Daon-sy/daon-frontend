@@ -1,5 +1,5 @@
 import React from "react"
-import { Avatar, Chip, Stack, Box } from "@mui/material"
+import { Chip, Stack, Box } from "@mui/material"
 import { TaskSummary } from "_types/task"
 import { getWorkspaceStore } from "store/userStore"
 import { getTaskDetailViewStore } from "store/taskStore"
@@ -48,7 +48,6 @@ const TaskCell: React.FC<Props> = React.memo(
             border: "1px solid",
             borderColor,
             marginY: "-1px",
-            // marginX: "-1px",
             "&:hover": {
               cursor: "pointer",
             },

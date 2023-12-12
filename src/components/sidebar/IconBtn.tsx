@@ -1,15 +1,26 @@
 import React from "react"
 import { Box } from "@mui/material"
+import {
+  FontAwesomeIcon,
+  FontAwesomeIconProps,
+} from "@fortawesome/react-fontawesome"
 
 interface IconBtnProps {
   text: string
-  icon: React.ReactNode
+  icon: React.ReactNode | FontAwesomeIconProps["icon"]
   onClick?: React.MouseEventHandler<HTMLButtonElement>
   to?: string
   component: React.ElementType
 }
 
 const IconBtn = ({ text, icon, onClick, to, component }: IconBtnProps) => {
+  const renderIcon = () => {
+    if (React.isValidElement(icon)) {
+      return icon
+    }
+    return <FontAwesomeIcon icon={icon as FontAwesomeIconProps["icon"]} />
+  }
+
   return (
     <Box
       component={component}
@@ -32,8 +43,8 @@ const IconBtn = ({ text, icon, onClick, to, component }: IconBtnProps) => {
         },
       }}
     >
-      <Box component="div" sx={{ color: "#1f4838" }}>
-        {icon}
+      <Box component="div" sx={{ color: "#1f4838", fontSize: "30px" }}>
+        {renderIcon()}
       </Box>
       <Box component="span" sx={{ fontSize: "8px", fontWeight: "bold" }}>
         {text}
