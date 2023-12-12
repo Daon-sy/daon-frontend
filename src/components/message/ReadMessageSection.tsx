@@ -1,11 +1,11 @@
 import React from "react"
-import { Avatar, Box, Button, Divider, Typography } from "@mui/material"
+import { Box, Button, Divider, Typography } from "@mui/material"
 import { MessageSender, MessageSummary } from "_types/workspace"
-import { TEST_IMAGE_URL } from "env"
 import { deleteMessageApi } from "api/workspace"
 import { useAlert } from "hooks/useAlert"
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos"
 import ConfirmDialog from "components/common/ConfirmDialog"
+import ColorAvatar from "components/common/ColorAvatar"
 
 interface ReadMessageSectionProps {
   workspaceId: number | undefined
@@ -20,13 +20,17 @@ const ReadMessageSection = ({
   onBackButtonClick,
   onReplyClick,
 }: ReadMessageSectionProps) => {
-  const { addSuccess } = useAlert()
+  const { addSuccess, addError } = useAlert()
 
   const [deleteMessageModalOpen, setDeleteMessageModalOpen] =
     React.useState<boolean>(false)
 
   const handleReplyClick = () => {
     if (message) {
+      if (!message.sender) {
+        addError("탈퇴한 사용자에게 쪽지를 보낼 수 없습니다.")
+        return
+      }
       onReplyClick(message.sender)
     }
   }
@@ -55,8 +59,14 @@ const ReadMessageSection = ({
       </Box>
       <Divider sx={{ mb: 2 }} />
       <Box sx={{ m: 2, my: 2, display: "flex", alignItems: "center" }}>
-        <Avatar src={message?.sender.imageUrl || TEST_IMAGE_URL} />
-        <Typography>{message?.sender.name}</Typography>
+        <ColorAvatar
+          sx={{ width: 27, height: 27 }}
+          src={message?.sender?.imageUrl}
+          id={message?.sender?.workspaceParticipantId}
+        />
+        <Typography>
+          {message?.sender ? message.sender.name : "탈퇴한 사용자"}
+        </Typography>
       </Box>
       <Typography sx={{ m: 2, pl: 1, fontSize: 18, fontWeight: "bold" }}>
         {message?.title}

@@ -42,8 +42,8 @@ const MessageCard: React.FC<MessageCardProps> = ({
       <Box sx={{ ml: 1, width: "10%" }}>
         <ColorAvatar
           sx={{ width: 27, height: 27 }}
-          src={message.sender.imageUrl}
-          id={message.sender.workspaceParticipantId}
+          src={message.sender?.imageUrl}
+          id={message.sender?.workspaceParticipantId}
         />
       </Box>
       <Box width="30%">
@@ -52,7 +52,7 @@ const MessageCard: React.FC<MessageCardProps> = ({
           whiteSpace="nowrap"
           textOverflow="ellipsis"
         >
-          {message.sender.name}
+          {message.sender ? message.sender.name : "탈퇴한 사용자"}
         </Typography>
       </Box>
       <Box width="50%">
