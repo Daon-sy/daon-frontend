@@ -2,6 +2,8 @@ import React from "react"
 import { Box, InputAdornment, TextField, Pagination } from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
 import useFetchWorkspaceNoticeList from "hooks/workspace/useFetchWorkspaceNoticeList"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faBullhorn } from "@fortawesome/free-solid-svg-icons"
 import WorkspaceNoticeCard from "./WorkspaceNoticeCard"
 
 interface Props {
@@ -97,24 +99,57 @@ const WorkspaceNoticeList: React.FC<Props> = ({
           검색
         </Box>
       </Box>
-      <Box
-        flexGrow={1}
-        mb={1}
-        width="100%"
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        {workspaceNotices.map(workspaceNotice => (
-          <WorkspaceNoticeCard
-            key={workspaceNotice.noticeId}
-            workspaceNotice={workspaceNotice}
-            onClick={() => handleNoticeClick(workspaceNotice.noticeId)}
-            isSelected={selectedNoticeId === workspaceNotice.noticeId}
-          />
-        ))}
-      </Box>
+      {workspaceNotices.length === 0 ? (
+        <Box
+          flexGrow={1}
+          mb={1}
+          width="100%"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Box
+            component="span"
+            sx={{
+              display: "inline-flex",
+              width: "58px",
+              height: "58px",
+              fontSize: "24px",
+              borderRadius: "50%",
+              backgroundColor: "rgba(226,88,96,0.6)",
+              alignItems: "center",
+              justifyContent: "center",
+              mb: 3,
+            }}
+          >
+            <FontAwesomeIcon icon={faBullhorn} color="#ffffff" />
+          </Box>
+          공지사항이 없습니다
+        </Box>
+      ) : (
+        <Box
+          flexGrow={1}
+          mb={1}
+          width="100%"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {workspaceNotices.map(workspaceNotice => (
+            <WorkspaceNoticeCard
+              key={workspaceNotice.noticeId}
+              workspaceNotice={workspaceNotice}
+              onClick={() => handleNoticeClick(workspaceNotice.noticeId)}
+              isSelected={selectedNoticeId === workspaceNotice.noticeId}
+            />
+          ))}
+        </Box>
+      )}
+
       <Pagination
         count={paginationInfo.totalPage}
         page={currentPage}

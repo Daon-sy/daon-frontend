@@ -4,6 +4,8 @@ import useRemoveWorkspaceNotice from "hooks/workspace/useRemoveWorkspaceNotice"
 import { getWorkspaceStore } from "store/userStore"
 import useFetchWorkspaceNoticeDetail from "hooks/workspace/useFetchWorkspaceNoticeDetail"
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew"
+import DeleteIcon from "@mui/icons-material/Delete"
+import EditIcon from "@mui/icons-material/Edit"
 import ModifyWorkspaceNotice from "./ModifyWorkspaceNotice"
 
 interface Props {
@@ -142,8 +144,12 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
           )}
           {myProfile?.role === "WORKSPACE_ADMIN" && !isModifyMode ? (
             <Box sx={{ display: "flex", justifyContent: "end" }}>
-              <Button onClick={handleModifyNotice}>공지사항 수정</Button>
-              <Button onClick={handleRemoveNotice}>공지사항 삭제</Button>
+              <Button onClick={handleModifyNotice}>
+                <EditIcon />
+              </Button>
+              <Button onClick={handleRemoveNotice}>
+                <DeleteIcon />
+              </Button>
             </Box>
           ) : null}
         </Box>
