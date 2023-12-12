@@ -14,7 +14,6 @@ import useCheckUsername from "hooks/member/useCheckUsername"
 
 const SignUp = () => {
   const navigate = useNavigate()
-  const [code, setCode] = React.useState<string>("")
 
   const {
     signUp,
@@ -66,7 +65,8 @@ const SignUp = () => {
     })
   }
 
-  const { emailCodeSent, emailCodeChecked, usernameCheck } = signUpForm
+  const { emailCodeSent, emailCodeChecked, usernameCheck, emailCheckCode } =
+    signUpForm
 
   const resendEmailClick = () => {
     setSignUpForm({
@@ -74,8 +74,15 @@ const SignUp = () => {
       email: "",
       emailCodeSent: false,
       emailCodeChecked: "NOT_CHECKED",
+      emailCheckCode: "",
     })
-    setCode("")
+  }
+
+  const renderEmailCodeCheckMessage = () => {
+    if (emailCodeChecked === "VALID") return "이메일 인증이 완료되었습니다"
+    if (timeLeftEmailCheck <= 0)
+      return "이메일 인증시간이 만료되었습니다. 다시 전송해주세요"
+    return emailCheckErrorMessage.emailCheckCode
   }
 
   return (
@@ -264,6 +271,7 @@ const SignUp = () => {
               />
               <Box
                 sx={{
+                  height: 12,
                   fontSize: 10,
                   color: emailCheckErrorMessage.email ? "#F14336" : "#dda600",
                 }}
@@ -305,7 +313,10 @@ const SignUp = () => {
                           fontSize: 10,
                           textDecorationColor: "#ecb317",
                         }}
-                        onClick={sendEmailCode}
+                        onClick={() => {
+                          sendEmailCode()
+                          setSignUpForm({ ...signUpForm, emailCheckCode: "" })
+                        }}
                       >
                         인증번호 재전송
                       </Button>
@@ -321,7 +332,7 @@ const SignUp = () => {
                           fontSize: 10,
                           textDecorationColor: "#ecb317",
                         }}
-                        onClick={() => checkEmailCode(code)}
+                        onClick={() => checkEmailCode()}
                       >
                         인증번호 확인
                       </Button>
@@ -329,29 +340,35 @@ const SignUp = () => {
                   </Box>
                 </InputLabel>
                 <TextField
-                  value={code}
-                  onChange={e => setCode(e.target.value)}
+                  value={emailCheckCode}
+                  onChange={e =>
+                    setSignUpForm({
+                      ...signUpForm,
+                      emailCheckCode: e.target.value,
+                    })
+                  }
                   variant="outlined"
                   margin="none"
                   size="small"
-                  error={emailCodeChecked === "INVALID"}
+                  // error={emailCodeChecked === "INVALID"}
+                  error={!!emailCheckErrorMessage.emailCheckCode}
                   inputProps={{
                     style: { fontSize: 12 },
-                    readOnly: emailCodeChecked === "VALID",
+                    readOnly:
+                      emailCodeChecked === "VALID" || timeLeftEmailCheck <= 0,
                   }}
                 />
                 <Box
                   style={{
+                    height: 12,
                     fontSize: 10,
                     color: emailCodeChecked === "VALID" ? "#3c8869" : "#F14336",
                   }}
                 >
+                  {/* {renderEmailCodeCheckMessage()} */}
                   {emailCodeChecked === "VALID"
-                    ? "이메일 인증이 완료되었습니다."
-                    : null}
-                  {emailCodeChecked === "INVALID"
-                    ? emailCheckErrorMessage.emailCheckCode
-                    : null}
+                    ? "이메일 인증이 완료되었습니다"
+                    : emailCheckErrorMessage.emailCheckCode}
                 </Box>
               </Stack>
             ) : null}

@@ -4,7 +4,7 @@ import { ErrorResponse } from "api"
 import { checkVerificationEmailApi, sendVerificationEmailApi } from "api/member"
 import { useAlert } from "hooks/useAlert"
 
-const MINUTES_IN_MS = 60 * 1000
+const MINUTES_IN_MS = 10 * 1000
 const INTERVAL_MS = 1000
 
 const validateEmail = (email: string) => {
@@ -18,7 +18,7 @@ interface ErrorMessage {
   emailCheckCode?: string
 }
 
-const useEmailCheck = (email: string) => {
+const useEmailCheck = (email: string, code: string) => {
   const [isFetching, setIsFetching] = React.useState(false)
   const [error, setError] = React.useState<ErrorResponse>()
   const [codeSent, setCodeSent] = React.useState(false)
@@ -36,6 +36,12 @@ const useEmailCheck = (email: string) => {
     }, INTERVAL_MS)
 
     if (timeLeft <= 0) {
+      if (checked !== "VALID") {
+        setErrorMessage({
+          ...errorMessage,
+          emailCheckCode: "이메일 인증시간이 만료되었습니다. 다시 전송해주세요",
+        })
+      }
       clearInterval(timer)
     }
 
@@ -45,7 +51,12 @@ const useEmailCheck = (email: string) => {
   React.useEffect(() => {
     setCodeSent(false)
     setChecked("NOT_CHECKED")
+    setErrorMessage({})
   }, [email])
+
+  React.useEffect(() => {
+    setErrorMessage({ ...errorMessage, emailCheckCode: undefined })
+  }, [code])
 
   const sendEmailCode = async () => {
     if (!validateEmail(email)) {
@@ -67,14 +78,21 @@ const useEmailCheck = (email: string) => {
     } catch (e) {
       if (axios.isAxiosError(e)) {
         const { response } = e
-        setError(response?.data as ErrorResponse)
+        const errorResponse = response?.data as ErrorResponse
+        setError(errorResponse)
+        if (errorResponse.errorCode === 2004) {
+          setErrorMessage({
+            ...errorMessage,
+            email: "이미 사용중인 이메일입니다",
+          })
+        }
       }
     } finally {
       setIsFetching(false)
     }
   }
 
-  const checkEmailCode = async (code: string) => {
+  const checkEmailCode = async () => {
     if (timeLeft <= 0) {
       // addError("이메일 인증시간이 만료되었습니다. 다시 전송해주세요")
       setErrorMessage({

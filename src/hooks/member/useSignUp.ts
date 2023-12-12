@@ -16,6 +16,7 @@ const useSignUp = () => {
   const [error, setError] = React.useState<ErrorResponse>()
   const [signUpForm, setSignUpForm] = React.useState<
     SignUpRequestBody & {
+      emailCheckCode: string
       usernameCheck: boolean
       passwordCheck: string
       emailCodeSent: boolean
@@ -25,6 +26,7 @@ const useSignUp = () => {
     username: "",
     usernameCheck: false,
     email: "",
+    emailCheckCode: "",
     password: "",
     passwordCheck: "",
     name: "",
@@ -39,6 +41,7 @@ const useSignUp = () => {
     passwordCheck,
     name,
     email,
+    emailCheckCode,
     emailCodeSent,
     emailCodeChecked,
     usernameCheck,
@@ -66,7 +69,7 @@ const useSignUp = () => {
     setCodeSent,
     setChecked,
     errorMessage: emailCheckErrorMessage,
-  } = useEmailCheck(email)
+  } = useEmailCheck(email, emailCheckCode)
 
   React.useEffect(() => {
     setCodeSent(emailCodeSent)
