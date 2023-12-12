@@ -1,458 +1,403 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import { Box, Button, LinearProgress, Stack, TextField } from "@mui/material"
 import {
-  addEmailApi,
-  checkUsernameApi,
-  checkVerificationEmailApi,
-  sendVerificationEmailApi,
-  signUpApi,
-} from "api/member"
-import { useAlert } from "hooks/useAlert"
-import Typography from "@mui/material/Typography"
-import CheckCircleIcon from "@mui/icons-material/CheckCircle"
-import ErrorIcon from "@mui/icons-material/Error"
-
-interface SignUpForm {
-  username: string
-  email: string
-  password: string
-  passwordCheck: string
-  name: string
-}
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Stack,
+  InputLabel,
+} from "@mui/material"
+import SignUpPageImage from "assets/img/sign-up.png"
+import useSignUp from "hooks/member/useSignUp"
+import useCheckUsername from "hooks/member/useCheckUsername"
 
 const SignUp = () => {
   const navigate = useNavigate()
-  const { addSuccess, addError } = useAlert()
-  const [email, setEmail] = React.useState<string>("")
-  const [sendEmail, setSendEmail] = React.useState<boolean>(false)
-  const [code, setCode] = React.useState<string>("")
-  const [checkCode, setCheckCode] = React.useState<boolean | null>(null)
-  const [progress, setProgress] = React.useState<number>(-1)
 
-  const [isUsernameDuplicate, setIsUsernameDuplicate] = React.useState<
-    boolean | null
-  >(null)
-  const [isEmailValid, setIsEmailValid] = React.useState<boolean>(true)
-
-  const [formData, setFormData] = React.useState<SignUpForm>({
-    username: "",
-    email: "",
-    password: "",
-    passwordCheck: "",
-    name: "",
-  })
+  const {
+    signUp,
+    signUpForm,
+    setSignUpForm,
+    sendEmailCode,
+    checkEmailCode,
+    timeLeftEmailCheck,
+    emailCheckErrorMessage,
+    checkUsername,
+    checkUsernameErrorMessage,
+  } = useSignUp()
+  const minutes = String(
+    Math.floor((timeLeftEmailCheck / (1000 * 60)) % 60),
+  ).padStart(2, "0")
+  const seconds = String(Math.floor((timeLeftEmailCheck / 1000) % 60)).padStart(
+    2,
+    "0",
+  )
 
   const onUsernameChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
+    setSignUpForm({
+      ...signUpForm,
       username: e.target.value,
     })
   }
-
   const onEmailChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
+    setSignUpForm({
+      ...signUpForm,
       email: e.target.value,
     })
   }
-
   const onPasswordChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
+    setSignUpForm({
+      ...signUpForm,
       password: e.target.value,
     })
   }
-
   const onPasswordCheckChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
+    setSignUpForm({
+      ...signUpForm,
       passwordCheck: e.target.value,
     })
   }
-
   const onNameChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
+    setSignUpForm({
+      ...signUpForm,
       name: e.target.value,
     })
   }
 
-  const MINUTES_IN_MS = 30 * 60 * 1000
-  const INTERVAL = 1000
-  const [timeLeft, setTimeLeft] = React.useState<number>(MINUTES_IN_MS)
-  const minutes = String(Math.floor((timeLeft / (1000 * 60)) % 60)).padStart(
-    2,
-    "0",
-  )
-  const second = String(Math.floor((timeLeft / 1000) % 60)).padStart(2, "0")
+  const { emailCodeSent, emailCodeChecked, usernameCheck, emailCheckCode } =
+    signUpForm
 
-  React.useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prevTime => prevTime - INTERVAL)
-    }, INTERVAL)
-
-    if (timeLeft <= 0) {
-      clearInterval(timer)
-    }
-
-    return () => {
-      clearInterval(timer)
-    }
-  }, [timeLeft])
-
-  const handleSendEmailClick = async () => {
-    setProgress(0)
-    const progressInterval = setInterval(() => {
-      setProgress(prevProgress =>
-        prevProgress >= 100 ? 0 : prevProgress + 12.33,
-      )
-    }, 500)
-
-    try {
-      await sendVerificationEmailApi({ email: formData.email })
-    } finally {
-      clearInterval(progressInterval)
-      setProgress(100)
-    }
-    setSendEmail(true)
-    setTimeLeft(MINUTES_IN_MS)
-  }
-
-  const handleCheckVerificationCodeClick = async () => {
-    const verifiedData = await checkVerificationEmailApi({
-      email: formData.email,
-      code,
+  const resendEmailClick = () => {
+    setSignUpForm({
+      ...signUpForm,
+      email: "",
+      emailCodeSent: false,
+      emailCodeChecked: "NOT_CHECKED",
+      emailCheckCode: "",
     })
-    if (verifiedData.data.verified) {
-      setCheckCode(true)
-    } else {
-      setCheckCode(false)
-    }
   }
 
-  const onCancelButtonClick = () => {
-    navigate(-1)
-  }
-
-  // 유효성 검사
-
-  // 1. 빈칸이 있는지
-  const checkFormData = (): boolean =>
-    !(
-      !formData.email ||
-      !formData.password ||
-      !formData.passwordCheck ||
-      !formData.name
-    )
-
-  // 2. '아이디'가 이미 존재하는지
-  const checkUsername = async () => {
-    try {
-      const response = await checkUsernameApi({
-        username: formData.username,
-      })
-      setIsUsernameDuplicate(response.data.isDuplicate)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  // 3. '비밀번호'가 6자리 이상인지
-  const checkPassword = () => formData.password.length >= 6
-
-  // 4. '비밀번호'와 '비밀번호 확인'의 값이 똑같은지
-  const checkPasswordMatching = () =>
-    formData.password === formData.passwordCheck
-
-  // 5. '이름'이 한국어로 기입되었는지
-  const checkNameKorean = () => /^[가-힣]+$/.test(formData.name)
-
-  // 6. '이메일'이 이메일 형식에 맞는지
-  const checkEmailValid = () =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
-
-  const onSignUpButtonClick = () => {
-    // 1. 빈칸이 있는지
-    if (!checkFormData()) {
-      addError("입력값을 확인해주세요")
-      return
-    }
-
-    // 2. '아이디'가 이미 존재하는지
-    if (isUsernameDuplicate === true) {
-      addError("이미 사용 중인 아이디입니다.")
-      return
-    }
-
-    // 3. '비밀번호'가 6자리 이상인지
-    if (!checkPassword()) {
-      addError("비밀번호는 6자리 이상이어야 합니다.")
-      return
-    }
-
-    // 4. '비밀번호'와 '비밀번호 확인'의 값이 똑같은지
-    if (!checkPasswordMatching()) {
-      addError("비밀번호와 비밀번호 확인이 일치하지 않습니다.")
-      return
-    }
-
-    // 5. '이름'이 한국어로 기입되었는지
-    if (!checkNameKorean()) {
-      addError("이름은 한글로 기입해주세요.")
-      return
-    }
-
-    // 6. '이메일'이 이메일 형식에 맞는지
-    if (!checkEmailValid()) {
-      addError("올바른 이메일 형식이 아닙니다.")
-      return
-    }
-
-    // 7. '이메일'인증을 했는지
-    if (!checkCode) {
-      addError("이메일을 인증해주세요.")
-      return
-    }
-
-    signUpApi({
-      username: formData.username,
-      password: formData.password,
-      name: formData.name,
-      email: formData.email,
-    })
-      .then(() => {
-        addSuccess("회원가입 성공! 로그인 버튼을 통해 로그인 해주세요.")
-        navigate("/")
-      })
-      .catch(err => {
-        if (err.response) {
-          const { status } = err.response
-          if (status === 400) {
-            // TODO
-            addError("입력값 오류입니다. 확인해주세요.")
-          }
-
-          if (status >= 500) {
-            addError("서버 오류입니다. 다시 시도해주세요.")
-          }
-        } else {
-          console.error(err)
-          addError("unknown error... 문의 부탁드립니다.")
-        }
-      })
+  const renderEmailCodeCheckMessage = () => {
+    if (emailCodeChecked === "VALID") return "이메일 인증이 완료되었습니다"
+    if (timeLeftEmailCheck <= 0)
+      return "이메일 인증시간이 만료되었습니다. 다시 전송해주세요"
+    return emailCheckErrorMessage.emailCheckCode
   }
 
   return (
     <Box
       sx={{
-        height: "calc(100vh - 70px);",
-        boxShadow: "border-box",
+        width: "100%",
+        height: "100%",
+        m: 0,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
         bgcolor: "white",
+        scrollbarWidth: "0.5em",
       }}
     >
-      <Box
-        sx={{
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          marginX: "auto",
-          justifyContent: "space-evenly",
-          width: 500,
-          backgroundColor: "white",
-        }}
-      >
-        <Typography
-          variant="h4"
-          component="h2"
+      <Stack direction="row">
+        <Box sx={{ width: 350 }}>
+          <Box component="img" sx={{ width: "100%" }} src={SignUpPageImage} />
+        </Box>
+        <Box
           sx={{
-            textAlign: "center",
-            mb: 2,
+            width: 350,
+            padding: 5,
+            boxShadow: 1,
+            borderWidth: 1,
           }}
         >
-          회원가입
-        </Typography>
-        <Stack spacing={2}>
-          <TextField
-            required
-            label="아이디"
-            variant="outlined"
-            value={formData.username}
-            onChange={onUsernameChanged}
-            helperText="usermail"
-          />
-          <TextField
-            required
-            type="password"
-            label="비밀번호"
-            variant="outlined"
-            value={formData.password}
-            onChange={onPasswordChanged}
-            helperText="6자리 이상. 영문,숫자,특수기호 조합."
-          />
-          <TextField
-            required
-            type="password"
-            label="비밀번호 확인"
-            variant="outlined"
-            value={formData.passwordCheck}
-            onChange={onPasswordCheckChanged}
-            helperText="6자리 이상. 영문,숫자,특수기호 조합."
-          />
-          <TextField
-            required
-            label="이름"
-            variant="outlined"
-            value={formData.name}
-            onChange={onNameChanged}
-            helperText="실명 입력"
-          />
-          <Box
-            component="form"
-            sx={{
-              display: "flex",
-              width: "500px",
-              justifyContent: "space-between",
-            }}
-          >
-            <TextField
-              required
-              label="이메일"
-              variant="outlined"
-              value={formData.email}
-              onChange={onEmailChanged}
-              helperText="usermail@email.com"
-              sx={{ flexGrow: 1 }}
-            />
-            <Button
-              sx={{
-                color: "white",
-                backgroundColor: "#FFBE00",
-                width: 120,
-                ml: 1,
-                height: "56px",
-                postion: "relative",
-                top: 0,
-              }}
-              onClick={handleSendEmailClick}
-            >
-              인증번호 전송
-            </Button>
-          </Box>
-          {!sendEmail && progress > 0 && progress <= 100 && (
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Box sx={{ width: "90%", mr: 1 }}>
-                <LinearProgress
-                  variant="determinate"
-                  value={progress}
-                  sx={{
-                    mt: 2,
-                    width: "100%",
-                    height: 10,
-                    borderRadius: 5,
-                  }}
-                />
-              </Box>
-              <Box sx={{ minWitdh: 35 }}>
-                <Typography
-                  mt={2}
-                  variant="body2"
-                  color="text.secondary"
-                >{`${Math.round(progress)}`}</Typography>
-              </Box>
-            </Box>
-          )}
-          {sendEmail ? (
+          <Stack spacing={1}>
             <Box>
-              <Typography sx={{ m: 0.5, fontSize: 14, color: "#787878" }}>
-                입력하신 이메일로 6자리 코드가 전송되었습니다.
+              <Typography
+                component="h2"
+                sx={{
+                  textAlign: "center",
+                  fontSize: 24,
+                  marginBottom: 3,
+                  fontWeight: 900,
+                }}
+              >
+                회원가입
               </Typography>
+            </Box>
+            <Stack spacing={1}>
+              <InputLabel htmlFor="username">
+                <Box display="flex">
+                  <Box flexGrow={1} fontWeight={900} fontSize={14}>
+                    아이디
+                  </Box>
+                  <Button
+                    sx={{
+                      p: 0,
+                      minWidth: 0,
+                      color: "#ecb317",
+                      fontWeight: 500,
+                      fontSize: 10,
+                      textDecorationColor: "#ecb317",
+                    }}
+                    onClick={checkUsername}
+                  >
+                    중복 확인
+                  </Button>
+                </Box>
+              </InputLabel>
+              <TextField
+                value={signUpForm.username}
+                onChange={onUsernameChanged}
+                placeholder="아이디"
+                variant="outlined"
+                margin="none"
+                size="small"
+                error={!!checkUsernameErrorMessage}
+                inputProps={{
+                  style: { fontSize: 12 },
+                }}
+              />
+              <Box
+                height={12}
+                fontSize={10}
+                color={usernameCheck ? "#3c8869" : "#F14336"}
+              >
+                {usernameCheck
+                  ? "사용 가능한 아이디 입니다"
+                  : checkUsernameErrorMessage}
+              </Box>
+            </Stack>
+            <Stack spacing={1}>
+              <InputLabel
+                htmlFor="password"
+                sx={{ fontWeight: 900, fontSize: 14 }}
+              >
+                비밀번호
+              </InputLabel>
+              <TextField
+                type="password"
+                value={signUpForm.password}
+                onChange={onPasswordChanged}
+                placeholder="비밀번호"
+                variant="outlined"
+                margin="none"
+                size="small"
+                inputProps={{
+                  style: { fontSize: 12 },
+                }}
+              />
+              <Box height={12} sx={{ fontSize: 10, color: "#dda600" }}>
+                6자리 이상 영문,숫자,특수기호 조합
+              </Box>
+            </Stack>
+            <Stack spacing={1}>
+              <InputLabel
+                htmlFor="passwordCheck"
+                sx={{ fontWeight: 900, fontSize: 14 }}
+              >
+                비밀번호 확인
+              </InputLabel>
+              <TextField
+                type="password"
+                value={signUpForm.passwordCheck}
+                onChange={onPasswordCheckChanged}
+                placeholder="비밀번호 확인"
+                variant="outlined"
+                margin="none"
+                size="small"
+                inputProps={{
+                  style: { fontSize: 12 },
+                }}
+              />
+              <Box height={12} sx={{ fontSize: 10, color: "#dda600" }}>
+                6자리 이상 영문,숫자,특수기호 조합
+              </Box>
+            </Stack>
+            <Stack spacing={1}>
+              <InputLabel
+                htmlFor="name"
+                sx={{
+                  fontWeight: 900,
+                  fontSize: 14,
+                }}
+              >
+                이름
+              </InputLabel>
+              <TextField
+                value={signUpForm.name}
+                onChange={onNameChanged}
+                placeholder="실명 기입"
+                variant="outlined"
+                margin="none"
+                size="small"
+                inputProps={{
+                  style: { fontSize: 12 },
+                }}
+              />
+            </Stack>
+            <Stack spacing={1}>
+              <InputLabel htmlFor="email">
+                <Box style={{ display: "flex" }}>
+                  <Box flexGrow={1} fontWeight={900} fontSize={14}>
+                    이메일
+                  </Box>
+                  <Button
+                    sx={{
+                      p: 0,
+                      minWidth: 0,
+                      color: !emailCodeSent ? "#ecb317" : "#3c8869",
+                      fontWeight: 500,
+                      fontSize: 10,
+                      textDecorationColor: "#ecb317",
+                    }}
+                    onClick={!emailCodeSent ? sendEmailCode : resendEmailClick}
+                  >
+                    {!emailCodeSent ? "인증번호 전송" : "이메일 재입력"}
+                  </Button>
+                </Box>
+              </InputLabel>
+              <TextField
+                value={signUpForm.email}
+                onChange={onEmailChanged}
+                placeholder="email@email.com"
+                variant="outlined"
+                margin="none"
+                size="small"
+                error={!!emailCheckErrorMessage.email}
+                inputProps={{
+                  style: { fontSize: 12 },
+                  readOnly: emailCodeSent,
+                }}
+              />
               <Box
                 sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  height: 12,
+                  fontSize: 10,
+                  color: emailCheckErrorMessage.email ? "#F14336" : "#dda600",
                 }}
               >
-                <TextField
-                  sx={{ width: 200 }}
-                  required
-                  label="인증번호 입력"
-                  error={checkCode === false}
-                  value={code}
-                  onChange={e => setCode(e.target.value)}
-                  inputProps={{ maxLength: 6 }}
-                />
-                <Typography sx={{ color: "#3A4CA8" }}>
-                  {minutes} : {second}
-                </Typography>
-                <Button
-                  sx={{
-                    color: "white",
-                    backgroundColor: "#1F4838",
-                    width: 120,
-                    ml: 1,
-                    height: "56px",
-                    postion: "relative",
-                    top: 0,
-                  }}
-                  onClick={handleCheckVerificationCodeClick}
-                >
-                  인증번호 확인
-                </Button>
+                {emailCodeSent
+                  ? "입력하신 이메일로 6자리 코드가 전송되었습니다."
+                  : emailCheckErrorMessage.email}
               </Box>
-              {checkCode !== null && (
-                <Typography sx={{ mt: 0.5, fontSize: 14, color: "#787878" }}>
-                  {checkCode
-                    ? "이메일 인증이 완료되었습니다."
-                    : "이메일 인증에 실패하였습니다. 다시 입력해 주세요."}
-                </Typography>
-              )}
-            </Box>
-          ) : null}
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <Box
-              sx={{
-                width: 300,
-                marginTop: 1,
-              }}
-            >
-              <Stack
-                direction="row"
-                spacing={2}
-                sx={{
-                  height: 50,
-                }}
-              >
-                <Button
-                  fullWidth
-                  size="large"
-                  variant="contained"
-                  onClick={onSignUpButtonClick}
-                >
-                  가입
-                </Button>
-                <Button
-                  fullWidth
-                  size="large"
+            </Stack>
+            {emailCodeSent ? (
+              <Stack spacing={1}>
+                <InputLabel htmlFor="emailCheck">
+                  <Box style={{ display: "flex" }}>
+                    <Box flexGrow={1} style={{ display: "flex" }}>
+                      <Box sx={{ fontWeight: 900, fontSize: 14 }}>
+                        이메일 인증하기
+                      </Box>
+                      {emailCodeChecked === "VALID" ? null : (
+                        <Box
+                          sx={{
+                            ml: 2,
+                            fontWeight: 500,
+                            fontSize: 10,
+                            color: "#3A4CA8",
+                          }}
+                        >
+                          {minutes} : {seconds}
+                        </Box>
+                      )}
+                    </Box>
+                    {emailCodeChecked !== "VALID" && timeLeftEmailCheck <= 0 ? (
+                      <Button
+                        sx={{
+                          p: 0,
+                          minWidth: 0,
+                          textAlign: "right",
+                          color: "#F14336",
+                          fontWeight: 500,
+                          fontSize: 10,
+                          textDecorationColor: "#ecb317",
+                        }}
+                        onClick={() => {
+                          sendEmailCode()
+                          setSignUpForm({ ...signUpForm, emailCheckCode: "" })
+                        }}
+                      >
+                        인증번호 재전송
+                      </Button>
+                    ) : null}
+                    {emailCodeChecked !== "VALID" && timeLeftEmailCheck > 0 ? (
+                      <Button
+                        sx={{
+                          p: 0,
+                          minWidth: 0,
+                          textAlign: "right",
+                          color: "#ecb317",
+                          fontWeight: 500,
+                          fontSize: 10,
+                          textDecorationColor: "#ecb317",
+                        }}
+                        onClick={() => checkEmailCode()}
+                      >
+                        인증번호 확인
+                      </Button>
+                    ) : null}
+                  </Box>
+                </InputLabel>
+                <TextField
+                  value={emailCheckCode}
+                  onChange={e =>
+                    setSignUpForm({
+                      ...signUpForm,
+                      emailCheckCode: e.target.value,
+                    })
+                  }
                   variant="outlined"
-                  onClick={onCancelButtonClick}
+                  margin="none"
+                  size="small"
+                  // error={emailCodeChecked === "INVALID"}
+                  error={!!emailCheckErrorMessage.emailCheckCode}
+                  inputProps={{
+                    style: { fontSize: 12 },
+                    readOnly:
+                      emailCodeChecked === "VALID" || timeLeftEmailCheck <= 0,
+                  }}
+                />
+                <Box
+                  style={{
+                    height: 12,
+                    fontSize: 10,
+                    color: emailCodeChecked === "VALID" ? "#3c8869" : "#F14336",
+                  }}
                 >
-                  취소
-                </Button>
+                  {/* {renderEmailCodeCheckMessage()} */}
+                  {emailCodeChecked === "VALID"
+                    ? "이메일 인증이 완료되었습니다"
+                    : emailCheckErrorMessage.emailCheckCode}
+                </Box>
               </Stack>
+            ) : null}
+            <Box display="flex" justifyContent="center">
+              <Box width={300} mt={5}>
+                <Stack height={40} direction="row" spacing={4}>
+                  <Button
+                    fullWidth
+                    size="small"
+                    variant="contained"
+                    onClick={() => signUp(() => navigate("/"))}
+                  >
+                    회원가입
+                  </Button>
+                  <Button
+                    fullWidth
+                    size="small"
+                    variant="outlined"
+                    onClick={() => navigate(-1)}
+                  >
+                    취소
+                  </Button>
+                </Stack>
+              </Box>
             </Box>
-          </Box>
-        </Stack>
-      </Box>
+          </Stack>
+        </Box>
+      </Stack>
     </Box>
   )
 }
-
 export default SignUp
