@@ -11,6 +11,7 @@ import {
   ListItemAvatar,
   ListItemText,
   ListItem,
+  Checkbox,
 } from "@mui/material"
 import { Dayjs } from "dayjs"
 import { ProjectParticipant } from "_types/project"
@@ -23,6 +24,7 @@ import ProjectParticipantsModal from "components/project/modal/ProjectParticipan
 import { useAlert } from "hooks/useAlert"
 import useCreateTask from "hooks/task/useCreateTask"
 import ColorAvatar from "components/common/ColorAvatar"
+import FormLabel from "@mui/material/FormLabel"
 
 interface Props {
   handleClose: () => void
@@ -55,31 +57,35 @@ const CreateTask: React.FC<Props> = ({ handleClose }: Props) => {
 
   return (
     <Box>
-      <Stack spacing={2} height="100%">
-        <Box
-          sx={{
-            display: "flex",
-          }}
-        >
-          <Stack direction="row" spacing={2}>
-            <ProjectSelectButton
-              handleProjectSelect={project => {
-                setProjectId(project.id)
-                setBoardId(undefined)
-              }}
-            />
-            {projectId ? (
-              <BoardSelectButton
-                projectId={projectId}
-                currentBoardId={boardId}
-                handleBoardSelect={board => setBoardId(board?.boardId)}
-              />
-            ) : null}
-          </Stack>
-          <Box flexGrow={1} />
+      <Stack spacing={1} height="100%">
+        <Stack spacing={1} pb={6 / 4}>
+          <ProjectSelectButton
+            handleProjectSelect={project => {
+              setProjectId(project?.projectId)
+              setBoardId(undefined)
+            }}
+          />
+          <BoardSelectButton
+            projectId={projectId}
+            handleBoardSelect={board => setBoardId(board?.boardId)}
+          />
+        </Stack>
+        <Box mt={2} display="flex" alignItems="start">
+          {/* <Box ml={1} display="flex" alignItems="center"> */}
+          {/*  <Typography fontSize={14} color="error"> */}
+          {/*    긴급 */}
+          {/*  </Typography> */}
+          {/*  <Checkbox */}
+          {/*    size="small" */}
+          {/*    color="error" */}
+          {/*    checked={emergency} */}
+          {/*    onClick={() => setEmergency(!emergency)} */}
+          {/*    sx={{ width: 30, height: 30 }} */}
+          {/*  /> */}
+          {/* </Box> */}
           <Box
             sx={{
-              padding: 0.5,
+              pr: 0.5,
               display: "flex",
               alignItems: "center",
             }}
@@ -88,22 +94,29 @@ const CreateTask: React.FC<Props> = ({ handleClose }: Props) => {
               label="긴급"
               color={emergency ? "error" : "default"}
               onClick={() => setEmergency(!emergency)}
+              sx={{ borderRadius: 1, mt: 0.4 }}
             />
           </Box>
-        </Box>
-        <Box mt={2}>
-          <TextField
-            required
-            fullWidth
-            label="제목"
-            size="small"
-            value={title}
-            onChange={e => setTitle(e.target.value)}
-            inputProps={{ maxLength: 20 }}
-          />
-          <FormHelperText
-            sx={{ textAlign: "end" }}
-          >{`${title.length}/20자`}</FormHelperText>
+          <Box flexGrow={1}>
+            <TextField
+              required
+              fullWidth
+              label="제목"
+              size="small"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              inputProps={{
+                maxLength: 20,
+                style: { fontSize: 14 },
+              }}
+              sx={{
+                ".MuiFormLabel-root": { fontSize: 14 },
+              }}
+            />
+            <FormHelperText
+              sx={{ textAlign: "end" }}
+            >{`${title.length}/20자`}</FormHelperText>
+          </Box>
         </Box>
         <Box
           sx={{

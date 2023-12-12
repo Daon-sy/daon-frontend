@@ -12,14 +12,19 @@ const initialState: CreateProjectRequestBody = {
 
 interface Props {
   onCancelButtonClick: () => void
+  navigateOnCreateSuccess?: boolean
 }
 
-const CreateProject: React.FC<Props> = ({ onCancelButtonClick }: Props) => {
+const CreateProject: React.FC<Props> = ({
+  onCancelButtonClick,
+  navigateOnCreateSuccess = false,
+}: Props) => {
   const { workspace } = getWorkspaceStore()
   const [data, onChange] = useInputs<CreateProjectRequestBody>(initialState)
   const { fetch } = useCreateProject(
     {
       workspaceId: workspace?.workspaceId || 0,
+      navigateOnCreateSuccess,
     },
     onCancelButtonClick,
   )

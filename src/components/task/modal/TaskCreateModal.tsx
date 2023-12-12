@@ -103,7 +103,7 @@ const TaskCreateModal: React.FC<Props> = ({ open, handleClose }: Props) => {
           <Stack direction="row" spacing={2}>
             <ProjectSelectButton
               handleProjectSelect={project => {
-                setProjectId(project.id)
+                setProjectId(project?.projectId)
                 setBoardId(undefined)
               }}
             />
