@@ -10,7 +10,6 @@ import {
 } from "@mui/material"
 import SignUpPageImage from "assets/img/sign-up.png"
 import useSignUp from "hooks/member/useSignUp"
-import useCheckUsername from "hooks/member/useCheckUsername"
 
 const SignUp = () => {
   const navigate = useNavigate()
@@ -76,13 +75,6 @@ const SignUp = () => {
       emailCodeChecked: "NOT_CHECKED",
       emailCheckCode: "",
     })
-  }
-
-  const renderEmailCodeCheckMessage = () => {
-    if (emailCodeChecked === "VALID") return "이메일 인증이 완료되었습니다"
-    if (timeLeftEmailCheck <= 0)
-      return "이메일 인증시간이 만료되었습니다. 다시 전송해주세요"
-    return emailCheckErrorMessage.emailCheckCode
   }
 
   return (
