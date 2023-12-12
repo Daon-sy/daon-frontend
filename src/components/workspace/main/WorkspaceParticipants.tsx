@@ -3,8 +3,8 @@ import React from "react"
 import { Box } from "@mui/material"
 import { getWorkspaceStore } from "store/userStore"
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCrown, faLeaf } from "@fortawesome/free-solid-svg-icons"
+import wsIcon from "assets/img/ws_icon.png"
+import pjIcon from "assets/img/pj_icon.png"
 import ColorAvatar from "components/common/ColorAvatar"
 import useFetchWorkspaceParticipants from "hooks/workspace/useFetchWorkspaceParticipants"
 
@@ -55,6 +55,7 @@ const WorkspaceParticipants: React.FC = () => {
             display: "inline-flex",
             alignItems: "center",
             justifyContent: "space-between",
+            position: "relative",
           }}
         >
           <ColorAvatar
@@ -65,6 +66,33 @@ const WorkspaceParticipants: React.FC = () => {
               height: "36px",
             }}
           />
+          {participant.role === "WORKSPACE_ADMIN" ? (
+            <Box
+              component="img"
+              sx={{
+                position: "absolute",
+                width: "16px",
+                height: "16px",
+                zIndex: 10,
+                bottom: 10,
+                left: 30,
+              }}
+              src={wsIcon}
+            />
+          ) : participant.role === "PROJECT_ADMIN" ? (
+            <Box
+              component="img"
+              sx={{
+                position: "absolute",
+                width: "16px",
+                height: "16px",
+                zIndex: 10,
+                bottom: 10,
+                left: 30,
+              }}
+              src={pjIcon}
+            />
+          ) : null}
           <Box
             component="div"
             sx={{
@@ -75,44 +103,26 @@ const WorkspaceParticipants: React.FC = () => {
               overflow: "hidden",
             }}
           >
-            <Box sx={{ display: "flex", position: "relative" }}>
-              {participant.role === "WORKSPACE_ADMIN" ? (
-                <Box
-                  component="span"
-                  sx={{
-                    color: "#fdd835",
-                    mr: "4px",
-                  }}
-                >
-                  <FontAwesomeIcon icon={faCrown} />
-                </Box>
-              ) : participant.role === "PROJECT_ADMIN" ? (
-                <Box component="span" sx={{ color: "#1F4838", mr: "4px" }}>
-                  <FontAwesomeIcon icon={faLeaf} />
-                </Box>
-              ) : null}
-              <Box
-                component="div"
-                sx={{
-                  // width: "fit-content",
-                  color: "#1F4838",
-                  fontWeight: "bold",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                  wordBreak: "break-all",
-                  fontSize: "14px",
-                }}
-              >
-                {participant.name}
-              </Box>
+            <Box
+              component="div"
+              sx={{
+                color: "#1F4838",
+                fontWeight: "bold",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                wordBreak: "break-all",
+                fontSize: "14px",
+              }}
+            >
+              {participant.name}
             </Box>
+
             <Box
               component="div"
               sx={{
                 color: "#a9a9a9",
                 overflow: "hidden",
-                // width: "120px",
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
                 wordBreak: "break-all",

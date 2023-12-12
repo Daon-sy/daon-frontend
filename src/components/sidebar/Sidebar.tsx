@@ -18,7 +18,7 @@ const Sidebar: React.FC = () => {
       <Box
         component="div"
         sx={{
-          height: "268px",
+          height: "196px",
           width: "100%",
           top: 0,
           zIndex: 100,

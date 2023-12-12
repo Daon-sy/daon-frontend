@@ -40,20 +40,20 @@ const IconBtnWrapper: React.FC = () => {
         <IconBtn
           component={RouterLink}
           text="북마크"
-          icon={<Bookmark fontSize="large" />}
+          icon={<Bookmark fontSize="medium" />}
           to={`/workspace/${workspaceId}/task/bookmark`}
         />
         <IconBtn
           component={RouterLink}
           text="나의 할일 모음"
-          icon={<EmojiEmotions fontSize="large" />}
+          icon={<EmojiEmotions fontSize="medium" />}
           to={`/workspace/${workspaceId}/task/my`}
         />
 
         <IconBtn
           component="button"
           text="할일추가"
-          icon={<AddCircle fontSize="large" />}
+          icon={<AddCircle fontSize="medium" />}
           onClick={openCreateTaskModal}
         />
       </Box>
@@ -82,13 +82,13 @@ const IconBtnWrapper: React.FC = () => {
         <IconBtn
           component="button"
           text="구성원보기"
-          icon={<Groups fontSize="large" />}
+          icon={<Groups fontSize="medium" />}
           onClick={openParticipantsModal}
         />
       </Box>
       <Divider
         sx={{
-          border: 1,
+          border: 2,
           width: "80%",
           marginX: "auto",
           color: "#eeeeef",

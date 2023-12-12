@@ -8,6 +8,8 @@ interface SubIconBtnProps {
   position?: string
   right?: string
   top?: string
+  bottom?: string
+  left?: string
 }
 
 const SubIconBtn = ({
@@ -17,6 +19,8 @@ const SubIconBtn = ({
   position,
   right,
   top,
+  bottom,
+  left,
 }: SubIconBtnProps) => {
   return (
     <Box
@@ -32,6 +36,8 @@ const SubIconBtn = ({
         position: `${position}`,
         top: `${top}`,
         right: `${right}`,
+        left: `${left}`,
+        bottom: `${bottom}`,
         ml: 0.5,
         "&:hover": {
           bgcolor: "rgba(0,0,0,0.1)",
