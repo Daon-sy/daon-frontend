@@ -1,14 +1,8 @@
 import React from "react"
 import { Link as RouterLink, useParams } from "react-router-dom"
 import { Box, Divider } from "@mui/material"
-import {
-  Groups,
-  AddCircle,
-  ChatBubbleOutline,
-  Bookmark,
-  EmojiEmotions,
-} from "@mui/icons-material"
-import { faBullhorn } from "@fortawesome/free-solid-svg-icons"
+import { Groups, AddCircle, Bookmark, EmojiEmotions } from "@mui/icons-material"
+import { faBullhorn, faComment } from "@fortawesome/free-solid-svg-icons"
 import ParticipantsModal from "components/workspace/ParticipantsModal"
 import { useCreateTaskModal } from "components/task/CreateTask"
 import WorkspaceNoticeModal from "components/workspace/modal/WorkspaceNoticeModal"
@@ -75,11 +69,7 @@ const IconBtnWrapper: React.FC = () => {
           icon={faBullhorn}
           onClick={openWorkspaceNoticeModal}
         />
-        <IconBtn
-          component="button"
-          text="쪽지"
-          icon={<ChatBubbleOutline fontSize="large" />}
-        />
+        <IconBtn component="button" text="쪽지" icon={faComment} />
         <IconBtn
           component="button"
           text="구성원보기"

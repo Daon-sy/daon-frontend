@@ -31,7 +31,7 @@ const IconBtn = ({ text, icon, onClick, to, component }: IconBtnProps) => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        width: "35%",
+        width: "30%",
         bgcolor: "transparent",
         border: "none",
         color: "#303633",
@@ -46,7 +46,7 @@ const IconBtn = ({ text, icon, onClick, to, component }: IconBtnProps) => {
       <Box component="div" sx={{ color: "#1f4838", fontSize: "30px" }}>
         {renderIcon()}
       </Box>
-      <Box component="span" sx={{ fontSize: "8px", fontWeight: "bold" }}>
+      <Box component="span" sx={{ fontSize: "10px", fontWeight: "bold" }}>
         {text}
       </Box>
     </Box>
