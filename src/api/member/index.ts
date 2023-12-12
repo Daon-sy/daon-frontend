@@ -106,3 +106,11 @@ export const checkEmailApi = async (
 ): Promise<AxiosResponse> => {
   return basicAxios.post(`${EMAIL_API_PREFIX}/check`, requestBody)
 }
+
+export const checkUsernameApi = async (
+  username: string,
+): Promise<AxiosResponse> => {
+  return basicAxios.post(`${MEMBER_API_PREFIX}/username`, {
+    username,
+  })
+}
