@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import Box from "@mui/material/Box"
 import useInputs from "hooks/useInputs"
 import { useAlert } from "hooks/useAlert"
@@ -28,6 +28,9 @@ const TaskReplyInput: React.FC<TaskReplyProps> = ({
 }: TaskReplyProps) => {
   const [data, onChange, resetData] = useInputs<TaskReply>(initialState)
   const { addSuccess, addError } = useAlert()
+  const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(
+    null,
+  )
 
   const createReply = () => {
     if (!workspaceId) return
@@ -46,10 +49,18 @@ const TaskReplyInput: React.FC<TaskReplyProps> = ({
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault()
-      createReply()
+
+      if (typingTimeout) {
+        clearTimeout(typingTimeout)
+      }
+
+      setTypingTimeout(
+        setTimeout(() => {
+          createReply()
+        }, 200),
+      )
     }
   }
-
   return (
     <Box
       component="form"
