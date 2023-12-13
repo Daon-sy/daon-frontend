@@ -219,14 +219,14 @@ const MemberInfoSection: React.FC = () => {
             }}
           >
             <Button
+              disableElevation
+              variant="contained"
+              color="primary"
               sx={{
                 height: 30,
                 borderRadius: 1,
                 color: "white",
                 backgroundColor: "#1F4838",
-                ":hover": {
-                  backgroundColor: "#FFBE00",
-                },
               }}
               onClick={handleCheckPasswordClick}
             >
@@ -290,11 +290,13 @@ const MemberInfoSection: React.FC = () => {
             }}
           >
             <Button
+              disableElevation
+              variant="contained"
+              color="secondary"
               sx={{
                 height: 30,
                 border: 1,
                 borderRadius: 1,
-                color: "#1F4838",
               }}
               onClick={handleEditMyInfoClick}
             >
