@@ -44,7 +44,7 @@ const WorkspaceParticipants: React.FC = () => {
       }}
     >
       {/* 구성원 Item */}
-      {workspaceParticipants?.map(participant => (
+      {workspaceParticipants?.map((participant, idx) => (
         <Box
           component="li"
           sx={{
@@ -57,6 +57,7 @@ const WorkspaceParticipants: React.FC = () => {
             justifyContent: "space-between",
             position: "relative",
             borderBottom: "1px solid #b9b9b9",
+            borderTop: idx === 0 ? "1px solid #b9b9b9" : "none",
           }}
         >
           <ColorAvatar
