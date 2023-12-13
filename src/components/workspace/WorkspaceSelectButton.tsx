@@ -73,7 +73,7 @@ const WorkspaceSelectButton = () => {
                     sx={{
                       fontSize: 16,
                       fontWeight: 500,
-                      maxWidth: 150,
+                      maxWidth: 200,
                       overflow: "hidden",
                       textOverflow: "ellipsis",
                       whiteSpace: "nowrap",

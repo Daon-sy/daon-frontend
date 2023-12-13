@@ -20,14 +20,20 @@ const TaskCard: React.FC<Props> = React.memo(
   ({ task, renderProject = false }: Props) => {
     const { workspace } = getWorkspaceStore()
     const { setTaskDetailParam } = getTaskDetailViewStore()
-    const { bookmarked, handleBookmark } = useHandleBookmark(
-      {
+    const { bookmarked: handleBookmarkResponse, handleBookmark } =
+      useHandleBookmark({
         workspaceId: workspace?.workspaceId || 0,
         projectId: task.project.projectId,
         taskId: task.taskId,
-      },
-      task.bookmark,
-    )
+      })
+    const [bookmarked, setBookmarked] = React.useState(false)
+    React.useEffect(() => {
+      setBookmarked(task.bookmark || false)
+    }, [task])
+    React.useEffect(() => {
+      if (typeof handleBookmarkResponse === "boolean")
+        setBookmarked(handleBookmarkResponse)
+    }, [handleBookmarkResponse])
 
     return (
       <Box

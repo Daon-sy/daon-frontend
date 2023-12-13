@@ -42,6 +42,10 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
     fetchTaskList()
   }, [params?.projectId])
 
+  React.useEffect(() => {
+    if (!taskDetailParam) fetchTaskList()
+  }, [taskDetailParam])
+
   const { state: locSate } = useLocation()
   React.useEffect(() => {
     if (locSate && locSate.openTaskId) {

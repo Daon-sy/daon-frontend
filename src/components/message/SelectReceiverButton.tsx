@@ -14,6 +14,8 @@ import { MessageSender, WorkspaceParticipant } from "_types/workspace"
 import { workspaceParticipantListApi } from "api/workspace"
 import { TEST_IMAGE_URL } from "env"
 import SearchIcon from "@mui/icons-material/Search"
+import ColorAvatar from "components/common/ColorAvatar"
+import NoData from "components/common/NoData"
 
 interface SelectReceiverButtonProps {
   workspaceId: number | undefined
@@ -121,6 +123,7 @@ const SelectReceiverButton = ({
       >
         <Box sx={{ m: 1 }}>
           <TextField
+            sx={{ width: "100%" }}
             size="small"
             placeholder="이름으로 검색"
             value={searchValue}
@@ -147,7 +150,11 @@ const SelectReceiverButton = ({
                   onClick={() => handleReceiverClick(receiver)}
                 >
                   <Box width="15%">
-                    <Avatar src={receiver.imageUrl || TEST_IMAGE_URL} />
+                    <ColorAvatar
+                      sx={{ width: 27, height: 27 }}
+                      src={receiver?.imageUrl}
+                      id={receiver?.workspaceParticipantId}
+                    />
                   </Box>
                   <Box width="40%">
                     <Typography
@@ -172,6 +179,15 @@ const SelectReceiverButton = ({
                 </MenuItem>
               </Tooltip>
             ))}
+          {receivers.filter(receiver =>
+            receiver.name.toLowerCase().includes(searchValue.toLowerCase()),
+          ).length === 0 && (
+            <NoData
+              content="검색 결과가 없어요"
+              width="286.75px"
+              height="143.375px"
+            />
+          )}
         </Box>
       </Menu>
     </Box>

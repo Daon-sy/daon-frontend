@@ -10,6 +10,7 @@ import {
 } from "@mui/material"
 import { getWorkspaceStore } from "store/userStore"
 import TitleDialog from "./TitleDialog"
+import { WORKSPACE_PARTICIPANT_ROLE } from "../../_types/workspace"
 
 export interface MenuWithPage {
   pageName: string
@@ -24,6 +25,7 @@ interface Props {
   handleClose: () => void
   menuWithPageList: MenuWithPage[]
   removeButton?: React.ReactNode
+  allowedEditRoles?: WORKSPACE_PARTICIPANT_ROLE[]
 }
 
 const MenuModal = ({
@@ -33,6 +35,7 @@ const MenuModal = ({
   handleClose,
   menuWithPageList = [],
   removeButton,
+  allowedEditRoles = [],
 }: Props) => {
   const [selectedPage, setSelectedPage] = React.useState<string | undefined>(
     menuWithPageList.length > 0 ? menuWithPageList[0].pageValue : undefined,
@@ -111,7 +114,7 @@ const MenuModal = ({
                 </RadioGroup>
               </Stack>
             </Box>
-            {myProfile?.role === "WORKSPACE_ADMIN" ? (
+            {myProfile && allowedEditRoles?.includes(myProfile.role) ? (
               <Box mt={1} sx={{ position: "absolute", bottom: 10, left: 120 }}>
                 {removeButton}
               </Box>

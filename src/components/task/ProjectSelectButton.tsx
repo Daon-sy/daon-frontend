@@ -101,7 +101,7 @@ const ProjectSelectButton: React.FC<Props> = ({
         }}
         size="medium"
       >
-        <Box display="flex" alignItems="center" width={85}>
+        <Box display="flex" alignItems="center" width={90}>
           <DvrIcon />
           <Typography ml={1} fontSize={14} fontWeight={500}>
             프로젝트
