@@ -4,6 +4,8 @@ import { TaskReplyDetail } from "_types/task"
 import { removeTaskReply } from "api/task"
 
 import ColorAvatar from "components/common/ColorAvatar"
+import { useAlert } from "hooks/useAlert"
+import ConfirmDialog from "components/common/ConfirmDialog"
 import ReplyBtn from "./ReplyBtn"
 
 interface TaskReplyItemProps {
@@ -25,9 +27,15 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
 }: TaskReplyItemProps): React.ReactNode => {
   const [isModify, setIsModify] = useState<boolean>(false)
   const [content, setContent] = useState<string>(reply.content)
+  const [confirmDialogOpen, setConfirmDialogOpen] = React.useState(false)
+  const { addSuccess } = useAlert()
 
   const handleToggle = () => {
     setIsModify(prevIsModify => !prevIsModify)
+  }
+
+  const openConfirmDialog = () => {
+    setConfirmDialogOpen(true)
   }
 
   const handleRemoveClick = async (replyId: number) => {
@@ -35,6 +43,7 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
       if (workspaceId) {
         await removeTaskReply(workspaceId, projectId, taskId, replyId)
         onReplyDeleted()
+        addSuccess("댓글이 삭제되었습니다.")
       }
     } catch (error) {
       console.error("Error removing reply:", error)
@@ -95,7 +104,7 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
                   >
                     저장
                   </ReplyBtn>
-                  <ReplyBtn bgcolor="#AE3A1E" handleClick={handleToggle}>
+                  <ReplyBtn bgcolor="#747474" handleClick={handleToggle}>
                     취소
                   </ReplyBtn>
                 </>
@@ -104,12 +113,16 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
                   수정
                 </ReplyBtn>
               )}
-              <ReplyBtn
-                bgcolor="#747474"
-                handleClick={() => handleRemoveClick(reply.replyId)}
-              >
+              <ReplyBtn bgcolor="#AE3A1E" handleClick={openConfirmDialog}>
                 삭제
               </ReplyBtn>
+              <ConfirmDialog
+                open={confirmDialogOpen}
+                handleConfirm={() => handleRemoveClick(reply.replyId)}
+                handleClose={() => setConfirmDialogOpen(false)}
+              >
+                댓글을 삭제하시겠습니까?
+              </ConfirmDialog>
             </>
           )}
         </Box>
@@ -124,22 +137,24 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
           }}
         >
           <TextField
+            multiline
+            rows={2}
             placeholder="댓글을 수정해주세요"
             name="content"
             value={content}
             onChange={e => setContent(e.target.value)}
-            inputProps={{ maxLength: 500 }}
+            inputProps={{ maxLength: 500, style: { whiteSpace: "pre-wrap" } }}
             sx={{
               boxSizing: "border-box",
-              width: "480px",
+              width: "472px",
               paddingLeft: "24px",
               overflow: "hidden",
               textOverflow: "ellipsis",
-              whiteSpace: "normal",
-              wordWrap: "break-word",
+              whiteSpace: "pre-wrap",
+              py: 0.1,
             }}
           />
-          <FormHelperText sx={{ textAlign: "end" }}>
+          <FormHelperText sx={{ textAlign: "end", width: "472px" }}>
             {`${content.length}/500자`}
           </FormHelperText>
         </Box>
@@ -150,12 +165,11 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
             boxSizing: "border-box",
             width: "480px",
             paddingLeft: "24px",
-            overflow: "hidden",
             textOverflow: "ellipsis",
-            whiteSpace: "normal",
             wordWrap: "break-word",
             fontSize: "14px",
             lineHeight: "16px",
+            whiteSpace: "pre-wrap",
           }}
         >
           {reply.content}

@@ -3,6 +3,7 @@ import { Box, Button } from "@mui/material"
 import { getWorkspaceStore } from "store/userStore"
 import { TaskReplyDetail } from "_types/task"
 import { taskReplyListApi, modifyTaskReply } from "api/task"
+import { useAlert } from "hooks/useAlert"
 import TaskReplyItem from "./TaskReplyItem"
 import TaskReplyInput from "./TaskReplyInput"
 
@@ -15,6 +16,7 @@ const TaskReply: React.FC<TaskReplyProps> = ({
   projectId,
   taskId,
 }: TaskReplyProps) => {
+  const { addSuccess } = useAlert()
   const { workspace } = getWorkspaceStore()
   const [replies, setReplies] = React.useState<TaskReplyDetail[]>([])
   const [replySlice, setReplySlice] = React.useState({
@@ -75,6 +77,7 @@ const TaskReply: React.FC<TaskReplyProps> = ({
       })
 
       setReplies(updatedReplies)
+      addSuccess("댓글이 수정되었습니다")
     }
   }
 

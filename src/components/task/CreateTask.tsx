@@ -68,7 +68,14 @@ const CreateTask: React.FC<Props> = ({ handleClose }: Props) => {
             handleBoardSelect={board => setBoardId(board?.boardId)}
           />
         </Stack>
-        <Box mt={2} display="flex" alignItems="start">
+        <Box
+          mt={2}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          position="relative"
+          paddingBottom={3}
+        >
           <Box
             sx={{
               pr: 0.5,
@@ -80,7 +87,9 @@ const CreateTask: React.FC<Props> = ({ handleClose }: Props) => {
               label="긴급"
               color={emergency ? "error" : "default"}
               onClick={() => setEmergency(!emergency)}
-              sx={{ borderRadius: 1, mt: 0.4 }}
+              sx={{
+                borderRadius: 1,
+              }}
             />
           </Box>
           <Box flexGrow={1}>
@@ -100,7 +109,7 @@ const CreateTask: React.FC<Props> = ({ handleClose }: Props) => {
               }}
             />
             <FormHelperText
-              sx={{ textAlign: "end" }}
+              sx={{ textAlign: "end", position: "absolute", right: 0 }}
             >{`${title.length}/20자`}</FormHelperText>
           </Box>
         </Box>

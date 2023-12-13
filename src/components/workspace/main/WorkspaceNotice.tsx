@@ -112,10 +112,20 @@ const WorkspaceNotice: React.FC = () => {
               paddingX: "8px",
             }}
           >
-            <Box component="span" sx={{ color: "#3b5e51", fontWeight: "bold" }}>
+            <Box
+              component="div"
+              sx={{
+                color: "#3b5e51",
+                fontWeight: "bold",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                width: "100px",
+              }}
+            >
               {workspaceNotice.writer.name}
             </Box>
-            <Box component="span" sx={{ color: "#888888" }}>
+            <Box component="div" sx={{ color: "#888888", textAlign: "center" }}>
               {workspaceNotice.createdAt}
             </Box>
           </Box>
