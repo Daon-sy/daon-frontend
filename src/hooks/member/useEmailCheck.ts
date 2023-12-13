@@ -4,7 +4,7 @@ import { ErrorResponse } from "api"
 import { checkVerificationEmailApi, sendVerificationEmailApi } from "api/member"
 import { useAlert } from "hooks/useAlert"
 
-const MINUTES_IN_MS = 10 * 1000
+const MINUTES_IN_MS = 10 * 60 * 1000
 const INTERVAL_MS = 1000
 
 const validateEmail = (email: string) => {

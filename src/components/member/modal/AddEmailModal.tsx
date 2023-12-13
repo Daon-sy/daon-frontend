@@ -1,4 +1,5 @@
 import React from "react"
+import axios from "axios"
 import TitleModal from "components/common/TitleModal"
 import { Box, Button, TextField, Typography } from "@mui/material"
 import {
@@ -9,6 +10,8 @@ import {
 import { useAlert } from "hooks/useAlert"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import ErrorIcon from "@mui/icons-material/Error"
+import { ErrorResponse } from "api"
+import CircularProgress from "@mui/material/CircularProgress"
 
 interface Props {
   open: boolean
@@ -27,8 +30,9 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
     React.useState<boolean>(false)
   const [isThrottledForCheck, setIsThrottledForCheck] =
     React.useState<boolean>(false)
+  const [isSending, setIsSending] = React.useState(false)
 
-  const MINUTES_IN_MS = 30 * 60 * 1000
+  const MINUTES_IN_MS = 10 * 60 * 1000
   const INTERVAL = 1000
   const [timeLeft, setTimeLeft] = React.useState<number>(MINUTES_IN_MS)
   const minutes = String(Math.floor((timeLeft / (1000 * 60)) % 60)).padStart(
@@ -47,8 +51,9 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
       setTimeLeft(prevTime => prevTime - INTERVAL)
     }, INTERVAL)
 
-    if (timeLeft <= 0) {
+    if (checkCode || timeLeft <= 0) {
       clearInterval(timer)
+      setTimeLeft(0)
     }
 
     return () => {
@@ -66,40 +71,68 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
       return
     }
 
-    if (!isThrottledForSend) {
-      try {
-        setError(null)
-        setSendEmail(true)
-        setTimeLeft(MINUTES_IN_MS)
-        setCode("")
-        setCheckCode(null)
-        setIsThrottledForSend(true)
-        await sendVerificationEmailApi({ email })
-        setTimeout(() => {
+    if (isThrottledForSend) {
+      return
+    }
+
+    try {
+      setError(null)
+      setIsSending(true)
+      await sendVerificationEmailApi({ email })
+      setSendEmail(true)
+      setTimeLeft(MINUTES_IN_MS)
+      setCode("")
+      setCheckCode(null)
+      setIsThrottledForSend(true)
+      setTimeout(() => {
+        setIsThrottledForSend(false)
+      }, 3000)
+    } catch (e) {
+      setSendEmail(false)
+      if (axios.isAxiosError(e)) {
+        const { response } = e
+        const errorResponse = response?.data as ErrorResponse
+        if (errorResponse.errorCode === 2004) {
           setIsThrottledForSend(false)
-        }, 3000)
-      } catch (e) {
-        setError("이메일 전송에 실패했습니다. 다시 요청해 주세요.")
+          setError("이미 사용중인 이메일입니다.")
+        } else {
+          setError("이메일 전송에 실패했습니다. 다시 입력해 주세요.")
+        }
       }
+    } finally {
+      setIsSending(false)
     }
   }
 
+  const handleRewriteEmailClick = () => {
+    setEmail("")
+    setSendEmail(false)
+  }
+
   const handleCheckVerificationCodeClick = async () => {
+    if (checkCode) {
+      addSuccess("이미 인증 처리 되었습니다.")
+      return
+    }
     if (!code) {
       setCheckCode(false)
       return
     }
-    if (!isThrottledForCheck) {
-      setIsThrottledForCheck(true)
-      const verifiedData = await checkVerificationEmailApi({ email, code })
-      if (verifiedData.data.verified) {
-        setCheckCode(true)
-      } else {
-        setCheckCode(false)
+    try {
+      if (!isThrottledForCheck) {
+        setIsThrottledForCheck(true)
+        const verifiedData = await checkVerificationEmailApi({ email, code })
+        if (verifiedData.data.verified) {
+          setCheckCode(true)
+        } else {
+          setCheckCode(false)
+        }
+        setTimeout(() => {
+          setIsThrottledForCheck(false)
+        }, 500)
       }
-      setTimeout(() => {
-        setIsThrottledForCheck(false)
-      }, 500)
+    } catch (e) {
+      setError("인증번호 확인에 실패했습니다.")
     }
   }
 
@@ -131,28 +164,30 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
         sx={{ display: "flex", justifyContent: "space-between" }}
       >
         <TextField
-          sx={{ width: 285 }}
+          sx={{ width: 265 }}
           required
           size="small"
           placeholder="gildong@email.com"
           value={email}
           onChange={e => setEmail(e.target.value)}
-          inputProps={{ maxLength: 100 }}
+          inputProps={{
+            maxLength: 100,
+            readOnly: sendEmail,
+          }}
           error={!!error}
           helperText={error}
         />
         <Button
+          disableElevation
+          variant="contained"
+          color="secondary"
           sx={{
+            width: 120,
             height: 40,
-            color: "white",
-            backgroundColor: "#FFBE00",
-            ":hover": {
-              backgroundColor: "#1F4838",
-            },
           }}
-          onClick={handleSendEmailClick}
+          onClick={sendEmail ? handleRewriteEmailClick : handleSendEmailClick}
         >
-          인증번호 전송
+          {sendEmail ? "이메일 재입력" : "인증번호 전송"}
         </Button>
       </Box>
       {sendEmail ? (
@@ -189,32 +224,45 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
             }}
           >
             <TextField
-              sx={{ width: 200 }}
+              sx={{ width: 180 }}
               required
               size="small"
               error={checkCode === false}
               value={code}
               onChange={e => setCode(e.target.value)}
-              inputProps={{ maxLength: 6 }}
+              inputProps={{
+                maxLength: 6,
+                readOnly: checkCode,
+              }}
             />
-            <Typography sx={{ color: "#3A4CA8" }}>
+            <Typography sx={{ fontSize: 13, color: "#3A4CA8" }}>
               {minutes} : {second}
             </Typography>
             <Button
+              disableElevation
+              variant="contained"
+              color="secondary"
               sx={{
+                width: 140,
                 ml: 3,
-                color: "white",
-                backgroundColor: "#1F4838",
-                ":hover": {
-                  backgroundColor: "#FFBE00",
-                },
               }}
-              onClick={handleCheckVerificationCodeClick}
+              onClick={
+                timeLeft === 0
+                  ? handleSendEmailClick
+                  : handleCheckVerificationCodeClick
+              }
             >
-              인증번호 확인
+              {timeLeft === 0 && !checkCode
+                ? "인증번호 재전송"
+                : "인증번호 확인"}
             </Button>
           </Box>
-          {checkCode !== null && (
+          {timeLeft === 0 && !checkCode ? (
+            <Typography sx={{ mt: 0.5, fontSize: 14, color: "#787878" }}>
+              인증 시간이 초과되었습니다.
+            </Typography>
+          ) : null}
+          {checkCode !== null && timeLeft !== 0 && (
             <Typography sx={{ mt: 0.5, fontSize: 14, color: "#787878" }}>
               {checkCode
                 ? "이메일 인증이 완료되었습니다."
@@ -222,41 +270,32 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
             </Typography>
           )}
         </Box>
-      ) : null}
-      {checkCode ? (
-        <Button
-          onClick={handleAddEmailClick}
-          sx={{
-            position: "absolute",
-            width: 100,
-            left: 190,
-            bottom: 13,
-            border: 1,
-            color: "white",
-            backgroundColor: "#1F4838",
-            ":hover": {
-              backgroundColor: "#FFBE00",
-            },
-          }}
-        >
-          추 가
-        </Button>
       ) : (
-        <Button
-          onClick={handleAddEmailClick}
-          sx={{
-            position: "absolute",
-            width: 100,
-            left: 190,
-            bottom: 13,
-            border: 1,
-            color: "#787878",
-            backgroundColor: "#F6F7F9",
-          }}
+        <Box
+          display={isSending ? "flex" : "none"}
+          justifyContent={isSending ? "center" : "none"}
+          mt={isSending ? "20px" : "none"}
         >
-          추 가
-        </Button>
+          <CircularProgress />
+        </Box>
       )}
+      <Button
+        disableElevation
+        variant="contained"
+        color="primary"
+        onClick={handleAddEmailClick}
+        sx={{
+          position: "absolute",
+          width: 100,
+          left: 190,
+          bottom: 13,
+          border: 1,
+          color: checkCode ? "none" : "#787878",
+          backgroundColor: checkCode ? "none" : "#F6F7F9",
+        }}
+      >
+        추 가
+      </Button>
     </TitleModal>
   )
 }

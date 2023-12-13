@@ -172,14 +172,13 @@ const MessageListSection = ({
             <Typography>모든 쪽지를 읽음 처리하시겠습니까?</Typography>
           </ConfirmDialog>
           <Button
+            disableElevation
+            variant="contained"
+            color="primary"
             sx={{
               border: 1,
               backgroundColor: "#1F4838",
               color: "white",
-              ":hover": {
-                backgroundColor: "#FFBE00",
-                borderColor: "#FFBE00",
-              },
             }}
             onClick={onSendMessageClick}
           >
@@ -217,6 +216,9 @@ const MessageListSection = ({
             }}
           />
           <Button
+            disableElevation
+            variant="outlined"
+            color="primary"
             sx={{ width: "10%", border: 1, borderColor: "lightGray" }}
             onClick={handleSearchClick}
           >
