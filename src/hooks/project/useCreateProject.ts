@@ -8,12 +8,16 @@ import { useAlert } from "hooks/useAlert"
 
 interface Props {
   workspaceId: number
+  navigateOnCreateSuccess?: boolean
 }
 
-const useCreateProject = ({ workspaceId }: Props, callback?: () => void) => {
+const useCreateProject = (
+  { workspaceId, navigateOnCreateSuccess = false }: Props,
+  callback?: () => void,
+) => {
+  const navigate = useNavigate()
   const [isFetching, setIsFetching] = React.useState(false)
   const [error, setError] = React.useState<ErrorResponse>()
-  const navigate = useNavigate()
   const { addSuccess, addError } = useAlert()
   const { projects, setProjects } = getProjectsStore()
   const fetch = async (data: CreateProjectRequestBody) => {
@@ -37,7 +41,8 @@ const useCreateProject = ({ workspaceId }: Props, callback?: () => void) => {
 
       if (callback) callback()
 
-      navigate(`/workspace/${workspaceId}/project/${projectId}`)
+      if (navigateOnCreateSuccess)
+        navigate(`/workspace/${workspaceId}/project/${projectId}`)
     } catch (e) {
       if (axios.isAxiosError(e)) {
         const { response } = e

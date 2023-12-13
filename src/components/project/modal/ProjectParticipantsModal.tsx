@@ -21,6 +21,7 @@ import {
 } from "api/project"
 import ColorAvatar from "components/common/ColorAvatar"
 import TitleDialog from "components/common/TitleDialog"
+import NoData from "components/common/NoData"
 
 type Filter = "name" | "email"
 
@@ -226,10 +227,16 @@ const ProjectParticipantsModal = ({
                   </ListItem>
                 ))}
               {projectParticipants?.length === 0 ? (
-                <Typography fontSize={14} p={1}>
-                  참여자들이 존재하지 않습니다.
-                </Typography>
-              ) : null}
+                <NoData
+                  content="참여자들이 존재하지 않습니다"
+                  width={200}
+                  height={100}
+                  sx={{ mb: 3 }}
+                />
+              ) : // <Typography fontSize={14} p={1}>
+              //   참여자들이 존재하지 않습니다.
+              // </Typography>
+              null}
               {projectParticipants &&
               projectParticipants.length > 0 &&
               filterText &&
@@ -238,10 +245,16 @@ const ProjectParticipantsModal = ({
                   .toUpperCase()
                   .includes(filterText.toUpperCase()),
               ).length === 0 ? (
-                <Typography fontSize={14} p={1}>
-                  검색 결과가 없습니다.
-                </Typography>
-              ) : null}
+                <NoData
+                  content="검색 결과가 없습니다"
+                  width={200}
+                  height={100}
+                  sx={{ mb: 3 }}
+                />
+              ) : // <Typography fontSize={14} p={1}>
+              //   검색 결과가 없습니다.
+              // </Typography>
+              null}
             </List>
           </Box>
 
