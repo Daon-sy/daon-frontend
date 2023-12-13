@@ -150,13 +150,13 @@ const SendMessageSection = ({
         </Box>
         <Box sx={{ mt: 6.4, display: "flex", justifyContent: "center" }}>
           <Button
+            disableElevation
+            variant="contained"
+            color="primary"
             sx={{
               border: 1,
               color: "white",
               backgroundColor: "#1F4838",
-              ":hover": {
-                backgroundColor: "#FFBE00",
-              },
             }}
             onClick={handleSendMessageClick}
           >
