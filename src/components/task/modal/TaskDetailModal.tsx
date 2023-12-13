@@ -244,7 +244,7 @@ const TaskDetailModal: React.FC<Props> = ({
                 >
                   <BoardSelectButton
                     projectId={projectId}
-                    currentBoardId={taskDetail.board?.boardId}
+                    currentBoard={taskDetail.board}
                     handleBoardSelect={item => {
                       modifyTask({
                         ...taskDetail,
@@ -522,6 +522,7 @@ const TaskDetailModal: React.FC<Props> = ({
               </Box>
             </Box>
             <ProjectParticipantsModal
+              title="담당자 선택"
               workspaceId={workspaceId}
               projectId={projectId}
               open={projectParticipantsModalOpen}
@@ -552,6 +553,7 @@ const TaskDetailModal: React.FC<Props> = ({
               setTaskRemoveModalOpen(false)
             }}
           >
+            {}
             지우시겠습니까?
           </ConfirmDialog>
         ) : null}

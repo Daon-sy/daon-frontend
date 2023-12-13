@@ -121,7 +121,10 @@ const SidebarMenu: React.FC = () => {
         </Box>
       </Menu>
       <TitleDialog title="프로젝트 생성" maxWidth="sm">
-        <CreateProject onCancelButtonClick={closeCreateProjectDialog} />
+        <CreateProject
+          onCancelButtonClick={closeCreateProjectDialog}
+          navigateOnCreateSuccess
+        />
       </TitleDialog>
     </Box>
   )
