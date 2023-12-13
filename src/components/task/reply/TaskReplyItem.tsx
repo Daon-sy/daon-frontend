@@ -4,6 +4,7 @@ import { TaskReplyDetail } from "_types/task"
 import { removeTaskReply } from "api/task"
 
 import ColorAvatar from "components/common/ColorAvatar"
+import { useAlert } from "hooks/useAlert"
 import ReplyBtn from "./ReplyBtn"
 
 interface TaskReplyItemProps {
@@ -25,6 +26,7 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
 }: TaskReplyItemProps): React.ReactNode => {
   const [isModify, setIsModify] = useState<boolean>(false)
   const [content, setContent] = useState<string>(reply.content)
+  const { addSuccess } = useAlert()
 
   const handleToggle = () => {
     setIsModify(prevIsModify => !prevIsModify)
@@ -35,6 +37,7 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
       if (workspaceId) {
         await removeTaskReply(workspaceId, projectId, taskId, replyId)
         onReplyDeleted()
+        addSuccess("댓글이 삭제되었습니다.")
       }
     } catch (error) {
       console.error("Error removing reply:", error)
@@ -95,7 +98,7 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
                   >
                     저장
                   </ReplyBtn>
-                  <ReplyBtn bgcolor="#AE3A1E" handleClick={handleToggle}>
+                  <ReplyBtn bgcolor="#747474" handleClick={handleToggle}>
                     취소
                   </ReplyBtn>
                 </>
@@ -105,7 +108,7 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
                 </ReplyBtn>
               )}
               <ReplyBtn
-                bgcolor="#747474"
+                bgcolor="#AE3A1E"
                 handleClick={() => handleRemoveClick(reply.replyId)}
               >
                 삭제
@@ -124,22 +127,23 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
           }}
         >
           <TextField
+            multiline
+            rows={2}
             placeholder="댓글을 수정해주세요"
             name="content"
             value={content}
             onChange={e => setContent(e.target.value)}
-            inputProps={{ maxLength: 500 }}
+            inputProps={{ maxLength: 500, style: { whiteSpace: "pre-wrap" } }}
             sx={{
               boxSizing: "border-box",
-              width: "480px",
+              width: "472px",
               paddingLeft: "24px",
               overflow: "hidden",
               textOverflow: "ellipsis",
-              whiteSpace: "normal",
-              wordWrap: "break-word",
+              whiteSpace: "pre-wrap",
             }}
           />
-          <FormHelperText sx={{ textAlign: "end" }}>
+          <FormHelperText sx={{ textAlign: "end", width: "472px" }}>
             {`${content.length}/500자`}
           </FormHelperText>
         </Box>
@@ -150,12 +154,20 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
             boxSizing: "border-box",
             width: "480px",
             paddingLeft: "24px",
-            overflow: "hidden",
+            overflowY: "auto",
             textOverflow: "ellipsis",
-            whiteSpace: "normal",
             wordWrap: "break-word",
             fontSize: "14px",
             lineHeight: "16px",
+            whiteSpace: "pre-wrap",
+            height: 32,
+            "&::-webkit-scrollbar": {
+              width: "4px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#495e57",
+              borderRadius: 1,
+            },
           }}
         >
           {reply.content}
