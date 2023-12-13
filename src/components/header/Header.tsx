@@ -22,19 +22,37 @@ const Header: React.FC = () => {
         sx={{
           height: "100%",
           display: "flex",
-          justifyContent: "space-between",
+          // justifyContent: "space-between",
           alignItems: "start",
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            width: "45%",
+          }}
+        >
           <Logo />
-          <WorkspaceSelectButton />
+          <Box>
+            <WorkspaceSelectButton />
+          </Box>
         </Box>
         {/* 검색창 */}
-        <Box sx={{ width: "40%", height: "100%", minWidth: 300 }}>
-          <SearchInput />
+        <Box sx={{ minWidth: 600, width: "100%", height: "100%" }}>
+          <Box width="75%">
+            <SearchInput />
+          </Box>
         </Box>
-        <Box sx={{ height: "100%", display: "flex", alignItems: "center" }}>
+
+        <Box
+          sx={{
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "end",
+          }}
+        >
           {/* 알림 */}
           <NotificationButton />
           {/* 아바타 */}

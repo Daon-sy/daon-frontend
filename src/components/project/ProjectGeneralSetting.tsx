@@ -2,14 +2,10 @@ import React from "react"
 import Typography from "@mui/material/Typography"
 import {
   createProjectBoardApi,
-  modifyProjectApi,
   modifyProjectBoardApi,
-  ModifyWorkspaceRequestBody,
   projectBoardListApi,
   projectDetailApi,
-  removeProjectApi,
   removeProjectBoardApi,
-  withdrawProjectApi,
 } from "api/project"
 import { Board, ProjectDetail } from "_types/project"
 import { Box, IconButton, TextField, Button, Stack } from "@mui/material"
@@ -19,8 +15,10 @@ import { useAlert } from "hooks/useAlert"
 import { getWorkspaceStore } from "store/userStore"
 import { WORKSPACE_PARTICIPANT_ROLE } from "_types/workspace"
 import ConfirmDialog from "components/common/ConfirmDialog"
-import { useNavigate } from "react-router-dom"
 import EditableTextBox from "components/common/EditableTextBox"
+import useWithdrawProject from "hooks/project/useWithdrawProject"
+import useRemoveProject from "hooks/project/useRemoveProject"
+import useModifyProject from "hooks/project/useModifyProject"
 
 const allowedEdit: Array<WORKSPACE_PARTICIPANT_ROLE> = [
   "WORKSPACE_ADMIN",
@@ -30,12 +28,16 @@ const allowedEdit: Array<WORKSPACE_PARTICIPANT_ROLE> = [
 interface Props {
   workspaceId: number
   projectId: number
+  handleClose?: () => void
 }
 
-const ProjectGeneralSetting = ({ workspaceId, projectId }: Props) => {
+const ProjectGeneralSetting = ({
+  workspaceId,
+  projectId,
+  handleClose,
+}: Props) => {
   const { addSuccess } = useAlert()
   const { myProfile } = getWorkspaceStore()
-  const navigate = useNavigate()
   const [projectDetail, setProjectDetail] = React.useState<ProjectDetail>()
   const [boards, setBoards] = React.useState<Array<Board>>()
   const [newBoardTitle, setNewBoardTitle] = React.useState("")
@@ -71,14 +73,12 @@ const ProjectGeneralSetting = ({ workspaceId, projectId }: Props) => {
     fetchData()
   }, [])
 
+  const { fetch: removeProject } = useRemoveProject()
+  const { fetch: withdrawProject } = useWithdrawProject()
+  const { fetch: modifyProject } = useModifyProject()
+
   if (!(projectDetail && myProfile)) return <Box />
   const { title: projectTitle, description } = projectDetail
-
-  const updateProject = async (data: ModifyWorkspaceRequestBody) => {
-    await modifyProjectApi(workspaceId, projectId, { ...data })
-    addSuccess("프로젝트 정보 수정 완료")
-    fetchProjectDetail()
-  }
 
   const handleAddBoard = async () => {
     if (newBoardTitle) {
@@ -116,20 +116,6 @@ const ProjectGeneralSetting = ({ workspaceId, projectId }: Props) => {
     }
   }
 
-  const removeProject = async () => {
-    await removeProjectApi(workspaceId, projectId)
-    addSuccess("프로젝트가 삭제되었습니다")
-    // 워크스페이스 메인 페이지로 이동
-    navigate(`/workspace/${workspaceId}`)
-  }
-
-  const withdrawProject = async () => {
-    await withdrawProjectApi(workspaceId, projectId)
-    addSuccess("프로젝트를 탈퇴하였습니다")
-    // 워크스페이스 메인 페이지로 이동
-    navigate(`/workspace/${workspaceId}`)
-  }
-
   return !projectDetail || !boards ? (
     <Box />
   ) : (
@@ -145,7 +131,19 @@ const ProjectGeneralSetting = ({ workspaceId, projectId }: Props) => {
           <EditableTextBox
             enterComplete
             text={projectTitle}
-            handleUpdate={value => value && updateProject({ title: value })}
+            handleUpdate={value =>
+              value &&
+              modifyProject(
+                {
+                  workspaceId,
+                  projectId,
+                  data: {
+                    title: value,
+                  },
+                },
+                fetchProjectDetail,
+              )
+            }
             fontSize={14}
             maxTextLength={20}
             blockEdit={!allowedEdit.includes(myProfile.role)}
@@ -160,7 +158,17 @@ const ProjectGeneralSetting = ({ workspaceId, projectId }: Props) => {
             rows={8}
             text={description}
             handleUpdate={value =>
-              value && updateProject({ description: value })
+              value &&
+              modifyProject(
+                {
+                  workspaceId,
+                  projectId,
+                  data: {
+                    description: value,
+                  },
+                },
+                fetchProjectDetail,
+              )
             }
             fontSize={14}
             maxTextLength={100}
@@ -283,7 +291,9 @@ const ProjectGeneralSetting = ({ workspaceId, projectId }: Props) => {
             <ConfirmDialog
               open={projectRemoveModalOpen}
               maxWidth="xs"
-              handleConfirm={removeProject}
+              handleConfirm={() =>
+                removeProject({ workspaceId, projectId }, handleClose)
+              }
               handleClose={() => {
                 setProjectRemoveModalOpen(false)
               }}
@@ -308,7 +318,15 @@ const ProjectGeneralSetting = ({ workspaceId, projectId }: Props) => {
           <ConfirmDialog
             open={projectWithdrawModalOpen}
             maxWidth="xs"
-            handleConfirm={withdrawProject}
+            handleConfirm={() =>
+              withdrawProject(
+                {
+                  workspaceId,
+                  projectId,
+                },
+                handleClose,
+              )
+            }
             handleClose={() => {
               setProjectWithdrawModalOpen(false)
             }}
