@@ -24,6 +24,7 @@ interface Props {
   color?: string
   right?: number
   top?: number
+  bgcolor?: string
 }
 
 export const TitleDialog = ({
@@ -37,9 +38,10 @@ export const TitleDialog = ({
   padding,
   disableCloseButton = false,
   minWidth,
-  color = "primary",
+  color = "white",
   right = 8,
   top = 8,
+  bgcolor = "primary.main",
 }: Props) => {
   return (
     <Dialog
@@ -57,7 +59,7 @@ export const TitleDialog = ({
     >
       {title ? (
         <>
-          <DialogTitle sx={{ px: 3, py: 1.5 }}>
+          <DialogTitle sx={{ px: 3, py: 1.5, bgcolor }}>
             <Box display="flex" alignItems="center" pr={7}>
               <Box flexGrow={1}>
                 <Typography

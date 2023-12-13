@@ -82,6 +82,7 @@ const WorkspaceSettingsModal = ({ open = false, handleClose }: Props) => {
       handleClose={handleClose}
       menuWithPageList={menuWithPageList}
       removeButton={removeButton}
+      allowedEditRoles={["WORKSPACE_ADMIN"]}
     />
   )
 }

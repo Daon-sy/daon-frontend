@@ -11,7 +11,6 @@ import {
   ListItemAvatar,
   ListItemText,
   ListItem,
-  Checkbox,
 } from "@mui/material"
 import { Dayjs } from "dayjs"
 import { ProjectParticipant } from "_types/project"
@@ -24,7 +23,6 @@ import ProjectParticipantsModal from "components/project/modal/ProjectParticipan
 import { useAlert } from "hooks/useAlert"
 import useCreateTask from "hooks/task/useCreateTask"
 import ColorAvatar from "components/common/ColorAvatar"
-import FormLabel from "@mui/material/FormLabel"
 
 interface Props {
   handleClose: () => void
@@ -71,18 +69,6 @@ const CreateTask: React.FC<Props> = ({ handleClose }: Props) => {
           />
         </Stack>
         <Box mt={2} display="flex" alignItems="start">
-          {/* <Box ml={1} display="flex" alignItems="center"> */}
-          {/*  <Typography fontSize={14} color="error"> */}
-          {/*    긴급 */}
-          {/*  </Typography> */}
-          {/*  <Checkbox */}
-          {/*    size="small" */}
-          {/*    color="error" */}
-          {/*    checked={emergency} */}
-          {/*    onClick={() => setEmergency(!emergency)} */}
-          {/*    sx={{ width: 30, height: 30 }} */}
-          {/*  /> */}
-          {/* </Box> */}
           <Box
             sx={{
               pr: 0.5,
@@ -130,7 +116,13 @@ const CreateTask: React.FC<Props> = ({ handleClose }: Props) => {
             rows={10}
             label="내용"
             onChange={e => setContent(e.target.value)}
-            inputProps={{ maxLength: 1000 }}
+            inputProps={{
+              maxLength: 1000,
+              style: { fontSize: 14 },
+            }}
+            sx={{
+              ".MuiFormLabel-root": { fontSize: 14 },
+            }}
           />
           <FormHelperText
             sx={{ textAlign: "end" }}

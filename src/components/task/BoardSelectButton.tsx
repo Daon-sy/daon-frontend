@@ -17,6 +17,12 @@ import { getWorkspaceStore } from "store/userStore"
 import { Board } from "_types/project"
 import useCreateBoard from "hooks/project/useCreateBoard"
 import useFetchBoardList from "hooks/project/useFetchBoardList"
+import { WORKSPACE_PARTICIPANT_ROLE } from "_types/workspace"
+
+const allowedEdit: WORKSPACE_PARTICIPANT_ROLE[] = [
+  "WORKSPACE_ADMIN",
+  "PROJECT_ADMIN",
+]
 
 interface Props {
   projectId?: number
@@ -31,6 +37,7 @@ const BoardSelectButton: React.FC<Props> = ({
   currentBoard,
   skipFirst = true,
 }: Props) => {
+  const { myProfile } = getWorkspaceStore()
   const [skipHandleSelect, setSkipHandleSelect] = React.useState(skipFirst)
   const [selectedBoard, setSelectedBoard] = React.useState<Board | undefined>(
     currentBoard,
@@ -84,6 +91,54 @@ const BoardSelectButton: React.FC<Props> = ({
     }
   }, [isMenuOpen])
 
+  const renderAddButton = () => {
+    if (!(projectId && myProfile && allowedEdit.includes(myProfile?.role)))
+      return null
+    return (
+      <Box p={1}>
+        {boardAddField ? (
+          <TextField
+            fullWidth
+            autoFocus
+            value={boardNameToAdd}
+            autoComplete="off"
+            size="small"
+            sx={{
+              fontSize: 14,
+              height: 40,
+            }}
+            placeholder="Enter 입력시 등록"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setBoardNameToAdd(e.target.value)
+            }}
+            InputProps={{
+              style: { fontSize: 14 },
+            }}
+            onKeyDown={e => {
+              if (e.key === "Enter") {
+                createBoard(() => fetchBoardList(projectId))
+                setBoardAddField(false)
+                setBoardNameToAdd("")
+              }
+            }}
+          />
+        ) : (
+          <Button
+            fullWidth
+            variant="outlined"
+            size="small"
+            sx={{ fontSize: 14 }}
+            onClick={() => {
+              setBoardAddField(true)
+            }}
+          >
+            보드 추가
+          </Button>
+        )}
+      </Box>
+    )
+  }
+
   return (
     <Box width="100%" position="relative">
       <Button
@@ -105,7 +160,7 @@ const BoardSelectButton: React.FC<Props> = ({
         }}
         size="medium"
       >
-        <Box display="flex" alignItems="center" width={85}>
+        <Box display="flex" alignItems="center" width={90}>
           <FolderIcon />
           <Typography ml={1} fontSize={14} fontWeight={500}>
             보드
@@ -237,48 +292,7 @@ const BoardSelectButton: React.FC<Props> = ({
                 </MenuItem>
               ) : null}
             </Box>
-            {}
-            <Box p={1}>
-              {boardAddField ? (
-                <TextField
-                  fullWidth
-                  autoFocus
-                  value={boardNameToAdd}
-                  autoComplete="off"
-                  size="small"
-                  sx={{
-                    fontSize: 14,
-                    height: 40,
-                  }}
-                  placeholder="Enter 입력시 등록"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setBoardNameToAdd(e.target.value)
-                  }}
-                  InputProps={{
-                    style: { fontSize: 14 },
-                  }}
-                  onKeyDown={e => {
-                    if (e.key === "Enter") {
-                      createBoard(() => fetchBoardList(projectId))
-                      setBoardAddField(false)
-                      setBoardNameToAdd("")
-                    }
-                  }}
-                />
-              ) : (
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  size="small"
-                  sx={{ fontSize: 14 }}
-                  onClick={() => {
-                    setBoardAddField(true)
-                  }}
-                >
-                  보드 추가
-                </Button>
-              )}
-            </Box>
+            {renderAddButton()}
           </Box>
         )}
       </Menu>
