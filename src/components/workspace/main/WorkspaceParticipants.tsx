@@ -56,6 +56,7 @@ const WorkspaceParticipants: React.FC = () => {
             alignItems: "center",
             justifyContent: "space-between",
             position: "relative",
+            borderBottom: "1px solid #b9b9b9",
           }}
         >
           <ColorAvatar
