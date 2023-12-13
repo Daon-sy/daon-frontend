@@ -5,6 +5,7 @@ import { removeTaskReply } from "api/task"
 
 import ColorAvatar from "components/common/ColorAvatar"
 import { useAlert } from "hooks/useAlert"
+import ConfirmDialog from "components/common/ConfirmDialog"
 import ReplyBtn from "./ReplyBtn"
 
 interface TaskReplyItemProps {
@@ -26,10 +27,15 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
 }: TaskReplyItemProps): React.ReactNode => {
   const [isModify, setIsModify] = useState<boolean>(false)
   const [content, setContent] = useState<string>(reply.content)
+  const [confirmDialogOpen, setConfirmDialogOpen] = React.useState(false)
   const { addSuccess } = useAlert()
 
   const handleToggle = () => {
     setIsModify(prevIsModify => !prevIsModify)
+  }
+
+  const openConfirmDialog = () => {
+    setConfirmDialogOpen(true)
   }
 
   const handleRemoveClick = async (replyId: number) => {
@@ -107,12 +113,16 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
                   수정
                 </ReplyBtn>
               )}
-              <ReplyBtn
-                bgcolor="#AE3A1E"
-                handleClick={() => handleRemoveClick(reply.replyId)}
-              >
+              <ReplyBtn bgcolor="#AE3A1E" handleClick={openConfirmDialog}>
                 삭제
               </ReplyBtn>
+              <ConfirmDialog
+                open={confirmDialogOpen}
+                handleConfirm={() => handleRemoveClick(reply.replyId)}
+                handleClose={() => setConfirmDialogOpen(false)}
+              >
+                댓글을 삭제하시겠습니까?
+              </ConfirmDialog>
             </>
           )}
         </Box>
@@ -141,6 +151,7 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "pre-wrap",
+              py: 0.1,
             }}
           />
           <FormHelperText sx={{ textAlign: "end", width: "472px" }}>
@@ -154,20 +165,11 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
             boxSizing: "border-box",
             width: "480px",
             paddingLeft: "24px",
-            overflowY: "auto",
             textOverflow: "ellipsis",
             wordWrap: "break-word",
             fontSize: "14px",
             lineHeight: "16px",
             whiteSpace: "pre-wrap",
-            height: 32,
-            "&::-webkit-scrollbar": {
-              width: "4px",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "#495e57",
-              borderRadius: 1,
-            },
           }}
         >
           {reply.content}
