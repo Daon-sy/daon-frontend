@@ -113,8 +113,9 @@ const TaskKanbansWrapper: React.FC<TaskKanbansWrapperProps> = ({
       <Box
         sx={{
           width: "100%",
-          minHeight: "555px",
+          minHeight: "600px",
           borderRadius: 1,
+          pb: 1,
         }}
       >
         <Stack direction="row" sx={{ width: "100%" }} spacing={2}>

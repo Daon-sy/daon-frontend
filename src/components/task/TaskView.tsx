@@ -94,7 +94,7 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
       <Box
         mt={2}
         mb={2}
-        height="calc(100vh - 300px)"
+        height="calc(100vh - 254px)"
         minHeight="330px"
         overflow="hidden"
         sx={{
