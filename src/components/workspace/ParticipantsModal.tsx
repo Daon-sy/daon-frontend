@@ -20,7 +20,7 @@ import { getWorkspaceStore } from "store/userStore"
 import { workspaceParticipantListApi } from "api/workspace"
 import ParticipantCard from "components/workspace/participant/ParticipantCard"
 import TitleDialog from "components/common/TitleDialog"
-import Typography from "@mui/material/Typography"
+import NoData from "components/common/NoData"
 
 type Filter = "name" | "email"
 
@@ -175,6 +175,7 @@ const ParticipantsModal = ({ open, handleClose }: Props) => {
           width: "100%",
           display: "flex",
           flexWrap: "wrap",
+          justifyContent: "center",
         }}
       >
         {getFilteredParticipants().length > 0 ? (
@@ -185,9 +186,7 @@ const ParticipantsModal = ({ open, handleClose }: Props) => {
             />
           ))
         ) : (
-          <Typography fontSize={14} p={1}>
-            검색 결과가 없습니다.
-          </Typography>
+          <NoData content="검색 결과가 없어요" width="280px" height="140px" />
         )}
       </Box>
     </TitleDialog>

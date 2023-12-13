@@ -23,6 +23,7 @@ import {
 import { Stack } from "@mui/system"
 import { ConfirmDialog } from "components/common/ConfirmDialog"
 import { useAlert } from "hooks/useAlert"
+import NoData from "components/common/NoData"
 import MessageCard from "./MessageCard"
 
 interface MessageListSectionProps {
@@ -227,7 +228,11 @@ const MessageListSection = ({
           <Box height={370}>
             {currentMessages.length === 0 ? (
               <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <Typography>조회된 쪽지가 없습니다.</Typography>
+                <NoData
+                  content="검색 결과가 없어요"
+                  width="280px"
+                  height="140px"
+                />
               </Box>
             ) : (
               <Stack spacing={1.5}>
