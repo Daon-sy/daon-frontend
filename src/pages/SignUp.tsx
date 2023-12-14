@@ -8,7 +8,7 @@ import {
   Stack,
   InputLabel,
 } from "@mui/material"
-import SignUpPageImage from "assets/img/sign-up.png"
+import signUpPageImage from "assets/img/sign_up.webp"
 import useSignUp from "hooks/member/useSignUp"
 
 const SignUp = () => {
@@ -92,7 +92,7 @@ const SignUp = () => {
     >
       <Stack direction="row">
         <Box sx={{ width: 350 }}>
-          <Box component="img" sx={{ width: "100%" }} src={SignUpPageImage} />
+          <Box component="img" sx={{ width: "100%" }} src={signUpPageImage} />
         </Box>
         <Box
           sx={{
