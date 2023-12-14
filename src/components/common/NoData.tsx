@@ -1,5 +1,5 @@
 import React from "react"
-import nodata from "assets/img/no_data.png"
+import nodata from "assets/img/no_data.webp"
 import { Box, Typography } from "@mui/material"
 import { SxProps } from "@mui/system/styleFunctionSx"
 

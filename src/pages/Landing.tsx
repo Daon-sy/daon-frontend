@@ -1,9 +1,9 @@
 import React from "react"
 import { Box } from "@mui/material"
-import landingOne from "assets/img/landing1.png"
-import landingTwo from "assets/img/landing2.png"
-import landingThree from "assets/img/landing3.png"
-import landingFour from "assets/img/landing4.png"
+import landingOne from "assets/img/landing1.webp"
+import landingTwo from "assets/img/landing2.webp"
+import landingThree from "assets/img/landing3.webp"
+import landingFour from "assets/img/landing4.webp"
 
 function Landing() {
   return (
