@@ -1,6 +1,6 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import { Box, Typography, Chip } from "@mui/material"
+import { Box, Chip } from "@mui/material"
 import {
   Notification,
   RegisteredTaskManagerNotification,
