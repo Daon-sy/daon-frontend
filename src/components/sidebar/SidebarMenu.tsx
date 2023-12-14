@@ -51,6 +51,7 @@ const SidebarMenu: React.FC = () => {
           <Box key={list.projectId}>
             <MenuItems to={list.link} listValue={list.listValue}>
               <SubIconBtn
+                aria-label="설정버튼"
                 color="darkgreen"
                 onClick={e => openProjectManageModal(list.projectId, e)}
                 icon={<SettingsIcon />}
