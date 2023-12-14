@@ -1,5 +1,7 @@
 import {
   Box,
+  CircularProgress,
+  Divider,
   FormControl,
   InputAdornment,
   MenuItem,
@@ -16,8 +18,10 @@ import { useAlert } from "hooks/useAlert"
 import { WorkspaceParticipant } from "_types/workspace"
 import { workspaceParticipantListApi } from "api/workspace"
 import { inviteProjectParticipantApi } from "api/project"
-import { ProjectParticipant } from "../../../_types/project"
-import ColorAvatar from "../../common/ColorAvatar"
+import useDebounce from "hooks/useDebounce"
+import NoData from "components/common/NoData"
+import { ProjectParticipant } from "_types/project"
+import ColorAvatar from "components/common/ColorAvatar"
 
 type Filter = "name" | "email"
 
@@ -53,6 +57,8 @@ const ProjectInvite: React.FC<Props> = ({
   >([])
   const [filter, setFilter] = React.useState<Filter>("name")
   const [filterText, setFilterText] = React.useState("")
+  const { debouncedValue: debouncedFilterText, debouncing } =
+    useDebounce<string>(filterText, 500)
 
   const fetchWorkspaceParticipants = async () => {
     const { data } = await workspaceParticipantListApi(workspaceId)
@@ -88,7 +94,7 @@ const ProjectInvite: React.FC<Props> = ({
       .filter(workspaceParticipant =>
         workspaceParticipant[filter]
           .toUpperCase()
-          .includes(filterText.toUpperCase()),
+          .includes(debouncedFilterText.toUpperCase()),
       )
 
   return (
@@ -142,76 +148,105 @@ const ProjectInvite: React.FC<Props> = ({
             borderRadius: 1,
           }}
         >
-          {filteredWorkspaceParticipants().map(workspaceParticipant => (
+          {debouncing ? (
             <Box
               sx={{
-                p: 0.5,
-                px: 1,
+                height: 300,
                 display: "flex",
                 alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              <Box flexGrow={1}>
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    width: "100%",
-                  }}
-                >
-                  <Box>
-                    <ColorAvatar
-                      id={workspaceParticipant.workspaceParticipantId}
-                      src={workspaceParticipant.imageUrl}
-                      sx={{ width: 36, height: 36 }}
-                    />
-                  </Box>
-                  <Box flexGrow={1}>
-                    <Stack spacing={0.5}>
-                      <Box sx={{ marginLeft: 1 }}>
-                        <Typography fontSize={14} fontWeight={600}>
-                          {workspaceParticipant.name}
-                        </Typography>
-                      </Box>
-                      <Box
-                        sx={{
-                          marginLeft: 1,
-                          fontSize: 12,
-                          color: "rgb(100,100,100)",
-                        }}
-                      >
-                        {workspaceParticipant.email}
-                      </Box>
-                    </Stack>
-                  </Box>
-                </Stack>
-              </Box>
-              <Box>
-                <Button
-                  size="small"
-                  variant="contained"
-                  color="secondary"
-                  disableElevation
-                  sx={{
-                    p: 0,
-                    fontSize: 13,
-                  }}
-                  onClick={() =>
-                    inviteProject(workspaceParticipant.workspaceParticipantId)
-                  }
-                >
-                  초대
-                </Button>
-              </Box>
+              <CircularProgress />
             </Box>
-          ))}
-          {filteredWorkspaceParticipants().length === 0 ? (
-            <Typography fontSize={14}>
-              프로젝트에 초대 할 회원이 없습니다.
-            </Typography>
-          ) : null}
+          ) : (
+            <>
+              {filteredWorkspaceParticipants().map(
+                (workspaceParticipant, index) => (
+                  <>
+                    <Box
+                      sx={{
+                        p: 0.5,
+                        px: 1,
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Box flexGrow={1}>
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            width: "100%",
+                          }}
+                        >
+                          <Box>
+                            <ColorAvatar
+                              id={workspaceParticipant.workspaceParticipantId}
+                              src={workspaceParticipant.imageUrl}
+                              sx={{ width: 36, height: 36 }}
+                            />
+                          </Box>
+                          <Box flexGrow={1}>
+                            <Stack spacing={0.5}>
+                              <Box sx={{ marginLeft: 1 }}>
+                                <Typography fontSize={14} fontWeight={600}>
+                                  {workspaceParticipant.name}
+                                </Typography>
+                              </Box>
+                              <Box
+                                sx={{
+                                  marginLeft: 1,
+                                  fontSize: 12,
+                                  color: "rgb(100,100,100)",
+                                }}
+                              >
+                                {workspaceParticipant.email}
+                              </Box>
+                            </Stack>
+                          </Box>
+                        </Stack>
+                      </Box>
+                      <Box>
+                        <Button
+                          size="small"
+                          variant="contained"
+                          color="secondary"
+                          disableElevation
+                          sx={{
+                            p: 0,
+                            fontSize: 13,
+                          }}
+                          onClick={() =>
+                            inviteProject(
+                              workspaceParticipant.workspaceParticipantId,
+                            )
+                          }
+                        >
+                          초대
+                        </Button>
+                      </Box>
+                    </Box>
+                    {index < filteredWorkspaceParticipants().length - 1 ? (
+                      <Divider />
+                    ) : null}
+                  </>
+                ),
+              )}
+              {filteredWorkspaceParticipants().length === 0 ? (
+                <Typography fontSize={14}>
+                  <NoData
+                    content="프로젝트에 초대 할 회원이 없습니다."
+                    width={200}
+                    height={100}
+                    sx={{ pb: 3 }}
+                  />
+                </Typography>
+              ) : null}
+            </>
+          )}
         </Stack>
       </Stack>
     </Box>
