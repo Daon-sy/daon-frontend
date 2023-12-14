@@ -6,6 +6,7 @@ import { useAlert } from "hooks/useAlert"
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos"
 import ConfirmDialog from "components/common/ConfirmDialog"
 import ColorAvatar from "components/common/ColorAvatar"
+import { ConfirmDeleteComponent } from "../common/confirm/ConfirmDelete"
 
 interface ReadMessageSectionProps {
   workspaceId: number | undefined
@@ -126,7 +127,10 @@ const ReadMessageSection = ({
           handleClose={() => setDeleteMessageModalOpen(false)}
           handleConfirm={deleteMessage}
         >
-          <Typography>쪽지를 삭제하시겠습니까?</Typography>
+          <ConfirmDeleteComponent
+            title="해당 쪽지를 삭제하시겠습니까"
+            contents="한번 삭제된 쪽지는 복구가 불가능합니다"
+          />
         </ConfirmDialog>
       </Box>
     </Box>

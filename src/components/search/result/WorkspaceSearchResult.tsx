@@ -8,6 +8,7 @@ import { SearchWorkspaceResult } from "api/search"
 import { getWorkspaceStore } from "store/userStore"
 import ColorAvatar from "components/common/ColorAvatar"
 import ConfirmDialog from "components/common/ConfirmDialog"
+import ConfirmMovementComponent from "../../common/confirm/ConfirmMovement"
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -46,7 +47,11 @@ const WorkspaceSearchResult: React.FC<Props> = ({ workspace }) => {
     if (currentWorkspace && currentWorkspace.workspaceId !== workspaceId) {
       setConfirmDialogData({
         children: (
-          <Typography>{`${title} 워크스페이스로 이동하시겠습니까?`}</Typography>
+          <ConfirmMovementComponent
+            title="워크스페이스"
+            contents1={`[${title}] 워크스페이스  >`}
+            contents2=""
+          />
         ),
         handleConfirm: () => navigate(`/workspace/${workspaceId}`),
       })

@@ -129,6 +129,7 @@ const WorkspaceDataManage = () => {
                           value && updateWorkspace({ subject: value })
                         }
                         fontSize={14}
+                        fontWeight={400}
                         maxTextLength={10}
                         blockEdit={!allowedEdit.includes(myProfile.role)}
                       />
@@ -155,6 +156,7 @@ const WorkspaceDataManage = () => {
                       value && updateWorkspace({ description: value })
                     }
                     fontSize={14}
+                    fontWeight={400}
                     maxTextLength={100}
                     inputProps={{
                       style: {},

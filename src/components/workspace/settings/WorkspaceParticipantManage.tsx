@@ -30,8 +30,10 @@ import ColorAvatar from "components/common/ColorAvatar"
 import SearchIcon from "@mui/icons-material/Search"
 import SelectRoleButton from "components/workspace/role/SelectRoleButton"
 import RoleButton from "components/workspace/role/RoleButton"
+import ConfirmOutMemberComponent from "components/common/confirm/ConfirmOutMember"
 import useFetchMyWorkspaceProfile from "hooks/workspace/useFetchMyWorkspaceProfile"
 import useFetchWorkspaceParticipants from "hooks/workspace/useFetchWorkspaceParticipants"
+import NoData from "components/common/NoData"
 
 type Filter = "name" | "email"
 
@@ -303,7 +305,12 @@ const WorkspaceParticipantManage = () => {
                 ))}
               {workspaceParticipants?.length === 0 ? (
                 <Typography fontSize={14} p={1}>
-                  참여자들이 존재하지 않습니다.
+                  <NoData
+                    content="참여자들이 존재하지 않습니다."
+                    width={200}
+                    height={100}
+                    sx={{ pb: 3 }}
+                  />
                 </Typography>
               ) : null}
               {(workspaceParticipants?.length || 0) > 0 &&
@@ -314,7 +321,12 @@ const WorkspaceParticipantManage = () => {
                   .includes(filterText.toUpperCase()),
               ).length === 0 ? (
                 <Typography fontSize={14} p={1}>
-                  검색 결과가 없습니다.
+                  <NoData
+                    content="검색 결과가 없습니다."
+                    width={200}
+                    height={100}
+                    sx={{ pb: 3 }}
+                  />
                 </Typography>
               ) : null}
             </List>
@@ -332,15 +344,7 @@ const WorkspaceParticipantManage = () => {
           confirmButtonText="내보내기"
         >
           <Box width={500}>
-            <Typography
-              mt={1}
-              component="h4"
-              fontSize={24}
-              fontWeight={600}
-              textAlign="center"
-            >
-              해당 사용자를 내보내겠습니까?
-            </Typography>
+            <ConfirmOutMemberComponent />
             <Box
               sx={{
                 mt: 3,

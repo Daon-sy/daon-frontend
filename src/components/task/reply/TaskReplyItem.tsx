@@ -26,12 +26,14 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
   onReplyDeleted,
 }: TaskReplyItemProps): React.ReactNode => {
   const [isModify, setIsModify] = useState<boolean>(false)
+  const prevContent = reply.content
   const [content, setContent] = useState<string>(reply.content)
   const [confirmDialogOpen, setConfirmDialogOpen] = React.useState(false)
-  const { addSuccess } = useAlert()
+  const { addSuccess, addError } = useAlert()
 
   const handleToggle = () => {
     setIsModify(prevIsModify => !prevIsModify)
+    setContent(prevContent)
   }
 
   const openConfirmDialog = () => {
@@ -51,6 +53,15 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
   }
 
   const handleModifyClick = async (replyId: number) => {
+    if (content.length === 0) {
+      addError("댓글 내용은 필수입력 값입니다")
+      return
+    }
+    if (content.length >= 500) {
+      addError("댓글 내용은 500자 미만으로 입력해주세요")
+      return
+    }
+
     setIsModify(false)
     onReplyModified(replyId, content)
   }

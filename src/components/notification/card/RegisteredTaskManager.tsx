@@ -1,6 +1,6 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import { Box, Typography, Chip } from "@mui/material"
+import { Box, Chip } from "@mui/material"
 import {
   Notification,
   RegisteredTaskManagerNotification,
@@ -9,6 +9,7 @@ import { getWorkspaceStore } from "store/userStore"
 import { getTaskDetailViewStore } from "store/taskStore"
 import { useConfirmDialog } from "components/common/ConfirmDialog"
 import NotificationCard from "components/notification/card/NotificationCard"
+import ConfirmMovementComponent from "../../common/confirm/ConfirmMovement"
 
 interface Props {
   notification: Notification<
@@ -85,7 +86,11 @@ const RegisteredTaskManager: React.FC<Props> = ({
         </Box>
       </NotificationCard>
       <ConfirmDialog handleConfirm={handleConfirmClick} maxWidth="xs">
-        <Typography>{`${workspace.workspaceTitle} 워크스페이스의 ${project.projectTitle} 프로젝트로 이동하시겠습니까?`}</Typography>
+        <ConfirmMovementComponent
+          title="프로젝트"
+          contents1={`[${workspace.workspaceTitle}] 워크스페이스  >`}
+          contents2={`[${project.projectTitle}] 프로젝트`}
+        />
       </ConfirmDialog>
     </>
   )

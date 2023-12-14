@@ -1,14 +1,13 @@
 import React from "react"
 import Typography from "@mui/material/Typography"
 import { Box, Button, Stack, TextField } from "@mui/material"
-import { useAlert } from "hooks/useAlert"
 import { useNavigate } from "react-router-dom"
-import { signInApi, SignInRequestBody } from "api/auth"
+import { SignInRequestBody } from "api/auth"
 import InputLabel from "@mui/material/InputLabel"
+import useSignIn from "hooks/auth/useSignIn"
 
 const SignIn: React.FC = () => {
   const navigate = useNavigate()
-  const { addSuccess, addError } = useAlert()
 
   const [signInRequest, setSignInRequest] = React.useState<SignInRequestBody>({
     username: "",
@@ -29,43 +28,14 @@ const SignIn: React.FC = () => {
     })
   }
 
-  const checkRequest = (): boolean =>
-    !(!signInRequest.username || !signInRequest.password)
-
   const onCancelButtonClick = () => {
     navigate(-1)
   }
 
-  const onLoginButtonClick = () => {
-    if (!checkRequest()) {
-      addError("아이디, 비밀번호를 입력해주세요.")
-
-      return
-    }
-
-    signInApi(signInRequest)
-      .then(() => {
-        addSuccess("로그인에 성공하였습니다.")
-        navigate("/")
-      })
-      .catch(err => {
-        if (err.response) {
-          const { status } = err.response
-          if (status === 400) {
-            addError("아이디 또는 비밀번호가 정확하지 않습니다.")
-          }
-
-          if (status >= 500) {
-            addError("서버 오류입니다. 다시 시도해주세요.")
-          }
-        }
-      })
-  }
+  const { fetch: signIn } = useSignIn({ requestBody: signInRequest })
 
   const onEnterKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      onLoginButtonClick()
-    }
+    if (e.key === "Enter") signIn()
   }
 
   return (
@@ -177,7 +147,7 @@ const SignIn: React.FC = () => {
                   fullWidth
                   size="small"
                   variant="contained"
-                  onClick={onLoginButtonClick}
+                  onClick={signIn}
                 >
                   로그인
                 </Button>

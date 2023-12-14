@@ -11,7 +11,8 @@ import useEventSource from "hooks/sse/useEventSource"
 import useFetchTaskList from "hooks/task/useFetchTaskList"
 import Typography from "@mui/material/Typography"
 import IconBreadcrumbs from "components/common/IconBreadcrumbs"
-import { useLocation } from "react-router-dom"
+import { matchPath, useLocation } from "react-router-dom"
+import NoData from "components/common/NoData"
 
 interface TaskViewProps {
   params?: TaskListApiParams
@@ -19,6 +20,7 @@ interface TaskViewProps {
 }
 
 const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
+  const location = useLocation()
   const [viewType, setViewType] = React.useState<string>("kanban")
   const { workspace } = getWorkspaceStore()
   const { taskDetailParam, setTaskDetailParam, clear } =
@@ -30,6 +32,16 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
     },
     true,
   )
+
+  const isBookmarkTasksLocation = () =>
+    matchPath("/workspace/:workspaceId/task/bookmark", location.pathname)
+  const isWsMyTasksLocation = () =>
+    matchPath("/workspace/:workspaceId/task/my", location.pathname)
+  const getEmptySetContent = () => {
+    if (isBookmarkTasksLocation()) return "북마크한 할 일이 없습니다"
+    if (isWsMyTasksLocation()) return "담당한 할 일이 없습니다"
+    return "프로젝트에 생성된 할 일이 없습니다"
+  }
 
   useEventSource({
     ssePath: `/api/subscribe/workspaces/${workspace?.workspaceId}/type?${
@@ -88,13 +100,15 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
           {title}
         </Typography>
       ) : null}
-      <Box mt={2}>
-        <TaskHeader
-          viewType={viewType}
-          setViewType={setViewType}
-          taskListApiParams={params}
-        />
-      </Box>
+      {tasks.length > 0 ? (
+        <Box mt={2}>
+          <TaskHeader
+            viewType={viewType}
+            setViewType={setViewType}
+            taskListApiParams={params}
+          />
+        </Box>
+      ) : null}
       <Box
         mt={2}
         mb={2}
@@ -119,7 +133,18 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
           },
         }}
       >
-        {renderView()}
+        {tasks.length > 0 ? (
+          renderView()
+        ) : (
+          <Box height="100%" alignItems="center">
+            <NoData
+              content={getEmptySetContent()}
+              width={200}
+              height={100}
+              sx={{ height: "80%" }}
+            />
+          </Box>
+        )}
       </Box>
       {taskDetailParam ? (
         <TaskDetailModal

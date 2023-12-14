@@ -5,10 +5,10 @@ import {
   DialogActions,
   DialogContent,
   TextField,
-  Typography,
 } from "@mui/material"
 import { modifyMyMemberInfoApi } from "api/member"
 import { useAlert } from "hooks/useAlert"
+import { ConfirmPasswordComponent } from "components/common/confirm/ConfirmPassword"
 
 interface Props {
   open: boolean
@@ -51,8 +51,9 @@ const CheckPasswordModal = ({
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogContent sx={{ pb: 1 }}>
-        <Typography>현재 비밀번호 입력</Typography>
+        <ConfirmPasswordComponent />
         <TextField
+          sx={{ width: "100%", mb: 2 }}
           size="small"
           type="password"
           required

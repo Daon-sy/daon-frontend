@@ -69,6 +69,7 @@ const useSignUp = () => {
     setCodeSent,
     setChecked,
     errorMessage: emailCheckErrorMessage,
+    isSendEmailCodeFetching,
   } = useEmailCheck(email, emailCheckCode)
 
   React.useEffect(() => {
@@ -148,6 +149,7 @@ const useSignUp = () => {
     emailCheckErrorMessage,
     checkUsername,
     checkUsernameErrorMessage,
+    isSendEmailCodeFetching,
   }
 }
 
