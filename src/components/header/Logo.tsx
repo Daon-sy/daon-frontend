@@ -1,27 +1,23 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import { Box, Typography } from "@mui/material"
+import { Box } from "@mui/material"
+import logo from "assets/img/logo.webp"
 
 const Logo = () => {
   return (
-    <Box>
-      <Typography
-        variant="h6"
-        noWrap
-        component="div"
-        sx={{
-          mr: 2,
-          fontFamily: "monospace",
-          fontWeight: 700,
-          letterSpacing: ".3rem",
-          color: "#495e57",
+    <Box mr={2}>
+      <Link
+        to="/"
+        style={{
           textDecoration: "none",
+          color: "inherit",
+          height: "30px",
+          width: "80px",
+          cursor: "pointer",
         }}
       >
-        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-          DAON
-        </Link>
-      </Typography>
+        <Box component="img" src={logo} alt="로고" height="44px" width="80px" />
+      </Link>
     </Box>
   )
 }
