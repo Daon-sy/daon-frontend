@@ -32,6 +32,7 @@ import SelectRoleButton from "components/workspace/role/SelectRoleButton"
 import RoleButton from "components/workspace/role/RoleButton"
 import useFetchMyWorkspaceProfile from "hooks/workspace/useFetchMyWorkspaceProfile"
 import useFetchWorkspaceParticipants from "hooks/workspace/useFetchWorkspaceParticipants"
+import NoData from "components/common/NoData"
 
 type Filter = "name" | "email"
 
@@ -303,7 +304,12 @@ const WorkspaceParticipantManage = () => {
                 ))}
               {workspaceParticipants?.length === 0 ? (
                 <Typography fontSize={14} p={1}>
-                  참여자들이 존재하지 않습니다.
+                  <NoData
+                    content="참여자들이 존재하지 않습니다."
+                    width={200}
+                    height={100}
+                    sx={{ pb: 3 }}
+                  />
                 </Typography>
               ) : null}
               {(workspaceParticipants?.length || 0) > 0 &&
@@ -314,7 +320,12 @@ const WorkspaceParticipantManage = () => {
                   .includes(filterText.toUpperCase()),
               ).length === 0 ? (
                 <Typography fontSize={14} p={1}>
-                  검색 결과가 없습니다.
+                  <NoData
+                    content="검색 결과가 없습니다."
+                    width={200}
+                    height={100}
+                    sx={{ pb: 3 }}
+                  />
                 </Typography>
               ) : null}
             </List>
