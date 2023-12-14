@@ -91,26 +91,42 @@ const SendMessageSection = ({
       </Box>
       <Divider sx={{ mb: 3 }} />
       <Box sx={{ m: 2 }}>
-        <Box sx={{ mb: 2.5, display: "flex", alignItems: "center" }}>
-          <Box sx={{ width: "20%" }}>
+        <Box
+          sx={{
+            mb: 2.5,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Box sx={{ minWidth: "15%" }}>
             <Typography sx={{ fontWeight: "bold" }}>받는이</Typography>
           </Box>
-          <SelectReceiverButton
-            workspaceId={workspace?.workspaceId}
-            messageSender={messageSender}
-            messageReceiver={messageReceiver}
-            onReceiverClick={workspaceParticipantId =>
-              setSelectedReceiverId(workspaceParticipantId)
-            }
-          />
+          <Box sx={{ width: "100%" }}>
+            <SelectReceiverButton
+              workspaceId={workspace?.workspaceId}
+              messageSender={messageSender}
+              messageReceiver={messageReceiver}
+              onReceiverClick={workspaceParticipantId =>
+                setSelectedReceiverId(workspaceParticipantId)
+              }
+            />
+          </Box>
         </Box>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography sx={{ width: "20%", fontWeight: "bold" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography sx={{ minWidth: "15%", fontWeight: "bold" }}>
             제목
           </Typography>
           <TextField
             size="small"
-            fullWidth
+            sx={{ width: "100%" }}
+            // fullWidth
             value={title}
             onChange={e => setTitle(e.target.value)}
           />
