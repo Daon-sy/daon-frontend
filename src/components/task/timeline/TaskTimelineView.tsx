@@ -186,6 +186,7 @@ const TaskTimelineView = ({ tasks = [], height = 300 }: TaskViewProps) => {
             />
             {memoTasks.map((task, index) => (
               <Box
+                key={task.taskId}
                 sx={{
                   display: "flex",
                   alignItems: "center",
@@ -280,6 +281,7 @@ const TaskTimelineView = ({ tasks = [], height = 300 }: TaskViewProps) => {
           <Box sx={{ display: "flex" }} position="sticky" top={0} zIndex={2}>
             {yearMonthDateCountList.map(ymdc => (
               <Box
+                key={`${ymdc.year}-${ymdc.month}`}
                 sx={{
                   width: dateWidth * ymdc.dateCount,
                   height: headerHeight,
@@ -301,6 +303,7 @@ const TaskTimelineView = ({ tasks = [], height = 300 }: TaskViewProps) => {
           <Box display="flex" position="absolute">
             {yearMonthDateCountList.map(ymdc => (
               <Box
+                key={`${ymdc.year}-${ymdc.month}`}
                 sx={{
                   width: dateWidth * ymdc.dateCount,
                   height: taskHeight * memoTasks.length,
@@ -321,6 +324,7 @@ const TaskTimelineView = ({ tasks = [], height = 300 }: TaskViewProps) => {
           >
             {memoTasks.map((task, index) => (
               <TaskTimelineBar
+                key={task.taskId}
                 task={task}
                 baseYearMonth={{
                   year: yearMonthDateCountList[0].year,

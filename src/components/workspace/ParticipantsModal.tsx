@@ -111,8 +111,9 @@ const ParticipantsModal = ({ open, handleClose }: Props) => {
                 size="small"
                 sx={{ fontSize: 14 }}
               >
-                {filters.map(item => (
+                {filters.map((item, index) => (
                   <MenuItem
+                    key={item.filter}
                     value={item.filter}
                     sx={{
                       fontSize: 14,
