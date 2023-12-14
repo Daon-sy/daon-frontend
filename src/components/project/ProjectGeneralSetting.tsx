@@ -16,12 +16,12 @@ import { getWorkspaceStore } from "store/userStore"
 import { WORKSPACE_PARTICIPANT_ROLE } from "_types/workspace"
 import ConfirmDialog from "components/common/ConfirmDialog"
 import EditableTextBox from "components/common/EditableTextBox"
-import { ConfirmDeleteComponent } from "../common/confirm/ConfirmDelete"
-import ConfirmProjectWithdrawalComponent from "../common/confirm/withdrawal/ConfirmProjectWithdrawal"
-import ConfirmProjectDeleteComponent from "../common/confirm/delete/ConfirmProjectDelete"
 import useWithdrawProject from "hooks/project/useWithdrawProject"
 import useRemoveProject from "hooks/project/useRemoveProject"
 import useModifyProject from "hooks/project/useModifyProject"
+import { ConfirmDeleteComponent } from "../common/confirm/ConfirmDelete"
+import ConfirmProjectWithdrawalComponent from "../common/confirm/withdrawal/ConfirmProjectWithdrawal"
+import ConfirmProjectDeleteComponent from "../common/confirm/delete/ConfirmProjectDelete"
 
 const allowedEdit: Array<WORKSPACE_PARTICIPANT_ROLE> = [
   "WORKSPACE_ADMIN",
@@ -174,6 +174,7 @@ const ProjectGeneralSetting = ({
               )
             }
             fontSize={14}
+            fontWeight={400}
             maxTextLength={100}
             blockEdit={!allowedEdit.includes(myProfile.role)}
           />
@@ -208,6 +209,7 @@ const ProjectGeneralSetting = ({
                     placeholder="추가 할 보드의 이름을 입력하세요"
                     onChange={e => setNewBoardTitle(e.target.value)}
                     onKeyDown={handleNewBoardTitleEntered}
+                    inputProps={{ style: { fontSize: 14 } }}
                   />
                   <Box ml={1}>
                     <IconButton size="small" onClick={handleAddBoard}>
@@ -278,7 +280,9 @@ const ProjectGeneralSetting = ({
       </Box>
       <Box mt={10}>
         <Box>
-          <Typography variant="h5">Danger Zone</Typography>
+          <Typography variant="h5" fontWeight={500}>
+            Danger Zone
+          </Typography>
         </Box>
         {allowedEdit.includes(myProfile.role) ? (
           <Box>

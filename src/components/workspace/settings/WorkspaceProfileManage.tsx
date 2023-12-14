@@ -3,10 +3,10 @@ import { Button, Box } from "@mui/material"
 import { resetPersonalWorkspaceApi } from "api/workspace"
 import { getWorkspaceStore } from "store/userStore"
 import { useAlert } from "hooks/useAlert"
+import useWithdrawWorkspace from "hooks/workspace/useWithdrawWorkspace"
 import ConfirmDialog from "components/common/ConfirmDialog"
 import WorkspaceProfileModify from "components/workspace/WorkspaceProfileModify"
-import ConfirmWOrkspaceWithdrawalComponent from "../../common/confirm/withdrawal/ConfirmWorkspaceWithdrawal"
-import useWithdrawWorkspace from "hooks/workspace/useWithdrawWorkspace"
+import ConfirmWOrkspaceWithdrawalComponent from "components/common/confirm/withdrawal/ConfirmWorkspaceWithdrawal"
 
 interface Props {
   handleWithdraw?: () => void

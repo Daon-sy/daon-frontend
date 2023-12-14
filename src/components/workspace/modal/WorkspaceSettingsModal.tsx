@@ -6,8 +6,8 @@ import WorkspaceDataManage from "components/workspace/settings/WorkspaceDataMana
 import WorkspaceParticipantManage from "components/workspace/settings/WorkspaceParticipantManage"
 import ConfirmDialog from "components/common/ConfirmDialog"
 import WorkspaceProfileManage from "components/workspace/settings/WorkspaceProfileManage"
-import ConfirmWorkspaceDeleteComponent from "../../common/confirm/delete/ConfirmWorkspaceDelete"
 import useRemoveWorkspace from "hooks/workspace/useRemoveWorkspace"
+import ConfirmWorkspaceDeleteComponent from "../../common/confirm/delete/ConfirmWorkspaceDelete"
 
 interface Props {
   open: boolean

@@ -49,7 +49,7 @@ const SelectRoleButton: React.FC<Props> = ({ initValue = 2, onChange }) => {
         }}
         size="small"
       >
-        <Typography pl={0} sx={{ fontSize: 14, fontWeight: 500 }} flexGrow={1}>
+        <Typography pl={0} sx={{ fontSize: 12, fontWeight: 500 }} flexGrow={1}>
           {roles[selectedIndex].description}
         </Typography>
         <KeyboardArrowDownIcon />

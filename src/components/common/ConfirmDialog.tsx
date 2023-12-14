@@ -30,11 +30,7 @@ export const ConfirmDialog = ({
     <Dialog open={open} onClose={handleClose} maxWidth={maxWidth}>
       <DialogContent>{children}</DialogContent>
       <DialogActions>
-        <Stack
-          direction="row"
-          spacing={3}
-          sx={{ width: "100%", mx: 3, mb: 2.5 }}
-        >
+        <Stack direction="row" spacing={3} sx={{ width: "100%", mx: 1, mb: 1 }}>
           <Button
             fullWidth
             autoFocus

@@ -8,6 +8,7 @@ export const ConfirmProjectWithdrawalComponent = () => {
   return (
     <Box
       sx={{
+        pt: 2,
         width: "250px",
         height: "230px",
         display: "flex",
