@@ -21,78 +21,83 @@ function Landing() {
   }
 
   return (
-    <Box
-      sx={{
-        width: "100%",
-        height: "100%",
-        scrollbarWidth: "0.5em",
-      }}
-    >
+    <>
       <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: "#fafffd",
-        }}
+        width={screen.width}
+        display="flex"
+        justifyContent="center"
+        sx={{ backgroundColor: "#fafffd" }}
       >
         <Box
           sx={{
-            position: "relative",
-            width: "100%",
+            width: 1200,
             height: "100%",
-            /* backgroundImage: `url(${landingOne})`, */
+            scrollbarWidth: "0.5em",
           }}
         >
-          <Button
-            variant="contained"
-            color="primary"
+          <Box
             sx={{
-              width: "325px",
-              height: "40px",
-              position: "absolute",
-              left: "30.5%",
-              transform: "translateX(-50%)",
-              marginTop: "398px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
             }}
-            onClick={start}
           >
-            지금 시작하기
-          </Button>
+            <Box
+              sx={{
+                position: "relative",
+                width: "100%",
+                height: "100%",
+              }}
+            >
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{
+                  width: "325px",
+                  height: "40px",
+                  position: "absolute",
+                  left: "30.5%",
+                  transform: "translateX(-50%)",
+                  marginTop: "398px",
+                }}
+                onClick={start}
+              >
+                지금 시작하기
+              </Button>
+            </Box>
+            <Box component="img" src={landingOne} style={{ width: "100%" }} />
+            <Box component="img" sx={{ width: "100%" }} src={landingTwo} />
+          </Box>
         </Box>
-        <img
-          src={landingOne}
-          alt=""
-          style={{ width: "73.2%", height: "auto" }}
-        />
-        <Box
-          component="img"
-          sx={{ width: "75%", height: "auto" }}
-          src={landingTwo}
-        />
       </Box>
       <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: "#e9f7f0",
-        }}
+        width={screen.width}
+        display="flex"
+        justifyContent="center"
+        sx={{ backgroundColor: "#e9f7f0" }}
       >
         <Box
-          component="img"
-          sx={{ width: "75%", height: "auto" }}
-          src={landingThree}
-        />
-        <Box
-          component="img"
-          sx={{ width: "75%", height: "auto" }}
-          src={landingFour}
-        />
+          width={1200}
+          display="flex"
+          justifyContent="center"
+          sx={{ backgroundColor: "#fafffd" }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "#e9f7f0",
+            }}
+          >
+            <Box component="img" sx={{ width: "100%" }} src={landingThree} />
+            <Box component="img" sx={{ width: "100%" }} src={landingFour} />
+          </Box>
+        </Box>
       </Box>
-    </Box>
+    </>
   )
 }
 export default Landing
