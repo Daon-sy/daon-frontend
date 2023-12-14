@@ -21,7 +21,6 @@ const useHandleBookmark = ({ workspaceId, projectId, taskId }: Props) => {
       setIsFetching(true)
       const { data } = await taskBookmarkApi(workspaceId, projectId, taskId)
       const { created } = data
-      console.log(created)
       setBookmarked(created)
       addSuccess(created ? "북마크 등록" : "북마크 취소")
     } catch (e) {

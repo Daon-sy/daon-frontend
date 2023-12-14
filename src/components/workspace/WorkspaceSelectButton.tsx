@@ -179,6 +179,7 @@ const WorkspaceSelectButton = () => {
               )
               .map(ws => (
                 <Link
+                  key={ws.workspaceId}
                   to={`/workspace/${ws.workspaceId}`}
                   style={{ textDecoration: "none", color: "inherit" }}
                 >
