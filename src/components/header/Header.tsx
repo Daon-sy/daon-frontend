@@ -7,6 +7,7 @@ import WorkspaceSelectButton from "components/workspace/WorkspaceSelectButton"
 import NotificationButton from "components/notification/NotificationButton"
 
 const Header: React.FC = () => {
+  const logoNWsButtonRef = React.useRef<HTMLDivElement | null>(null)
   return (
     <AppBar
       position="static"
@@ -19,22 +20,55 @@ const Header: React.FC = () => {
       }}
     >
       <Toolbar
+        disableGutters
         sx={{
+          px: 3,
           height: "100%",
           display: "flex",
-          justifyContent: "space-between",
+          // justifyContent: "space-between",
           alignItems: "start",
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box
+          ref={logoNWsButtonRef}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            mr: 1,
+          }}
+        >
           <Logo />
-          <WorkspaceSelectButton />
+          <Box id="wsb">
+            <WorkspaceSelectButton />
+          </Box>
         </Box>
         {/* 검색창 */}
-        <Box sx={{ width: "40%", height: "100%", minWidth: 300 }}>
+        <Box
+          position="sticky"
+          left="36%"
+          height="100%"
+          display="flex"
+          justifyContent="left"
+          sx={theme => ({
+            // [theme.breakpoints.down(990)]: {
+            [theme.breakpoints.down(
+              670 + (logoNWsButtonRef.current?.offsetWidth || 0),
+            )]: {
+              display: "none",
+            },
+          })}
+        >
           <SearchInput />
         </Box>
-        <Box sx={{ height: "100%", display: "flex", alignItems: "center" }}>
+        <Box
+          flexGrow={1}
+          sx={{
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "end",
+          }}
+        >
           {/* 알림 */}
           <NotificationButton />
           {/* 아바타 */}

@@ -23,6 +23,7 @@ import {
 import { Stack } from "@mui/system"
 import { ConfirmDialog } from "components/common/ConfirmDialog"
 import { useAlert } from "hooks/useAlert"
+import NoData from "components/common/NoData"
 import MessageCard from "./MessageCard"
 import { ConfirmAllMessageComponent } from "../common/confirm/ConfirmAllMessage"
 
@@ -173,14 +174,13 @@ const MessageListSection = ({
             <ConfirmAllMessageComponent />
           </ConfirmDialog>
           <Button
+            disableElevation
+            variant="contained"
+            color="primary"
             sx={{
               border: 1,
               backgroundColor: "#1F4838",
               color: "white",
-              ":hover": {
-                backgroundColor: "#FFBE00",
-                borderColor: "#FFBE00",
-              },
             }}
             onClick={onSendMessageClick}
           >
@@ -218,6 +218,9 @@ const MessageListSection = ({
             }}
           />
           <Button
+            disableElevation
+            variant="outlined"
+            color="primary"
             sx={{ width: "10%", border: 1, borderColor: "lightGray" }}
             onClick={handleSearchClick}
           >
@@ -228,7 +231,11 @@ const MessageListSection = ({
           <Box height={370}>
             {currentMessages.length === 0 ? (
               <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <Typography>조회된 쪽지가 없습니다.</Typography>
+                <NoData
+                  content="검색 결과가 없어요"
+                  width="280px"
+                  height="140px"
+                />
               </Box>
             ) : (
               <Stack spacing={1.5}>

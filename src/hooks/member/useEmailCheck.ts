@@ -4,7 +4,7 @@ import { ErrorResponse } from "api"
 import { checkVerificationEmailApi, sendVerificationEmailApi } from "api/member"
 import { useAlert } from "hooks/useAlert"
 
-const MINUTES_IN_MS = 10 * 1000
+const MINUTES_IN_MS = 10 * 60 * 1000
 const INTERVAL_MS = 1000
 
 const validateEmail = (email: string) => {
@@ -113,27 +113,22 @@ const useEmailCheck = (email: string, code: string) => {
 
     try {
       setIsFetching(true)
-      const { data: responseData } = await checkVerificationEmailApi({
+      await checkVerificationEmailApi({
         email,
         code,
       })
-      const { verified } = responseData
-      if (verified) {
-        addSuccess("이메일 인증에 성공했습니다")
-        setChecked("VALID")
-        setErrorMessage({})
-      } else {
-        // addError("인증번호가 일치하지 않습니다")
+      addSuccess("이메일 인증에 성공했습니다")
+      setChecked("VALID")
+      setErrorMessage({})
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        const { response } = e
+        setError(response?.data as ErrorResponse)
         setErrorMessage({
           ...errorMessage,
           emailCheckCode: "인증번호가 일치하지 않습니다",
         })
         setChecked("INVALID")
-      }
-    } catch (e) {
-      if (axios.isAxiosError(e)) {
-        const { response } = e
-        setError(response?.data as ErrorResponse)
       }
     } finally {
       setIsFetching(false)

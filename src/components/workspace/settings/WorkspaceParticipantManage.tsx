@@ -19,8 +19,6 @@ import {
   deportationWorkspaceParticipantApi,
   modifyWorkspaceParticipantRoleApi,
   ModifyWorkspaceParticipantRoleRequestBody,
-  myWorkspaceParticipantDetailApi,
-  workspaceParticipantListApi,
 } from "api/workspace"
 import { roleColors as roles, WorkspaceParticipant } from "_types/workspace"
 import ListItemText from "@mui/material/ListItemText"
@@ -33,6 +31,9 @@ import SearchIcon from "@mui/icons-material/Search"
 import SelectRoleButton from "components/workspace/role/SelectRoleButton"
 import RoleButton from "components/workspace/role/RoleButton"
 import ConfirmOutMemberComponent from "components/common/confirm/ConfirmOutMember"
+import useFetchMyWorkspaceProfile from "hooks/workspace/useFetchMyWorkspaceProfile"
+import useFetchWorkspaceParticipants from "hooks/workspace/useFetchWorkspaceParticipants"
+import NoData from "components/common/NoData"
 
 type Filter = "name" | "email"
 
@@ -49,9 +50,9 @@ const filters = [
 
 const WorkspaceParticipantManage = () => {
   const { addSuccess } = useAlert()
-  const { workspace, myProfile, setMyProfile } = getWorkspaceStore()
+  const { workspace } = getWorkspaceStore()
   const [workspaceParticipants, setWorkspaceParticipants] = React.useState<
-    Array<WorkspaceParticipant>
+    WorkspaceParticipant[]
   >([])
   const [workspaceParticipantToDrop, setWorkspaceParticipantToDrop] =
     React.useState<WorkspaceParticipant>()
@@ -59,31 +60,25 @@ const WorkspaceParticipantManage = () => {
   const [filterText, setFilterText] = React.useState("")
   const { TitleDialog, open: openInviteMember } = useTitleDialog()
 
-  const fetchWorkspaceParticipants = async () => {
-    if (workspace) {
-      const { data } = await workspaceParticipantListApi(workspace.workspaceId)
+  const {
+    workspaceParticipants: fetchedParticipants,
+    fetch: fetchWorkspaceParticipants,
+  } = useFetchWorkspaceParticipants(workspace?.workspaceId || 0)
+
+  const { myWorkspaceProfile: myProfile, fetchMyWorkspaceProfile } =
+    useFetchMyWorkspaceProfile(workspace?.workspaceId || 0)
+
+  React.useEffect(() => {
+    if (fetchedParticipants) {
       setWorkspaceParticipants(
-        data.workspaceParticipants.filter(
+        fetchedParticipants.filter(
           participant =>
             participant.workspaceParticipantId !==
             myProfile?.workspaceParticipantId,
         ),
       )
     }
-  }
-
-  const fetchMyWorkspaceProfile = async () => {
-    if (workspace) {
-      const { data } = await myWorkspaceParticipantDetailApi(
-        workspace.workspaceId,
-      )
-      setMyProfile(data)
-    }
-  }
-
-  React.useEffect(() => {
-    fetchWorkspaceParticipants()
-  }, [])
+  }, [fetchedParticipants])
 
   const updateWorkspaceParticipantRole = async (
     data: ModifyWorkspaceParticipantRoleRequestBody,
@@ -237,7 +232,7 @@ const WorkspaceParticipantManage = () => {
           >
             <List sx={{ paddingY: 0 }}>
               {workspaceParticipants
-                .filter(participant =>
+                ?.filter(participant =>
                   participant[filter]
                     .toUpperCase()
                     .includes(filterText.toUpperCase()),
@@ -308,20 +303,30 @@ const WorkspaceParticipantManage = () => {
                     </ListItemText>
                   </ListItem>
                 ))}
-              {workspaceParticipants.length === 0 ? (
+              {workspaceParticipants?.length === 0 ? (
                 <Typography fontSize={14} p={1}>
-                  참여자들이 존재하지 않습니다.
+                  <NoData
+                    content="참여자들이 존재하지 않습니다."
+                    width={200}
+                    height={100}
+                    sx={{ pb: 3 }}
+                  />
                 </Typography>
               ) : null}
-              {workspaceParticipants.length > 0 &&
+              {(workspaceParticipants?.length || 0) > 0 &&
               filterText &&
-              workspaceParticipants.filter(participant =>
+              workspaceParticipants?.filter(participant =>
                 participant[filter]
                   .toUpperCase()
                   .includes(filterText.toUpperCase()),
               ).length === 0 ? (
                 <Typography fontSize={14} p={1}>
-                  검색 결과가 없습니다.
+                  <NoData
+                    content="검색 결과가 없습니다."
+                    width={200}
+                    height={100}
+                    sx={{ pb: 3 }}
+                  />
                 </Typography>
               ) : null}
             </List>

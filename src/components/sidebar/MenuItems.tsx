@@ -1,6 +1,12 @@
 import React from "react"
 import { Link as RouterLink, useLocation } from "react-router-dom"
-import { ListItemButton, ListItemIcon, ListItemText, Box } from "@mui/material"
+import {
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Box,
+  Tooltip,
+} from "@mui/material"
 import { SvgIconProps } from "@mui/material/SvgIcon"
 
 interface MenuItemsProps {
@@ -45,18 +51,23 @@ const MenuItems: React.FC<MenuItemsProps> = ({
             {React.createElement(icon)}
           </ListItemIcon>
         ) : null}
-        <ListItemText
-          primary={listValue}
-          sx={{
-            display: "block",
-            color: "inherit",
-            fontWeight: "700",
-            maxWidth: "80%",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-          }}
-        />
+        <Tooltip title={listValue} arrow>
+          <ListItemText
+            primary={listValue}
+            sx={{
+              display: "block",
+              color: "inherit",
+              maxWidth: "80%",
+              ".MuiListItemText-primary": {
+                fontWeight: 500,
+                fontSize: 14,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              },
+            }}
+          />
+        </Tooltip>
         {children}
       </ListItemButton>
     </Box>

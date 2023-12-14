@@ -42,6 +42,10 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
     fetchTaskList()
   }, [params?.projectId])
 
+  React.useEffect(() => {
+    if (!taskDetailParam) fetchTaskList()
+  }, [taskDetailParam])
+
   const { state: locSate } = useLocation()
   React.useEffect(() => {
     if (locSate && locSate.openTaskId) {
@@ -94,7 +98,7 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
       <Box
         mt={2}
         mb={2}
-        height="calc(100vh - 300px)"
+        height="calc(100vh - 254px)"
         minHeight="330px"
         overflow="hidden"
         sx={{

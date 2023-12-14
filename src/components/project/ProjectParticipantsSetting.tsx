@@ -31,6 +31,7 @@ import ConfirmDialog from "components/common/ConfirmDialog"
 import SearchIcon from "@mui/icons-material/Search"
 import { TitleDialog } from "components/common/TitleDialog"
 import ConfirmOutMemberComponent from "components/common/confirm/ConfirmOutMember"
+import NoData from "components/common/NoData"
 import RoleButton from "../workspace/role/RoleButton"
 import ColorAvatar from "../common/ColorAvatar"
 import ProjectInvite from "./invite/ProjectInvite"
@@ -308,7 +309,12 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
                 ))}
               {projectParticipants.length === 0 ? (
                 <Typography fontSize={14} p={1}>
-                  참여자들이 존재하지 않습니다.
+                  <NoData
+                    content="참여자들이 존재하지 않습니다."
+                    width={200}
+                    height={100}
+                    sx={{ pb: 3 }}
+                  />
                 </Typography>
               ) : null}
               {projectParticipants.length > 0 &&
@@ -319,7 +325,12 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
                   .includes(filterText.toUpperCase()),
               ).length === 0 ? (
                 <Typography fontSize={14} p={1}>
-                  검색 결과가 없습니다.
+                  <NoData
+                    content="검색 결과가 없습니다."
+                    width={200}
+                    height={100}
+                    sx={{ pb: 3 }}
+                  />
                 </Typography>
               ) : null}
             </List>

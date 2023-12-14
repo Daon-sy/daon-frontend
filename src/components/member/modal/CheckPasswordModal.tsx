@@ -67,14 +67,14 @@ const CheckPasswordModal = ({
       </DialogContent>
       <DialogActions sx={{ mb: 2, display: "flex", justifyContent: "center" }}>
         <Button
+          disableElevation
+          variant="contained"
+          color="primary"
           sx={{
             height: 30,
             borderRadius: 1,
             color: "white",
             backgroundColor: "#1F4838",
-            ":hover": {
-              backgroundColor: "#FFBE00",
-            },
           }}
           onClick={handleConfirmClick}
         >

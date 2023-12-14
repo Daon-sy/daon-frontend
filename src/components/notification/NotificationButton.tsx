@@ -114,8 +114,8 @@ const NotificationButton = () => {
               overflow: "visible",
               filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
               mt: 1.5,
-              maxHeight: 500,
-              overflowY: "auto",
+              // height: 500,
+              overflowY: "scroll",
               "&:before": {
                 content: '""',
                 display: "block",
@@ -131,6 +131,11 @@ const NotificationButton = () => {
                 width: "8px",
                 borderRadius: 1,
               },
+              "&::-webkit-scrollbar-button:vertical:start:increment": {
+                display: "block",
+                height: 72,
+                borderRadius: 1,
+              },
               "&::-webkit-scrollbar-thumb": {
                 position: "absolute",
                 backgroundColor: "#495e57",
@@ -140,7 +145,7 @@ const NotificationButton = () => {
           },
         }}
       >
-        <Box width={300} p={2}>
+        <Box width={300} pl={2} pr={1}>
           {notificationsPage === "unread" ? (
             <NotificationsUnreadBox
               notifications={notifications}

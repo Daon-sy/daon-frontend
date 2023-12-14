@@ -55,31 +55,30 @@ const CreateTask: React.FC<Props> = ({ handleClose }: Props) => {
 
   return (
     <Box>
-      <Stack spacing={2} height="100%">
+      <Stack spacing={1} height="100%">
+        <Stack spacing={1} pb={6 / 4}>
+          <ProjectSelectButton
+            handleProjectSelect={project => {
+              setProjectId(project?.projectId)
+              setBoardId(undefined)
+            }}
+          />
+          <BoardSelectButton
+            projectId={projectId}
+            handleBoardSelect={board => setBoardId(board?.boardId)}
+          />
+        </Stack>
         <Box
-          sx={{
-            display: "flex",
-          }}
+          mt={2}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          position="relative"
+          paddingBottom={3}
         >
-          <Stack direction="row" spacing={2}>
-            <ProjectSelectButton
-              handleProjectSelect={project => {
-                setProjectId(project.id)
-                setBoardId(undefined)
-              }}
-            />
-            {projectId ? (
-              <BoardSelectButton
-                projectId={projectId}
-                currentBoardId={boardId}
-                handleBoardSelect={board => setBoardId(board?.boardId)}
-              />
-            ) : null}
-          </Stack>
-          <Box flexGrow={1} />
           <Box
             sx={{
-              padding: 0.5,
+              pr: 0.5,
               display: "flex",
               alignItems: "center",
             }}
@@ -88,22 +87,31 @@ const CreateTask: React.FC<Props> = ({ handleClose }: Props) => {
               label="긴급"
               color={emergency ? "error" : "default"}
               onClick={() => setEmergency(!emergency)}
+              sx={{
+                borderRadius: 1,
+              }}
             />
           </Box>
-        </Box>
-        <Box mt={2}>
-          <TextField
-            required
-            fullWidth
-            label="제목"
-            size="small"
-            value={title}
-            onChange={e => setTitle(e.target.value)}
-            inputProps={{ maxLength: 20 }}
-          />
-          <FormHelperText
-            sx={{ textAlign: "end" }}
-          >{`${title.length}/20자`}</FormHelperText>
+          <Box flexGrow={1}>
+            <TextField
+              required
+              fullWidth
+              label="제목"
+              size="small"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              inputProps={{
+                maxLength: 20,
+                style: { fontSize: 14 },
+              }}
+              sx={{
+                ".MuiFormLabel-root": { fontSize: 14 },
+              }}
+            />
+            <FormHelperText
+              sx={{ textAlign: "end", position: "absolute", right: 0 }}
+            >{`${title.length}/20자`}</FormHelperText>
+          </Box>
         </Box>
         <Box
           sx={{
@@ -117,7 +125,13 @@ const CreateTask: React.FC<Props> = ({ handleClose }: Props) => {
             rows={10}
             label="내용"
             onChange={e => setContent(e.target.value)}
-            inputProps={{ maxLength: 1000 }}
+            inputProps={{
+              maxLength: 1000,
+              style: { fontSize: 14 },
+            }}
+            sx={{
+              ".MuiFormLabel-root": { fontSize: 14 },
+            }}
           />
           <FormHelperText
             sx={{ textAlign: "end" }}

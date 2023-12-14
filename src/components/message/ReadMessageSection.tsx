@@ -99,23 +99,25 @@ const ReadMessageSection = ({
       </Typography>
       <Box sx={{ mt: 7, display: "flex", justifyContent: "center" }}>
         <Button
+          disableElevation
+          variant="contained"
+          color="primary"
           sx={{
             m: 1.5,
             color: "white",
             backgroundColor: "#1F4838",
             border: 1,
             borderColor: "#1F4838",
-            ":hover": {
-              backgroundColor: "#FFBE00",
-              borderColor: "#FFBE00",
-            },
           }}
           onClick={handleReplyClick}
         >
           답장하기
         </Button>
         <Button
-          sx={{ m: 1.5, color: "#1F4838", border: 1, borderColor: "lightGray" }}
+          disableElevation
+          variant="outlined"
+          color="primary"
+          sx={{ m: 1.5 }}
           onClick={handleDeleteClick}
         >
           삭제하기

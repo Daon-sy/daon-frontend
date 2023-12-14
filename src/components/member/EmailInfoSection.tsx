@@ -55,15 +55,15 @@ const EmailInfoSection: React.FC = () => {
         <MailIcon sx={{ width: "10%", color: "#1F4838" }} />
         <Typography sx={{ width: "12%", color: "#1F4838" }}>이메일</Typography>
         <Button
+          disableElevation
+          variant="contained"
+          color="secondary"
           sx={{
             width: "15%",
             p: 0,
             border: 1,
             color: "white",
             backgroundColor: "#FFBE00",
-            ":hover": {
-              backgroundColor: "#1F4838",
-            },
           }}
           onClick={() => setAddEmailModalOpen(true)}
         >

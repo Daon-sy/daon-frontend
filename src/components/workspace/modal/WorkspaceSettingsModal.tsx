@@ -1,15 +1,13 @@
 import React from "react"
-import { getMyWorkspaceIdStore, getWorkspaceStore } from "store/userStore"
+import { Box, Button } from "@mui/material"
+import { getWorkspaceStore } from "store/userStore"
 import MenuModal, { MenuWithPage } from "components/common/MenuModal"
 import WorkspaceDataManage from "components/workspace/settings/WorkspaceDataManage"
 import WorkspaceParticipantManage from "components/workspace/settings/WorkspaceParticipantManage"
-import { Box, Button } from "@mui/material"
 import ConfirmDialog from "components/common/ConfirmDialog"
-import { useNavigate } from "react-router-dom"
-import { removeWorkspaceApi } from "api/workspace"
-import { useAlert } from "hooks/useAlert"
 import WorkspaceProfileManage from "components/workspace/settings/WorkspaceProfileManage"
 import ConfirmWorkspaceDeleteComponent from "../../common/confirm/delete/ConfirmWorkspaceDelete"
+import useRemoveWorkspace from "hooks/workspace/useRemoveWorkspace"
 
 interface Props {
   open: boolean
@@ -17,20 +15,10 @@ interface Props {
 }
 
 const WorkspaceSettingsModal = ({ open = false, handleClose }: Props) => {
-  const navigate = useNavigate()
-  const { addSuccess } = useAlert()
   const { workspace } = getWorkspaceStore()
-  const { myWorkspaceId } = getMyWorkspaceIdStore()
   const [workspaceRemoveModalOpen, setWorkspaceRemoveModalOpen] =
     React.useState(false)
-  const removeWorkspace = async () => {
-    if (workspace?.workspaceId) {
-      removeWorkspaceApi(workspace.workspaceId)
-      handleClose()
-      addSuccess("워크스페이스가 삭제되었습니다")
-      navigate(`/workspace/${myWorkspaceId}`)
-    }
-  }
+  const { fetch: removeWorkspace } = useRemoveWorkspace()
 
   const menuWithPageList: MenuWithPage[] = [
     {
@@ -63,7 +51,12 @@ const WorkspaceSettingsModal = ({ open = false, handleClose }: Props) => {
         <ConfirmDialog
           open={workspaceRemoveModalOpen}
           maxWidth="xs"
-          handleConfirm={removeWorkspace}
+          handleConfirm={() =>
+            removeWorkspace(
+              { workspaceId: workspace?.workspaceId || 0 },
+              handleClose,
+            )
+          }
           handleClose={() => {
             setWorkspaceRemoveModalOpen(false)
           }}
@@ -81,6 +74,7 @@ const WorkspaceSettingsModal = ({ open = false, handleClose }: Props) => {
       handleClose={handleClose}
       menuWithPageList={menuWithPageList}
       removeButton={removeButton}
+      allowedEditRoles={["WORKSPACE_ADMIN"]}
     />
   )
 }

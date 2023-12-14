@@ -2,42 +2,31 @@ import { Box, Stack } from "@mui/material"
 import React from "react"
 import Typography from "@mui/material/Typography"
 import useImageUrlInputRef from "hooks/useImageUrlInputRef"
-import {
-  modifyWorkspaceApi,
-  ModifyWorkspaceRequestBody,
-  workspaceDetailApi,
-} from "api/workspace"
 import { getWorkspaceStore } from "store/userStore"
-import { useAlert } from "hooks/useAlert"
 import { WORKSPACE_PARTICIPANT_ROLE } from "_types/workspace"
 import EditableTextBox from "components/common/EditableTextBox"
 import MenuBox from "components/common/MenuBox"
 import ColorAvatar from "components/common/ColorAvatar"
 import useImageUpload from "hooks/image/useImageUpload"
+import useModifyWorkspace from "hooks/workspace/useModifyWorkspace"
 
 const allowedEdit: Array<WORKSPACE_PARTICIPANT_ROLE> = ["WORKSPACE_ADMIN"]
 
 const WorkspaceDataManage = () => {
-  const { workspace, myProfile, setWorkspace } = getWorkspaceStore()
-  const { addSuccess } = useAlert()
+  const { workspace, myProfile } = getWorkspaceStore()
   const [ref, changeRef] = useImageUrlInputRef()
 
   const { ImageInput, selectFile } = useImageUpload()
+
+  const { fetch: updateWorkspace } = useModifyWorkspace(
+    workspace?.workspaceId || 0,
+  )
 
   if (!(workspace && myProfile)) {
     return <Box />
   }
 
   const { workspaceId, title, imageUrl, subject, description } = workspace
-
-  const updateWorkspace = async (data: ModifyWorkspaceRequestBody) => {
-    await modifyWorkspaceApi(workspaceId, { ...data })
-    addSuccess("워크스페이스 정보 수정 완료")
-    const { data: workspaceDetail } = await workspaceDetailApi(
-      workspace.workspaceId,
-    )
-    setWorkspace(workspaceDetail)
-  }
 
   return (
     <Box>

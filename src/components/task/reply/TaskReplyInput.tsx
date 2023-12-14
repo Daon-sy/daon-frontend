@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import Box from "@mui/material/Box"
 import useInputs from "hooks/useInputs"
 import { useAlert } from "hooks/useAlert"
@@ -27,29 +27,40 @@ const TaskReplyInput: React.FC<TaskReplyProps> = ({
   onReplyAdded,
 }: TaskReplyProps) => {
   const [data, onChange, resetData] = useInputs<TaskReply>(initialState)
-  const { addError } = useAlert()
+  const { addSuccess, addError } = useAlert()
+  const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(
+    null,
+  )
 
   const createReply = () => {
     if (!workspaceId) return
-    if (data.content.length === 0) {
+    if (!data.content || data.content.trim().length === 0) {
       addError("댓글 내용은 필수 입력 값입니다")
-
       return
     }
 
     addTaskReply(workspaceId, projectId, taskId, data).then(() => {
       resetData()
       onReplyAdded()
+      addSuccess("댓글이 등록 되었습니다")
     })
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault()
-      createReply()
+
+      if (typingTimeout) {
+        clearTimeout(typingTimeout)
+      }
+
+      setTypingTimeout(
+        setTimeout(() => {
+          createReply()
+        }, 200),
+      )
     }
   }
-
   return (
     <Box
       component="form"
@@ -64,8 +75,10 @@ const TaskReplyInput: React.FC<TaskReplyProps> = ({
         <TextField
           required
           multiline
+          maxRows={2}
           size="small"
-          placeholder="댓글 입력 후, 엔터키를 눌러주세요 😄"
+          placeholder="댓글 입력 후, 엔터키를 눌러주세요 😄
+          ◼ 줄바꿈은  shift+Enter를 입력해주세요"
           name="content"
           value={data.content}
           onChange={onChange}

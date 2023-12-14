@@ -67,10 +67,17 @@ const TaskDetailModal: React.FC<Props> = ({
   const { taskHistories, fetchHistories, fetchTopHistory, isLast } =
     useFetchTaskHistory(taskFullPath)
   const { fetch: modifyTask } = useModifyTask(taskFullPath)
-  const { bookmarked, handleBookmark } = useHandleBookmark(
-    taskFullPath,
-    taskDetail?.bookmark,
-  )
+  const { bookmarked: handleBookmarkResponse, handleBookmark } =
+    useHandleBookmark(taskFullPath)
+  const [bookmarked, setBookmarked] = React.useState(false)
+  React.useEffect(() => {
+    setBookmarked(taskDetail?.bookmark || false)
+  }, [taskDetail])
+  React.useEffect(() => {
+    if (typeof handleBookmarkResponse === "boolean")
+      setBookmarked(handleBookmarkResponse)
+  }, [handleBookmarkResponse])
+
   const { fetch: removeTask } = useRemoveTask(taskFullPath, handleClose)
 
   useEventSource({
@@ -245,7 +252,7 @@ const TaskDetailModal: React.FC<Props> = ({
                 >
                   <BoardSelectButton
                     projectId={projectId}
-                    currentBoardId={taskDetail.board?.boardId}
+                    currentBoard={taskDetail.board}
                     handleBoardSelect={item => {
                       modifyTask({
                         ...taskDetail,
@@ -258,9 +265,9 @@ const TaskDetailModal: React.FC<Props> = ({
                       })
                     }}
                   />
-                  <Box flexGrow={1} />
                   <Box
                     sx={{
+                      ml: 3,
                       padding: 0.5,
                       display: "flex",
                       alignItems: "center",
@@ -277,6 +284,7 @@ const TaskDetailModal: React.FC<Props> = ({
                             emergency: !taskDetail?.emergency,
                           })
                         }}
+                        sx={{ borderRadius: 1, mt: 0.4 }}
                       />
                     </Tooltip>
                   </Box>
@@ -523,6 +531,7 @@ const TaskDetailModal: React.FC<Props> = ({
               </Box>
             </Box>
             <ProjectParticipantsModal
+              title="담당자 선택"
               workspaceId={workspaceId}
               projectId={projectId}
               open={projectParticipantsModalOpen}

@@ -3,17 +3,17 @@ import { Box } from "@mui/material"
 import { getWorkspaceStore } from "store/userStore"
 import WorkspaceProfileModifyModal from "components/workspace/modal/WorkspaceProfileModifyModal"
 import EditIcon from "@mui/icons-material/Edit"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCrown, faLeaf } from "@fortawesome/free-solid-svg-icons"
 import ColorAvatar from "components/common/ColorAvatar"
+import wsIcon from "assets/img/ws_icon.webp"
+import pjIcon from "assets/img/pj_icon.webp"
 import SubIconBtn from "./SubIconBtn"
 
 const WorkSpaceProfile: React.FC = () => {
   let icon = null
-  let color = null
   const { myProfile } = getWorkspaceStore()
   const [profileModfiyModalOpen, setProfileModfiyModalOpen] =
     React.useState(false)
+  const [isMouseover, setIsMouseHover] = React.useState(false)
 
   const openProfileModifyModal = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -21,20 +21,21 @@ const WorkSpaceProfile: React.FC = () => {
   }
 
   if (myProfile?.role === "WORKSPACE_ADMIN") {
-    icon = faCrown
-    color = "#fdd835"
+    icon = wsIcon
   } else if (myProfile?.role === "PROJECT_ADMIN") {
-    icon = faLeaf
-    color = "#009959"
+    icon = pjIcon
   }
 
   return (
     <Box
+      onMouseEnter={() => setIsMouseHover(true)}
+      onMouseLeave={() => setIsMouseHover(false)}
       sx={{
         boxSizing: "border-box",
+        paddingX: 1,
         width: "100%",
         height: "20%",
-        minHeight: "110px",
+        minHeight: "80px",
         bgcolor: "#1f4838",
         position: "relative",
         border: "none",
@@ -46,57 +47,63 @@ const WorkSpaceProfile: React.FC = () => {
         pl: "12px",
       }}
     >
-      {icon ? (
-        <Box
-          sx={{
-            position: "absolute",
-            top: 5,
-            right: 10,
-            color,
-          }}
-        >
-          <FontAwesomeIcon icon={icon} />
-        </Box>
-      ) : null}
-      <ColorAvatar
-        id={myProfile?.workspaceParticipantId}
-        src={myProfile?.imageUrl}
-        sx={{ width: 65, height: 65 }}
-      />
+      {isMouseover && (
+        <SubIconBtn
+          color="#ffbe00"
+          onClick={openProfileModifyModal}
+          icon={<EditIcon sx={{ width: 20, height: 20, p: 0.5 }} />}
+          position="absolute"
+          bottom="0"
+          right="0"
+        />
+      )}
+
+      <Box sx={{ position: "relative", mr: 1 }}>
+        {icon ? (
+          <Box
+            component="img"
+            sx={{
+              position: "absolute",
+              width: "16px",
+              height: "16px",
+              zIndex: 10,
+              bottom: 2,
+              right: 0,
+            }}
+            src={icon}
+          />
+        ) : null}
+        <ColorAvatar
+          id={myProfile?.workspaceParticipantId}
+          src={myProfile?.imageUrl}
+          sx={{ width: 52, height: 52 }}
+        />
+      </Box>
       <Box
         sx={{
-          width: "55%",
+          width: "70%",
           mt: "2px",
           textAlign: "left",
           color: "white",
+          lineHeight: "20px",
           position: "relative",
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Box
-            sx={{
-              maxWidth: "100px",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-              wordBreak: "break-all",
-              borderRadius: 1,
-              fontSize: 20,
-              fontWeight: "bold",
-              display: "block",
-              mt: 2,
-            }}
-          >
-            {myProfile?.name}
-          </Box>
-          <SubIconBtn
-            color="#808080"
-            onClick={openProfileModifyModal}
-            icon={<EditIcon />}
-            position="relative"
-            top="8px"
-          />
+        <Box
+          sx={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            wordBreak: "break-all",
+            borderRadius: 1,
+            fontSize: 14,
+            fontWeight: "bold",
+            display: "block",
+          }}
+        >
+          {myProfile?.name}
         </Box>
+
         <Box
           sx={{
             borderRadius: 1,
@@ -105,10 +112,10 @@ const WorkSpaceProfile: React.FC = () => {
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
             color: "#b6d1c2",
-            marginY: 1,
             fontSize: 12,
             lineHeight: "20px",
             fontWeight: "bold",
+            maxWidth: "132px",
           }}
         >
           {myProfile?.email}
