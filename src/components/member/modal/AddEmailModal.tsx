@@ -121,18 +121,15 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
     try {
       if (!isThrottledForCheck) {
         setIsThrottledForCheck(true)
-        const verifiedData = await checkVerificationEmailApi({ email, code })
-        if (verifiedData.data.verified) {
-          setCheckCode(true)
-        } else {
-          setCheckCode(false)
-        }
+        await checkVerificationEmailApi({ email, code })
+        setCheckCode(true)
         setTimeout(() => {
           setIsThrottledForCheck(false)
         }, 500)
       }
     } catch (e) {
       setError("인증번호 확인에 실패했습니다.")
+      setCheckCode(false)
     }
   }
 
