@@ -86,7 +86,7 @@ const TaskReply: React.FC<TaskReplyProps> = ({
   }, [])
 
   return (
-    <Box component="section" sx={{ width: "100%" }}>
+    <Box component="section" sx={{ boxSizing: "border-box" }}>
       <TaskReplyInput
         workspaceId={workspace?.workspaceId}
         projectId={projectId}

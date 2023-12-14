@@ -7,15 +7,15 @@ import {
   Stack,
   Tooltip,
   Typography,
-  Menu,
   Box,
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Tabs,
+  Tab,
 } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
 import DeleteIcon from "@mui/icons-material/Delete"
-import HistoryIcon from "@mui/icons-material/History"
 import CalendarDateField from "components/common/CalendarDateField"
 import ConfirmDialog from "components/common/ConfirmDialog"
 import BoardSelectButton from "components/task/BoardSelectButton"
@@ -69,6 +69,11 @@ const TaskDetailModal: React.FC<Props> = ({
   const { bookmarked: handleBookmarkResponse, handleBookmark } =
     useHandleBookmark(taskFullPath)
   const [bookmarked, setBookmarked] = React.useState(false)
+  const [tab, setTab] = React.useState("댓글")
+
+  const handleChange = (event: React.SyntheticEvent, newTab: string) => {
+    setTab(newTab)
+  }
   React.useEffect(() => {
     setBookmarked(taskDetail?.bookmark || false)
   }, [taskDetail])
@@ -87,20 +92,6 @@ const TaskDetailModal: React.FC<Props> = ({
     },
   })
 
-  // 히스토리
-  const [historyAnchorEl, setHistoryAnchorEl] =
-    React.useState<null | HTMLElement>(null)
-
-  const handleOpenHistory = (event: React.MouseEvent<HTMLElement>) => {
-    setHistoryAnchorEl(event.currentTarget)
-  }
-  const handleCloseHistory = () => {
-    setHistoryAnchorEl(null)
-  }
-
-  const openhistory = Boolean(historyAnchorEl)
-  const id = openhistory ? "history" : undefined
-
   return (
     <TitleDialog
       disableCloseButton
@@ -112,98 +103,12 @@ const TaskDetailModal: React.FC<Props> = ({
     >
       <Box>
         {/* 위에 더보기, x */}
-        <Box display="flex" alignItems="center" justifyContent="end">
-          <Box>
-            <Tooltip title="히스토리" arrow placement="top">
-              <IconButton aria-describedby={id} onClick={handleOpenHistory}>
-                <HistoryIcon />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              id={id}
-              open={openhistory}
-              anchorEl={historyAnchorEl}
-              onClose={handleCloseHistory}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              elevation={0}
-              sx={{
-                ".MuiList-root": { p: 0 },
-              }}
-            >
-              <Box
-                sx={{
-                  borderRadius: 1,
-                  border: 1,
-                  p: 1,
-                  height: "200px",
-                  cursor: "default",
-                  scrollbarWidth: "0.5em",
-                  WebkitScrollSnapType: "none",
-                  overflowX: "hidden",
-                  overflowY: "scroll",
-                  boxShadow: "2px 2px 6px rgba(0,0,0,0.3)",
-                  "&::-webkit-scrollbar": {
-                    width: "8px",
-                  },
-                  "&::-webkit-scrollbar-thumb": {
-                    backgroundColor: "#495e57",
-                    borderRadius: "15px",
-                  },
-                  "&::-webkit-scrollbar-button": {
-                    height: "16px",
-                  },
-                }}
-              >
-                {/* 히스토리 */}
-                <Box sx={{ width: "450px" }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontWeight: "bold",
-                        color: "#1f4838",
-                        fontSize: "20px",
-                      }}
-                    >
-                      히스토리
-                    </Typography>
-                    <IconButton
-                      onClick={handleCloseHistory}
-                      sx={{
-                        color: theme => theme.palette.grey[500],
-                      }}
-                    >
-                      <CloseIcon />
-                    </IconButton>
-                  </Box>
-                  <TaskHistoriesWrapper taskHistories={taskHistories} />
-                  {isLast ? null : (
-                    <Button
-                      fullWidth
-                      onClick={async () => {
-                        await fetchHistories()
-                      }}
-                    >
-                      더보기
-                    </Button>
-                  )}
-                </Box>
-              </Box>
-            </Menu>
-          </Box>
-
+        <Box
+          width="100%"
+          display="flex"
+          alignItems="center"
+          justifyContent="end"
+        >
           {/* 삭제 */}
           <Box>
             <Tooltip title="삭제" arrow>
@@ -233,12 +138,14 @@ const TaskDetailModal: React.FC<Props> = ({
         </Box>
 
         {taskDetail ? (
-          <Stack p={1} direction="row" spacing={5} height="100%">
+          <Stack p={1} direction="row" spacing={5} height="100%" width="100%">
             {/* left */}
             <Box
               id="left-container"
+              width={600}
               sx={{
-                width: "100%",
+                boxSizing: "border-box",
+                // width: "100%",
                 height: "100%",
               }}
             >
@@ -449,8 +356,10 @@ const TaskDetailModal: React.FC<Props> = ({
             {/* right */}
             <Box
               id="right-container"
+              boxSizing="border-box"
+              width={600}
               sx={{
-                width: "100%",
+                overflowX: "hidden",
                 height: "100%",
               }}
             >
@@ -514,20 +423,51 @@ const TaskDetailModal: React.FC<Props> = ({
                     />
                   </Box>
                 </Box>
-
-                {/* 댓글 */}
-                <Box>
-                  <Box
-                    sx={{
-                      pb: 2,
-                      fontWeight: "bold",
-                      color: "#1f4838",
-                      fontSize: "18px",
-                    }}
+                <Box />
+                {/* true :댓글, flase :히스토리 */}
+                <Box minHeight="313px">
+                  <Tabs
+                    value={tab}
+                    onChange={handleChange}
+                    textColor="primary"
+                    indicatorColor="primary"
+                    aria-label="댓글, 히스토리 탭"
+                    sx={{ mb: 1 }}
                   >
-                    댓글
-                  </Box>
-                  <TaskReply projectId={projectId} taskId={taskId} />
+                    <Tab
+                      value="댓글"
+                      label="댓글"
+                      sx={{
+                        fontWeight: "bold",
+                        fontSize: "12px",
+                      }}
+                    />
+                    <Tab
+                      value="히스토리"
+                      label="히스토리"
+                      sx={{ fontWeight: "bold", fontSize: "12px" }}
+                    />
+                  </Tabs>
+
+                  {tab === "댓글" ? (
+                    <Box width="494px">
+                      <TaskReply projectId={projectId} taskId={taskId} />
+                    </Box>
+                  ) : (
+                    <Box>
+                      <TaskHistoriesWrapper taskHistories={taskHistories} />
+                      {isLast ? null : (
+                        <Button
+                          fullWidth
+                          onClick={async () => {
+                            await fetchHistories()
+                          }}
+                        >
+                          더보기
+                        </Button>
+                      )}
+                    </Box>
+                  )}
                 </Box>
               </Box>
             </Box>
