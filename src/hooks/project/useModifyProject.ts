@@ -32,6 +32,7 @@ const useModifyProject = () => {
           if (p.projectId !== projectId) return p
           return {
             projectId,
+            ...projects.find(pj => pj.projectId === projectId),
             ...data,
           } as Project
         }),

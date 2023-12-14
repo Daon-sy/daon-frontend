@@ -8,6 +8,7 @@ import { SearchTaskResult } from "api/search"
 import { getWorkspaceStore } from "store/userStore"
 import { getTaskDetailViewStore } from "store/taskStore"
 import ConfirmDialog from "components/common/ConfirmDialog"
+import ConfirmMovementComponent from "../../common/confirm/ConfirmMovement"
 
 interface Props {
   task: SearchTaskResult
@@ -46,7 +47,11 @@ const TaskSearchResult: React.FC<Props> = ({ task }) => {
     if (currentWorkspace && currentWorkspace.workspaceId !== workspaceId) {
       setConfirmDialogData({
         children: (
-          <Typography>{`${workspaceTitle} 워크스페이스의 ${projectTitle} 프로젝트로 이동하시겠습니까?`}</Typography>
+          <ConfirmMovementComponent
+            title="프로젝트"
+            contents1={`[${workspaceTitle}] 워크스페이스  >`}
+            contents2={`[${projectTitle}] 프로젝트`}
+          />
         ),
         handleConfirm: () =>
           navigate(`/workspace/${workspaceId}/project/${projectId}`, {

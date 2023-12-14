@@ -184,7 +184,11 @@ const WorkspaceSelectButton = () => {
                 >
                   <Tooltip
                     arrow
-                    title={ws.description ? ws.description : "설명 없음"}
+                    title={
+                      <Typography whiteSpace="pre-wrap" fontSize={10}>
+                        {ws.description ? ws.description : "설명 없음"}
+                      </Typography>
+                    }
                   >
                     <MenuItem
                       key={ws.workspaceId}

@@ -30,6 +30,7 @@ import {
 import ConfirmDialog from "components/common/ConfirmDialog"
 import SearchIcon from "@mui/icons-material/Search"
 import { TitleDialog } from "components/common/TitleDialog"
+import ConfirmOutMemberComponent from "components/common/confirm/ConfirmOutMember"
 import NoData from "components/common/NoData"
 import RoleButton from "../workspace/role/RoleButton"
 import ColorAvatar from "../common/ColorAvatar"
@@ -347,15 +348,7 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
           confirmButtonText="내보내기"
         >
           <Box width={500}>
-            <Typography
-              mt={1}
-              component="h4"
-              fontSize={24}
-              fontWeight={600}
-              textAlign="center"
-            >
-              해당 사용자를 내보내겠습니까?
-            </Typography>
+            <ConfirmOutMemberComponent />
             <Box
               sx={{
                 mt: 3,

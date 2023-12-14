@@ -35,6 +35,7 @@ import TitleDialog from "components/common/TitleDialog"
 import ColorAvatar from "components/common/ColorAvatar"
 import TaskReply from "../reply/TaskReply"
 import ProgressRadioButton from "../ProgressRadioButton"
+import { ConfirmDeleteComponent } from "../../common/confirm/ConfirmDelete"
 
 interface Props {
   workspaceId: number
@@ -561,8 +562,10 @@ const TaskDetailModal: React.FC<Props> = ({
               setTaskRemoveModalOpen(false)
             }}
           >
-            {}
-            지우시겠습니까?
+            <ConfirmDeleteComponent
+              title="해당 할일을 삭제하시겠습니까"
+              contents="한번 삭제된 할일은 복구가 불가능합니다"
+            />
           </ConfirmDialog>
         ) : null}
       </Box>

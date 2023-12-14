@@ -20,7 +20,7 @@ const RoleButton: React.FC<Props> = ({ colorRole }) => {
         borderWidth: 1,
       }}
     >
-      <Typography pl={0} sx={{ fontSize: 14, fontWeight: 500 }} flexGrow={1}>
+      <Typography pl={0} sx={{ fontSize: 12, fontWeight: 500 }} flexGrow={1}>
         {colorRole.description}
       </Typography>
     </Button>

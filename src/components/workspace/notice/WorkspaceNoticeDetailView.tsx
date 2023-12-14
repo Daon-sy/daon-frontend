@@ -7,6 +7,7 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew"
 import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
 import ConfirmDialog from "components/common/ConfirmDialog"
+import { ConfirmDeleteComponent } from "components/common/confirm/ConfirmDelete"
 import ModifyWorkspaceNotice from "./ModifyWorkspaceNotice"
 
 interface Props {
@@ -164,7 +165,10 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
         handleConfirm={handleRemoveNotice}
         handleClose={() => setConfirmDialogOpen(false)}
       >
-        공지사항을 삭제하시겠습니까?
+        <ConfirmDeleteComponent
+          title="해당 공지사항을 삭제하시겠습니까"
+          contents="한번 삭제된 공지사항은 복구가 불가능합니다"
+        />
       </ConfirmDialog>
     </Box>
   )

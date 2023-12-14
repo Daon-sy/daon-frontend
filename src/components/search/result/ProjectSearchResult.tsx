@@ -7,6 +7,7 @@ import PeopleIcon from "@mui/icons-material/People"
 import { SearchProjectResult } from "api/search"
 import { getWorkspaceStore } from "store/userStore"
 import ConfirmDialog from "components/common/ConfirmDialog"
+import ConfirmMovementComponent from "../../common/confirm/ConfirmMovement"
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -51,7 +52,11 @@ const ProjectSearchResult: React.FC<Props> = ({ project }) => {
     if (currentWorkspace && currentWorkspace.workspaceId !== workspaceId) {
       setConfirmDialogData({
         children: (
-          <Typography>{`${workspaceTitle} 워크스페이스의 ${projectTitle} 프로젝트로 이동하시겠습니까?`}</Typography>
+          <ConfirmMovementComponent
+            title="프로젝트"
+            contents1={`[${workspaceTitle}] 워크스페이스  >`}
+            contents2={`[${projectTitle}] 프로젝트`}
+          />
         ),
         handleConfirm: () =>
           navigate(`/workspace/${workspaceId}/project/${projectId}`),

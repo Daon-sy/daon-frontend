@@ -1,11 +1,12 @@
 import React from "react"
-import { Box, Chip, Typography } from "@mui/material"
+import { Box, Chip } from "@mui/material"
 import {
   DeportationProjectNotification,
   Notification,
 } from "_types/notification"
 import NotificationCard from "components/notification/card/NotificationCard"
 import { useAlertDialog } from "components/common/AlertDialog"
+import ConfirmOutMemberAlarmComponent from "../../common/confirm/ConfirmOutMemberAlarm"
 
 interface Props {
   notification: Notification<DeportationProjectNotification & { time: string }>
@@ -58,7 +59,11 @@ const DeportatedProject: React.FC<Props> = ({
         </Box>
       </NotificationCard>
       <AlertDialog>
-        <Typography>{`${workspace.workspaceTitle} 워크스페이스의 ${project.projectTitle} 프로젝트에서 내보내기 되었습니다.`}</Typography>
+        <ConfirmOutMemberAlarmComponent
+          title="프로젝트"
+          contents1={`[${workspace.workspaceTitle}] 워크스페이스  >`}
+          contents2={`[${project.projectTitle}] 프로젝트`}
+        />
       </AlertDialog>
     </>
   )

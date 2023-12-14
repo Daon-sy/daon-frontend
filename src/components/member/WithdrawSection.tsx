@@ -14,8 +14,8 @@ import { withdrawApi } from "api/member"
 import React from "react"
 import { useNavigate } from "react-router-dom"
 import { getTokenStore } from "store/tokenStore"
-import WarningAmberIcon from "@mui/icons-material/WarningAmber"
 import { useAlert } from "hooks/useAlert"
+import { ConfirmMemberWithdrawalComponent } from "components/common/confirm/withdrawal/ConfirmMemberWithdrawal"
 
 const WithdrawSection: React.FC = () => {
   const tokenState = getTokenStore()
@@ -54,26 +54,9 @@ const WithdrawSection: React.FC = () => {
         onClose={() => setWithdrawMemberModalOpen(false)}
       >
         <DialogTitle>
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <WarningAmberIcon sx={{ mr: 1, color: "red" }} />
-            <Typography sx={{ color: "red" }}>회원 탈퇴</Typography>
-          </Box>
+          <ConfirmMemberWithdrawalComponent />
         </DialogTitle>
         <DialogContent>
-          <Box
-            sx={{
-              width: 300,
-              p: 1,
-              border: 1,
-              borderRadius: 1,
-              color: "lightGray",
-            }}
-          >
-            <Typography sx={{ color: "#787878", lineHeight: 2 }}>
-              회원 탈퇴가 진행되면 복구가 불가능합니다. 동의하시면 아래
-              체크버튼을 클릭해 주세요.
-            </Typography>
-          </Box>
           <FormGroup>
             <FormControlLabel
               control={
