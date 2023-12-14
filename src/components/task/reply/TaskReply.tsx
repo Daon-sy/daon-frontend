@@ -4,6 +4,7 @@ import { getWorkspaceStore } from "store/userStore"
 import { TaskReplyDetail } from "_types/task"
 import { taskReplyListApi, modifyTaskReply } from "api/task"
 import { useAlert } from "hooks/useAlert"
+import NoData from "components/common/NoData"
 import TaskReplyItem from "./TaskReplyItem"
 import TaskReplyInput from "./TaskReplyInput"
 
@@ -94,6 +95,14 @@ const TaskReply: React.FC<TaskReplyProps> = ({
         onReplyAdded={handleReplyChanged}
       />
       <Box component="ul">
+        {replies.length === 0 && (
+          <NoData
+            content="댓글이 없습니다"
+            width="120px"
+            height="60px"
+            sx={{ height: "180px" }}
+          />
+        )}
         {replies.map(reply => (
           <TaskReplyItem
             key={reply.replyId}
