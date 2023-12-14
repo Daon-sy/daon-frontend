@@ -25,7 +25,6 @@ const Header: React.FC = () => {
           px: 3,
           height: "100%",
           display: "flex",
-          // justifyContent: "space-between",
           alignItems: "start",
         }}
       >

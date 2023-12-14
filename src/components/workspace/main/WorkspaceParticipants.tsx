@@ -80,6 +80,7 @@ const WorkspaceParticipants: React.FC = () => {
                 left: 30,
               }}
               src={wsIcon}
+              alt="사용자 역할 아이콘"
             />
           ) : participant.role === "PROJECT_ADMIN" ? (
             <Box
@@ -93,6 +94,7 @@ const WorkspaceParticipants: React.FC = () => {
                 left: 30,
               }}
               src={pjIcon}
+              alt="사용자 역할 아이콘"
             />
           ) : null}
           <Box

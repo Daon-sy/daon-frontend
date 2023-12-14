@@ -70,6 +70,7 @@ const WorkSpaceProfile: React.FC = () => {
               bottom: 2,
               right: 0,
             }}
+            alt="사용자 역할 아이콘"
             src={icon}
           />
         ) : null}
