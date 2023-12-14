@@ -247,6 +247,7 @@ const TaskDetailModal: React.FC<Props> = ({
                   sx={{
                     display: "flex",
                     paddingLeft: 1,
+                    alignItems: "center",
                   }}
                 >
                   <BoardSelectButton
@@ -266,16 +267,15 @@ const TaskDetailModal: React.FC<Props> = ({
                   />
                   <Box
                     sx={{
-                      ml: 3,
-                      padding: 0.5,
+                      ml: 4,
                       display: "flex",
-                      alignItems: "center",
+                      alignItems: "end",
                     }}
                   >
                     <Tooltip title="긴급 설정" arrow>
                       <Chip
                         label="긴급"
-                        size="small"
+                        size="medium"
                         color={taskDetail.emergency ? "error" : "default"}
                         onClick={() => {
                           modifyTask({
@@ -283,7 +283,7 @@ const TaskDetailModal: React.FC<Props> = ({
                             emergency: !taskDetail?.emergency,
                           })
                         }}
-                        sx={{ borderRadius: 1, mt: 0.4 }}
+                        sx={{ borderRadius: 1, margin: 0, border: 0 }}
                       />
                     </Tooltip>
                   </Box>
@@ -291,10 +291,12 @@ const TaskDetailModal: React.FC<Props> = ({
                     sx={{
                       display: "flex",
                       alignItems: "center",
-                      marginLeft: 1,
+                      marginLeft: 0.5,
                     }}
                   >
                     <TaskBookmarkButton
+                      padding={0}
+                      fontSize="2.5rem"
                       bookmarked={bookmarked}
                       handleClick={handleBookmark}
                     />
