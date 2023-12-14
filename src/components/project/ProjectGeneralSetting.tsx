@@ -21,6 +21,9 @@ import { WORKSPACE_PARTICIPANT_ROLE } from "_types/workspace"
 import ConfirmDialog from "components/common/ConfirmDialog"
 import { useNavigate } from "react-router-dom"
 import EditableTextBox from "components/common/EditableTextBox"
+import { ConfirmDeleteComponent } from "../common/confirm/ConfirmDelete"
+import ConfirmProjectWithdrawalComponent from "../common/confirm/withdrawal/ConfirmProjectWithdrawal"
+import ConfirmProjectDeleteComponent from "../common/confirm/delete/ConfirmProjectDelete"
 
 const allowedEdit: Array<WORKSPACE_PARTICIPANT_ROLE> = [
   "WORKSPACE_ADMIN",
@@ -256,7 +259,10 @@ const ProjectGeneralSetting = ({ workspaceId, projectId }: Props) => {
                   setBoardIdToRemove(undefined)
                 }}
               >
-                보드를 삭제하시겠습니까? 보드 내의 모든 할 일이 함께 삭제됩니다.
+                <ConfirmDeleteComponent
+                  title="해당 보드를 삭제하시겠습니까"
+                  contents="보드 내 모든 할일이 함께 삭제되며, 복구가 불가능 합니다"
+                />
               </ConfirmDialog>
             </Box>
           </Box>
@@ -288,7 +294,7 @@ const ProjectGeneralSetting = ({ workspaceId, projectId }: Props) => {
                 setProjectRemoveModalOpen(false)
               }}
             >
-              프로젝트를 삭제하시겠습니까? 프로젝트 내의 모든 정보가 삭제됩니다.
+              <ConfirmProjectDeleteComponent />
             </ConfirmDialog>
           </Box>
         ) : null}
@@ -313,7 +319,7 @@ const ProjectGeneralSetting = ({ workspaceId, projectId }: Props) => {
               setProjectWithdrawModalOpen(false)
             }}
           >
-            프로젝트를 탈퇴하시겠습니까?
+            <ConfirmProjectWithdrawalComponent />
           </ConfirmDialog>
         </Box>
       </Box>

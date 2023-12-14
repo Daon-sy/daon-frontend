@@ -18,6 +18,7 @@ import useInviteWorkspace from "hooks/workspace/useInviteWorkspace"
 import ColorAvatar from "components/common/ColorAvatar"
 import ConfirmDialog from "components/common/ConfirmDialog"
 import SelectRoleButton from "components/workspace/role/SelectRoleButton"
+import { ConfirmInvitationComponent } from "components/common/confirm/ConfirmInvitation"
 
 const MemberInvite = () => {
   const { workspace } = getWorkspaceStore()
@@ -183,15 +184,7 @@ const MemberInvite = () => {
           }}
         >
           <Box width={500}>
-            <Typography
-              mt={1}
-              component="h4"
-              fontSize={24}
-              fontWeight={600}
-              textAlign="center"
-            >
-              사용자를 초대하시겠습니까?
-            </Typography>
+            <ConfirmInvitationComponent />
             <Box
               sx={{
                 mt: 3,

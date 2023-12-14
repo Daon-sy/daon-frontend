@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom"
 import { removeWorkspaceApi } from "api/workspace"
 import { useAlert } from "hooks/useAlert"
 import WorkspaceProfileManage from "components/workspace/settings/WorkspaceProfileManage"
+import ConfirmWorkspaceDeleteComponent from "../../common/confirm/delete/ConfirmWorkspaceDelete"
 
 interface Props {
   open: boolean
@@ -67,9 +68,7 @@ const WorkspaceSettingsModal = ({ open = false, handleClose }: Props) => {
             setWorkspaceRemoveModalOpen(false)
           }}
         >
-          워크스페이스 내의 모든 정보가 삭제됩니다.
-          <br />
-          정말로 이 워크스페이스를 삭제하시겠습니까?
+          <ConfirmWorkspaceDeleteComponent />
         </ConfirmDialog>
       </Box>
     )

@@ -4,6 +4,7 @@ import { Box, Button, Typography } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
 import ColorAvatar from "components/common/ColorAvatar"
 import { ConfirmDialog } from "components/common/ConfirmDialog"
+import { ConfirmDeleteComponent } from "../common/confirm/ConfirmDelete"
 
 interface MessageCardProps {
   message: MessageSummary
@@ -75,7 +76,10 @@ const MessageCard: React.FC<MessageCardProps> = ({
           handleClose={() => setDeleteMessageModalOpen(false)}
           handleConfirm={deleteMessage}
         >
-          <Typography>쪽지를 삭제하시겠습니까?</Typography>
+          <ConfirmDeleteComponent
+            title="해당 쪽지를 삭제하시겠습니까"
+            contents="한번 삭제된 쪽지는 복구가 불가능합니다"
+          />
         </ConfirmDialog>
       </Box>
     </Box>

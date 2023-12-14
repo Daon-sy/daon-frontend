@@ -6,6 +6,7 @@ import { getMyWorkspaceIdStore, getWorkspaceStore } from "store/userStore"
 import { useAlert } from "hooks/useAlert"
 import ConfirmDialog from "components/common/ConfirmDialog"
 import WorkspaceProfileModify from "components/workspace/WorkspaceProfileModify"
+import ConfirmWOrkspaceWithdrawalComponent from "../../common/confirm/withdrawal/ConfirmWorkspaceWithdrawal"
 
 interface Props {
   handleWithdraw?: () => void
@@ -87,7 +88,7 @@ const WorkspaceProfileManage: React.FC<Props> = ({ handleWithdraw }) => {
                 setWorkspaceWithdrawModalOpen(false)
               }}
             >
-              정말로 이 워크스페이스를 탈퇴하시겠습니까?
+              <ConfirmWOrkspaceWithdrawalComponent />
             </ConfirmDialog>
           ) : null}
         </Box>

@@ -32,6 +32,7 @@ import ColorAvatar from "components/common/ColorAvatar"
 import SearchIcon from "@mui/icons-material/Search"
 import SelectRoleButton from "components/workspace/role/SelectRoleButton"
 import RoleButton from "components/workspace/role/RoleButton"
+import ConfirmOutMemberComponent from "components/common/confirm/ConfirmOutMember"
 
 type Filter = "name" | "email"
 
@@ -338,15 +339,7 @@ const WorkspaceParticipantManage = () => {
           confirmButtonText="내보내기"
         >
           <Box width={500}>
-            <Typography
-              mt={1}
-              component="h4"
-              fontSize={24}
-              fontWeight={600}
-              textAlign="center"
-            >
-              해당 사용자를 내보내겠습니까?
-            </Typography>
+            <ConfirmOutMemberComponent />
             <Box
               sx={{
                 mt: 3,
