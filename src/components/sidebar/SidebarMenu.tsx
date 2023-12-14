@@ -1,6 +1,6 @@
 import React from "react"
 import { useParams } from "react-router-dom"
-import { Box, TextField, InputAdornment } from "@mui/material"
+import { Box, TextField, InputAdornment, Typography } from "@mui/material"
 import SettingsIcon from "@mui/icons-material/Settings"
 import SearchIcon from "@mui/icons-material/Search"
 import { getProjectsStore } from "store/userStore"
@@ -37,6 +37,49 @@ const SidebarMenu: React.FC = () => {
     listValue: project.title,
     projectId: project.projectId,
   }))
+
+  const renderProjects = () => {
+    if (myProjects.length > 0) {
+      const filteredProjects = myProjects.filter(project =>
+        project.listValue
+          .toUpperCase()
+          .includes(projectFilterKeyword.toUpperCase()),
+      )
+
+      return filteredProjects.length > 0 ? (
+        filteredProjects.map(list => (
+          <Box key={list.projectId}>
+            <MenuItems to={list.link} listValue={list.listValue}>
+              <SubIconBtn
+                color="darkgreen"
+                onClick={e => openProjectManageModal(list.projectId, e)}
+                icon={<SettingsIcon />}
+              />
+            </MenuItems>
+            <ProjectSettingsModal
+              projectId={list.projectId}
+              open={projectManageModalOpenMap[list.projectId] || false}
+              handleClose={() =>
+                setProjectManageModalOpenMap(prev => ({
+                  ...prev,
+                  [list.projectId]: false,
+                }))
+              }
+            />
+          </Box>
+        ))
+      ) : (
+        <Typography mt={1} textAlign="center" fontSize={14} fontWeight={400}>
+          검색 결과가 없습니다.
+        </Typography>
+      )
+    }
+    return (
+      <Typography mt={1} textAlign="center" fontSize={14} fontWeight={400}>
+        참여중인 프로젝트가 없습니다.
+      </Typography>
+    )
+  }
 
   return (
     <Box
@@ -91,33 +134,7 @@ const SidebarMenu: React.FC = () => {
             },
           }}
         >
-          {myProjects
-            .filter(project =>
-              project.listValue
-                .toUpperCase()
-                .includes(projectFilterKeyword.toUpperCase()),
-            )
-            .map(list => (
-              <Box key={list.projectId}>
-                <MenuItems to={list.link} listValue={list.listValue}>
-                  <SubIconBtn
-                    color="darkgreen"
-                    onClick={e => openProjectManageModal(list.projectId, e)}
-                    icon={<SettingsIcon />}
-                  />
-                </MenuItems>
-                <ProjectSettingsModal
-                  projectId={list.projectId}
-                  open={projectManageModalOpenMap[list.projectId] || false}
-                  handleClose={() =>
-                    setProjectManageModalOpenMap(prev => ({
-                      ...prev,
-                      [list.projectId]: false,
-                    }))
-                  }
-                />
-              </Box>
-            ))}
+          {renderProjects()}
         </Box>
       </Menu>
       <TitleDialog title="프로젝트 생성" maxWidth="sm">

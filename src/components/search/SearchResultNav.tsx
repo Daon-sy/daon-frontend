@@ -14,7 +14,7 @@ const SearchResultNav: React.FC<Props> = ({
   children,
 }) => (
   <Box>
-    <Box display="flex" alignItems="center">
+    <Box display="flex" alignItems="center" mb={1 / 4}>
       <IconButton size="small" onClick={onBackButtonClick}>
         <ArrowBackIosNewIcon sx={{ fontSize: 16 }} />
       </IconButton>
