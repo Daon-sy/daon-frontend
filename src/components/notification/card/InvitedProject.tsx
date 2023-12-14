@@ -1,6 +1,6 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import { Box, Chip, Typography } from "@mui/material"
+import { Box, Chip } from "@mui/material"
 import { InviteProjectNotification, Notification } from "_types/notification"
 import NotificationCard from "components/notification/card/NotificationCard"
 import { useConfirmDialog } from "components/common/ConfirmDialog"

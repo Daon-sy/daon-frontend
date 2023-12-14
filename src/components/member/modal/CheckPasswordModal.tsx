@@ -5,7 +5,6 @@ import {
   DialogActions,
   DialogContent,
   TextField,
-  Typography,
 } from "@mui/material"
 import { modifyMyMemberInfoApi } from "api/member"
 import { useAlert } from "hooks/useAlert"

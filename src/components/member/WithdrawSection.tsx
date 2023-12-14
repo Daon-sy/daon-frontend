@@ -8,7 +8,6 @@ import {
   DialogTitle,
   FormControlLabel,
   FormGroup,
-  Typography,
 } from "@mui/material"
 import { withdrawApi } from "api/member"
 import React from "react"
