@@ -2,6 +2,7 @@ import React from "react"
 import { AxiosResponse } from "axios"
 import { basicAxios } from "api"
 import { getTokenStore } from "store/tokenStore"
+import { Box } from "@mui/material"
 
 const RefreshComponent = ({ children }: React.PropsWithChildren) => {
   const BEARER_TYPE = "Bearer "
@@ -21,7 +22,7 @@ const RefreshComponent = ({ children }: React.PropsWithChildren) => {
       .catch(error => error)
   }, [])
 
-  return <div>{children}</div>
+  return <Box>{children}</Box>
 }
 
 export default RefreshComponent

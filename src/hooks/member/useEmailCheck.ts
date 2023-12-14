@@ -20,6 +20,8 @@ interface ErrorMessage {
 
 const useEmailCheck = (email: string, code: string) => {
   const [isFetching, setIsFetching] = React.useState(false)
+  const [isSendEmailCodeFetching, setIsSendEmailCodeFetching] =
+    React.useState(false)
   const [error, setError] = React.useState<ErrorResponse>()
   const [codeSent, setCodeSent] = React.useState(false)
   const [checked, setChecked] = React.useState<
@@ -69,7 +71,7 @@ const useEmailCheck = (email: string, code: string) => {
     }
 
     try {
-      setIsFetching(true)
+      setIsSendEmailCodeFetching(true)
       await sendVerificationEmailApi({ email })
       setCodeSent(true)
       setErrorMessage({})
@@ -88,7 +90,7 @@ const useEmailCheck = (email: string, code: string) => {
         }
       }
     } finally {
-      setIsFetching(false)
+      setIsSendEmailCodeFetching(false)
     }
   }
 
@@ -146,6 +148,7 @@ const useEmailCheck = (email: string, code: string) => {
     setCodeSent,
     setChecked,
     errorMessage,
+    isSendEmailCodeFetching,
   }
 }
 

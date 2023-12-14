@@ -7,6 +7,7 @@ import {
   Typography,
   Stack,
   InputLabel,
+  CircularProgress,
 } from "@mui/material"
 import signUpPageImage from "assets/img/sign_up.webp"
 import useSignUp from "hooks/member/useSignUp"
@@ -24,6 +25,7 @@ const SignUp = () => {
     emailCheckErrorMessage,
     checkUsername,
     checkUsernameErrorMessage,
+    isSendEmailCodeFetching,
   } = useSignUp()
   const minutes = String(
     Math.floor((timeLeftEmailCheck / (1000 * 60)) % 60),
@@ -77,6 +79,123 @@ const SignUp = () => {
     })
   }
 
+  const [openEmailCodeInput, setOpenEmailCodeInput] = React.useState(false)
+
+  const renderEmailCodeInput = () => {
+    if (openEmailCodeInput) {
+      if (isSendEmailCodeFetching)
+        return (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "83.25px",
+              width: "100%",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        )
+
+      return (
+        <Stack spacing={1}>
+          <InputLabel htmlFor="emailCheck">
+            <Box style={{ display: "flex" }}>
+              <Box flexGrow={1} style={{ display: "flex" }}>
+                <Box sx={{ fontWeight: 900, fontSize: 14 }}>
+                  이메일 인증하기
+                </Box>
+                {emailCodeChecked === "VALID" ? null : (
+                  <Box
+                    sx={{
+                      ml: 2,
+                      fontWeight: 500,
+                      fontSize: 10,
+                      color: "#3A4CA8",
+                    }}
+                  >
+                    {minutes} : {seconds}
+                  </Box>
+                )}
+              </Box>
+              {emailCodeChecked !== "VALID" && timeLeftEmailCheck <= 0 ? (
+                <Button
+                  variant="contained"
+                  color="error"
+                  sx={{
+                    p: 0,
+                    px: 1,
+                    minWidth: 0,
+                    textAlign: "right",
+                    fontWeight: 500,
+                    fontSize: 10,
+                  }}
+                  onClick={() => {
+                    sendEmailCode()
+                    setSignUpForm({ ...signUpForm, emailCheckCode: "" })
+                  }}
+                >
+                  인증번호 재전송
+                </Button>
+              ) : null}
+              {emailCodeChecked !== "VALID" && timeLeftEmailCheck > 0 ? (
+                <Button
+                  disableElevation
+                  variant="contained"
+                  color="secondary"
+                  sx={{
+                    p: 0,
+                    px: 1,
+                    minWidth: 0,
+                    textAlign: "right",
+                    fontWeight: 500,
+                    fontSize: 10,
+                  }}
+                  onClick={() => checkEmailCode()}
+                >
+                  인증번호 확인
+                </Button>
+              ) : null}
+            </Box>
+          </InputLabel>
+          <TextField
+            value={emailCheckCode}
+            onChange={e =>
+              setSignUpForm({
+                ...signUpForm,
+                emailCheckCode: e.target.value,
+              })
+            }
+            variant="outlined"
+            margin="none"
+            size="small"
+            // error={emailCodeChecked === "INVALID"}
+            error={!!emailCheckErrorMessage.emailCheckCode}
+            inputProps={{
+              style: { fontSize: 12 },
+              readOnly: emailCodeChecked === "VALID" || timeLeftEmailCheck <= 0,
+            }}
+          />
+          <Box
+            style={{
+              height: 12,
+              fontSize: 10,
+              color: emailCodeChecked === "VALID" ? "#3c8869" : "#F14336",
+            }}
+          >
+            {/* {renderEmailCodeCheckMessage()} */}
+            {emailCodeChecked === "VALID"
+              ? "이메일 인증이 완료되었습니다"
+              : emailCheckErrorMessage.emailCheckCode}
+          </Box>
+        </Stack>
+      )
+    }
+
+    return null
+  }
+
   return (
     <Box
       sx={{
@@ -123,13 +242,15 @@ const SignUp = () => {
                     아이디
                   </Box>
                   <Button
+                    disableElevation
+                    variant="contained"
+                    color="secondary"
                     sx={{
                       p: 0,
+                      px: 1,
                       minWidth: 0,
-                      color: "#ecb317",
                       fontWeight: 500,
                       fontSize: 10,
-                      textDecorationColor: "#ecb317",
                     }}
                     onClick={checkUsername}
                   >
@@ -234,15 +355,28 @@ const SignUp = () => {
                     이메일
                   </Box>
                   <Button
+                    disableElevation
+                    disabled={isSendEmailCodeFetching}
+                    variant="contained"
+                    color={!emailCodeSent ? "secondary" : "primary"}
                     sx={{
                       p: 0,
+                      px: 1,
                       minWidth: 0,
-                      color: !emailCodeSent ? "#ecb317" : "#3c8869",
                       fontWeight: 500,
                       fontSize: 10,
-                      textDecorationColor: "#ecb317",
                     }}
-                    onClick={!emailCodeSent ? sendEmailCode : resendEmailClick}
+                    onClick={
+                      !emailCodeSent
+                        ? () => {
+                            setOpenEmailCodeInput(true)
+                            sendEmailCode()
+                          }
+                        : () => {
+                            setOpenEmailCodeInput(false)
+                            resendEmailClick()
+                          }
+                    }
                   >
                     {!emailCodeSent ? "인증번호 전송" : "이메일 재입력"}
                   </Button>
@@ -273,97 +407,7 @@ const SignUp = () => {
                   : emailCheckErrorMessage.email}
               </Box>
             </Stack>
-            {emailCodeSent ? (
-              <Stack spacing={1}>
-                <InputLabel htmlFor="emailCheck">
-                  <Box style={{ display: "flex" }}>
-                    <Box flexGrow={1} style={{ display: "flex" }}>
-                      <Box sx={{ fontWeight: 900, fontSize: 14 }}>
-                        이메일 인증하기
-                      </Box>
-                      {emailCodeChecked === "VALID" ? null : (
-                        <Box
-                          sx={{
-                            ml: 2,
-                            fontWeight: 500,
-                            fontSize: 10,
-                            color: "#3A4CA8",
-                          }}
-                        >
-                          {minutes} : {seconds}
-                        </Box>
-                      )}
-                    </Box>
-                    {emailCodeChecked !== "VALID" && timeLeftEmailCheck <= 0 ? (
-                      <Button
-                        sx={{
-                          p: 0,
-                          minWidth: 0,
-                          textAlign: "right",
-                          color: "#F14336",
-                          fontWeight: 500,
-                          fontSize: 10,
-                          textDecorationColor: "#ecb317",
-                        }}
-                        onClick={() => {
-                          sendEmailCode()
-                          setSignUpForm({ ...signUpForm, emailCheckCode: "" })
-                        }}
-                      >
-                        인증번호 재전송
-                      </Button>
-                    ) : null}
-                    {emailCodeChecked !== "VALID" && timeLeftEmailCheck > 0 ? (
-                      <Button
-                        sx={{
-                          p: 0,
-                          minWidth: 0,
-                          textAlign: "right",
-                          color: "#ecb317",
-                          fontWeight: 500,
-                          fontSize: 10,
-                          textDecorationColor: "#ecb317",
-                        }}
-                        onClick={() => checkEmailCode()}
-                      >
-                        인증번호 확인
-                      </Button>
-                    ) : null}
-                  </Box>
-                </InputLabel>
-                <TextField
-                  value={emailCheckCode}
-                  onChange={e =>
-                    setSignUpForm({
-                      ...signUpForm,
-                      emailCheckCode: e.target.value,
-                    })
-                  }
-                  variant="outlined"
-                  margin="none"
-                  size="small"
-                  // error={emailCodeChecked === "INVALID"}
-                  error={!!emailCheckErrorMessage.emailCheckCode}
-                  inputProps={{
-                    style: { fontSize: 12 },
-                    readOnly:
-                      emailCodeChecked === "VALID" || timeLeftEmailCheck <= 0,
-                  }}
-                />
-                <Box
-                  style={{
-                    height: 12,
-                    fontSize: 10,
-                    color: emailCodeChecked === "VALID" ? "#3c8869" : "#F14336",
-                  }}
-                >
-                  {/* {renderEmailCodeCheckMessage()} */}
-                  {emailCodeChecked === "VALID"
-                    ? "이메일 인증이 완료되었습니다"
-                    : emailCheckErrorMessage.emailCheckCode}
-                </Box>
-              </Stack>
-            ) : null}
+            {renderEmailCodeInput()}
             <Box display="flex" justifyContent="center">
               <Box width={300} mt={5}>
                 <Stack height={40} direction="row" spacing={4}>
