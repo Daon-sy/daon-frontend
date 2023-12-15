@@ -7,13 +7,14 @@ import landingOne from "assets/img/landing1.webp"
 import landingTwo from "assets/img/landing2.webp"
 import landingThree from "assets/img/landing3.webp"
 import landingFour from "assets/img/landing4.webp"
+import arrow from "assets/img/arrow.webp"
 
 function Landing() {
-  const tokenState = getTokenStore()
+  const { token } = getTokenStore()
   const navigate = useNavigate()
 
   const start = async () => {
-    if (!tokenState) {
+    if (!token) {
       navigate("/sign-in")
     } else {
       navigate("/workspace/me")
@@ -54,16 +55,18 @@ function Landing() {
                 variant="contained"
                 color="primary"
                 sx={{
-                  width: "325px",
+                  width: "357px",
                   height: "40px",
                   position: "absolute",
-                  left: "30.5%",
+                  left: "23.5%",
                   transform: "translateX(-50%)",
-                  marginTop: "398px",
+                  marginTop: "432px",
+                  boxShadow: "3px 3px 1px #cccfce",
                 }}
                 onClick={start}
               >
-                지금 시작하기
+                <span style={{ marginRight: "15px" }}>지금 시작하기</span>
+                <img src={arrow} alt="" style={{ width: "180px" }} />
               </Button>
             </Box>
             <Box component="img" src={landingOne} style={{ width: "100%" }} />
