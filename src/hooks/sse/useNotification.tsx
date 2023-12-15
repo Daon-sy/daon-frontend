@@ -12,6 +12,8 @@ import {
   ReceiveMessageNotification,
   RegisteredTaskManagerNotification,
 } from "_types/notification"
+import { useAlert } from "hooks/useAlert"
+import { useNavigate } from "react-router-dom"
 
 type EventType =
   | "CONNECTED"
@@ -23,7 +25,7 @@ type EventType =
   | "REGISTERED_TASK_MANAGER"
   | "RECEIVE_MESSAGE"
 
-const heartbeatTimeout = 140_000
+const heartbeatTimeout = 180_000
 
 const addEventListener = (
   eventsource: EventSourcePolyfill,
@@ -58,8 +60,16 @@ const useNotification = ({
   onDeportationProject,
   onRegisteredTaskManager,
 }: Props) => {
-  const { token } = getTokenStore()
+  const { token, clear } = getTokenStore()
   const { addNotification, setIsNewIssued } = getNotificationsUnreadStore()
+  const { addError } = useAlert()
+  const navigate = useNavigate()
+
+  React.useEffect(() => {
+    if (!token) {
+      navigate("/")
+    }
+  }, [token])
 
   let eventSource: EventSourcePolyfill
   const subscribe = () => {
@@ -175,8 +185,15 @@ const useNotification = ({
     })
 
     eventSource.onerror = e => {
+      const { error } = e as ErrorEvent
       console.error(e)
       eventSource?.close()
+      if (error.message === "Failed to fetch") {
+        addError("네트워크 오류가 발생하였습니다")
+        clear()
+        return
+      }
+      subscribe()
     }
   }
 

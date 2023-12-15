@@ -10,7 +10,7 @@ import { getWorkspaceStore } from "store/userStore"
 import WorkspaceNotice from "components/workspace/main/WorkspaceNotice"
 import WorkspaceParticipants from "components/workspace/main/WorkspaceParticipants"
 import WorkspaceDeadlineTaskWrapper from "components/workspace/main/WorkspaceDeadlineTaskWrapper"
-import TaskTimelineView from "components/task/timeline/TaskTimelineView"
+// import TaskTimelineView from "components/task/timeline/TaskTimelineView"
 import SectionTitleWrapper from "components/workspace/main/SectionTitleWrapper"
 import useFetchTaskList from "hooks/task/useFetchTaskList"
 
@@ -86,7 +86,7 @@ const WorkspaceMain: React.FC = () => {
           icon={faStopwatch}
           title="타임라인"
         >
-          <TaskTimelineView tasks={tasks} height="calc(68vh - 160px - 44px)" />
+          {/* <TaskTimelineView tasks={tasks} height="calc(68vh - 160px - 44px)" /> */}
         </SectionTitleWrapper>
         <SectionTitleWrapper
           width="calc(20vw - 67.2px)"
