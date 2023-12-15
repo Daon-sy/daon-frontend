@@ -19,7 +19,7 @@ const TaskHistory = ({ taskHistory }: Props) => {
       {(() => {
         if (taskHistory.fieldType === "TaskProgressStatus") {
           return (
-            <Typography fontSize={12} display="flex" alignItems="center">
+            <Typography fontSize={10} display="flex" alignItems="center">
               {
                 TASK_STATUS_SET.find(t => t.value === taskHistory.from)
                   ?.description
@@ -41,12 +41,12 @@ const TaskHistory = ({ taskHistory }: Props) => {
 
         if (taskHistory.fieldType === "boolean") {
           return (
-            <Typography fontSize={12} display="flex" alignItems="center">
+            <Typography fontSize={10} display="flex" alignItems="center">
               <Chip
                 label={taskHistory.from ? "긴급" : "긴급 해제"}
                 size="small"
                 color={taskHistory.from ? "error" : "default"}
-                sx={{ fontSize: 12 }}
+                sx={{ fontSize: 10, p: 0, height: 18 }}
               />
               <EastIcon
                 fontSize="small"
@@ -59,7 +59,7 @@ const TaskHistory = ({ taskHistory }: Props) => {
                 label={taskHistory.to ? "긴급" : "긴급 해제"}
                 size="small"
                 color={taskHistory.to ? "error" : "default"}
-                sx={{ fontSize: 12 }}
+                sx={{ fontSize: 10, p: 0, height: 18 }}
               />
             </Typography>
           )
@@ -69,7 +69,7 @@ const TaskHistory = ({ taskHistory }: Props) => {
           const boardFrom = taskHistory.from as HistoryBoard
           const boardTo = taskHistory.to as HistoryBoard
           return (
-            <Typography fontSize={12} display="flex" alignItems="center">
+            <Typography fontSize={10} display="flex" alignItems="center">
               <Box>{`${boardFrom.title}`}</Box>
               <EastIcon
                 fontSize="small"
@@ -91,20 +91,19 @@ const TaskHistory = ({ taskHistory }: Props) => {
               {taskManagerFrom ? (
                 <Stack
                   direction="row"
-                  spacing={1}
                   sx={{ display: "flex", alignItems: "center" }}
                 >
                   <Box>
                     <ColorAvatar
                       id={taskManagerFrom.projectParticipantId}
                       src={taskManagerFrom.imageUrl}
-                      sx={{ width: 20, height: 20 }}
+                      sx={{ width: 18, height: 18 }}
                     />
                   </Box>
-                  <Typography fontSize={12}>{taskManagerFrom.name}</Typography>
+                  <Typography fontSize={10}>{taskManagerFrom.name}</Typography>
                 </Stack>
               ) : (
-                <Typography fontSize={12}>없음</Typography>
+                <Typography fontSize={10}>없음</Typography>
               )}
               <EastIcon
                 fontSize="small"
@@ -116,27 +115,26 @@ const TaskHistory = ({ taskHistory }: Props) => {
               {taskManagerTo ? (
                 <Stack
                   direction="row"
-                  spacing={1}
                   sx={{ display: "flex", alignItems: "center" }}
                 >
                   <Box>
                     <ColorAvatar
                       id={taskManagerTo.projectParticipantId}
                       src={taskManagerTo.imageUrl}
-                      sx={{ width: 20, height: 20 }}
+                      sx={{ width: 18, height: 18 }}
                     />
                   </Box>
-                  <Typography fontSize={12}>{taskManagerTo.name}</Typography>
+                  <Typography fontSize={10}>{taskManagerTo.name}</Typography>
                 </Stack>
               ) : (
-                <Typography fontSize={12}>없음</Typography>
+                <Typography fontSize={10}>없음</Typography>
               )}
             </Box>
           )
         }
 
         return (
-          <Typography fontSize={12} display="flex" alignItems="center">
+          <Typography fontSize={10} display="flex" alignItems="center">
             <Box
               maxWidth={200}
               overflow="hidden"
@@ -172,87 +170,70 @@ const TaskHistory = ({ taskHistory }: Props) => {
         borderColor: "rgb(224,224,224)",
       }}
     >
-      <Tooltip
-        title={tooltipText()}
-        componentsProps={{
-          tooltip: {
-            sx: {
-              backgroundColor: "white",
-              borderStyle: "solid",
-              borderWidth: 1,
-              borderColor: "#C8C8C8FF",
-            },
-          },
-        }}
-        PopperProps={{
-          style: {
-            zIndex: 10000,
-            cursor: "default",
-          },
-        }}
+      <Stack
+        direction="row"
+        spacing={0.5}
+        sx={{ display: "flex", alignItems: "center" }}
       >
-        <Stack
-          direction="row"
-          spacing={0.5}
-          sx={{ display: "flex", alignItems: "center" }}
-        >
-          <Box>
-            <ColorAvatar
-              id={taskHistory.modifier.projectParticipantId}
-              src={taskHistory.modifier.imageUrl}
-              sx={{ width: 20, height: 20 }}
-            />
+        <Box>
+          <ColorAvatar
+            id={taskHistory.modifier.projectParticipantId}
+            src={taskHistory.modifier.imageUrl}
+            sx={{ width: 18, height: 18 }}
+          />
+        </Box>
+        <Typography fontSize={12}>
+          <Box component="span" fontSize={12} fontWeight={600} mr={0.5}>
+            {taskHistory.modifier.name}
           </Box>
-          <Typography fontSize={12}>
-            <Box component="span" fontSize={14} fontWeight={600} mr={0.5}>
-              {taskHistory.modifier.name}
-            </Box>
-            참여자가
-            <Box
-              component="span"
-              fontSize={14}
-              fontWeight={600}
-              mx={0.5}
-              bgcolor="rgb(244,244,244)"
-              borderRadius={1}
-              p={0.3}
-            >
-              {(() => {
-                switch (taskHistory.fieldName) {
-                  case "title":
-                    return "제목"
-                  case "content":
-                    return "내용"
-                  case "board":
-                    return "보드"
-                  case "taskManager":
-                    return "담당자"
-                  case "startDate":
-                    return "시작일"
-                  case "endDate":
-                    return "마감일"
-                  case "progressStatus":
-                    return "진행상태"
-                  case "emergency":
-                    return "긴급여부"
-                  default:
-                    return "???"
-                }
-              })()}
-            </Box>
-            을(를) 변경함
-          </Typography>
-          <Typography
-            display="flex"
-            flexGrow={1}
-            justifyContent="end"
+          참여자가
+          <Box
+            component="span"
             fontSize={12}
-            color="rgb(155,155,155)"
+            fontWeight={600}
+            mx={0.5}
+            bgcolor="rgb(244,244,244)"
+            borderRadius={1}
+            p={0.3}
           >
-            {taskHistory.modifiedAt}
-          </Typography>
-        </Stack>
-      </Tooltip>
+            {(() => {
+              switch (taskHistory.fieldName) {
+                case "title":
+                  return "제목"
+                case "content":
+                  return "내용"
+                case "board":
+                  return "보드"
+                case "taskManager":
+                  return "담당자"
+                case "startDate":
+                  return "시작일"
+                case "endDate":
+                  return "마감일"
+                case "progressStatus":
+                  return "진행상태"
+                case "emergency":
+                  return "긴급여부"
+                default:
+                  return "???"
+              }
+            })()}
+          </Box>
+          을(를) 변경함
+        </Typography>
+      </Stack>
+      <Box ml={3} mt={1 / 4}>
+        {tooltipText()}
+      </Box>
+      <Typography
+        display="flex"
+        flexGrow={1}
+        justifyContent="end"
+        fontSize={10}
+        color="rgb(155,155,155)"
+      >
+        {taskHistory.modifiedAt}
+      </Typography>
     </Box>
   )
 }

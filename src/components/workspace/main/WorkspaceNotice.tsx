@@ -35,6 +35,7 @@ const WorkspaceNotice: React.FC = () => {
     >
       {workspaceNotices.length === 0 && (
         <Box
+          component="li"
           sx={{
             width: "100%",
             display: "flex",

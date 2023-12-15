@@ -201,6 +201,7 @@ const TaskTimelineView = ({ tasks = [], height = 300 }: TaskViewProps) => {
                   setTaskDetailParam({
                     workspaceId: workspace?.workspaceId || 0,
                     projectId: task.project.projectId,
+                    boardId: task.board?.boardId || 0,
                     taskId: task.taskId,
                   })
                 }
@@ -341,6 +342,7 @@ const TaskTimelineView = ({ tasks = [], height = 300 }: TaskViewProps) => {
         <TaskDetailModal
           workspaceId={taskDetailParam.workspaceId}
           projectId={taskDetailParam.projectId}
+          boardId={taskDetailParam.boardId}
           taskId={taskDetailParam.taskId}
           open={!!taskDetailParam}
           handleClose={clear}

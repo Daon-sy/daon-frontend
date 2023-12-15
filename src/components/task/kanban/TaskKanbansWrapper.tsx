@@ -64,6 +64,7 @@ const TaskKanbansWrapper: React.FC<TaskKanbansWrapperProps> = ({
     modifyTaskProgressStatusApi(
       +workspaceId,
       movedTask.project.projectId,
+      movedTask.board?.boardId || 0,
       movedTask.taskId,
       {
         ...movedTask,

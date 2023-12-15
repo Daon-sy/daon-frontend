@@ -10,11 +10,13 @@ import TaskReplyInput from "./TaskReplyInput"
 
 interface TaskReplyProps {
   projectId: number
+  boardId: number
   taskId: number
 }
 
 const TaskReply: React.FC<TaskReplyProps> = ({
   projectId,
+  boardId,
   taskId,
 }: TaskReplyProps) => {
   const { addSuccess } = useAlert()
@@ -30,6 +32,7 @@ const TaskReply: React.FC<TaskReplyProps> = ({
       const { data } = await taskReplyListApi(
         workspace.workspaceId,
         projectId,
+        boardId,
         taskId,
         { page, size },
       )
@@ -64,9 +67,16 @@ const TaskReply: React.FC<TaskReplyProps> = ({
     modifiedContent: string,
   ) => {
     if (workspace?.workspaceId) {
-      await modifyTaskReply(workspace.workspaceId, projectId, taskId, replyId, {
-        content: modifiedContent,
-      })
+      await modifyTaskReply(
+        workspace.workspaceId,
+        projectId,
+        boardId,
+        taskId,
+        replyId,
+        {
+          content: modifiedContent,
+        },
+      )
       const updatedReplies = replies.map(reply => {
         if (reply.replyId === replyId) {
           return {
@@ -91,6 +101,7 @@ const TaskReply: React.FC<TaskReplyProps> = ({
       <TaskReplyInput
         workspaceId={workspace?.workspaceId}
         projectId={projectId}
+        boardId={boardId}
         taskId={taskId}
         onReplyAdded={handleReplyChanged}
       />
@@ -108,6 +119,7 @@ const TaskReply: React.FC<TaskReplyProps> = ({
             key={reply.replyId}
             workspaceId={workspace?.workspaceId}
             projectId={projectId}
+            boardId={boardId}
             taskId={taskId}
             reply={reply}
             onReplyModified={(replyId: number, modifiedContent: string) =>

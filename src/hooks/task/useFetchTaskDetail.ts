@@ -8,10 +8,12 @@ const useFetchTaskDetail = (
   {
     workspaceId,
     projectId,
+    boardId,
     taskId,
   }: {
     workspaceId: number
     projectId: number
+    boardId: number
     taskId: number
   },
   skip = false,
@@ -26,7 +28,12 @@ const useFetchTaskDetail = (
     setIsFetching(true)
 
     try {
-      const { data } = await taskDetailApi(workspaceId, projectId, taskId)
+      const { data } = await taskDetailApi(
+        workspaceId,
+        projectId,
+        boardId,
+        taskId,
+      )
       setTaskDetail(data)
     } catch (e) {
       if (axios.isAxiosError(e)) {

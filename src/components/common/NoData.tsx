@@ -1,5 +1,5 @@
 import React from "react"
-import nodata from "assets/img/no_data.webp"
+import noData from "assets/img/no_data.webp"
 import { Box, Typography } from "@mui/material"
 import { SxProps } from "@mui/system/styleFunctionSx"
 
@@ -26,7 +26,12 @@ const NoData: React.FC<NoDataProps> = ({
         ...sx,
       }}
     >
-      <Box sx={{ width, height }} component="img" src={nodata} />
+      <Box
+        sx={{ width, height }}
+        component="img"
+        src={noData}
+        alt="empty set"
+      />
       <Typography>{content}</Typography>
     </Box>
   )
