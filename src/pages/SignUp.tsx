@@ -415,7 +415,7 @@ const SignUp = () => {
                     fullWidth
                     size="small"
                     variant="contained"
-                    onClick={() => signUp(() => navigate("/"))}
+                    onClick={() => signUp(() => navigate("/sign-in"))}
                   >
                     회원가입
                   </Button>
