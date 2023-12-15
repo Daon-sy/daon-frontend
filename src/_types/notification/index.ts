@@ -17,6 +17,11 @@ interface ProjectSummary {
   projectTitle: string
 }
 
+interface BoardSummary {
+  boardId: number
+  boardTitle: string
+}
+
 interface TaskSummary {
   taskId: number
   taskTitle: string
@@ -37,6 +42,7 @@ interface MessageSummary {
 export interface RegisteredTaskManagerNotification {
   workspace: WorkspaceSummary
   project: ProjectSummary
+  board: BoardSummary
   task: TaskSummary
 }
 

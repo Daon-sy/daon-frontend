@@ -3,6 +3,7 @@ import { create } from "zustand"
 interface TaskDetailParam {
   workspaceId: number
   projectId: number
+  boardId: number
   taskId: number
 }
 

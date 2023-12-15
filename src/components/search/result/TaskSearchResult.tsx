@@ -59,7 +59,12 @@ const TaskSearchResult: React.FC<Props> = ({ task }) => {
           }),
       })
     } else {
-      setTaskDetailParam({ workspaceId, projectId, taskId })
+      setTaskDetailParam({
+        workspaceId,
+        projectId,
+        boardId: board?.boardId || 0,
+        taskId,
+      })
     }
   }
 

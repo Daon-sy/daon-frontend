@@ -40,6 +40,7 @@ import { ConfirmDeleteComponent } from "../../common/confirm/ConfirmDelete"
 interface Props {
   workspaceId: number
   projectId: number
+  boardId: number
   taskId: number
   open: boolean
   handleClose: () => void
@@ -48,6 +49,7 @@ interface Props {
 const TaskDetailModal: React.FC<Props> = ({
   workspaceId,
   projectId,
+  boardId,
   taskId,
   open,
   handleClose,
@@ -60,6 +62,7 @@ const TaskDetailModal: React.FC<Props> = ({
   const taskFullPath = {
     workspaceId,
     projectId,
+    boardId,
     taskId,
   }
 
@@ -452,7 +455,11 @@ const TaskDetailModal: React.FC<Props> = ({
 
                   {tab === "댓글" ? (
                     <Box width="494px">
-                      <TaskReply projectId={projectId} taskId={taskId} />
+                      <TaskReply
+                        projectId={projectId}
+                        boardId={boardId}
+                        taskId={taskId}
+                      />
                     </Box>
                   ) : (
                     <Box>

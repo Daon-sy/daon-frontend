@@ -8,10 +8,11 @@ import axios from "axios"
 interface Props {
   workspaceId: number
   projectId: number
+  boardId: number
   taskId: number
 }
 
-const useModifyTask = ({ workspaceId, projectId, taskId }: Props) => {
+const useModifyTask = ({ workspaceId, projectId, boardId, taskId }: Props) => {
   const [isFetching, setIsFetching] = React.useState(false)
   const [error, setError] = React.useState<ErrorResponse>()
   const { addSuccess, addError } = useAlert()
@@ -39,7 +40,7 @@ const useModifyTask = ({ workspaceId, projectId, taskId }: Props) => {
         emergency: modifiedTask.emergency,
         progressStatus: modifiedTask.progressStatus,
       }
-      await modifyTaskApi(workspaceId, projectId, taskId, request)
+      await modifyTaskApi(workspaceId, projectId, boardId, taskId, request)
       addSuccess("할 일을 수정했습니다.")
     } catch (e) {
       if (axios.isAxiosError(e)) {

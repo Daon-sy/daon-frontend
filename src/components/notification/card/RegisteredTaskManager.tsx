@@ -23,7 +23,7 @@ const RegisteredTaskManager: React.FC<Props> = ({
   removeCallback,
 }) => {
   const { notificationId, data } = notification
-  const { workspace, project, task, time } = data
+  const { workspace, project, board, task, time } = data
 
   const { ConfirmDialog, open: openConfirmDialog } = useConfirmDialog()
   const navigate = useNavigate()
@@ -44,6 +44,7 @@ const RegisteredTaskManager: React.FC<Props> = ({
       setTaskDetailParam({
         workspaceId: workspace.workspaceId,
         projectId: project.projectId,
+        boardId: board.boardId,
         taskId: task.taskId,
       })
     }

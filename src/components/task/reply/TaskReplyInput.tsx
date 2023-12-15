@@ -8,6 +8,7 @@ import { FormHelperText, TextField } from "@mui/material"
 interface TaskReplyProps {
   workspaceId: number | undefined
   projectId: number
+  boardId: number
   taskId: number
   onReplyAdded: () => void
 }
@@ -23,6 +24,7 @@ const initialState: TaskReply = {
 const TaskReplyInput: React.FC<TaskReplyProps> = ({
   workspaceId,
   projectId,
+  boardId,
   taskId,
   onReplyAdded,
 }: TaskReplyProps) => {
@@ -39,7 +41,7 @@ const TaskReplyInput: React.FC<TaskReplyProps> = ({
       return
     }
 
-    addTaskReply(workspaceId, projectId, taskId, data).then(() => {
+    addTaskReply(workspaceId, projectId, boardId, taskId, data).then(() => {
       resetData()
       onReplyAdded()
       addSuccess("댓글이 등록 되었습니다")

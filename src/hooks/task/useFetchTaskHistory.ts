@@ -8,10 +8,12 @@ const useFetchTaskHistory = (
   {
     workspaceId,
     projectId,
+    boardId,
     taskId,
   }: {
     workspaceId: number
     projectId: number
+    boardId: number
     taskId: number
   },
   skip = false,
@@ -29,9 +31,15 @@ const useFetchTaskHistory = (
     setIsFetching(true)
 
     try {
-      const { data } = await taskHistoryApi(workspaceId, projectId, taskId, {
-        page: page + 1,
-      })
+      const { data } = await taskHistoryApi(
+        workspaceId,
+        projectId,
+        boardId,
+        taskId,
+        {
+          page: page + 1,
+        },
+      )
       const { first, last, pageNumber, content } = data
       setIsFirst(first)
       setIsLast(last)
@@ -56,7 +64,12 @@ const useFetchTaskHistory = (
 
   const fetchTopHistory = async () => {
     try {
-      const { data } = await taskHistoryApi(workspaceId, projectId, taskId)
+      const { data } = await taskHistoryApi(
+        workspaceId,
+        projectId,
+        boardId,
+        taskId,
+      )
       const { content } = data
       if (content.length > 0) {
         setTaskHistories(
