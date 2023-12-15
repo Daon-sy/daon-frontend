@@ -2,7 +2,6 @@
 import React from "react"
 import { Box } from "@mui/material"
 import { getWorkspaceStore } from "store/userStore"
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos"
 import wsIcon from "assets/img/ws_icon.png"
 import pjIcon from "assets/img/pj_icon.png"
 import ColorAvatar from "components/common/ColorAvatar"
@@ -132,24 +131,6 @@ const WorkspaceParticipants: React.FC = () => {
             >
               {participant.email}
             </Box>
-          </Box>
-
-          <Box
-            component="button"
-            sx={{
-              mx: "auto",
-              py: 1,
-              px: 1,
-              bgcolor: "transparent",
-              border: "none",
-              borderRadius: "50%",
-              color: "#a5a5a5",
-              "&:hover": {
-                bgcolor: "#dcdcdc",
-              },
-            }}
-          >
-            <ArrowForwardIosIcon />
           </Box>
         </Box>
       ))}
