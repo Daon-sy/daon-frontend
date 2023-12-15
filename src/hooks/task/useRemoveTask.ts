@@ -8,10 +8,12 @@ const useRemoveTask = (
   {
     workspaceId,
     projectId,
+    boardId,
     taskId,
   }: {
     workspaceId: number
     projectId: number
+    boardId: number
     taskId: number
   },
   callback?: () => void,
@@ -23,7 +25,7 @@ const useRemoveTask = (
   const fetch = async () => {
     try {
       setIsFetching(true)
-      await removeTaskApi(workspaceId, projectId, taskId)
+      await removeTaskApi(workspaceId, projectId, boardId, taskId)
       addSuccess("태스크를 삭제하였습니다")
       if (callback) callback()
     } catch (e) {

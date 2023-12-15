@@ -167,6 +167,7 @@ const TaskTableWrapper: React.FC<TaskTableWrapperProps> = ({
     modifyTaskProgressStatusApi(
       Number(workspaceId),
       movedTask.project.projectId,
+      movedTask.board?.boardId || 0,
       movedTask.taskId,
       {
         ...movedTask,

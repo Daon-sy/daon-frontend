@@ -34,6 +34,7 @@ const useCreateTask = ({ workspaceId }: Props, callback?: () => void) => {
       const { data: responseBody } = await createTaskApi(
         workspaceId,
         projectId,
+        data.boardId,
         data,
       )
       const { taskId } = responseBody

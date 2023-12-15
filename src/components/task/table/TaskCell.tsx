@@ -1,5 +1,5 @@
 import React from "react"
-import { Chip, Stack, Box } from "@mui/material"
+import { Chip, Stack, Box, Tooltip } from "@mui/material"
 import { TaskSummary } from "_types/task"
 import { getWorkspaceStore } from "store/userStore"
 import { getTaskDetailViewStore } from "store/taskStore"
@@ -30,14 +30,21 @@ const TaskCell: React.FC<Props> = React.memo(
 
     const { workspace } = getWorkspaceStore()
     const { setTaskDetailParam } = getTaskDetailViewStore()
-    const { bookmarked, handleBookmark } = useHandleBookmark(
-      {
+    const { bookmarked: handleBookmarkResponse, handleBookmark } =
+      useHandleBookmark({
         workspaceId: workspace?.workspaceId || 0,
         projectId: task.project.projectId,
+        boardId: task.board?.boardId || 0,
         taskId: task.taskId,
-      },
-      task.bookmark,
-    )
+      })
+    const [bookmarked, setBookmarked] = React.useState(false)
+    React.useEffect(() => {
+      setBookmarked(task.bookmark || false)
+    }, [task])
+    React.useEffect(() => {
+      if (typeof handleBookmarkResponse === "boolean")
+        setBookmarked(handleBookmarkResponse)
+    }, [handleBookmarkResponse])
 
     return (
       <Box>
@@ -56,6 +63,7 @@ const TaskCell: React.FC<Props> = React.memo(
             setTaskDetailParam({
               workspaceId: workspace?.workspaceId || 0,
               projectId: task.project.projectId,
+              boardId: task.board?.boardId || 0,
               taskId: task.taskId,
             })
           }
@@ -90,7 +98,7 @@ const TaskCell: React.FC<Props> = React.memo(
               fontWeight: 400,
             }}
           >
-            <Box flexGrow={1} sx={{ fontSize: 16, fontWeight: "bold" }}>
+            <Box flexGrow={1} sx={{ fontSize: 14, fontWeight: "bold" }}>
               <Box display="flex" alignItems="center">
                 {task.emergency ? (
                   <Typography mr={0.5}>
@@ -124,20 +132,22 @@ const TaskCell: React.FC<Props> = React.memo(
                 marginLeft: "-1px",
               }}
             >
-              <Chip
-                label={task.project.title}
-                color="secondary"
-                size="small"
-                sx={{
-                  fontSize: 12,
-                  borderRadius: 1.5,
-                  mr: 1,
-                  fontWeight: 900,
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  maxWidth: 80,
-                }}
-              />
+              <Tooltip title={`프로젝트명: ${task.board?.title}`}>
+                <Chip
+                  label={task.project.title}
+                  color="secondary"
+                  size="small"
+                  sx={{
+                    fontSize: 12,
+                    borderRadius: 1.5,
+                    mr: 1,
+                    fontWeight: 900,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    // maxWidth: 80,
+                  }}
+                />
+              </Tooltip>
             </Box>
           ) : null}
           <Box
@@ -154,19 +164,21 @@ const TaskCell: React.FC<Props> = React.memo(
               marginLeft: "-1px",
             }}
           >
-            <Chip
-              label={task.board?.title}
-              color="green"
-              size="small"
-              sx={{
-                fontSize: 12,
-                borderRadius: 1.5,
-                fontWeight: 900,
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                maxWidth: 100,
-              }}
-            />
+            <Tooltip title={`보드명: ${task.board?.title}`}>
+              <Chip
+                label={task.board?.title}
+                color="green"
+                size="small"
+                sx={{
+                  fontSize: 12,
+                  borderRadius: 1.5,
+                  fontWeight: 900,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  // maxWidth: 100,
+                }}
+              />
+            </Tooltip>
           </Box>
           <Box
             sx={{
@@ -179,13 +191,14 @@ const TaskCell: React.FC<Props> = React.memo(
               borderColor,
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
               marginY: "-1px",
               marginLeft: "-1px",
             }}
           >
             {task.endDate ? (
-              <Typography sx={{ fontSize: 12 }}>{task.endDate}</Typography>
+              <Tooltip title={`마감일: ${task.endDate}`}>
+                <Typography sx={{ fontSize: 12 }}>{task.endDate}</Typography>
+              </Tooltip>
             ) : null}
           </Box>
           <Box
@@ -210,16 +223,19 @@ const TaskCell: React.FC<Props> = React.memo(
                     sx={{ width: 16, height: 16 }}
                   />
                 </Box>
-                <Box
-                  sx={{
-                    marginLeft: 0.5,
-                    fontSize: 12,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                >
-                  {task.taskManager?.name}
-                </Box>
+                <Tooltip title={`담당자: ${task.taskManager?.name}`}>
+                  <Box
+                    sx={{
+                      marginLeft: 1 / 4,
+                      fontSize: 12,
+                      overflow: "hidden",
+                      whiteSpace: "nowrap",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {task.taskManager?.name}
+                  </Box>
+                </Tooltip>
               </>
             ) : null}
           </Box>

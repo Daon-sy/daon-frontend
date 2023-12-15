@@ -64,6 +64,7 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
       setTaskDetailParam({
         workspaceId: workspace?.workspaceId || 0,
         projectId: Number(params?.projectId),
+        boardId: locSate.boardId,
         taskId: locSate.openTaskId,
       })
     }
@@ -150,6 +151,7 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
         <TaskDetailModal
           workspaceId={taskDetailParam.workspaceId}
           projectId={taskDetailParam.projectId}
+          boardId={taskDetailParam.boardId}
           taskId={taskDetailParam.taskId}
           open={!!taskDetailParam}
           handleClose={clear}

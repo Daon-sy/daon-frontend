@@ -11,6 +11,7 @@ import ReplyBtn from "./ReplyBtn"
 interface TaskReplyItemProps {
   workspaceId: number | undefined
   projectId: number
+  boardId: number
   taskId: number
   reply: TaskReplyDetail
   onReplyModified: (replyId: number, modifiedContent: string) => void
@@ -20,11 +21,12 @@ interface TaskReplyItemProps {
 const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
   workspaceId,
   projectId,
+  boardId,
   taskId,
   reply,
   onReplyModified,
   onReplyDeleted,
-}: TaskReplyItemProps): React.ReactNode => {
+}) => {
   const [isModify, setIsModify] = useState<boolean>(false)
   const prevContent = reply.content
   const [content, setContent] = useState<string>(reply.content)
@@ -43,7 +45,7 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
   const handleRemoveClick = async (replyId: number) => {
     try {
       if (workspaceId) {
-        await removeTaskReply(workspaceId, projectId, taskId, replyId)
+        await removeTaskReply(workspaceId, projectId, boardId, taskId, replyId)
         onReplyDeleted()
         addSuccess("댓글이 삭제되었습니다.")
       }
