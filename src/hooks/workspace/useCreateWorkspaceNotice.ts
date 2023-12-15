@@ -11,6 +11,7 @@ import useFetchWorkspaceNoticeList from "./useFetchWorkspaceNoticeList"
 const useCreateWorkspaceNotice = (workspaceId: number) => {
   const [error, setError] = React.useState<ErrorResponse>()
   const { addSuccess } = useAlert()
+  const [createNoticeId, setCreateNoticeId] = React.useState<number | null>()
   const { fetchWorkspaceNoticeList } = useFetchWorkspaceNoticeList(workspaceId)
 
   const fetchCreateWorkspaceNotice = async (
@@ -22,7 +23,8 @@ const useCreateWorkspaceNotice = (workspaceId: number) => {
         data,
       )
       const { noticeId } = responseBody
-      addSuccess(`공지사항이 생성되었습니다. id: ${noticeId}`)
+      setCreateNoticeId(noticeId)
+      addSuccess("공지사항이 생성되었습니다.")
       fetchWorkspaceNoticeList()
     } catch (e) {
       if (axios.isAxiosError(e)) {
@@ -32,7 +34,7 @@ const useCreateWorkspaceNotice = (workspaceId: number) => {
     }
   }
 
-  return { fetchCreateWorkspaceNotice, error }
+  return { fetchCreateWorkspaceNotice, error, createNoticeId }
 }
 
 export default useCreateWorkspaceNotice

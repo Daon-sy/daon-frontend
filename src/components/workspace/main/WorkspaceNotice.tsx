@@ -126,7 +126,10 @@ const WorkspaceNotice: React.FC = () => {
             >
               {workspaceNotice.writer.name}
             </Box>
-            <Box component="div" sx={{ color: "#888888", textAlign: "center" }}>
+            <Box
+              component="div"
+              sx={{ color: "#888888", textAlign: "center", width: "88px" }}
+            >
               {workspaceNotice.createdAt}
             </Box>
           </Box>

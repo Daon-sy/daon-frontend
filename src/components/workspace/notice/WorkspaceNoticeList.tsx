@@ -4,6 +4,7 @@ import SearchIcon from "@mui/icons-material/Search"
 import useFetchWorkspaceNoticeList from "hooks/workspace/useFetchWorkspaceNoticeList"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBullhorn } from "@fortawesome/free-solid-svg-icons"
+import { getWorkspaceNoticesStore } from "store/userStore"
 import WorkspaceNoticeCard from "./WorkspaceNoticeCard"
 
 interface Props {
@@ -15,8 +16,9 @@ const WorkspaceNoticeList: React.FC<Props> = ({
   workspaceId,
   onNoticeClick,
 }: Props) => {
-  const { workspaceNotices, paginationInfo, fetchWorkspaceNoticeList } =
+  const { workspaceNotices, fetchWorkspaceNoticeList } =
     useFetchWorkspaceNoticeList(workspaceId)
+  const { totalPage } = getWorkspaceNoticesStore()
   const [currentPage, setCurrentPage] = React.useState(1)
   const [searchKeyword, setSearchKeyword] = React.useState("")
   const [selectedNoticeId, setSelectedNoticeId] = React.useState<number | null>(
@@ -151,7 +153,7 @@ const WorkspaceNoticeList: React.FC<Props> = ({
       )}
 
       <Pagination
-        count={paginationInfo.totalPage}
+        count={totalPage}
         page={currentPage}
         onChange={handlePageChange}
       />

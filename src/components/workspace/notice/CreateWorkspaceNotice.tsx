@@ -75,7 +75,7 @@ const CreateWorkspaceNotice: React.FC<Props> = ({
       <Box
         sx={{
           width: "100%",
-          height: "348px",
+          height: "324px",
           lineHeight: "20px",
           position: "relative",
         }}

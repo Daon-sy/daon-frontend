@@ -101,7 +101,7 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
                   justifyContent: "center",
                 }}
               >
-                <NoData content="공지사항 목록에서 상세보기 할 공지사항을 선택해주세요" />
+                <NoData content="공지사항을 선택해 주세요." />
               </Box>
             )}
           </Container>
