@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Button } from "@mui/material"
+import { Box, Button, IconButton, Typography, Grid } from "@mui/material"
 import { useNavigate } from "react-router-dom"
 import { getTokenStore } from "store/tokenStore"
 
@@ -8,6 +8,10 @@ import landingTwo from "assets/img/landing2.webp"
 import landingThree from "assets/img/landing3.webp"
 import landingFour from "assets/img/landing4.webp"
 import arrow from "assets/img/arrow.webp"
+
+import FacebookIcon from "@mui/icons-material/Facebook"
+import TwitterIcon from "@mui/icons-material/Twitter"
+import LinkedInIcon from "@mui/icons-material/LinkedIn"
 
 function Landing() {
   const { token } = getTokenStore()
@@ -98,6 +102,49 @@ function Landing() {
             <Box component="img" sx={{ width: "100%" }} src={landingThree} />
             <Box component="img" sx={{ width: "100%" }} src={landingFour} />
           </Box>
+        </Box>
+      </Box>
+
+      <Box
+        sx={{
+          backgroundColor: "#fff",
+          color: "#333",
+          padding: "40px 20px",
+          textAlign: "center",
+          /* borderTop: "1px solid #ddd", */
+          marginTop: "30px",
+        }}
+      >
+        <Box sx={{ margin: 0, marginBottom: "20px", fontWeight: "500" }}>
+          DAON, TODO MANAGEMENT SERVICE
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "20px",
+          }}
+        >
+          <IconButton color="primary" aria-label="Facebook">
+            <FacebookIcon />
+          </IconButton>
+          <IconButton color="primary" aria-label="Twitter">
+            <TwitterIcon />
+          </IconButton>
+          <IconButton color="primary" aria-label="LinkedIn">
+            <LinkedInIcon />
+          </IconButton>
+        </Box>
+        <Box
+          sx={{
+            lineHeight: "30px",
+          }}
+        >
+          더존비즈온 채용확정형 4기
+          <br />
+          6조 : 유하영 김성은 김재윤 조수연
+          <br />
+          &copy; 2023 12 28 DAON (3M)
         </Box>
       </Box>
     </>
