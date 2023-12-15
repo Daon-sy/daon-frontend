@@ -54,7 +54,7 @@ const TaskTimelineView = ({ tasks = [], height = 300 }: TaskViewProps) => {
     return new Date(
       memoTasks
         .filter(task => !!task.endDate)
-        .reduce((prev, curr) => {
+        .reduce((prev, curr = { ...prev }) => {
           return new Date(prev.endDate || "").getTime() <=
             new Date(curr.endDate || "").getTime()
             ? curr
@@ -68,7 +68,7 @@ const TaskTimelineView = ({ tasks = [], height = 300 }: TaskViewProps) => {
     return new Date(
       memoTasks
         .filter(task => !!task.startDate)
-        .reduce((prev, curr) => {
+        .reduce((prev, curr = { ...prev }) => {
           return new Date(prev.startDate || "").getTime() <=
             new Date(curr.startDate || "").getTime()
             ? prev
@@ -102,8 +102,9 @@ const TaskTimelineView = ({ tasks = [], height = 300 }: TaskViewProps) => {
     })
     setYearMonthDateCountList(tmp)
     setTotalWidth(
-      tmp.map(ymdc => ymdc.dateCount).reduce((prev, curr) => prev + curr) *
-        dateWidth,
+      tmp
+        .map(ymdc => ymdc.dateCount)
+        .reduce((prev, curr = prev) => prev + curr) * dateWidth,
     )
   }, [memoTasks])
 
