@@ -11,8 +11,10 @@ import {
 } from "@mui/material"
 import signUpPageImage from "assets/img/sign_up.webp"
 import useSignUp from "hooks/member/useSignUp"
+import { useAlert } from "hooks/useAlert"
 
 const SignUp = () => {
+  const { addError } = useAlert()
   const navigate = useNavigate()
 
   const {
@@ -90,7 +92,8 @@ const SignUp = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              height: "83.25px",
+              height: "68.25px",
+              paddingBottom: "15px",
               width: "100%",
             }}
           >
@@ -112,7 +115,7 @@ const SignUp = () => {
                       ml: 2,
                       fontWeight: 500,
                       fontSize: 10,
-                      color: "#3A4CA8",
+                      color: "error.main",
                     }}
                   >
                     {minutes} : {seconds}
@@ -132,7 +135,7 @@ const SignUp = () => {
                     fontSize: 10,
                   }}
                   onClick={() => {
-                    sendEmailCode()
+                    sendEmailCode(() => setOpenEmailCodeInput(true))
                     setSignUpForm({ ...signUpForm, emailCheckCode: "" })
                   }}
                 >
@@ -160,6 +163,7 @@ const SignUp = () => {
             </Box>
           </InputLabel>
           <TextField
+            autoComplete="off"
             value={emailCheckCode}
             onChange={e =>
               setSignUpForm({
@@ -259,6 +263,7 @@ const SignUp = () => {
                 </Box>
               </InputLabel>
               <TextField
+                autoComplete="off"
                 value={signUpForm.username}
                 onChange={onUsernameChanged}
                 placeholder="아이디"
@@ -300,7 +305,7 @@ const SignUp = () => {
                 }}
               />
               <Box height={12} sx={{ fontSize: 10, color: "#dda600" }}>
-                6자리 이상 영문,숫자,특수기호 조합
+                6~30자리 영문,숫자,특수기호 조합
               </Box>
             </Stack>
             <Stack spacing={1}>
@@ -323,7 +328,7 @@ const SignUp = () => {
                 }}
               />
               <Box height={12} sx={{ fontSize: 10, color: "#dda600" }}>
-                6자리 이상 영문,숫자,특수기호 조합
+                6~30자리 영문,숫자,특수기호 조합
               </Box>
             </Stack>
             <Stack spacing={1}>
@@ -337,9 +342,10 @@ const SignUp = () => {
                 이름
               </InputLabel>
               <TextField
+                autoComplete="off"
                 value={signUpForm.name}
                 onChange={onNameChanged}
-                placeholder="실명 기입"
+                placeholder="이름"
                 variant="outlined"
                 margin="none"
                 size="small"
@@ -369,8 +375,7 @@ const SignUp = () => {
                     onClick={
                       !emailCodeSent
                         ? () => {
-                            setOpenEmailCodeInput(true)
-                            sendEmailCode()
+                            sendEmailCode(() => setOpenEmailCodeInput(true))
                           }
                         : () => {
                             setOpenEmailCodeInput(false)
@@ -383,6 +388,7 @@ const SignUp = () => {
                 </Box>
               </InputLabel>
               <TextField
+                autoComplete="off"
                 value={signUpForm.email}
                 onChange={onEmailChanged}
                 placeholder="email@email.com"
@@ -409,7 +415,7 @@ const SignUp = () => {
             </Stack>
             {renderEmailCodeInput()}
             <Box display="flex" justifyContent="center">
-              <Box width={300} mt={5}>
+              <Box width={300} mt={1}>
                 <Stack height={40} direction="row" spacing={4}>
                   <Button
                     fullWidth

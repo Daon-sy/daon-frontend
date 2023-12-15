@@ -60,7 +60,7 @@ const useEmailCheck = (email: string, code: string) => {
     setErrorMessage({ ...errorMessage, emailCheckCode: undefined })
   }, [code])
 
-  const sendEmailCode = async () => {
+  const sendEmailCode = async (onInputValid: () => void) => {
     if (!validateEmail(email)) {
       // addError("올바르지 않은 이메일 양식입니다")
       setErrorMessage({
@@ -69,6 +69,7 @@ const useEmailCheck = (email: string, code: string) => {
       })
       return
     }
+    onInputValid()
 
     try {
       setIsSendEmailCodeFetching(true)
