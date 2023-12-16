@@ -175,7 +175,6 @@ const ParticipantsModal = ({ open, handleClose }: Props) => {
           width: "100%",
           display: "flex",
           flexWrap: "wrap",
-          justifyContent: "center",
         }}
       >
         {getFilteredParticipants().length > 0 ? (
