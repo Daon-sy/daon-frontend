@@ -10,7 +10,7 @@ const Header: React.FC = () => {
   const logoNWsButtonRef = React.useRef<HTMLDivElement | null>(null)
   return (
     <AppBar
-      position="static"
+      position="sticky"
       sx={{
         boxShadow: "5px 5px 10px 3px rgba(0, 0, 0, 0.1)",
         bgcolor: "#ffffff",

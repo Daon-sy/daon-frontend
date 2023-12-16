@@ -40,6 +40,15 @@ const InputWsProfileInfo: React.FC<Props> = ({
     fetchMemberEmails()
   }, [])
 
+  React.useEffect(() => {
+    if (memberEmails.length > 0) {
+      handleDataChange({
+        ...wsProfileInfo,
+        email: memberEmails[0].email,
+      })
+    }
+  }, [memberEmails])
+
   const { ImageInput, selectFile } = useImageUpload()
 
   return (
@@ -116,7 +125,6 @@ const InputWsProfileInfo: React.FC<Props> = ({
                     required
                     labelId="email-select-label"
                     label="이메일"
-                    autoWidth
                     value={email}
                     onChange={e =>
                       handleDataChange({

@@ -3,6 +3,11 @@ import axios from "axios"
 import { ErrorResponse } from "api"
 import { checkUsernameApi } from "api/member"
 
+const validateUsername = (inputUsername: string) => {
+  const usernameRegex = /^[a-zA-Z0-9]{6,20}$/
+  return usernameRegex.test(inputUsername)
+}
+
 const useCheckUsername = (username: string) => {
   const [isFetching, setIsFetching] = React.useState(false)
   const [error, setError] = React.useState<ErrorResponse>()
@@ -15,8 +20,14 @@ const useCheckUsername = (username: string) => {
   }, [username])
 
   const fetch = async () => {
+    setIsValid(false)
     if (!username) {
       setErrorMessage("아이디를 입력해주세요")
+      return
+    }
+
+    if (!validateUsername(username)) {
+      setErrorMessage("영어, 숫자만으로 6~20자리의 아이디를 입력해주세요")
       return
     }
 

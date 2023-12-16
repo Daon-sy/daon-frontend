@@ -19,12 +19,14 @@ export const getDateCount = ({ year, month }: YearMonth): number =>
 export const getDateCountArray = ({
   startDate,
   endDate,
-  monthRange = 3,
+  monthRange = 1,
 }: {
   startDate: Date
   endDate: Date
   monthRange?: number
 }): YearMonthDateCount[] => {
+  console.log(startDate)
+  console.log(endDate)
   let startYear = startDate.getFullYear()
   let startMonth = startDate.getMonth() - monthRange + 1
   if (startMonth < 1) {

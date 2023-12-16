@@ -100,7 +100,7 @@ const NotificationCard: React.FC<Props> = ({
       <Box>{children}</Box>
       {time ? (
         <Typography fontSize={12} textAlign="end" color="deepGray.main">
-          {time}
+          {time.slice(0, 16)}
         </Typography>
       ) : null}
     </Box>
