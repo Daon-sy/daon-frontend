@@ -11,10 +11,8 @@ import {
 } from "@mui/material"
 import signUpPageImage from "assets/img/sign_up.webp"
 import useSignUp from "hooks/member/useSignUp"
-import { useAlert } from "hooks/useAlert"
 
 const SignUp = () => {
-  const { addError } = useAlert()
   const navigate = useNavigate()
 
   const {
