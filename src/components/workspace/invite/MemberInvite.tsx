@@ -8,6 +8,7 @@ import {
   Button,
   Typography,
   CircularProgress,
+  Tooltip,
 } from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
 import { getWorkspaceStore } from "store/userStore"
@@ -128,13 +129,19 @@ const MemberInvite = () => {
                             name={member.name}
                           />
                         </Box>
-                        <Box ml={2} flexGrow={1}>
-                          <Typography fontSize={14} fontWeight={600}>
-                            {member.username}
-                          </Typography>
-                        </Box>
-                        <Box flexGrow={1}>
-                          <Typography fontSize={12}>{member.name}</Typography>
+                        <Box ml={1} flexGrow={1}>
+                          <Tooltip
+                            title="username"
+                            arrow
+                            placement="left-start"
+                          >
+                            <Typography fontSize={14} fontWeight={500}>
+                              {member.username}
+                            </Typography>
+                          </Tooltip>
+                          <Tooltip title="이름" arrow placement="left-start">
+                            <Typography fontSize={12}>{member.name}</Typography>
+                          </Tooltip>
                         </Box>
                         <Box>
                           {member.invited ? (
@@ -142,6 +149,7 @@ const MemberInvite = () => {
                               size="small"
                               variant="contained"
                               color="primary"
+                              disableElevation
                               sx={{
                                 p: 0,
                                 fontSize: 13,
