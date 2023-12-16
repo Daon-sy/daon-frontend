@@ -45,7 +45,12 @@ const useModifyTask = ({ workspaceId, projectId, boardId, taskId }: Props) => {
     } catch (e) {
       if (axios.isAxiosError(e)) {
         const { response } = e
-        setError(response?.data as ErrorResponse)
+        const errorResponse = response?.data as ErrorResponse
+        setError(errorResponse)
+        const { errorCode } = errorResponse
+        if (errorCode === 5000) {
+          addError("존재하지 않는 할 일 입니다")
+        }
       }
     } finally {
       setIsFetching(false)
