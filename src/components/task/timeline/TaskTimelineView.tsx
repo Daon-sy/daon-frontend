@@ -129,6 +129,60 @@ const TaskTimelineView = ({
     }
   })
 
+  const todayLine = () => (
+    <Box
+      sx={{
+        zIndex: 1,
+        position: "absolute",
+        left:
+          yearMonthDateCountList.length > 0 ? dateWidth * getBlankCount() : 0,
+        top: headerHeight,
+        width: 5,
+        height: taskHeight * memoTasks.length,
+        borderLeft: 1,
+        borderWidth: 2,
+        borderColor: "#FFBE00",
+        "&:hover": {
+          cursor: "pointer",
+          // borderColor: "#dca900",
+        },
+        "&:before":
+          memoTasks.length > 0
+            ? {
+                content: '""',
+                display: "block",
+                position: "sticky",
+                borderColor: "#FFBE00",
+                top: headerHeight,
+                width: 8,
+                height: 8,
+                bgcolor: "#FFBE00",
+                transform: "translateX(-60%) translateY(-50%) rotate(45deg)",
+                zIndex: 2,
+              }
+            : {},
+      }}
+    />
+  )
+
+  const monthDivider = () => (
+    <Box display="flex" position="absolute" zIndex={0} top={headerHeight}>
+      {yearMonthDateCountList.map(ymdc => (
+        <Box
+          key={`${ymdc.year}-${ymdc.month}`}
+          sx={{
+            width: dateWidth * ymdc.dateCount,
+            height: taskHeight * memoTasks.length,
+            boxSizing: "border-box",
+            borderRight: 1,
+            borderColor: "#c8c8c8",
+            backgroundColor: "rgba(255,255,255,0)",
+          }}
+        />
+      ))}
+    </Box>
+  )
+
   return (
     <Box
       ref={boxRef}
@@ -276,95 +330,58 @@ const TaskTimelineView = ({
               ))}
             </Box>
           </Box>
-          {/* 타임라인 */}
+
+          {/* header */}
           <Box
             sx={{
               position: "relative",
               left: taskWidth,
             }}
           >
-            {/* 오늘 날짜 선 */}
-            {/* <Tooltip title={todayDateToString()} placement="top"> */}
-            <Box
-              sx={{
-                zIndex: 2,
-                position: "absolute",
-                left:
-                  yearMonthDateCountList.length > 0
-                    ? dateWidth * getBlankCount()
-                    : 0,
-                top: headerHeight,
-                width: 5,
-                height: taskHeight * memoTasks.length,
-                borderLeft: 1,
-                borderWidth: 2,
-                borderColor: "#FFBE00",
-                "&:hover": {
-                  cursor: "pointer",
-                  // borderColor: "#dca900",
-                },
-                "&:before":
-                  memoTasks.length > 0
-                    ? {
-                        content: '""',
-                        display: "block",
-                        position: "sticky",
-                        borderColor: "#FFBE00",
-                        top: headerHeight,
-                        width: 8,
-                        height: 8,
-                        bgcolor: "#FFBE00",
-                        transform:
-                          "translateX(-60%) translateY(-50%) rotate(45deg)",
-                        zIndex: 2,
-                      }
-                    : {},
-              }}
-            />
-            {/* </Tooltip> */}
-            {/* header */}
-            <Box sx={{ display: "flex" }} position="sticky" top={0} zIndex={2}>
-              {yearMonthDateCountList.map(ymdc => (
-                <Box
-                  key={`${ymdc.year}-${ymdc.month}`}
-                  sx={{
-                    width: dateWidth * ymdc.dateCount,
-                    height: headerHeight,
-                    display: "flex",
-                    backgroundColor: "#F1F2F4FF",
-                    boxSizing: "border-box",
-                    borderBottom: 1,
-                    borderRight: 1,
-                    borderColor: "#C8C8C8FF",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: 12,
-                  }}
-                >
-                  {ymdc.year}년 {ymdc.month}월
-                </Box>
-              ))}
+            <Box position="absolute" height={taskHeight * (tasks.length + 1)}>
+              <Box
+                sx={{ display: "flex" }}
+                position="sticky"
+                top={0}
+                zIndex={2}
+              >
+                {yearMonthDateCountList.map(ymdc => (
+                  <Box
+                    key={`${ymdc.year}-${ymdc.month}`}
+                    sx={{
+                      width: dateWidth * ymdc.dateCount,
+                      height: headerHeight,
+                      display: "flex",
+                      backgroundColor: "#F1F2F4FF",
+                      boxSizing: "border-box",
+                      borderBottom: 1,
+                      borderRight: 1,
+                      borderColor: "#C8C8C8FF",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: 12,
+                    }}
+                  >
+                    {ymdc.year}년 {ymdc.month}월
+                  </Box>
+                ))}
+              </Box>
             </Box>
-            <Box display="flex" position="absolute">
-              {yearMonthDateCountList.map(ymdc => (
-                <Box
-                  key={`${ymdc.year}-${ymdc.month}`}
-                  sx={{
-                    width: dateWidth * ymdc.dateCount,
-                    height: taskHeight * memoTasks.length,
-                    boxSizing: "border-box",
-                    borderRight: 1,
-                    borderColor: "#c8c8c8",
-                    backgroundColor: "rgba(255,255,255,0)",
-                  }}
-                />
-              ))}
-            </Box>
+          </Box>
+
+          <Box
+            sx={{
+              position: "relative",
+              left: taskWidth,
+            }}
+          >
             {/* 할 일 타임라인 */}
             <Box
               sx={{
+                position: "absolute",
                 borderBottom: 1,
                 borderColor: "#C8C8C8FF",
+                top: headerHeight,
               }}
             >
               {memoTasks.map((task, index) => (
@@ -380,6 +397,10 @@ const TaskTimelineView = ({
                 />
               ))}
             </Box>
+            {/* 오늘 날짜 선 */}
+            {todayLine()}
+            {/* 월별 구분선 */}
+            {monthDivider()}
           </Box>
         </>
       )}
