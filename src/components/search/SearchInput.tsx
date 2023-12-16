@@ -187,7 +187,7 @@ const SearchInput: React.FC = () => {
                   <Box
                     sx={{
                       p: 1,
-                      maxHeight: 400,
+                      maxHeight: 450,
                       overflowX: "hidden",
                       overflowY: "auto",
                     }}

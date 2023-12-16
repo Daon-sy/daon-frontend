@@ -59,15 +59,20 @@ const WorkspaceSearchResult: React.FC<Props> = ({ workspace }) => {
   }
 
   return (
-    <Box key={`ws${workspaceId}`}>
+    <Box
+      key={`ws${workspaceId}`}
+      p={0.5}
+      sx={{
+        "&:hover": {
+          backgroundColor: "background.default",
+          cursor: "pointer",
+        },
+      }}
+    >
       <Box
         display="flex"
         alignItems="center"
-        p={0.5}
         borderRadius={1}
-        sx={{
-          "&:hover": { backgroundColor: "background.default" },
-        }}
         onClick={handleResultClick}
       >
         <ColorAvatar
