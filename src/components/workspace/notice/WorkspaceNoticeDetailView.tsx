@@ -8,6 +8,8 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
 import ConfirmDialog from "components/common/ConfirmDialog"
 import { ConfirmDeleteComponent } from "components/common/confirm/ConfirmDelete"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faBullhorn } from "@fortawesome/free-solid-svg-icons"
 import ModifyWorkspaceNotice from "./ModifyWorkspaceNotice"
 
 interface Props {
@@ -62,9 +64,38 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
       }}
     >
       {noData ? (
-        <Box>삭제</Box>
+        <Box
+          flexGrow={1}
+          mb={1}
+          width="100%"
+          height="100%"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Box
+            component="span"
+            sx={{
+              display: "inline-flex",
+              width: "58px",
+              height: "58px",
+              fontSize: "24px",
+              borderRadius: "50%",
+              backgroundColor: "rgba(226,88,96,0.6)",
+              alignItems: "center",
+              justifyContent: "center",
+              mb: 3,
+            }}
+          >
+            <FontAwesomeIcon icon={faBullhorn} color="#ffffff" />
+          </Box>
+          공지사항이 삭제되었습니다.
+        </Box>
       ) : (
-        <Box>
+        <Box height="100%">
           {isModifyMode && workspaceNotice ? (
             <ModifyWorkspaceNotice
               workspaceId={workspaceId}
@@ -89,6 +120,7 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
+                      mr: 1,
                       "&:hover": {
                         bgcolor: "#e2e2e4",
                       },
@@ -109,7 +141,7 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
                       WebkitBoxOrient: "vertical",
                     }}
                   >
-                    📌 {workspaceNotice.title}
+                    {workspaceNotice.title}
                   </Box>
                 </Box>
                 <Box
@@ -130,10 +162,13 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
                 <Divider sx={{ mt: 0.5, mb: 1 }} />
                 <Box
                   sx={{
-                    height: 408,
+                    height: 348,
                     lineHeight: "20px",
                     overflowY: "auto",
                     whiteSpace: "pre-wrap",
+                    backgroundColor: "#f6f7f9",
+                    borderRadius: 1,
+                    p: 2,
                     "&::-webkit-scrollbar": {
                       width: "8px",
                     },
@@ -149,11 +184,19 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
             )
           )}
           {myProfile?.role === "WORKSPACE_ADMIN" && !isModifyMode ? (
-            <Box sx={{ display: "flex", justifyContent: "end" }}>
-              <Button onClick={handleModifyNotice}>
+            <Box sx={{ display: "flex", justifyContent: "end", mt: 1 }}>
+              <Button
+                variant="contained"
+                onClick={handleModifyNotice}
+                sx={{ mr: 1 }}
+              >
                 <EditIcon />
               </Button>
-              <Button onClick={openConfirmDialog}>
+              <Button
+                variant="outlined"
+                onClick={openConfirmDialog}
+                sx={{ mr: 1 }}
+              >
                 <DeleteIcon />
               </Button>
             </Box>

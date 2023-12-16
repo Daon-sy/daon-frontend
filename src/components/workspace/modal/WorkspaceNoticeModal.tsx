@@ -48,8 +48,8 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
       height={560}
       maxWidth="lg"
       minWidth={1200}
-      top={24}
-      right={32}
+      top={22}
+      right={28}
     >
       {isCreateMode && workspaceId ? (
         <CreateWorkspaceNotice
@@ -65,8 +65,7 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
               sx={{
                 position: "absolute",
                 right: 76,
-                top: 33,
-                height: 20,
+                top: 24,
               }}
               onClick={handleCreateNotice}
             >
@@ -101,7 +100,7 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
                   justifyContent: "center",
                 }}
               >
-                <NoData content="공지사항 목록에서 상세보기 할 공지사항을 선택해주세요" />
+                <NoData content="공지사항을 선택해 주세요." />
               </Box>
             )}
           </Container>

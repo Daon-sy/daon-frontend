@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Divider,
-  FormHelperText,
-  TextField,
-  Typography,
-} from "@mui/material"
+import { Box, Button, Divider, FormHelperText, TextField } from "@mui/material"
 import { WorkspaceNoticeDetail } from "_types/workspaceNotice"
 import { useAlert } from "hooks/useAlert"
 import useModifyWorkspaceNotice from "hooks/workspace/useModifyWorkspaceNotice"
@@ -106,23 +99,10 @@ const ModifyWorkspaceNotice: React.FC<Props> = ({
           >{`${(requestBody?.title || title).length + 1}/50자`}</FormHelperText>
         </Box>
       </Box>
+      <Divider sx={{ mt: 4, mb: 2 }} />
       <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          mt: 3,
-        }}
-      >
-        <Box sx={{ color: "#bababa" }}>{notice.createdAt}</Box>
-        <Typography sx={{ color: "#1f4838", fontSize: 12 }}>
-          {notice.writer?.name}
-        </Typography>
-      </Box>
-      <Divider sx={{ mt: 0.5, mb: 1 }} />
-      <Box
-        sx={{
-          height: 408,
+          height: 362,
           lineHeight: "20px",
           position: "relative",
         }}
@@ -130,7 +110,7 @@ const ModifyWorkspaceNotice: React.FC<Props> = ({
         <TextField
           required
           multiline
-          rows={15}
+          rows={14}
           sx={{
             width: "99%",
             overflowY: "auto",
@@ -152,10 +132,18 @@ const ModifyWorkspaceNotice: React.FC<Props> = ({
           (requestBody?.content || content).length + 1
         }/500자`}</FormHelperText>
       </Box>
-      <Button onClick={handleModify} sx={{ position: "relative", top: -32 }}>
+      <Button
+        variant="contained"
+        onClick={handleModify}
+        sx={{ position: "relative", top: 0, ml: 1 }}
+      >
         수정
       </Button>
-      <Button onClick={onCancel} sx={{ position: "relative", top: -32 }}>
+      <Button
+        variant="outlined"
+        onClick={onCancel}
+        sx={{ position: "relative", top: 0, ml: 1 }}
+      >
         취소
       </Button>
     </Box>

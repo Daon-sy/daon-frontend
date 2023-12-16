@@ -6,7 +6,6 @@ import {
   RegisteredTaskManagerNotification,
 } from "_types/notification"
 import { getWorkspaceStore } from "store/userStore"
-import { getTaskDetailViewStore } from "store/taskStore"
 import { useConfirmDialog } from "components/common/ConfirmDialog"
 import NotificationCard from "components/notification/card/NotificationCard"
 import useReadNotification from "hooks/notification/useReadNotification"
@@ -29,7 +28,6 @@ const RegisteredTaskManager: React.FC<Props> = ({
   const { ConfirmDialog, open: openConfirmDialog } = useConfirmDialog()
   const navigate = useNavigate()
   const { workspace: currentWorkspace } = getWorkspaceStore()
-  const { setTaskDetailParam } = getTaskDetailViewStore()
   const { fetch: read } = useReadNotification()
   const anotherWorkspace = () =>
     currentWorkspace && currentWorkspace.workspaceId !== workspace.workspaceId
