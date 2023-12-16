@@ -1,7 +1,8 @@
 import React from "react"
 import { Box } from "@mui/material"
 import { getWorkspaceNoticesStore } from "store/userStore"
-import NoData from "components/common/NoData"
+import MainEmpty from "components/common/MainEmpty"
+import { faBullhorn } from "@fortawesome/free-solid-svg-icons"
 
 const WorkspaceNotice: React.FC = () => {
   const { workspaceNotices } = getWorkspaceNoticesStore()
@@ -42,13 +43,12 @@ const WorkspaceNotice: React.FC = () => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            pb: 2,
           }}
         >
-          <NoData
+          <MainEmpty
+            icon={faBullhorn}
             content="입력된 공지사항이 없어요"
-            width="280px"
-            height="140px"
+            bgcolor="rgba(226,88,96,0.6)"
           />
         </Box>
       )}

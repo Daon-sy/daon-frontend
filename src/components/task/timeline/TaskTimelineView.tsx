@@ -1,13 +1,14 @@
 import React from "react"
 import { Box, Chip, Typography } from "@mui/material"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faFire } from "@fortawesome/free-solid-svg-icons"
+import { faFire, faStopwatch } from "@fortawesome/free-solid-svg-icons"
 import { getWorkspaceStore } from "store/userStore"
 import { getTaskDetailViewStore } from "store/taskStore"
 import { getTaskTimelineStore } from "store/taskTimelineStore"
 import TaskTimelineBar from "components/task/timeline/TaskTimelineBar"
 import { TaskSummary } from "_types/task"
 import { getDateCountArray } from "utils/DateUtils"
+import MainEmpty from "components/common/MainEmpty"
 
 interface TaskViewProps {
   tasks: TaskSummary[]
@@ -167,201 +168,221 @@ const TaskTimelineView = ({
         },
       }}
     >
-      {/* 할 일 목록 */}
-      <Box position="sticky" left={0} zIndex={5}>
+      {memoTasks.length === 0 ? (
         <Box
           sx={{
-            position: "absolute",
+            height: "100%",
+            width: "100%",
             display: "flex",
             flexDirection: "column",
-            borderRight: "1px solid #C8C8C8FF",
-            borderBottom: 1,
-            borderColor: "#C8C8C8FF",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <Box
-            sx={{
-              width: taskWidth,
-              top: 0,
-              position: "sticky",
-              color: "#F1F2F4FF",
-              backgroundColor: "#F1F2F4FF",
-              boxSizing: "border-box",
-              borderBottom: 1,
-              borderColor: "#C8C8C8FF",
-              borderTopLeftRadius: 1,
-              height: headerHeight,
-            }}
+          <MainEmpty
+            icon={faStopwatch}
+            content="타임라인에 할일이 없어요"
+            bgcolor="rgb(185,107,198,0.6)"
           />
-          {memoTasks.map((task, index) => (
+        </Box>
+      ) : (
+        <>
+          <Box position="sticky" left={0} zIndex={5}>
             <Box
-              key={task.taskId}
               sx={{
+                position: "absolute",
                 display: "flex",
-                alignItems: "center",
-                width: taskWidth,
-                backgroundColor: index % 2 === 0 ? "#ffffff" : "#F7F8F9FF",
-                "&:hover": {
-                  cursor: "pointer",
-                  backgroundColor: "#dcdcdc",
-                },
+                flexDirection: "column",
+                borderRight: "1px solid #C8C8C8FF",
+                borderBottom: 1,
+                borderColor: "#C8C8C8FF",
               }}
-              onClick={() =>
-                setTaskDetailParam({
-                  workspaceId: workspace?.workspaceId || 0,
-                  projectId: task.project.projectId,
-                  boardId: task.board?.boardId || 0,
-                  taskId: task.taskId,
-                })
-              }
             >
-              {task.emergency ? (
-                <Typography ml={1}>
-                  <FontAwesomeIcon icon={faFire} color="red" />
-                </Typography>
-              ) : null}
-              <Chip
-                label={task.project.title}
-                color="secondary"
-                size="small"
+              <Box
                 sx={{
-                  ml: 1,
-                  fontSize: 12,
-                  borderRadius: 1.5,
-                  fontWeight: 900,
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  maxWidth: 80,
+                  width: taskWidth,
+                  top: 0,
+                  position: "sticky",
+                  color: "#F1F2F4FF",
+                  backgroundColor: "#F1F2F4FF",
+                  boxSizing: "border-box",
+                  borderBottom: 1,
+                  borderColor: "#C8C8C8FF",
+                  borderTopLeftRadius: 1,
+                  height: headerHeight,
                 }}
               />
-              <Typography
-                sx={{
-                  // 완료됨 표시. 다른 아이콘 넣으면 좋을 것 같음
-                  textDecoration:
-                    task.progressStatus === "COMPLETED"
-                      ? "line-through"
-                      : undefined,
-                  fontSize: 12,
-                  lineHeight: `${taskHeight}px`,
-                  paddingX: 0.5,
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  color: "deepGray.main",
-                  fontWeight: 600,
-                }}
-              >
-                {task.title}
-              </Typography>
-            </Box>
-          ))}
-        </Box>
-      </Box>
-      {/* 타임라인 */}
-      <Box
-        sx={{
-          position: "relative",
-          left: taskWidth,
-        }}
-      >
-        {/* 오늘 날짜 선 */}
-        {/* <Tooltip title={todayDateToString()} placement="top"> */}
-        <Box
-          sx={{
-            zIndex: 2,
-            position: "absolute",
-            left:
-              yearMonthDateCountList.length > 0
-                ? dateWidth * getBlankCount()
-                : 0,
-            top: headerHeight,
-            width: 5,
-            height: taskHeight * memoTasks.length,
-            borderLeft: 1,
-            borderWidth: 2,
-            borderColor: "#FFBE00",
-            "&:hover": {
-              cursor: "pointer",
-              // borderColor: "#dca900",
-            },
-            "&:before":
-              memoTasks.length > 0
-                ? {
-                    content: '""',
-                    display: "block",
-                    position: "sticky",
-                    borderColor: "#FFBE00",
-                    top: headerHeight,
-                    width: 8,
-                    height: 8,
-                    bgcolor: "#FFBE00",
-                    transform:
-                      "translateX(-60%) translateY(-50%) rotate(45deg)",
-                    zIndex: 2,
+              {memoTasks.map((task, index) => (
+                <Box
+                  key={task.taskId}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: taskWidth,
+                    backgroundColor: index % 2 === 0 ? "#ffffff" : "#F7F8F9FF",
+                    "&:hover": {
+                      cursor: "pointer",
+                      backgroundColor: "#dcdcdc",
+                    },
+                  }}
+                  onClick={() =>
+                    setTaskDetailParam({
+                      workspaceId: workspace?.workspaceId || 0,
+                      projectId: task.project.projectId,
+                      boardId: task.board?.boardId || 0,
+                      taskId: task.taskId,
+                    })
                   }
-                : {},
-          }}
-        />
-        {/* </Tooltip> */}
-        {/* header */}
-        <Box sx={{ display: "flex" }} position="sticky" top={0} zIndex={2}>
-          {yearMonthDateCountList.map(ymdc => (
+                >
+                  {task.emergency ? (
+                    <Typography ml={1}>
+                      <FontAwesomeIcon icon={faFire} color="red" />
+                    </Typography>
+                  ) : null}
+                  <Chip
+                    label={task.project.title}
+                    color="secondary"
+                    size="small"
+                    sx={{
+                      ml: 1,
+                      fontSize: 12,
+                      borderRadius: 1.5,
+                      fontWeight: 900,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      maxWidth: 80,
+                    }}
+                  />
+                  <Typography
+                    sx={{
+                      // 완료됨 표시. 다른 아이콘 넣으면 좋을 것 같음
+                      textDecoration:
+                        task.progressStatus === "COMPLETED"
+                          ? "line-through"
+                          : undefined,
+                      fontSize: 12,
+                      lineHeight: `${taskHeight}px`,
+                      paddingX: 0.5,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      color: "deepGray.main",
+                      fontWeight: 600,
+                    }}
+                  >
+                    {task.title}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
+          </Box>
+          {/* 타임라인 */}
+          <Box
+            sx={{
+              position: "relative",
+              left: taskWidth,
+            }}
+          >
+            {/* 오늘 날짜 선 */}
+            {/* <Tooltip title={todayDateToString()} placement="top"> */}
             <Box
-              key={`${ymdc.year}-${ymdc.month}`}
               sx={{
-                width: dateWidth * ymdc.dateCount,
-                height: headerHeight,
-                display: "flex",
-                backgroundColor: "#F1F2F4FF",
-                boxSizing: "border-box",
+                zIndex: 2,
+                position: "absolute",
+                left:
+                  yearMonthDateCountList.length > 0
+                    ? dateWidth * getBlankCount()
+                    : 0,
+                top: headerHeight,
+                width: 5,
+                height: taskHeight * memoTasks.length,
+                borderLeft: 1,
+                borderWidth: 2,
+                borderColor: "#FFBE00",
+                "&:hover": {
+                  cursor: "pointer",
+                  // borderColor: "#dca900",
+                },
+                "&:before":
+                  memoTasks.length > 0
+                    ? {
+                        content: '""',
+                        display: "block",
+                        position: "sticky",
+                        borderColor: "#FFBE00",
+                        top: headerHeight,
+                        width: 8,
+                        height: 8,
+                        bgcolor: "#FFBE00",
+                        transform:
+                          "translateX(-60%) translateY(-50%) rotate(45deg)",
+                        zIndex: 2,
+                      }
+                    : {},
+              }}
+            />
+            {/* </Tooltip> */}
+            {/* header */}
+            <Box sx={{ display: "flex" }} position="sticky" top={0} zIndex={2}>
+              {yearMonthDateCountList.map(ymdc => (
+                <Box
+                  key={`${ymdc.year}-${ymdc.month}`}
+                  sx={{
+                    width: dateWidth * ymdc.dateCount,
+                    height: headerHeight,
+                    display: "flex",
+                    backgroundColor: "#F1F2F4FF",
+                    boxSizing: "border-box",
+                    borderBottom: 1,
+                    borderRight: 1,
+                    borderColor: "#C8C8C8FF",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: 12,
+                  }}
+                >
+                  {ymdc.year}년 {ymdc.month}월
+                </Box>
+              ))}
+            </Box>
+            <Box display="flex" position="absolute">
+              {yearMonthDateCountList.map(ymdc => (
+                <Box
+                  key={`${ymdc.year}-${ymdc.month}`}
+                  sx={{
+                    width: dateWidth * ymdc.dateCount,
+                    height: taskHeight * memoTasks.length,
+                    boxSizing: "border-box",
+                    borderRight: 1,
+                    borderColor: "#c8c8c8",
+                    backgroundColor: "rgba(255,255,255,0)",
+                  }}
+                />
+              ))}
+            </Box>
+            {/* 할 일 타임라인 */}
+            <Box
+              sx={{
                 borderBottom: 1,
-                borderRight: 1,
                 borderColor: "#C8C8C8FF",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 12,
               }}
             >
-              {ymdc.year}년 {ymdc.month}월
+              {memoTasks.map((task, index) => (
+                <TaskTimelineBar
+                  key={task.taskId}
+                  task={task}
+                  baseYearMonth={{
+                    year: yearMonthDateCountList[0].year,
+                    month: yearMonthDateCountList[0].month,
+                  }}
+                  totalWidth={totalWidth}
+                  index={index}
+                />
+              ))}
             </Box>
-          ))}
-        </Box>
-        <Box display="flex" position="absolute">
-          {yearMonthDateCountList.map(ymdc => (
-            <Box
-              key={`${ymdc.year}-${ymdc.month}`}
-              sx={{
-                width: dateWidth * ymdc.dateCount,
-                height: taskHeight * memoTasks.length,
-                boxSizing: "border-box",
-                borderRight: 1,
-                borderColor: "#c8c8c8",
-                backgroundColor: "rgba(255,255,255,0)",
-              }}
-            />
-          ))}
-        </Box>
-        {/* 할 일 타임라인 */}
-        <Box
-          sx={{
-            borderBottom: 1,
-            borderColor: "#C8C8C8FF",
-          }}
-        >
-          {memoTasks.map((task, index) => (
-            <TaskTimelineBar
-              key={task.taskId}
-              task={task}
-              baseYearMonth={{
-                year: yearMonthDateCountList[0].year,
-                month: yearMonthDateCountList[0].month,
-              }}
-              totalWidth={totalWidth}
-              index={index}
-            />
-          ))}
-        </Box>
-      </Box>
+          </Box>
+        </>
+      )}
     </Box>
   )
 }
