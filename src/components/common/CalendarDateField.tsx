@@ -23,6 +23,7 @@ const CalendarDateField = ({ date, handleChange }: Props) => {
               width: "100%",
               "& .MuiInputBase-input": {
                 height: 8,
+                fontSize: 14,
               },
               "& .MuiOutlinedInput-notchedOutline": {
                 borderWidth: 2,

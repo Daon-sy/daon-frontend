@@ -156,32 +156,33 @@ const TaskDetailModal: React.FC<Props> = ({
               <Box>
                 <Box
                   sx={{
+                    width: "100%",
                     display: "flex",
-                    paddingLeft: 1,
                     alignItems: "center",
                   }}
                 >
-                  <BoardSelectButton
-                    projectId={projectId}
-                    currentBoard={taskDetail.board}
-                    handleBoardSelect={item => {
-                      modifyTask({
-                        ...taskDetail,
-                        board: item
-                          ? {
-                              boardId: item.boardId,
-                              title: item.title,
-                            }
-                          : undefined,
-                      })
-                    }}
-                  />
+                  <Box width={390}>
+                    <BoardSelectButton
+                      projectId={projectId}
+                      currentBoard={taskDetail.board}
+                      handleBoardSelect={item => {
+                        modifyTask({
+                          ...taskDetail,
+                          board: item
+                            ? {
+                                boardId: item.boardId,
+                                title: item.title,
+                              }
+                            : undefined,
+                        })
+                      }}
+                    />
+                  </Box>
                   <Box
-                    sx={{
-                      ml: 4,
-                      display: "flex",
-                      alignItems: "end",
-                    }}
+                    display="flex"
+                    flexGrow={1}
+                    alignItems="center"
+                    justifyContent="end"
                   >
                     <Tooltip title="긴급 설정" arrow>
                       <Chip
@@ -197,20 +198,14 @@ const TaskDetailModal: React.FC<Props> = ({
                         sx={{ borderRadius: 1, margin: 0, border: 0 }}
                       />
                     </Tooltip>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      marginLeft: 0.5,
-                    }}
-                  >
-                    <TaskBookmarkButton
-                      padding={0}
-                      fontSize="2.5rem"
-                      bookmarked={bookmarked}
-                      handleClick={handleBookmark}
-                    />
+                    <Box ml={1 / 2}>
+                      <TaskBookmarkButton
+                        padding={0}
+                        fontSize="2.5rem"
+                        bookmarked={bookmarked}
+                        handleClick={handleBookmark}
+                      />
+                    </Box>
                   </Box>
                 </Box>
 
@@ -357,6 +352,7 @@ const TaskDetailModal: React.FC<Props> = ({
               </Box>
             </Box>
             <Divider orientation="vertical" flexItem color="#e0e0e0" />
+
             {/* right */}
             <Box
               id="right-container"
@@ -389,9 +385,10 @@ const TaskDetailModal: React.FC<Props> = ({
                     fontWeight: 700,
                     color: "#1f4838",
                     fontSize: "18px",
+                    width: 490,
                   }}
                 >
-                  <Box sx={{ width: "100%" }}>
+                  <Box sx={{ width: 220 }}>
                     <Box sx={{ mb: 1 }}>시작일</Box>
                     <CalendarDateField
                       date={taskDetail.startDate}
@@ -407,14 +404,14 @@ const TaskDetailModal: React.FC<Props> = ({
                     sx={{
                       lineHeight: "102px",
                       marginX: 3,
-                      fontSize: "32px",
+                      fontSize: "28px",
                       color: "#929292",
                       fontWeight: "bold",
                     }}
                   >
                     ~
                   </Box>
-                  <Box sx={{ width: "100%" }}>
+                  <Box sx={{ width: 220 }}>
                     <Box sx={{ mb: 1 }}>마감일</Box>
                     <CalendarDateField
                       date={taskDetail.endDate}
@@ -427,9 +424,9 @@ const TaskDetailModal: React.FC<Props> = ({
                     />
                   </Box>
                 </Box>
-                <Box />
+
                 {/* true :댓글, flase :히스토리 */}
-                <Box minHeight="313px">
+                <Box minHeight="313px" width={490}>
                   <Tabs
                     value={tab}
                     onChange={handleChange}
@@ -454,7 +451,7 @@ const TaskDetailModal: React.FC<Props> = ({
                   </Tabs>
 
                   {tab === "댓글" ? (
-                    <Box width="494px">
+                    <Box>
                       <TaskReply
                         projectId={projectId}
                         boardId={boardId}
