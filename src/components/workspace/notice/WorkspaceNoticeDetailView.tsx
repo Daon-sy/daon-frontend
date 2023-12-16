@@ -120,6 +120,7 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
+                      mr: 1,
                       "&:hover": {
                         bgcolor: "#e2e2e4",
                       },
@@ -184,10 +185,18 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
           )}
           {myProfile?.role === "WORKSPACE_ADMIN" && !isModifyMode ? (
             <Box sx={{ display: "flex", justifyContent: "end", mt: 1 }}>
-              <Button onClick={handleModifyNotice}>
+              <Button
+                variant="contained"
+                onClick={handleModifyNotice}
+                sx={{ mr: 1 }}
+              >
                 <EditIcon />
               </Button>
-              <Button onClick={openConfirmDialog}>
+              <Button
+                variant="outlined"
+                onClick={openConfirmDialog}
+                sx={{ mr: 1 }}
+              >
                 <DeleteIcon />
               </Button>
             </Box>

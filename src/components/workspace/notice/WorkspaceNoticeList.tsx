@@ -42,6 +42,12 @@ const WorkspaceNoticeList: React.FC<Props> = ({
     setSelectedNoticeId(noticeId)
   }
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleSearch()
+    }
+  }
+
   return (
     <Box
       sx={{
@@ -76,6 +82,7 @@ const WorkspaceNoticeList: React.FC<Props> = ({
           placeholder="공지사항 검색"
           value={searchKeyword}
           onChange={e => setSearchKeyword(e.target.value)}
+          onKeyDown={handleKeyDown}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -151,12 +158,13 @@ const WorkspaceNoticeList: React.FC<Props> = ({
           ))}
         </Box>
       )}
-
-      <Pagination
-        count={totalPage}
-        page={currentPage}
-        onChange={handlePageChange}
-      />
+      {totalPage === 0 ? null : (
+        <Pagination
+          count={totalPage}
+          page={currentPage}
+          onChange={handlePageChange}
+        />
+      )}
     </Box>
   )
 }

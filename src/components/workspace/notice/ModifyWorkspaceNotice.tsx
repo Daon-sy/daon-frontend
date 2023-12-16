@@ -132,10 +132,18 @@ const ModifyWorkspaceNotice: React.FC<Props> = ({
           (requestBody?.content || content).length + 1
         }/500자`}</FormHelperText>
       </Box>
-      <Button onClick={handleModify} sx={{ position: "relative", top: 0 }}>
+      <Button
+        variant="contained"
+        onClick={handleModify}
+        sx={{ position: "relative", top: 0, ml: 1 }}
+      >
         수정
       </Button>
-      <Button onClick={onCancel} sx={{ position: "relative", top: 0 }}>
+      <Button
+        variant="outlined"
+        onClick={onCancel}
+        sx={{ position: "relative", top: 0, ml: 1 }}
+      >
         취소
       </Button>
     </Box>
