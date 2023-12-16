@@ -6,6 +6,8 @@ import { Notification, ReceiveMessageNotification } from "_types/notification"
 import { getWorkspaceStore } from "store/userStore"
 import { useConfirmDialog } from "components/common/ConfirmDialog"
 import NotificationCard from "components/notification/card/NotificationCard"
+import useReadNotification from "hooks/notification/useReadNotification"
+import ConfirmMovementComponent from "components/common/confirm/ConfirmMovement"
 
 interface Props {
   notification: Notification<ReceiveMessageNotification & { time: string }>
@@ -20,13 +22,14 @@ const ReceivedMessage: React.FC<Props> = ({ notification, removeCallback }) => {
   const { ConfirmDialog, open: openConfirmDialog } = useConfirmDialog()
   const navigate = useNavigate()
   const { workspace: currentWorkspace } = getWorkspaceStore()
+  const { fetch: read } = useReadNotification()
+  const anotherWorkspace = () =>
+    currentWorkspace && currentWorkspace.workspaceId !== workspace.workspaceId
   const handleConfirmClick = () => {
-    if (
-      currentWorkspace &&
-      currentWorkspace.workspaceId !== workspace.workspaceId
-    ) {
-      console.error()
-    }
+    if (!notification.read) read(notificationId)
+    navigate(`/workspace/${workspace.workspaceId}`, {
+      state: { openMessage: true },
+    })
   }
 
   return (
@@ -36,7 +39,10 @@ const ReceivedMessage: React.FC<Props> = ({ notification, removeCallback }) => {
         notification={notification}
         paths={[workspace.workspaceTitle]}
         time={time}
-        onClick={openConfirmDialog}
+        onClick={() => {
+          if (anotherWorkspace()) openConfirmDialog()
+          else navigate(".", { state: { openMessage: true } })
+        }}
         removeCallback={removeCallback}
       >
         <Box mt={1 / 2} fontSize={14}>
@@ -45,14 +51,14 @@ const ReceivedMessage: React.FC<Props> = ({ notification, removeCallback }) => {
             <Box
               fontSize={14}
               fontWeight={500}
-              maxWidth={200}
+              maxWidth={160}
               overflow="hidden"
               whiteSpace="nowrap"
               textOverflow="ellipsis"
             >
               {sender.name}
             </Box>
-            <Box>]님으로 부터</Box>
+            <Box>]님으로부터</Box>
           </Box>
           <Box mt={1 / 4} display="flex" alignItems="center">
             <Chip
@@ -65,9 +71,14 @@ const ReceivedMessage: React.FC<Props> = ({ notification, removeCallback }) => {
           </Box>
         </Box>
       </NotificationCard>
-      <ConfirmDialog handleConfirm={handleConfirmClick} maxWidth="xs">
-        <Typography>{`${workspace.workspaceTitle} 워크스페이스의 ${sender.name}님이 보낸 쪽지를 확인하시겠습니까?`}</Typography>
-      </ConfirmDialog>
+      {anotherWorkspace() ? (
+        <ConfirmDialog handleConfirm={handleConfirmClick} maxWidth="xs">
+          <ConfirmMovementComponent
+            title="워크스페이스"
+            contents1={`[${workspace.workspaceTitle}] 워크스페이스`}
+          />
+        </ConfirmDialog>
+      ) : null}
     </>
   )
 }

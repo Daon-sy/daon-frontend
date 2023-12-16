@@ -8,6 +8,7 @@ import { SearchTaskResult } from "api/search"
 import { getWorkspaceStore } from "store/userStore"
 import { getTaskDetailViewStore } from "store/taskStore"
 import ConfirmDialog from "components/common/ConfirmDialog"
+import { TASK_STATUS_SET } from "_types/task"
 import ConfirmMovementComponent from "../../common/confirm/ConfirmMovement"
 
 interface Props {
@@ -69,15 +70,20 @@ const TaskSearchResult: React.FC<Props> = ({ task }) => {
   }
 
   return (
-    <Box key={`tsk${taskId}`}>
+    <Box
+      key={`tsk${taskId}`}
+      p={0.5}
+      sx={{
+        "&:hover": {
+          backgroundColor: "background.default",
+          cursor: "pointer",
+        },
+      }}
+    >
       <Box
         display="flex"
         alignItems="center"
-        p={0.5}
         borderRadius={1}
-        sx={{
-          "&:hover": { backgroundColor: "background.default" },
-        }}
         onClick={handleResultClick}
       >
         {task.emergency ? (
@@ -94,7 +100,10 @@ const TaskSearchResult: React.FC<Props> = ({ task }) => {
           </Typography>
         ) : null}
         <Chip
-          label={progressStatus}
+          label={
+            TASK_STATUS_SET.find(ts => ts.value === progressStatus)
+              ?.description || "TODO"
+          }
           size="small"
           variant="outlined"
           sx={{ mr: 0.5, fontSize: 10, height: 16, borderRadius: 1 }}
@@ -102,8 +111,10 @@ const TaskSearchResult: React.FC<Props> = ({ task }) => {
         <Typography fontSize={14} color="primary">
           {taskTitle}
         </Typography>
+      </Box>
+      <Box>
         <Typography
-          ml={2}
+          // ml={2}
           fontSize={12}
         >{`(${workspaceTitle}-${projectTitle}에서 생성됨)`}</Typography>
       </Box>

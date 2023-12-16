@@ -19,7 +19,7 @@ const useCreateWorkspace = (callback?: () => void) => {
       const { data } = await createWorkspaceApi(requestBody)
       const { workspaceId } = data
       fetchWorkspaceList()
-      addSuccess(`워크스페이스가 생성되었습니다. id: ${workspaceId}`)
+      addSuccess("워크스페이스가 생성되었습니다")
 
       if (callback) callback()
 

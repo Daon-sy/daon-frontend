@@ -67,15 +67,20 @@ const ProjectSearchResult: React.FC<Props> = ({ project }) => {
   }
 
   return (
-    <Box key={`pj${projectId}`}>
+    <Box
+      key={`pj${projectId}`}
+      p={0.5}
+      sx={{
+        "&:hover": {
+          backgroundColor: "background.default",
+          cursor: "pointer",
+        },
+      }}
+    >
       <Box
         display="flex"
         alignItems="center"
-        p={0.5}
         borderRadius={1}
-        sx={{
-          "&:hover": { backgroundColor: "background.default" },
-        }}
         onClick={handleResultClick}
       >
         <Typography fontSize={14} color="primary">
@@ -91,8 +96,10 @@ const ProjectSearchResult: React.FC<Props> = ({ project }) => {
             <PeopleIcon sx={{ fontSize: 20 }} />
           </StyledBadge>
         ) : null}
+      </Box>
+      <Box>
         <Typography
-          ml={2}
+          // ml={2}
           fontSize={12}
         >{`(${workspaceTitle}에서 생성됨)`}</Typography>
       </Box>

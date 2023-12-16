@@ -6,7 +6,8 @@ import {
 } from "_types/notification"
 import { useAlertDialog } from "components/common/AlertDialog"
 import NotificationCard from "components/notification/card/NotificationCard"
-import ConfirmOutMemberAlarmComponent from "../../common/confirm/ConfirmOutMemberAlarm"
+import ConfirmOutMemberAlarmComponent from "components/common/confirm/ConfirmOutMemberAlarm"
+import useReadNotification from "hooks/notification/useReadNotification"
 
 interface Props {
   notification: Notification<
@@ -22,6 +23,7 @@ const DeportatedWorkspace: React.FC<Props> = ({
   const { notificationId, data } = notification
   const { workspace, time } = data
 
+  const { fetch: read } = useReadNotification()
   const { AlertDialog, open: openAlertDialog } = useAlertDialog()
 
   return (
@@ -60,7 +62,9 @@ const DeportatedWorkspace: React.FC<Props> = ({
           </Box>
         </Box>
       </NotificationCard>
-      <AlertDialog>
+      <AlertDialog
+        handleConfirm={() => !notification.read && read(notificationId)}
+      >
         <ConfirmOutMemberAlarmComponent
           title="워크스페이스"
           contents1={`[${workspace.workspaceTitle}] 워크스페이스`}

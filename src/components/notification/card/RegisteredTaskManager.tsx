@@ -9,7 +9,8 @@ import { getWorkspaceStore } from "store/userStore"
 import { getTaskDetailViewStore } from "store/taskStore"
 import { useConfirmDialog } from "components/common/ConfirmDialog"
 import NotificationCard from "components/notification/card/NotificationCard"
-import ConfirmMovementComponent from "../../common/confirm/ConfirmMovement"
+import useReadNotification from "hooks/notification/useReadNotification"
+import ConfirmMovementComponent from "components/common/confirm/ConfirmMovement"
 
 interface Props {
   notification: Notification<
@@ -29,25 +30,24 @@ const RegisteredTaskManager: React.FC<Props> = ({
   const navigate = useNavigate()
   const { workspace: currentWorkspace } = getWorkspaceStore()
   const { setTaskDetailParam } = getTaskDetailViewStore()
+  const { fetch: read } = useReadNotification()
+  const anotherWorkspace = () =>
+    currentWorkspace && currentWorkspace.workspaceId !== workspace.workspaceId
   const handleConfirmClick = () => {
-    if (
-      currentWorkspace &&
-      currentWorkspace.workspaceId !== workspace.workspaceId
-    ) {
-      navigate(
-        `/workspace/${workspace.workspaceId}/project/${project.projectId}`,
-        {
-          state: { openTaskId: task.taskId },
+    if (!notification.read) read(notificationId)
+    navigate(
+      `/workspace/${workspace.workspaceId}/project/${project.projectId}`,
+      {
+        state: {
+          task: {
+            taskId: task.taskId,
+            boardId: board.boardId,
+            projectId: project.projectId,
+            workspaceId: workspace.workspaceId,
+          },
         },
-      )
-    } else {
-      setTaskDetailParam({
-        workspaceId: workspace.workspaceId,
-        projectId: project.projectId,
-        boardId: board.boardId,
-        taskId: task.taskId,
-      })
-    }
+      },
+    )
   }
 
   return (
@@ -57,7 +57,20 @@ const RegisteredTaskManager: React.FC<Props> = ({
         notification={notification}
         paths={[workspace.workspaceTitle, project.projectTitle]}
         time={time}
-        onClick={openConfirmDialog}
+        onClick={() => {
+          if (anotherWorkspace()) openConfirmDialog()
+          else
+            navigate(".", {
+              state: {
+                task: {
+                  taskId: task.taskId,
+                  boardId: board.boardId,
+                  projectId: project.projectId,
+                  workspaceId: workspace.workspaceId,
+                },
+              },
+            })
+        }}
         removeCallback={removeCallback}
       >
         <Box mt={1 / 2} fontSize={14}>
@@ -86,13 +99,15 @@ const RegisteredTaskManager: React.FC<Props> = ({
           </Box>
         </Box>
       </NotificationCard>
-      <ConfirmDialog handleConfirm={handleConfirmClick} maxWidth="xs">
-        <ConfirmMovementComponent
-          title="프로젝트"
-          contents1={`[${workspace.workspaceTitle}] 워크스페이스  >`}
-          contents2={`[${project.projectTitle}] 프로젝트`}
-        />
-      </ConfirmDialog>
+      {anotherWorkspace() ? (
+        <ConfirmDialog handleConfirm={handleConfirmClick} maxWidth="xs">
+          <ConfirmMovementComponent
+            title="프로젝트"
+            contents1={`[${workspace.workspaceTitle}] 워크스페이스  >`}
+            contents2={`[${project.projectTitle}] 프로젝트`}
+          />
+        </ConfirmDialog>
+      ) : null}
     </>
   )
 }

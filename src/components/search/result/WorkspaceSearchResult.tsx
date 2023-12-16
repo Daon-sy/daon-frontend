@@ -49,7 +49,7 @@ const WorkspaceSearchResult: React.FC<Props> = ({ workspace }) => {
         children: (
           <ConfirmMovementComponent
             title="워크스페이스"
-            contents1={`[${title}] 워크스페이스  >`}
+            contents1={`[${title}] 워크스페이스`}
             contents2=""
           />
         ),
@@ -59,15 +59,20 @@ const WorkspaceSearchResult: React.FC<Props> = ({ workspace }) => {
   }
 
   return (
-    <Box key={`ws${workspaceId}`}>
+    <Box
+      key={`ws${workspaceId}`}
+      p={0.5}
+      sx={{
+        "&:hover": {
+          backgroundColor: "background.default",
+          cursor: "pointer",
+        },
+      }}
+    >
       <Box
         display="flex"
         alignItems="center"
-        p={0.5}
         borderRadius={1}
-        sx={{
-          "&:hover": { backgroundColor: "background.default" },
-        }}
         onClick={handleResultClick}
       >
         <ColorAvatar

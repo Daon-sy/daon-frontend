@@ -1,8 +1,10 @@
 import React from "react"
-import { Outlet } from "react-router-dom"
+import { Outlet, useLocation } from "react-router-dom"
 import Header from "components/header/Header"
 import Sidebar from "components/sidebar/Sidebar"
 import styled from "styled-components"
+import TaskDetailModal from "components/task/modal/TaskDetailModal"
+import { getTaskDetailViewStore } from "store/taskStore"
 
 const DefaultLayout = styled.div`
   display: flex;
@@ -42,6 +44,21 @@ const Page = styled.div`
 `
 
 const UserLayout = () => {
+  const { taskDetailParam, setTaskDetailParam, clear } =
+    getTaskDetailViewStore()
+  const { state: locSate } = useLocation()
+  React.useLayoutEffect(() => {
+    if (locSate && locSate.task) {
+      const { workspaceId, projectId, boardId, taskId } = locSate.task
+      setTaskDetailParam({
+        workspaceId,
+        projectId,
+        boardId,
+        taskId,
+      })
+    }
+  }, [locSate])
+
   return (
     <DefaultLayout>
       <Header />
@@ -51,6 +68,16 @@ const UserLayout = () => {
         </SideBarWrapper>
         <Page>
           <Outlet />
+          {taskDetailParam ? (
+            <TaskDetailModal
+              workspaceId={taskDetailParam.workspaceId}
+              projectId={taskDetailParam.projectId}
+              boardId={taskDetailParam.boardId}
+              taskId={taskDetailParam.taskId}
+              open={!!taskDetailParam}
+              handleClose={clear}
+            />
+          ) : null}
         </Page>
       </Main>
     </DefaultLayout>

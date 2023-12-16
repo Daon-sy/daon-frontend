@@ -4,6 +4,8 @@ import { InviteWorkspaceNotification, Notification } from "_types/notification"
 import NotificationCard from "components/notification/card/NotificationCard"
 import { useTitleDialog } from "components/common/TitleDialog"
 import JoinWorkspace from "components/workspace/JoinWorkspace"
+import useReadNotification from "hooks/notification/useReadNotification"
+import { useAlert } from "hooks/useAlert"
 
 interface Props {
   notification: Notification<InviteWorkspaceNotification & { time: string }>
@@ -16,12 +18,13 @@ const InvitedWorkspace: React.FC<Props> = ({
 }) => {
   const { notificationId, data } = notification
   const { workspace, time } = data
-
+  const { fetch: read } = useReadNotification()
   const {
     TitleDialog,
     open: openJoinWorkspaceDialog,
     close: closeJoinWorkspaceDialog,
   } = useTitleDialog()
+  const { addError } = useAlert()
 
   return (
     <>
@@ -30,7 +33,13 @@ const InvitedWorkspace: React.FC<Props> = ({
         notification={notification}
         paths={[workspace.workspaceTitle]}
         time={time}
-        onClick={openJoinWorkspaceDialog}
+        onClick={() => {
+          if (notification.read) {
+            addError("이미 참여한 워크스페이스입니다")
+            return
+          }
+          openJoinWorkspaceDialog()
+        }}
         removeCallback={removeCallback}
       >
         <Box mt={1 / 2} fontSize={14}>
@@ -64,6 +73,7 @@ const InvitedWorkspace: React.FC<Props> = ({
           workspaceId={workspace.workspaceId}
           handleSuccess={() => {
             closeJoinWorkspaceDialog()
+            if (!notification.read) read(notificationId)
           }}
           handleCancel={closeJoinWorkspaceDialog}
         />
