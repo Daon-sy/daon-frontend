@@ -27,7 +27,7 @@ const NotifyOnOffIconButton = ({
   return (
     <IconButton
       size="small"
-      sx={{ mr: 1, ...buttonProps }}
+      sx={{ mr: 1, color: notified ? "#fdd835" : undefined, ...buttonProps }}
       onClick={() => modifySettings({ notified: !mySettings?.notified })}
     >
       {notified ? (

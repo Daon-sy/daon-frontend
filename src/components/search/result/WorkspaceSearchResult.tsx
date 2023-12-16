@@ -49,7 +49,7 @@ const WorkspaceSearchResult: React.FC<Props> = ({ workspace }) => {
         children: (
           <ConfirmMovementComponent
             title="워크스페이스"
-            contents1={`[${title}] 워크스페이스  >`}
+            contents1={`[${title}] 워크스페이스`}
             contents2=""
           />
         ),

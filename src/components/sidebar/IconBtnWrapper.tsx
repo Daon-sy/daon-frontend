@@ -1,5 +1,5 @@
 import React from "react"
-import { Link as RouterLink, useParams } from "react-router-dom"
+import { Link as RouterLink, useLocation, useParams } from "react-router-dom"
 import { Box, Divider } from "@mui/material"
 import { Groups, AddCircle, Bookmark, EmojiEmotions } from "@mui/icons-material"
 import { faBullhorn, faComment } from "@fortawesome/free-solid-svg-icons"
@@ -24,6 +24,13 @@ const IconBtnWrapper: React.FC = () => {
   const openWorkspaceNoticeModal = () => {
     setWorkspaceNoticeModalOpen(true)
   }
+
+  const { state: locState } = useLocation()
+  React.useEffect(() => {
+    if (locState && locState.openMessage) {
+      setSendMessageModalOpen(true)
+    }
+  }, [locState])
 
   return (
     <Box sx={{ width: "100%", height: "40%" }}>

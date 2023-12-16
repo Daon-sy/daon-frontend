@@ -5,7 +5,7 @@ import ConfirmMovement from "./confirmImg/movement.png"
 interface Props {
   title: string
   contents1: string
-  contents2: string
+  contents2?: string
 }
 
 export const ConfirmMovementComponent = ({
@@ -47,7 +47,7 @@ export const ConfirmMovementComponent = ({
         sx={{
           width: "100%",
           height: "10%",
-          fontSize: "15px",
+          fontSize: "14px",
           fontWeight: "700",
           textAlign: "center",
           alignItems: "center",

@@ -6,7 +6,6 @@ import { TaskListApiParams } from "api/task"
 import TaskHeader from "components/task/TaskHeader"
 import TaskKanbansWrapper from "components/task/kanban/TaskKanbansWrapper"
 import TaskTableWrapper from "components/task/table/TaskTableWrapper"
-import TaskDetailModal from "components/task/modal/TaskDetailModal"
 import useEventSource from "hooks/sse/useEventSource"
 import useFetchTaskList from "hooks/task/useFetchTaskList"
 import Typography from "@mui/material/Typography"
@@ -23,8 +22,7 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
   const location = useLocation()
   const [viewType, setViewType] = React.useState<string>("kanban")
   const { workspace } = getWorkspaceStore()
-  const { taskDetailParam, setTaskDetailParam, clear } =
-    getTaskDetailViewStore()
+  const { taskDetailParam } = getTaskDetailViewStore()
   const { tasks, fetchTaskList } = useFetchTaskList(
     {
       workspaceId: workspace?.workspaceId || 0,
@@ -57,18 +55,6 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
   React.useEffect(() => {
     if (!taskDetailParam) fetchTaskList()
   }, [taskDetailParam])
-
-  const { state: locSate } = useLocation()
-  React.useEffect(() => {
-    if (locSate && locSate.openTaskId) {
-      setTaskDetailParam({
-        workspaceId: workspace?.workspaceId || 0,
-        projectId: Number(params?.projectId),
-        boardId: locSate.boardId,
-        taskId: locSate.openTaskId,
-      })
-    }
-  }, [locSate])
 
   const renderView = () => {
     switch (viewType) {
@@ -147,16 +133,6 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
           </Box>
         )}
       </Box>
-      {taskDetailParam ? (
-        <TaskDetailModal
-          workspaceId={taskDetailParam.workspaceId}
-          projectId={taskDetailParam.projectId}
-          boardId={taskDetailParam.boardId}
-          taskId={taskDetailParam.taskId}
-          open={!!taskDetailParam}
-          handleClose={clear}
-        />
-      ) : null}
     </Box>
   )
 }
