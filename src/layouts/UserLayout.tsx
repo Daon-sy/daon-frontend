@@ -12,6 +12,7 @@ const DefaultLayout = styled.div`
   width: 100%;
   height: 100vh;
   overflow: hidden;
+  background-color: #f6f7f9;
 `
 const Main = styled.div`
   background-color: #f6f7f9;

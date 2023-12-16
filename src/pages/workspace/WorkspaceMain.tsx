@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Stack } from "@mui/material"
+import { Box, Grid } from "@mui/material"
 import {
   faPeopleGroup,
   faBullhorn,
@@ -45,59 +45,61 @@ const WorkspaceMain: React.FC = () => {
           color: "#445a53",
           fontSize: "24px",
           fontWeight: 700,
+          mb: 2,
         }}
       >
         {workspace.title}에 오신 것을 환영합니다.
       </Box>
-      {workspace.division === "PERSONAL" ? null : (
-        <Stack mt={3} spacing={2} direction="row" height="30vh" width="100%">
-          <SectionTitleWrapper
-            width="80vw"
-            minWidth="928px"
-            color="#E25860"
-            icon={faBullhorn}
-            title="공지사항"
-          >
-            <WorkspaceNotice />
-          </SectionTitleWrapper>
-          <SectionTitleWrapper
-            width="20vw"
-            minWidth="243px"
-            color="#3A4CA8"
-            icon={faPeopleGroup}
-            title="구성원"
-          >
-            <WorkspaceParticipants />
-          </SectionTitleWrapper>
-        </Stack>
-      )}
+      <Grid container spacing={2}>
+        {workspace.division === "PERSONAL" ? null : (
+          <>
+            <Grid item xs={9.5}>
+              <SectionTitleWrapper
+                width="100%"
+                color="#E25860"
+                icon={faBullhorn}
+                title="공지사항"
+              >
+                <WorkspaceNotice />
+              </SectionTitleWrapper>
+            </Grid>
+            <Grid item xs={2.5}>
+              <SectionTitleWrapper
+                width="100%"
+                color="#3A4CA8"
+                icon={faPeopleGroup}
+                title="구성원"
+              >
+                <WorkspaceParticipants />
+              </SectionTitleWrapper>
+            </Grid>
+          </>
+        )}
 
-      <Stack
-        mt={2}
-        spacing={2}
-        direction="row"
-        height="calc(80vh - 240px)"
-        width="100%"
-      >
-        <SectionTitleWrapper
-          width="calc(80vw - 270px)"
-          minWidth="928px"
-          color="#B96BC6"
-          icon={faStopwatch}
-          title="타임라인"
-        >
-          <TaskTimelineView tasks={tasks} height="calc(68vh - 160px - 44px)" />
-        </SectionTitleWrapper>
-        <SectionTitleWrapper
-          width="calc(20vw - 67.2px)"
-          minWidth="243px"
-          color="#7DB249"
-          icon={faFileCircleExclamation}
-          title="할일 D-3"
-        >
-          <WorkspaceDeadlineTaskWrapper tasks={tasks} />
-        </SectionTitleWrapper>
-      </Stack>
+        <Grid item xs={9.5}>
+          <SectionTitleWrapper
+            width="100%"
+            color="#B96BC6"
+            icon={faStopwatch}
+            title="타임라인"
+          >
+            <TaskTimelineView
+              tasks={tasks}
+              height="calc(68vh - 160px - 44px)"
+            />
+          </SectionTitleWrapper>
+        </Grid>
+        <Grid item xs={2.5}>
+          <SectionTitleWrapper
+            width="100%"
+            color="#7DB249"
+            icon={faFileCircleExclamation}
+            title="할일 D-3"
+          >
+            <WorkspaceDeadlineTaskWrapper tasks={tasks} />
+          </SectionTitleWrapper>
+        </Grid>
+      </Grid>
     </Box>
   )
 }

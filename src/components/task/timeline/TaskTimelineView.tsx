@@ -1,13 +1,14 @@
 import React from "react"
 import { Box, Chip, Typography } from "@mui/material"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faFire } from "@fortawesome/free-solid-svg-icons"
+import { faFire, faStopwatch } from "@fortawesome/free-solid-svg-icons"
 import { getWorkspaceStore } from "store/userStore"
 import { getTaskDetailViewStore } from "store/taskStore"
 import { getTaskTimelineStore } from "store/taskTimelineStore"
 import TaskTimelineBar from "components/task/timeline/TaskTimelineBar"
 import { TaskSummary } from "_types/task"
 import { getDateCountArray } from "utils/DateUtils"
+import MainEmpty from "components/common/MainEmpty"
 
 interface TaskViewProps {
   tasks: TaskSummary[]
@@ -221,163 +222,188 @@ const TaskTimelineView = ({
         },
       }}
     >
-      {/* 할 일 목록 */}
-      <Box position="sticky" left={0} zIndex={5}>
+      {memoTasks.length === 0 ? (
         <Box
           sx={{
-            position: "absolute",
+            height: "100%",
+            width: "100%",
             display: "flex",
             flexDirection: "column",
-            borderRight: "1px solid #C8C8C8FF",
-            borderBottom: 1,
-            borderColor: "#C8C8C8FF",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <Box
-            sx={{
-              width: taskWidth,
-              top: 0,
-              position: "sticky",
-              color: "#F1F2F4FF",
-              backgroundColor: "#F1F2F4FF",
-              boxSizing: "border-box",
-              borderBottom: 1,
-              borderColor: "#C8C8C8FF",
-              borderTopLeftRadius: 1,
-              height: headerHeight,
-            }}
+          <MainEmpty
+            icon={faStopwatch}
+            content="타임라인에 할일이 없어요"
+            bgcolor="rgb(185,107,198,0.6)"
           />
-          {memoTasks.map((task, index) => (
-            <Box
-              key={task.taskId}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                width: taskWidth,
-                backgroundColor: index % 2 === 0 ? "#ffffff" : "#F7F8F9FF",
-                "&:hover": {
-                  cursor: "pointer",
-                  backgroundColor: "#dcdcdc",
-                },
-              }}
-              onClick={() =>
-                setTaskDetailParam({
-                  workspaceId: workspace?.workspaceId || 0,
-                  projectId: task.project.projectId,
-                  boardId: task.board?.boardId || 0,
-                  taskId: task.taskId,
-                })
-              }
-            >
-              {task.emergency ? (
-                <Typography ml={1}>
-                  <FontAwesomeIcon icon={faFire} color="red" />
-                </Typography>
-              ) : null}
-              <Chip
-                label={task.project.title}
-                color="secondary"
-                size="small"
-                sx={{
-                  ml: 1,
-                  fontSize: 12,
-                  borderRadius: 1.5,
-                  fontWeight: 900,
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  maxWidth: 80,
-                }}
-              />
-              <Typography
-                sx={{
-                  // 완료됨 표시. 다른 아이콘 넣으면 좋을 것 같음
-                  textDecoration:
-                    task.progressStatus === "COMPLETED"
-                      ? "line-through"
-                      : undefined,
-                  fontSize: 12,
-                  lineHeight: `${taskHeight}px`,
-                  paddingX: 0.5,
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  color: "deepGray.main",
-                  fontWeight: 600,
-                }}
-              >
-                {task.title}
-              </Typography>
-            </Box>
-          ))}
         </Box>
-      </Box>
-
-      {/* header */}
-      <Box
-        sx={{
-          position: "relative",
-          left: taskWidth,
-        }}
-      >
-        <Box position="absolute" height={taskHeight * (tasks.length + 1)}>
-          <Box sx={{ display: "flex" }} position="sticky" top={0} zIndex={2}>
-            {yearMonthDateCountList.map(ymdc => (
+      ) : (
+        <>
+          <Box position="sticky" left={0} zIndex={5}>
+            <Box
+              sx={{
+                position: "absolute",
+                display: "flex",
+                flexDirection: "column",
+                borderRight: "1px solid #C8C8C8FF",
+                borderBottom: 1,
+                borderColor: "#C8C8C8FF",
+              }}
+            >
               <Box
-                key={`${ymdc.year}-${ymdc.month}`}
                 sx={{
-                  width: dateWidth * ymdc.dateCount,
-                  height: headerHeight,
-                  display: "flex",
+                  width: taskWidth,
+                  top: 0,
+                  position: "sticky",
+                  color: "#F1F2F4FF",
                   backgroundColor: "#F1F2F4FF",
                   boxSizing: "border-box",
                   borderBottom: 1,
-                  borderRight: 1,
                   borderColor: "#C8C8C8FF",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: 12,
+                  borderTopLeftRadius: 1,
+                  height: headerHeight,
                 }}
-              >
-                {ymdc.year}년 {ymdc.month}월
-              </Box>
-            ))}
+              />
+              {memoTasks.map((task, index) => (
+                <Box
+                  key={task.taskId}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: taskWidth,
+                    backgroundColor: index % 2 === 0 ? "#ffffff" : "#F7F8F9FF",
+                    "&:hover": {
+                      cursor: "pointer",
+                      backgroundColor: "#dcdcdc",
+                    },
+                  }}
+                  onClick={() =>
+                    setTaskDetailParam({
+                      workspaceId: workspace?.workspaceId || 0,
+                      projectId: task.project.projectId,
+                      boardId: task.board?.boardId || 0,
+                      taskId: task.taskId,
+                    })
+                  }
+                >
+                  {task.emergency ? (
+                    <Typography ml={1}>
+                      <FontAwesomeIcon icon={faFire} color="red" />
+                    </Typography>
+                  ) : null}
+                  <Chip
+                    label={task.project.title}
+                    color="secondary"
+                    size="small"
+                    sx={{
+                      ml: 1,
+                      fontSize: 12,
+                      borderRadius: 1.5,
+                      fontWeight: 900,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      maxWidth: 80,
+                    }}
+                  />
+                  <Typography
+                    sx={{
+                      // 완료됨 표시. 다른 아이콘 넣으면 좋을 것 같음
+                      textDecoration:
+                        task.progressStatus === "COMPLETED"
+                          ? "line-through"
+                          : undefined,
+                      fontSize: 12,
+                      lineHeight: `${taskHeight}px`,
+                      paddingX: 0.5,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      color: "deepGray.main",
+                      fontWeight: 600,
+                    }}
+                  >
+                    {task.title}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
           </Box>
-        </Box>
-      </Box>
 
-      <Box
-        sx={{
-          position: "relative",
-          left: taskWidth,
-        }}
-      >
-        {/* 할 일 타임라인 */}
-        <Box
-          sx={{
-            position: "absolute",
-            borderBottom: 1,
-            borderColor: "#C8C8C8FF",
-            top: headerHeight,
-          }}
-        >
-          {memoTasks.map((task, index) => (
-            <TaskTimelineBar
-              key={task.taskId}
-              task={task}
-              baseYearMonth={{
-                year: yearMonthDateCountList[0].year,
-                month: yearMonthDateCountList[0].month,
+          {/* header */}
+          <Box
+            sx={{
+              position: "relative",
+              left: taskWidth,
+            }}
+          >
+            <Box position="absolute" height={taskHeight * (tasks.length + 1)}>
+              <Box
+                sx={{ display: "flex" }}
+                position="sticky"
+                top={0}
+                zIndex={2}
+              >
+                {yearMonthDateCountList.map(ymdc => (
+                  <Box
+                    key={`${ymdc.year}-${ymdc.month}`}
+                    sx={{
+                      width: dateWidth * ymdc.dateCount,
+                      height: headerHeight,
+                      display: "flex",
+                      backgroundColor: "#F1F2F4FF",
+                      boxSizing: "border-box",
+                      borderBottom: 1,
+                      borderRight: 1,
+                      borderColor: "#C8C8C8FF",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: 12,
+                    }}
+                  >
+                    {ymdc.year}년 {ymdc.month}월
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          </Box>
+
+          <Box
+            sx={{
+              position: "relative",
+              left: taskWidth,
+            }}
+          >
+            {/* 할 일 타임라인 */}
+            <Box
+              sx={{
+                position: "absolute",
+                borderBottom: 1,
+                borderColor: "#C8C8C8FF",
+                top: headerHeight,
               }}
-              totalWidth={totalWidth}
-              index={index}
-            />
-          ))}
-        </Box>
-        {/* 오늘 날짜 선 */}
-        {todayLine()}
-        {/* 월별 구분선 */}
-        {monthDivider()}
-      </Box>
+            >
+              {memoTasks.map((task, index) => (
+                <TaskTimelineBar
+                  key={task.taskId}
+                  task={task}
+                  baseYearMonth={{
+                    year: yearMonthDateCountList[0].year,
+                    month: yearMonthDateCountList[0].month,
+                  }}
+                  totalWidth={totalWidth}
+                  index={index}
+                />
+              ))}
+            </Box>
+            {/* 오늘 날짜 선 */}
+            {todayLine()}
+            {/* 월별 구분선 */}
+            {monthDivider()}
+          </Box>
+        </>
+      )}
     </Box>
   )
 }
