@@ -78,7 +78,6 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
         borderRadius: "4px",
         mb: "8px",
         background: "#f6f7f9",
-        // width: "495px",
         width: "100%",
       }}
       key={reply.replyId}

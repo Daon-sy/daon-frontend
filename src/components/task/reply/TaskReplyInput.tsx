@@ -30,9 +30,7 @@ const TaskReplyInput: React.FC<TaskReplyProps> = ({
 }: TaskReplyProps) => {
   const [data, onChange, resetData] = useInputs<TaskReply>(initialState)
   const { addSuccess, addError } = useAlert()
-  const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(
-    null,
-  )
+  const [isThrottling, setIsThrottling] = useState<boolean>(false)
 
   const createReply = () => {
     if (!workspaceId) return
@@ -52,15 +50,14 @@ const TaskReplyInput: React.FC<TaskReplyProps> = ({
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault()
 
-      if (typingTimeout) {
-        clearTimeout(typingTimeout)
-      }
+      if (!isThrottling) {
+        createReply()
+        setIsThrottling(true)
 
-      setTypingTimeout(
         setTimeout(() => {
-          createReply()
-        }, 200),
-      )
+          setIsThrottling(false)
+        }, 500)
+      }
     }
   }
   return (
@@ -79,8 +76,9 @@ const TaskReplyInput: React.FC<TaskReplyProps> = ({
           multiline
           maxRows={2}
           size="small"
-          placeholder="댓글 입력 후, 엔터키를 눌러주세요 😄
-          ◼ 줄바꿈은  shift+Enter를 입력해주세요"
+          placeholder={
+            "댓글 입력 후, 엔터키를 눌러주세요 😄\n◼ 줄바꿈은  shift+Enter를 입력해주세요"
+          }
           name="content"
           value={data.content}
           onChange={onChange}
