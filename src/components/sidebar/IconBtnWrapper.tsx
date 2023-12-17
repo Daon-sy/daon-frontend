@@ -138,10 +138,12 @@ const IconBtnWrapper: React.FC = () => {
           mt: 1,
         }}
       />
-      <ParticipantsModal
-        open={participantsModalOpen}
-        handleClose={() => setParticipantsModalOpen(false)}
-      />
+      {participantsModalOpen ? (
+        <ParticipantsModal
+          open={participantsModalOpen}
+          handleClose={() => setParticipantsModalOpen(false)}
+        />
+      ) : null}
       <WorkspaceNoticeModal
         open={workspaceNoticeModalOpen}
         handleClose={() => setWorkspaceNoticeModalOpen(false)}
