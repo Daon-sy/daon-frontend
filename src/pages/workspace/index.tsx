@@ -1,34 +1,28 @@
 import React from "react"
 import { Route, Routes, useParams } from "react-router-dom"
-import { getBackdropStore } from "store/backdropStore"
 import { getLastWorkspaceStore, getMyMemberDetailStore } from "store/userStore"
-import UserLayout from "layouts/UserLayout"
 import ProjectRoutes from "pages/workspace/project"
 import TaskRoutes from "pages/workspace/task"
 import WorkspaceMain from "pages/workspace/WorkspaceMain"
 import useFetchWorkspaceDetail from "hooks/workspace/useFetchWorkspaceDetail"
 import useFetchMyWorkspaceProfile from "hooks/workspace/useFetchMyWorkspaceProfile"
 import useFetchProjectList from "hooks/project/useFetchProjectList"
+import MemberSidebarLayout from "layouts/MemberSidebarLayout"
+import MemberDefaultHeaderLayout from "layouts/MemberDefaultHeaderLayout"
+import { Box, CircularProgress } from "@mui/material"
 
 const WorkspaceDetailRoutes = () => {
   const { workspaceId } = useParams()
-  const {
-    workspaceDetail,
-    fetchWorkspaceDetail,
-    isFetching: isWorkspaceDetailFetching,
-  } = useFetchWorkspaceDetail(Number(workspaceId), true)
-  const {
-    myWorkspaceProfile,
-    fetchMyWorkspaceProfile,
-    isFetching: isMyWorkspaceProfileFetching,
-  } = useFetchMyWorkspaceProfile(Number(workspaceId), true)
-  const {
-    projects,
-    fetchProjectList,
-    isFetching: isProjectListFetching,
-  } = useFetchProjectList(Number(workspaceId), true)
-  const { backdropOpen, handleBackdropOpen, handleBackdropClose } =
-    getBackdropStore()
+  const { workspaceDetail, fetchWorkspaceDetail } = useFetchWorkspaceDetail(
+    Number(workspaceId),
+    true,
+  )
+  const { myWorkspaceProfile, fetchMyWorkspaceProfile } =
+    useFetchMyWorkspaceProfile(Number(workspaceId), true)
+  const { projects, fetchProjectList } = useFetchProjectList(
+    Number(workspaceId),
+    true,
+  )
   const { myDetail } = getMyMemberDetailStore()
   const { setLastConnectedWs } = getLastWorkspaceStore()
 
@@ -45,38 +39,21 @@ const WorkspaceDetailRoutes = () => {
     fetchProjectList()
   }, [workspaceId])
 
-  React.useLayoutEffect(() => {
-    if (
-      isWorkspaceDetailFetching ||
-      isMyWorkspaceProfileFetching ||
-      isProjectListFetching
-    ) {
-      if (!backdropOpen) handleBackdropOpen()
-    } else if (backdropOpen) {
-      handleBackdropClose()
-    }
-  }, [
-    isWorkspaceDetailFetching,
-    isMyWorkspaceProfileFetching,
-    isProjectListFetching,
-  ])
-
-  return !(
-    isWorkspaceDetailFetching ||
-    isMyWorkspaceProfileFetching ||
-    isProjectListFetching
-  ) &&
-    workspaceDetail &&
-    myWorkspaceProfile &&
-    projects ? (
+  return workspaceDetail && myWorkspaceProfile && projects ? (
     <Routes>
-      <Route element={<UserLayout />}>
-        <Route index element={<WorkspaceMain />} />
-        <Route path="/project/*" element={<ProjectRoutes />} />
-        <Route path="/task/*" element={<TaskRoutes />} />
+      <Route element={<MemberDefaultHeaderLayout />}>
+        <Route element={<MemberSidebarLayout />}>
+          <Route index element={<WorkspaceMain />} />
+          <Route path="/project/*" element={<ProjectRoutes />} />
+          <Route path="/task/*" element={<TaskRoutes />} />
+        </Route>
       </Route>
     </Routes>
-  ) : null
+  ) : (
+    <Box width="100%" height="100%">
+      <CircularProgress color="primary" />
+    </Box>
+  )
 }
 
 const WorkspaceRoutes = () => {

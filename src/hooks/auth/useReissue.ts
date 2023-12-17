@@ -5,9 +5,10 @@ import { getTokenStore } from "store/tokenStore"
 
 const BEARER_TYPE = "Bearer "
 
-const useReissue = () => {
+const useReissue = (skip = false) => {
   const [error, setError] = React.useState<ErrorResponse>()
   const {
+    token,
     setToken,
     clear: clearToken,
     isFetchingReissue,
@@ -36,7 +37,12 @@ const useReissue = () => {
     }
   }
 
-  return { fetch, isFetchingReissue, error }
+  React.useEffect(() => {
+    if (skip) return
+    fetch()
+  }, [])
+
+  return { fetch, token, isFetchingReissue, error }
 }
 
 export default useReissue

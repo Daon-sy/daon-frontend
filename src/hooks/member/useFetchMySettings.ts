@@ -4,7 +4,7 @@ import { ErrorResponse } from "api"
 import { getMyMemberDetailStore } from "store/userStore"
 import { memberSettingsApi } from "api/member"
 
-const useFetchMySettings = () => {
+const useFetchMySettings = (skip = false) => {
   const { mySettings, setMySettings } = getMyMemberDetailStore()
   const [isFetching, setIsFetching] = React.useState(false)
   const [error, setError] = React.useState<ErrorResponse>()
@@ -23,6 +23,11 @@ const useFetchMySettings = () => {
       setIsFetching(false)
     }
   }
+
+  React.useLayoutEffect(() => {
+    if (skip) return
+    fetch()
+  }, [])
 
   return { mySettings, fetch, isFetching, error }
 }

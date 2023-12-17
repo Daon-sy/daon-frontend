@@ -34,7 +34,7 @@ const useFetchWorkspaceList = (skip = false) => {
     }
   }
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (skip) return
     fetchWorkspaceList()
   }, [])

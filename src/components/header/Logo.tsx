@@ -2,12 +2,16 @@ import React from "react"
 import { Link } from "react-router-dom"
 import { Box } from "@mui/material"
 import logo from "assets/img/logo.webp"
+import { getTokenStore } from "store/tokenStore"
+import { getWorkspaceStore } from "store/userStore"
 
 const Logo = () => {
+  const { token } = getTokenStore()
+  const { workspace } = getWorkspaceStore()
   return (
     <Box mr={2}>
       <Link
-        to="/"
+        to={!token ? "/" : `/workspace/${workspace?.workspaceId}`}
         style={{
           textDecoration: "none",
           color: "inherit",
