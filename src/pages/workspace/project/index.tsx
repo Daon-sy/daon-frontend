@@ -2,22 +2,27 @@ import React from "react"
 import { Route, Routes, useParams } from "react-router-dom"
 import { getProjectStore, getWorkspaceStore } from "store/userStore"
 import { projectDetailApi } from "api/project"
-import BoardRoutes from "pages/workspace/project/board"
-import TaskRoutes from "pages/workspace/project/task"
-import ProjectTaskView from "pages/workspace/project/task/ProjectTaskView"
+import ProjectTaskView from "pages/workspace/project/ProjectTaskView"
+import NotFound from "components/common/NotFound"
+import { Box } from "@mui/material"
 
 const ProjectDetailRoutes = () => {
   const { workspace } = getWorkspaceStore()
   const { setProject, clear: clearProjectStore } = getProjectStore()
   const { projectId } = useParams()
+  const [isProjectNotFound, setIsProjectNotFound] = React.useState(false)
 
   const fetchProjectDetail = async () => {
     if (workspace && projectId) {
-      const { data } = await projectDetailApi(
-        workspace.workspaceId,
-        Number(projectId),
-      )
-      setProject(data)
+      try {
+        const { data } = await projectDetailApi(
+          workspace.workspaceId,
+          Number(projectId),
+        )
+        setProject(data)
+      } catch (e) {
+        setIsProjectNotFound(true)
+      }
     }
   }
 
@@ -29,11 +34,17 @@ const ProjectDetailRoutes = () => {
     return () => clearProjectStore()
   }, [])
 
+  if (isProjectNotFound)
+    return (
+      <Box height="100%">
+        <NotFound content="존재하지 않는 프로젝트입니다" />
+      </Box>
+    )
+
   return (
     <Routes>
       <Route index element={<ProjectTaskView />} />
-      <Route path="/board/*" element={<BoardRoutes />} />
-      <Route path="/task/*" element={<TaskRoutes />} />
+      <Route path="/*" element={<NotFound />} />
     </Routes>
   )
 }
@@ -42,6 +53,7 @@ const ProjectRoutes = () => {
   return (
     <Routes>
       <Route path="/:projectId/*" element={<ProjectDetailRoutes />} />
+      <Route path="/*" element={<NotFound />} />
     </Routes>
   )
 }
