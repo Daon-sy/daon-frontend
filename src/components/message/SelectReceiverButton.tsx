@@ -104,25 +104,6 @@ const SelectReceiverButton = ({
         onClick={handleClick}
       >
         {selectedReceiver ? (
-          //     <Box sx={{ display: "flex", alignItems: "center" }}>
-          //       <ColorAvatar
-          //         sx={{ width: 27, height: 27 }}
-          //         src={selectedReceiver?.imageUrl}
-          //         id={selectedReceiver?.workspaceParticipantId}
-          //       />
-          //       <Typography
-          //         overflow="hidden"
-          //         whiteSpace="nowrap"
-          //         textOverflow="ellipsis"
-          //         sx={{ ml: 0.5 }}
-          //       >
-          //         {selectedReceiver?.name}
-          //       </Typography>
-          //     </Box>
-          //   ) : null}
-          // </Button>
-          // <Menu
-          //   sx={{ width: 333.56, height: 400 }}
           <Tooltip title={selectedReceiver.name} disableInteractive>
             <Box sx={{ width: "100%", display: "flex", alignItems: "center" }}>
               <ColorAvatar
