@@ -91,7 +91,6 @@ const WorkspaceList: React.FC = () => {
                   left: 0,
                 }}
               />
-              {/* 나머지 카드 내용 */}
               <CardContent
                 sx={{
                   display: "flex",
@@ -118,7 +117,7 @@ const WorkspaceList: React.FC = () => {
                   sx={{
                     width: "100%",
                     display: "inline-block",
-                    maxHeight: "calc(30vh - 128px)",
+                    height: "calc(30vh - 128px)",
                     overflowY: "hidden",
                     textOverflow: "ellipsis",
                     whiteSpace: "normal",
