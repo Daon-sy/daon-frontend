@@ -99,7 +99,7 @@ const ReadMessageSection = ({
         <Typography
           sx={{
             m: 1,
-            fontSize: 14,
+            fontSize: 13.7,
             wordWrap: "break-word",
             overflowWrap: "break-word",
           }}
