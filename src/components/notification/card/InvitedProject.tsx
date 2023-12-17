@@ -1,9 +1,12 @@
 import React from "react"
-import { useNavigate } from "react-router-dom"
-import { Box, Chip, Typography } from "@mui/material"
+import { matchPath, useLocation, useNavigate } from "react-router-dom"
+import { Box, Chip } from "@mui/material"
 import { InviteProjectNotification, Notification } from "_types/notification"
 import NotificationCard from "components/notification/card/NotificationCard"
 import { useConfirmDialog } from "components/common/ConfirmDialog"
+import ConfirmMovementComponent from "components/common/confirm/ConfirmMovement"
+import { useAlert } from "hooks/useAlert"
+import useReadNotification from "hooks/notification/useReadNotification"
 
 interface Props {
   notification: Notification<InviteProjectNotification & { time: string }>
@@ -15,8 +18,18 @@ const InvitedProject: React.FC<Props> = ({ notification, removeCallback }) => {
   const { workspace, project, time } = data
 
   const { ConfirmDialog, open: openConfirmDialog } = useConfirmDialog()
+  const { addInfo } = useAlert()
+  const location = useLocation()
+  const isProjectDetailPath = () =>
+    matchPath("/workspace/:workspaceId/project/:projectId", location.pathname)
   const navigate = useNavigate()
+  const { fetch: read } = useReadNotification()
   const handleConfirmClick = () => {
+    if (!notification.read) read(notificationId)
+    if (isProjectDetailPath()) {
+      addInfo("현재 해당 프로젝트입니다")
+      return
+    }
     navigate(`/workspace/${workspace.workspaceId}/project/${project.projectId}`)
   }
 
@@ -57,7 +70,11 @@ const InvitedProject: React.FC<Props> = ({ notification, removeCallback }) => {
         </Box>
       </NotificationCard>
       <ConfirmDialog handleConfirm={handleConfirmClick} maxWidth="xs">
-        <Typography>{`${workspace.workspaceTitle} 워크스페이스의 ${project.projectTitle} 프로젝트로 이동하시겠습니까?`}</Typography>
+        <ConfirmMovementComponent
+          title="프로젝트"
+          contents1={`[${workspace.workspaceTitle}] 워크스페이스  >`}
+          contents2={`[${project.projectTitle}] 프로젝트`}
+        />
       </ConfirmDialog>
     </>
   )

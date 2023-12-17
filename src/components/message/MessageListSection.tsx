@@ -25,6 +25,7 @@ import { ConfirmDialog } from "components/common/ConfirmDialog"
 import { useAlert } from "hooks/useAlert"
 import NoData from "components/common/NoData"
 import MessageCard from "./MessageCard"
+import { ConfirmAllMessageComponent } from "../common/confirm/ConfirmAllMessage"
 
 interface MessageListSectionProps {
   workspace: Workspace | null | undefined
@@ -179,7 +180,7 @@ const MessageListSection = ({
             handleClose={() => setReadAllMessagesModalOpen(false)}
             handleConfirm={readAllMessages}
           >
-            <Typography>모든 쪽지를 읽음 처리하시겠습니까?</Typography>
+            <ConfirmAllMessageComponent />
           </ConfirmDialog>
           <Button
             disableElevation

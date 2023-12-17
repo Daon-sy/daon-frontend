@@ -7,7 +7,7 @@ import useCheckUsername from "hooks/member/useCheckUsername"
 import { useAlert } from "hooks/useAlert"
 
 const validatePassword = (password: string) => {
-  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,20}$/
+  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,30}$/
   return passwordRegex.test(password)
 }
 
@@ -33,6 +33,7 @@ const useSignUp = () => {
     emailCodeSent: false,
     emailCodeChecked: "NOT_CHECKED",
   })
+
   const { addSuccess, addError } = useAlert()
 
   const {
@@ -69,6 +70,7 @@ const useSignUp = () => {
     setCodeSent,
     setChecked,
     errorMessage: emailCheckErrorMessage,
+    isSendEmailCodeFetching,
   } = useEmailCheck(email, emailCheckCode)
 
   React.useEffect(() => {
@@ -116,6 +118,11 @@ const useSignUp = () => {
       return
     }
 
+    if (name.length > 20) {
+      addError("이름은 20글자 이내로 작성해주세요")
+      return
+    }
+
     if (emailCodeChecked !== "VALID") {
       addError("이메일을 인증해주세요")
       return
@@ -148,6 +155,7 @@ const useSignUp = () => {
     emailCheckErrorMessage,
     checkUsername,
     checkUsernameErrorMessage,
+    isSendEmailCodeFetching,
   }
 }
 

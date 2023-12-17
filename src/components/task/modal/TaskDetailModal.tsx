@@ -7,15 +7,15 @@ import {
   Stack,
   Tooltip,
   Typography,
-  Menu,
   Box,
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Tabs,
+  Tab,
 } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
 import DeleteIcon from "@mui/icons-material/Delete"
-import HistoryIcon from "@mui/icons-material/History"
 import CalendarDateField from "components/common/CalendarDateField"
 import ConfirmDialog from "components/common/ConfirmDialog"
 import BoardSelectButton from "components/task/BoardSelectButton"
@@ -33,12 +33,15 @@ import TaskBookmarkButton from "components/task/TaskBookmarkButton"
 import EditableTextBox from "components/common/EditableTextBox"
 import TitleDialog from "components/common/TitleDialog"
 import ColorAvatar from "components/common/ColorAvatar"
+import NoData from "components/common/NoData"
 import TaskReply from "../reply/TaskReply"
 import ProgressRadioButton from "../ProgressRadioButton"
+import { ConfirmDeleteComponent } from "../../common/confirm/ConfirmDelete"
 
 interface Props {
   workspaceId: number
   projectId: number
+  boardId: number
   taskId: number
   open: boolean
   handleClose: () => void
@@ -47,6 +50,7 @@ interface Props {
 const TaskDetailModal: React.FC<Props> = ({
   workspaceId,
   projectId,
+  boardId,
   taskId,
   open,
   handleClose,
@@ -59,16 +63,26 @@ const TaskDetailModal: React.FC<Props> = ({
   const taskFullPath = {
     workspaceId,
     projectId,
+    boardId,
     taskId,
   }
 
-  const { taskDetail, fetchTaskDetail } = useFetchTaskDetail(taskFullPath)
+  const {
+    taskDetail,
+    fetchTaskDetail,
+    error: fetchTaskDetailError,
+  } = useFetchTaskDetail(taskFullPath)
   const { taskHistories, fetchHistories, fetchTopHistory, isLast } =
     useFetchTaskHistory(taskFullPath)
   const { fetch: modifyTask } = useModifyTask(taskFullPath)
   const { bookmarked: handleBookmarkResponse, handleBookmark } =
     useHandleBookmark(taskFullPath)
   const [bookmarked, setBookmarked] = React.useState(false)
+  const [tab, setTab] = React.useState("댓글")
+
+  const handleChange = (event: React.SyntheticEvent, newTab: string) => {
+    setTab(newTab)
+  }
   React.useEffect(() => {
     setBookmarked(taskDetail?.bookmark || false)
   }, [taskDetail])
@@ -87,19 +101,54 @@ const TaskDetailModal: React.FC<Props> = ({
     },
   })
 
-  // 히스토리
-  const [historyAnchorEl, setHistoryAnchorEl] =
-    React.useState<null | HTMLElement>(null)
+  // error-handling
+  const [noData, setNoData] = React.useState(false)
+  React.useEffect(() => {
+    if (fetchTaskDetailError) {
+      const { errorCode } = fetchTaskDetailError
+      if (errorCode === 5000) {
+        addError("존재하지 않는 할 일 입니다")
+        setNoData(true)
+      }
+    }
+  }, [fetchTaskDetailError])
 
-  const handleOpenHistory = (event: React.MouseEvent<HTMLElement>) => {
-    setHistoryAnchorEl(event.currentTarget)
-  }
-  const handleCloseHistory = () => {
-    setHistoryAnchorEl(null)
-  }
-
-  const openhistory = Boolean(historyAnchorEl)
-  const id = openhistory ? "history" : undefined
+  if (noData)
+    return (
+      <TitleDialog
+        disableCloseButton
+        open={open}
+        handleClose={handleClose}
+        maxWidth={1200}
+        minWidth={1200}
+        height={600}
+      >
+        <Box
+          width="100%"
+          display="flex"
+          alignItems="center"
+          justifyContent="end"
+        >
+          <Tooltip title="닫기" arrow>
+            <IconButton
+              onClick={handleClose}
+              sx={{
+                color: theme => theme.palette.grey[500],
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
+        <Box display="flex" height="80%" justifyContent="center">
+          <NoData
+            content="존재하지 않는 할 일 입니다"
+            width={200}
+            height={100}
+          />
+        </Box>
+      </TitleDialog>
+    )
 
   return (
     <TitleDialog
@@ -112,98 +161,12 @@ const TaskDetailModal: React.FC<Props> = ({
     >
       <Box>
         {/* 위에 더보기, x */}
-        <Box display="flex" alignItems="center" justifyContent="end">
-          <Box>
-            <Tooltip title="히스토리" arrow placement="top">
-              <IconButton aria-describedby={id} onClick={handleOpenHistory}>
-                <HistoryIcon />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              id={id}
-              open={openhistory}
-              anchorEl={historyAnchorEl}
-              onClose={handleCloseHistory}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              elevation={0}
-              sx={{
-                ".MuiList-root": { p: 0 },
-              }}
-            >
-              <Box
-                sx={{
-                  borderRadius: 1,
-                  border: 1,
-                  p: 1,
-                  height: "200px",
-                  cursor: "default",
-                  scrollbarWidth: "0.5em",
-                  WebkitScrollSnapType: "none",
-                  overflowX: "hidden",
-                  overflowY: "scroll",
-                  boxShadow: "2px 2px 6px rgba(0,0,0,0.3)",
-                  "&::-webkit-scrollbar": {
-                    width: "8px",
-                  },
-                  "&::-webkit-scrollbar-thumb": {
-                    backgroundColor: "#495e57",
-                    borderRadius: "15px",
-                  },
-                  "&::-webkit-scrollbar-button": {
-                    height: "16px",
-                  },
-                }}
-              >
-                {/* 히스토리 */}
-                <Box sx={{ width: "450px" }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontWeight: "bold",
-                        color: "#1f4838",
-                        fontSize: "20px",
-                      }}
-                    >
-                      히스토리
-                    </Typography>
-                    <IconButton
-                      onClick={handleCloseHistory}
-                      sx={{
-                        color: theme => theme.palette.grey[500],
-                      }}
-                    >
-                      <CloseIcon />
-                    </IconButton>
-                  </Box>
-                  <TaskHistoriesWrapper taskHistories={taskHistories} />
-                  {isLast ? null : (
-                    <Button
-                      fullWidth
-                      onClick={async () => {
-                        await fetchHistories()
-                      }}
-                    >
-                      더보기
-                    </Button>
-                  )}
-                </Box>
-              </Box>
-            </Menu>
-          </Box>
-
+        <Box
+          width="100%"
+          display="flex"
+          alignItems="center"
+          justifyContent="end"
+        >
           {/* 삭제 */}
           <Box>
             <Tooltip title="삭제" arrow>
@@ -233,49 +196,52 @@ const TaskDetailModal: React.FC<Props> = ({
         </Box>
 
         {taskDetail ? (
-          <Stack p={1} direction="row" spacing={5} height="100%">
+          <Stack p={1} direction="row" spacing={5} height="100%" width="100%">
             {/* left */}
             <Box
               id="left-container"
+              width={600}
               sx={{
-                width: "100%",
+                boxSizing: "border-box",
+                // width: "100%",
                 height: "100%",
               }}
             >
               <Box>
                 <Box
                   sx={{
+                    width: "100%",
                     display: "flex",
-                    paddingLeft: 1,
+                    alignItems: "center",
                   }}
                 >
-                  <BoardSelectButton
-                    projectId={projectId}
-                    currentBoard={taskDetail.board}
-                    handleBoardSelect={item => {
-                      modifyTask({
-                        ...taskDetail,
-                        board: item
-                          ? {
-                              boardId: item.boardId,
-                              title: item.title,
-                            }
-                          : undefined,
-                      })
-                    }}
-                  />
+                  <Box width={390}>
+                    <BoardSelectButton
+                      projectId={projectId}
+                      currentBoard={taskDetail.board}
+                      handleBoardSelect={item => {
+                        modifyTask({
+                          ...taskDetail,
+                          board: item
+                            ? {
+                                boardId: item.boardId,
+                                title: item.title,
+                              }
+                            : undefined,
+                        })
+                      }}
+                    />
+                  </Box>
                   <Box
-                    sx={{
-                      ml: 3,
-                      padding: 0.5,
-                      display: "flex",
-                      alignItems: "center",
-                    }}
+                    display="flex"
+                    flexGrow={1}
+                    alignItems="center"
+                    justifyContent="end"
                   >
                     <Tooltip title="긴급 설정" arrow>
                       <Chip
                         label="긴급"
-                        size="small"
+                        size="medium"
                         color={taskDetail.emergency ? "error" : "default"}
                         onClick={() => {
                           modifyTask({
@@ -283,21 +249,17 @@ const TaskDetailModal: React.FC<Props> = ({
                             emergency: !taskDetail?.emergency,
                           })
                         }}
-                        sx={{ borderRadius: 1, mt: 0.4 }}
+                        sx={{ borderRadius: 1, margin: 0, border: 0 }}
                       />
                     </Tooltip>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      marginLeft: 1,
-                    }}
-                  >
-                    <TaskBookmarkButton
-                      bookmarked={bookmarked}
-                      handleClick={handleBookmark}
-                    />
+                    <Box ml={1 / 2}>
+                      <TaskBookmarkButton
+                        padding={0}
+                        fontSize="2.5rem"
+                        bookmarked={bookmarked}
+                        handleClick={handleBookmark}
+                      />
+                    </Box>
                   </Box>
                 </Box>
 
@@ -444,11 +406,14 @@ const TaskDetailModal: React.FC<Props> = ({
               </Box>
             </Box>
             <Divider orientation="vertical" flexItem color="#e0e0e0" />
+
             {/* right */}
             <Box
               id="right-container"
+              boxSizing="border-box"
+              width={600}
               sx={{
-                width: "100%",
+                overflowX: "hidden",
                 height: "100%",
               }}
             >
@@ -474,9 +439,10 @@ const TaskDetailModal: React.FC<Props> = ({
                     fontWeight: 700,
                     color: "#1f4838",
                     fontSize: "18px",
+                    width: 490,
                   }}
                 >
-                  <Box sx={{ width: "100%" }}>
+                  <Box sx={{ width: 220 }}>
                     <Box sx={{ mb: 1 }}>시작일</Box>
                     <CalendarDateField
                       date={taskDetail.startDate}
@@ -492,14 +458,14 @@ const TaskDetailModal: React.FC<Props> = ({
                     sx={{
                       lineHeight: "102px",
                       marginX: 3,
-                      fontSize: "32px",
+                      fontSize: "28px",
                       color: "#929292",
                       fontWeight: "bold",
                     }}
                   >
                     ~
                   </Box>
-                  <Box sx={{ width: "100%" }}>
+                  <Box sx={{ width: 220 }}>
                     <Box sx={{ mb: 1 }}>마감일</Box>
                     <CalendarDateField
                       date={taskDetail.endDate}
@@ -513,19 +479,54 @@ const TaskDetailModal: React.FC<Props> = ({
                   </Box>
                 </Box>
 
-                {/* 댓글 */}
-                <Box>
-                  <Box
-                    sx={{
-                      pb: 2,
-                      fontWeight: "bold",
-                      color: "#1f4838",
-                      fontSize: "18px",
-                    }}
+                {/* true :댓글, flase :히스토리 */}
+                <Box minHeight="313px" width={490}>
+                  <Tabs
+                    value={tab}
+                    onChange={handleChange}
+                    textColor="primary"
+                    indicatorColor="primary"
+                    aria-label="댓글, 히스토리 탭"
+                    sx={{ mb: 1 }}
                   >
-                    댓글
-                  </Box>
-                  <TaskReply projectId={projectId} taskId={taskId} />
+                    <Tab
+                      value="댓글"
+                      label="댓글"
+                      sx={{
+                        fontWeight: "bold",
+                        fontSize: "12px",
+                      }}
+                    />
+                    <Tab
+                      value="히스토리"
+                      label="히스토리"
+                      sx={{ fontWeight: "bold", fontSize: "12px" }}
+                    />
+                  </Tabs>
+
+                  {tab === "댓글" ? (
+                    <Box>
+                      <TaskReply
+                        projectId={projectId}
+                        boardId={boardId}
+                        taskId={taskId}
+                      />
+                    </Box>
+                  ) : (
+                    <Box>
+                      <TaskHistoriesWrapper taskHistories={taskHistories} />
+                      {isLast ? null : (
+                        <Button
+                          fullWidth
+                          onClick={async () => {
+                            await fetchHistories()
+                          }}
+                        >
+                          더보기
+                        </Button>
+                      )}
+                    </Box>
+                  )}
                 </Box>
               </Box>
             </Box>
@@ -561,8 +562,10 @@ const TaskDetailModal: React.FC<Props> = ({
               setTaskRemoveModalOpen(false)
             }}
           >
-            {}
-            지우시겠습니까?
+            <ConfirmDeleteComponent
+              title="해당 할일을 삭제하시겠습니까"
+              contents="한번 삭제된 할일은 복구가 불가능합니다"
+            />
           </ConfirmDialog>
         ) : null}
       </Box>

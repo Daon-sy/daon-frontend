@@ -1,17 +1,19 @@
 import React from "react"
-import { Box } from "@mui/material"
+import { Box, Button } from "@mui/material"
 import { getWorkspaceStore } from "store/userStore"
 import { getTaskDetailViewStore } from "store/taskStore"
 import { TaskListApiParams } from "api/task"
 import TaskHeader from "components/task/TaskHeader"
 import TaskKanbansWrapper from "components/task/kanban/TaskKanbansWrapper"
 import TaskTableWrapper from "components/task/table/TaskTableWrapper"
-import TaskDetailModal from "components/task/modal/TaskDetailModal"
 import useEventSource from "hooks/sse/useEventSource"
 import useFetchTaskList from "hooks/task/useFetchTaskList"
 import Typography from "@mui/material/Typography"
 import IconBreadcrumbs from "components/common/IconBreadcrumbs"
-import { useLocation } from "react-router-dom"
+import { matchPath, useLocation } from "react-router-dom"
+import { useCreateTaskModal } from "components/task/CreateTask"
+import NoData from "components/common/NoData"
+import { AddCircle } from "@mui/icons-material"
 
 interface TaskViewProps {
   params?: TaskListApiParams
@@ -19,10 +21,11 @@ interface TaskViewProps {
 }
 
 const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
+  const location = useLocation()
   const [viewType, setViewType] = React.useState<string>("kanban")
   const { workspace } = getWorkspaceStore()
-  const { taskDetailParam, setTaskDetailParam, clear } =
-    getTaskDetailViewStore()
+  const { taskDetailParam } = getTaskDetailViewStore()
+  const { CreateTaskModal, open: openCreateTaskModal } = useCreateTaskModal()
   const { tasks, fetchTaskList } = useFetchTaskList(
     {
       workspaceId: workspace?.workspaceId || 0,
@@ -30,6 +33,16 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
     },
     true,
   )
+
+  const isBookmarkTasksLocation = () =>
+    matchPath("/workspace/:workspaceId/task/bookmark", location.pathname)
+  const isWsMyTasksLocation = () =>
+    matchPath("/workspace/:workspaceId/task/my", location.pathname)
+  const getEmptySetContent = () => {
+    if (isBookmarkTasksLocation()) return "북마크한 할 일이 없습니다"
+    if (isWsMyTasksLocation()) return "담당한 할 일이 없습니다"
+    return "프로젝트에 생성된 할 일이 없습니다"
+  }
 
   useEventSource({
     ssePath: `/api/subscribe/workspaces/${workspace?.workspaceId}/type?${
@@ -45,17 +58,6 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
   React.useEffect(() => {
     if (!taskDetailParam) fetchTaskList()
   }, [taskDetailParam])
-
-  const { state: locSate } = useLocation()
-  React.useEffect(() => {
-    if (locSate && locSate.openTaskId) {
-      setTaskDetailParam({
-        workspaceId: workspace?.workspaceId || 0,
-        projectId: Number(params?.projectId),
-        taskId: locSate.openTaskId,
-      })
-    }
-  }, [locSate])
 
   const renderView = () => {
     switch (viewType) {
@@ -84,17 +86,44 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
     <Box height="100%">
       <IconBreadcrumbs />
       {title ? (
-        <Typography mt={1} variant="h2" sx={{ fontSize: 24, fontWeight: 900 }}>
-          {title}
-        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography
+            mt={1}
+            variant="h2"
+            sx={{ fontSize: 24, fontWeight: 900 }}
+          >
+            {title}
+          </Typography>
+          <Button
+            color="yellow"
+            size="medium"
+            variant="contained"
+            onClick={openCreateTaskModal}
+            sx={{
+              borderRadius: 50,
+              position: "absolute",
+              bottom: 42,
+              right: 42,
+              zIndex: 100,
+              display: "flex",
+              alignItems: "center",
+              fontSize: "16px",
+              lineHeight: "32px",
+            }}
+          >
+            <AddCircle sx={{ mr: 1 }} />할 일 추가
+          </Button>
+        </Box>
       ) : null}
-      <Box mt={2}>
-        <TaskHeader
-          viewType={viewType}
-          setViewType={setViewType}
-          taskListApiParams={params}
-        />
-      </Box>
+      {tasks.length > 0 ? (
+        <Box mt={2}>
+          <TaskHeader
+            viewType={viewType}
+            setViewType={setViewType}
+            taskListApiParams={params}
+          />
+        </Box>
+      ) : null}
       <Box
         mt={2}
         mb={2}
@@ -119,17 +148,20 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
           },
         }}
       >
-        {renderView()}
+        {tasks.length > 0 ? (
+          renderView()
+        ) : (
+          <Box height="100%" alignItems="center">
+            <NoData
+              content={getEmptySetContent()}
+              width={200}
+              height={100}
+              sx={{ height: "80%" }}
+            />
+          </Box>
+        )}
       </Box>
-      {taskDetailParam ? (
-        <TaskDetailModal
-          workspaceId={taskDetailParam.workspaceId}
-          projectId={taskDetailParam.projectId}
-          taskId={taskDetailParam.taskId}
-          open={!!taskDetailParam}
-          handleClose={clear}
-        />
-      ) : null}
+      <CreateTaskModal />
     </Box>
   )
 }

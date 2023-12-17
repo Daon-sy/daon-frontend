@@ -1,9 +1,9 @@
 import React from "react"
 import { useParams } from "react-router-dom"
-import { Box, TextField, InputAdornment } from "@mui/material"
+import { Box, TextField, InputAdornment, Typography } from "@mui/material"
 import SettingsIcon from "@mui/icons-material/Settings"
 import SearchIcon from "@mui/icons-material/Search"
-import { getProjectsStore } from "store/userStore"
+import { getProjectsStore, getWorkspaceStore } from "store/userStore"
 import Menu from "components/common/Menu"
 import CreateBtn from "components/common/CreateBtn"
 import { useTitleDialog } from "components/common/TitleDialog"
@@ -14,6 +14,7 @@ import ProjectSettingsModal from "components/project/modal/ProjectSettingsModal"
 
 const SidebarMenu: React.FC = () => {
   const { workspaceId } = useParams()
+  const { myProfile } = getWorkspaceStore()
   const { projects } = getProjectsStore()
   const [projectManageModalOpenMap, setProjectManageModalOpenMap] =
     React.useState<Record<number, boolean>>({})
@@ -38,10 +39,54 @@ const SidebarMenu: React.FC = () => {
     projectId: project.projectId,
   }))
 
+  const renderProjects = () => {
+    if (myProjects.length > 0) {
+      const filteredProjects = myProjects.filter(project =>
+        project.listValue
+          .toUpperCase()
+          .includes(projectFilterKeyword.toUpperCase()),
+      )
+
+      return filteredProjects.length > 0 ? (
+        filteredProjects.map(list => (
+          <Box key={list.projectId}>
+            <MenuItems to={list.link} listValue={list.listValue}>
+              <SubIconBtn
+                aria-label="설정버튼"
+                color="darkgreen"
+                onClick={e => openProjectManageModal(list.projectId, e)}
+                icon={<SettingsIcon />}
+              />
+            </MenuItems>
+            <ProjectSettingsModal
+              projectId={list.projectId}
+              open={projectManageModalOpenMap[list.projectId] || false}
+              handleClose={() =>
+                setProjectManageModalOpenMap(prev => ({
+                  ...prev,
+                  [list.projectId]: false,
+                }))
+              }
+            />
+          </Box>
+        ))
+      ) : (
+        <Typography mt={1} textAlign="center" fontSize={14} fontWeight={400}>
+          검색 결과가 없습니다.
+        </Typography>
+      )
+    }
+    return (
+      <Typography mt={1} textAlign="center" fontSize={14} fontWeight={400}>
+        참여중인 프로젝트가 없습니다.
+      </Typography>
+    )
+  }
+
   return (
     <Box
       sx={{
-        height: "calc(100vh - 195px)",
+        height: "calc(100vh - 320px)",
         display: "flex",
         flexDirection: "column",
         boxSizing: "border-box",
@@ -49,7 +94,11 @@ const SidebarMenu: React.FC = () => {
     >
       <Menu
         title="참여 중인 프로젝트"
-        btn={<CreateBtn handleClick={openCreateProjectDialog} />}
+        btn={
+          myProfile?.role === "BASIC_PARTICIPANT" ? null : (
+            <CreateBtn handleClick={openCreateProjectDialog} />
+          )
+        }
       >
         <Box width="88%" mb={1}>
           <TextField
@@ -78,7 +127,7 @@ const SidebarMenu: React.FC = () => {
         </Box>
         <Box
           sx={{
-            height: "calc(100vh - 365px)",
+            height: "calc(100vh - 416px)",
             msOverflowStyle: "none",
             scrollbarWidth: "none",
             WebkitScrollSnapType: "none",
@@ -91,33 +140,7 @@ const SidebarMenu: React.FC = () => {
             },
           }}
         >
-          {myProjects
-            .filter(project =>
-              project.listValue
-                .toUpperCase()
-                .includes(projectFilterKeyword.toUpperCase()),
-            )
-            .map(list => (
-              <Box key={list.projectId}>
-                <MenuItems to={list.link} listValue={list.listValue}>
-                  <SubIconBtn
-                    color="darkgreen"
-                    onClick={e => openProjectManageModal(list.projectId, e)}
-                    icon={<SettingsIcon />}
-                  />
-                </MenuItems>
-                <ProjectSettingsModal
-                  projectId={list.projectId}
-                  open={projectManageModalOpenMap[list.projectId] || false}
-                  handleClose={() =>
-                    setProjectManageModalOpenMap(prev => ({
-                      ...prev,
-                      [list.projectId]: false,
-                    }))
-                  }
-                />
-              </Box>
-            ))}
+          {renderProjects()}
         </Box>
       </Menu>
       <TitleDialog title="프로젝트 생성" maxWidth="sm">

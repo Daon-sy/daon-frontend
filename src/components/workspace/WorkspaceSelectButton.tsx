@@ -55,7 +55,7 @@ const WorkspaceSelectButton = () => {
           <Button
             color="primary"
             onClick={handleOpenMenu}
-            sx={{ my: 2, display: "block" }}
+            sx={{ my: 2, display: "block", minWidth: 250 }}
           >
             <Box display="flex" alignItems="center">
               {workspace ? (
@@ -73,7 +73,6 @@ const WorkspaceSelectButton = () => {
                     sx={{
                       fontSize: 16,
                       fontWeight: 500,
-                      maxWidth: 200,
                       overflow: "hidden",
                       textOverflow: "ellipsis",
                       whiteSpace: "nowrap",
@@ -106,7 +105,7 @@ const WorkspaceSelectButton = () => {
           slotProps={{
             paper: {
               sx: {
-                width: 230,
+                width: 250,
                 maxHeight: 400,
                 p: 0,
                 "& .MuiList-root": { p: 0 },
@@ -179,12 +178,17 @@ const WorkspaceSelectButton = () => {
               )
               .map(ws => (
                 <Link
+                  key={ws.workspaceId}
                   to={`/workspace/${ws.workspaceId}`}
                   style={{ textDecoration: "none", color: "inherit" }}
                 >
                   <Tooltip
                     arrow
-                    title={ws.description ? ws.description : "설명 없음"}
+                    title={
+                      <Typography whiteSpace="pre-wrap" fontSize={10}>
+                        {ws.description ? ws.description : "설명 없음"}
+                      </Typography>
+                    }
                   >
                     <MenuItem
                       key={ws.workspaceId}

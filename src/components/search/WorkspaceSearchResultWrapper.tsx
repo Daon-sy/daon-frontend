@@ -29,7 +29,7 @@ const WorkspaceSearchResultWrapper: React.FC<Props> = ({
           <WorkspaceSearchResult workspace={workspaceResult} />
         ))}
       </Box>
-      <Box display="flex" justifyContent="center">
+      <Box display="flex" justifyContent="center" mt={1 / 4}>
         <Pagination
           count={pageInfo?.totalPage || 1}
           size="small"

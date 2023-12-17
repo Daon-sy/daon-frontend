@@ -92,23 +92,57 @@ export const getMyWorkspaceIdStore = create<MyWorkspaceId>(set => ({
 }))
 
 interface WorkspaceNoticesStore {
+  first: boolean
+  last: boolean
+  pageSize: number
+  pageNumber: number
+  contentSize: number
   workspaceNotices: WorkspaceNoticeDetail[]
+  totalPage: number
   totalCount: number
   clear: () => void
   setWorkspaceNotices: (
+    first: boolean,
+    last: boolean,
+    pageSize: number,
+    pageNumber: number,
+    contentSize: number,
     workspaceNotices: WorkspaceNoticeDetail[],
+    totalPage: number,
     totalCount: number,
   ) => void
 }
 
 export const getWorkspaceNoticesStore = create<WorkspaceNoticesStore>(set => ({
+  first: true,
+  last: true,
+  pageSize: 4,
+  pageNumber: 0,
+  contentSize: 0,
   workspaceNotices: [],
+  totalPage: 1,
   totalCount: 0,
   clear: () => set({ workspaceNotices: [], totalCount: 0 }),
   setWorkspaceNotices: (
+    first: boolean,
+    last: boolean,
+    pageSize: number,
+    pageNumber: number,
+    contentSize: number,
     workspaceNotices: WorkspaceNoticeDetail[],
+    totalPage: number,
     totalCount: number,
-  ) => set({ workspaceNotices, totalCount }),
+  ) =>
+    set({
+      first,
+      last,
+      pageSize,
+      pageNumber,
+      contentSize,
+      workspaceNotices,
+      totalPage,
+      totalCount,
+    }),
 }))
 
 // persist

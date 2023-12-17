@@ -2,6 +2,8 @@ import React from "react"
 import { Box } from "@mui/material"
 import { TaskSummary } from "_types/task"
 import DeadlineTask from "components/task/deadlined/DeadlineTask"
+import MainEmpty from "components/common/MainEmpty"
+import { faFileCircleExclamation } from "@fortawesome/free-solid-svg-icons"
 
 interface Props {
   tasks: TaskSummary[]
@@ -57,12 +59,32 @@ const WorkspaceDeadlineTaskWrapper: React.FC<Props> = ({ tasks }) => {
         },
       }}
     >
-      <Box p={1} boxSizing="border-box">
-        {/* 할일 item */}
-        {memoTasks.map(task => (
-          <DeadlineTask key={task.taskId} task={task} />
-        ))}
-      </Box>
+      {memoTasks.length === 0 ? (
+        <Box
+          component="li"
+          sx={{
+            height: "100%",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <MainEmpty
+            icon={faFileCircleExclamation}
+            content="D-3 할일이 없어요"
+            bgcolor="rgb(125,178,73,0.6)"
+          />
+        </Box>
+      ) : (
+        <Box component="li" p={1} boxSizing="border-box">
+          {/* 할일 item */}
+          {memoTasks.map(task => (
+            <DeadlineTask key={task.taskId} task={task} />
+          ))}
+        </Box>
+      )}
     </Box>
   )
 }

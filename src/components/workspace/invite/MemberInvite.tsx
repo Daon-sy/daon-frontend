@@ -7,6 +7,8 @@ import {
   TextField,
   Button,
   Typography,
+  CircularProgress,
+  Tooltip,
 } from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
 import { getWorkspaceStore } from "store/userStore"
@@ -18,22 +20,28 @@ import useInviteWorkspace from "hooks/workspace/useInviteWorkspace"
 import ColorAvatar from "components/common/ColorAvatar"
 import ConfirmDialog from "components/common/ConfirmDialog"
 import SelectRoleButton from "components/workspace/role/SelectRoleButton"
+import { ConfirmInvitationComponent } from "components/common/confirm/ConfirmInvitation"
+import NoData from "components/common/NoData"
+import useDebounce from "hooks/useDebounce"
 
 const MemberInvite = () => {
   const { workspace } = getWorkspaceStore()
   const [usernameKeyword, setUsernameKeyword] = React.useState("")
+  const { debouncedValue: debouncedUsernameKeyword, debouncing } =
+    useDebounce<string>(usernameKeyword, 500)
 
   const {
     members: searchedMembers,
     fetch: searchMembers,
+    isFetching: isSearching,
     clear,
   } = useSearchMembersToInvite(workspace?.workspaceId || 0)
   const { fetch: invite } = useInviteWorkspace(workspace?.workspaceId || 0)
 
-  React.useEffect(() => {
-    if (usernameKeyword) searchMembers(usernameKeyword)
+  React.useLayoutEffect(() => {
+    if (debouncedUsernameKeyword) searchMembers(debouncedUsernameKeyword)
     else clear()
-  }, [usernameKeyword])
+  }, [debouncedUsernameKeyword])
 
   const [members, setMembers] = React.useState<Member[]>([])
 
@@ -79,88 +87,119 @@ const MemberInvite = () => {
           />
         </Box>
         {usernameKeyword ? (
-          <Box pb={5}>
-            <Typography fontSize={14}>검색결과</Typography>
-            <Stack
-              spacing={0.5}
-              sx={{
-                marginTop: 0.5,
-                padding: 1,
-                borderStyle: "solid",
-                borderColor: "rgb(200,200,200)",
-                borderWidth: 1,
-                borderRadius: 1,
-              }}
-            >
-              {members.map((member, index) => (
-                <>
-                  <Box
-                    sx={{
-                      p: 0.5,
-                      px: 1,
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Box>
-                      <ColorAvatar id={member.username} name={member.name} />
-                    </Box>
-                    <Box ml={2} flexGrow={1}>
-                      <Typography fontSize={14} fontWeight={600}>
-                        {member.username}
-                      </Typography>
-                    </Box>
-                    <Box flexGrow={1}>
-                      <Typography fontSize={12}>{member.name}</Typography>
-                    </Box>
-                    <Box>
-                      {member.invited ? (
-                        <Button
-                          size="small"
-                          variant="contained"
-                          color="primary"
-                          sx={{
-                            p: 0,
-                            fontSize: 13,
-                          }}
-                        >
-                          초대중
-                        </Button>
-                      ) : (
-                        <Button
-                          size="small"
-                          variant="contained"
-                          color="secondary"
-                          disableElevation
-                          sx={{
-                            p: 0,
-                            fontSize: 13,
-                          }}
-                          onClick={() => setSelectedMember(member)}
-                        >
-                          초대
-                        </Button>
-                      )}
-                    </Box>
-                  </Box>
-                  {index < members.length - 1 ? <Divider /> : null}
-                </>
-              ))}
-              {members.length === 0 ? (
-                <Box
+          <Box>
+            {debouncing || isSearching ? (
+              <Box
+                sx={{
+                  height: 300,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <CircularProgress />
+              </Box>
+            ) : (
+              <Box pb={5}>
+                <Typography fontSize={14}>검색결과</Typography>
+                <Stack
+                  spacing={0.5}
                   sx={{
-                    p: 0.5,
-                    px: 1,
-                    display: "flex",
-                    alignItems: "center",
+                    marginTop: 0.5,
+                    padding: 1,
+                    borderStyle: "solid",
+                    borderColor: "rgb(200,200,200)",
+                    borderWidth: 1,
+                    borderRadius: 1,
                   }}
                 >
-                  <Typography fontSize={14}>
-                    일치하는 회원이 없습니다
-                  </Typography>
-                </Box>
-              ) : null}
-            </Stack>
+                  {members.map((member, index) => (
+                    <>
+                      <Box
+                        sx={{
+                          p: 0.5,
+                          px: 1,
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Box>
+                          <ColorAvatar
+                            id={member.username}
+                            name={member.name}
+                          />
+                        </Box>
+                        <Box ml={1} flexGrow={1}>
+                          <Tooltip
+                            title="username"
+                            arrow
+                            placement="left-start"
+                          >
+                            <Typography fontSize={14} fontWeight={500}>
+                              {member.username}
+                            </Typography>
+                          </Tooltip>
+                          <Tooltip title="이름" arrow placement="left-start">
+                            <Typography fontSize={12}>{member.name}</Typography>
+                          </Tooltip>
+                        </Box>
+                        <Box>
+                          {member.invited ? (
+                            <Button
+                              size="small"
+                              variant="contained"
+                              color="primary"
+                              disableElevation
+                              sx={{
+                                p: 0,
+                                fontSize: 13,
+                              }}
+                            >
+                              초대중
+                            </Button>
+                          ) : (
+                            <Button
+                              size="small"
+                              variant="contained"
+                              color="secondary"
+                              disableElevation
+                              sx={{
+                                p: 0,
+                                fontSize: 13,
+                              }}
+                              onClick={() => setSelectedMember(member)}
+                            >
+                              초대
+                            </Button>
+                          )}
+                        </Box>
+                      </Box>
+                      {index < members.length - 1 ? <Divider /> : null}
+                    </>
+                  ))}
+                  {members.length === 0 ? (
+                    <Box
+                      sx={{
+                        p: 0.5,
+                        px: 1,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Typography fontSize={14}>
+                        <NoData
+                          content="일치하는 회원이 없습니다"
+                          width={200}
+                          height={100}
+                          sx={{ pb: 3 }}
+                        />
+                      </Typography>
+                    </Box>
+                  ) : null}
+                </Stack>
+              </Box>
+            )}
           </Box>
         ) : null}
         {/* 초대 확인 */}
@@ -183,15 +222,7 @@ const MemberInvite = () => {
           }}
         >
           <Box width={500}>
-            <Typography
-              mt={1}
-              component="h4"
-              fontSize={24}
-              fontWeight={600}
-              textAlign="center"
-            >
-              사용자를 초대하시겠습니까?
-            </Typography>
+            <ConfirmInvitationComponent />
             <Box
               sx={{
                 mt: 3,

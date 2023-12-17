@@ -19,6 +19,9 @@ import EditableTextBox from "components/common/EditableTextBox"
 import useWithdrawProject from "hooks/project/useWithdrawProject"
 import useRemoveProject from "hooks/project/useRemoveProject"
 import useModifyProject from "hooks/project/useModifyProject"
+import { ConfirmDeleteComponent } from "../common/confirm/ConfirmDelete"
+import ConfirmProjectWithdrawalComponent from "../common/confirm/withdrawal/ConfirmProjectWithdrawal"
+import ConfirmProjectDeleteComponent from "../common/confirm/delete/ConfirmProjectDelete"
 
 const allowedEdit: Array<WORKSPACE_PARTICIPANT_ROLE> = [
   "WORKSPACE_ADMIN",
@@ -171,6 +174,7 @@ const ProjectGeneralSetting = ({
               )
             }
             fontSize={14}
+            fontWeight={400}
             maxTextLength={100}
             blockEdit={!allowedEdit.includes(myProfile.role)}
           />
@@ -205,6 +209,7 @@ const ProjectGeneralSetting = ({
                     placeholder="추가 할 보드의 이름을 입력하세요"
                     onChange={e => setNewBoardTitle(e.target.value)}
                     onKeyDown={handleNewBoardTitleEntered}
+                    inputProps={{ style: { fontSize: 14 } }}
                   />
                   <Box ml={1}>
                     <IconButton size="small" onClick={handleAddBoard}>
@@ -264,7 +269,10 @@ const ProjectGeneralSetting = ({
                   setBoardIdToRemove(undefined)
                 }}
               >
-                보드를 삭제하시겠습니까? 보드 내의 모든 할 일이 함께 삭제됩니다.
+                <ConfirmDeleteComponent
+                  title="해당 보드를 삭제하시겠습니까"
+                  contents="보드 내 모든 할일이 함께 삭제되며, 복구가 불가능 합니다"
+                />
               </ConfirmDialog>
             </Box>
           </Box>
@@ -272,7 +280,9 @@ const ProjectGeneralSetting = ({
       </Box>
       <Box mt={10}>
         <Box>
-          <Typography variant="h5">Danger Zone</Typography>
+          <Typography variant="h5" fontWeight={500}>
+            Danger Zone
+          </Typography>
         </Box>
         {allowedEdit.includes(myProfile.role) ? (
           <Box>
@@ -298,7 +308,7 @@ const ProjectGeneralSetting = ({
                 setProjectRemoveModalOpen(false)
               }}
             >
-              프로젝트를 삭제하시겠습니까? 프로젝트 내의 모든 정보가 삭제됩니다.
+              <ConfirmProjectDeleteComponent />
             </ConfirmDialog>
           </Box>
         ) : null}
@@ -331,7 +341,7 @@ const ProjectGeneralSetting = ({
               setProjectWithdrawModalOpen(false)
             }}
           >
-            프로젝트를 탈퇴하시겠습니까?
+            <ConfirmProjectWithdrawalComponent />
           </ConfirmDialog>
         </Box>
       </Box>

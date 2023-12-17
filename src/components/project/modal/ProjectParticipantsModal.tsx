@@ -13,6 +13,7 @@ import {
   ListItemAvatar,
   ListItemText,
   Button,
+  InputAdornment,
 } from "@mui/material"
 import { ProjectParticipant } from "_types/project"
 import {
@@ -22,6 +23,7 @@ import {
 import ColorAvatar from "components/common/ColorAvatar"
 import TitleDialog from "components/common/TitleDialog"
 import NoData from "components/common/NoData"
+import SearchIcon from "@mui/icons-material/Search"
 
 type Filter = "name" | "email"
 
@@ -153,13 +155,22 @@ const ProjectParticipantsModal = ({
                 ))}
               </Select>
             </FormControl>
+
             <TextField
               fullWidth
               size="small"
-              inputProps={{ style: { fontSize: 14 } }}
+              placeholder="담당자 검색"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setFilterText(e.target.value)
               }
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon fontSize="small" />
+                  </InputAdornment>
+                ),
+                style: { fontSize: 14 },
+              }}
             />
           </Stack>
         </Box>

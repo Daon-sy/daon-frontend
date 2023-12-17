@@ -176,6 +176,9 @@ const BoardSelectButton: React.FC<Props> = ({
           fontSize={14}
           fontWeight={500}
           textAlign="start"
+          whiteSpace="nowrap"
+          overflow="hidden"
+          textOverflow="ellipsis"
           sx={{ color: selectedBoard ? "primary" : "#bdbdbd" }}
         >
           {selectedBoard ? selectedBoard.title : "선택"}

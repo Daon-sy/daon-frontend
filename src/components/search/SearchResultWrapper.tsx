@@ -13,13 +13,25 @@ import WorkspaceSearchResult from "components/search/result/WorkspaceSearchResul
 import ProjectSearchResult from "components/search/result/ProjectSearchResult"
 import TaskSearchResult from "components/search/result/TaskSearchResult"
 
-const MoreButton = styled(Button)<ButtonProps>(() => ({
+const StyledMoreButton = styled(Button)<ButtonProps>(() => ({
   p: 0,
   marginLeft: 10,
   fontSize: 12,
   minWidth: 50,
   height: 20,
 }))
+
+const MoreButton = ({ onClick }: { onClick: () => void }) => (
+  <StyledMoreButton
+    disableElevation
+    size="small"
+    variant="contained"
+    onClick={onClick}
+    sx={{ fontWeight: 500 }}
+  >
+    더보기
+  </StyledMoreButton>
+)
 
 interface Props {
   searchResult: SearchResponseBody
@@ -48,16 +60,19 @@ const SearchResultWrapper: React.FC<Props> = ({ searchResult, setPage }) => {
             ) : (
               <>
                 <Box display="flex" alignItems="center">
-                  <Typography fontSize={15} color="primary" fontWeight={500}>
+                  <Typography
+                    fontSize={15}
+                    color="primary"
+                    fontWeight={500}
+                    flexGrow={1}
+                  >
                     워크스페이스
                   </Typography>
                   {!searchResult.workspaces.last ? (
-                    <MoreButton size="small" onClick={setWorkspaceSearchPage}>
-                      더보기
-                    </MoreButton>
+                    <MoreButton onClick={setWorkspaceSearchPage} />
                   ) : null}
                 </Box>
-                <Stack mt={1} spacing={0.5}>
+                <Stack mt={1} spacing={1 / 2}>
                   {searchResult.workspaces.content.map(workspace => (
                     <WorkspaceSearchResult workspace={workspace} />
                   ))}
@@ -71,20 +86,23 @@ const SearchResultWrapper: React.FC<Props> = ({ searchResult, setPage }) => {
             ) : (
               <>
                 <Box display="flex" alignItems="center">
-                  <Typography fontSize={15} color="primary" fontWeight={500}>
+                  <Typography
+                    fontSize={15}
+                    color="primary"
+                    fontWeight={500}
+                    flexGrow={1}
+                  >
                     프로젝트
                   </Typography>
                   {!searchResult.projects.last ? (
-                    <MoreButton size="small" onClick={setProjectSearchPage}>
-                      더보기
-                    </MoreButton>
+                    <MoreButton onClick={setProjectSearchPage} />
                   ) : null}
                 </Box>
-                <Box>
+                <Stack spacing={1 / 2}>
                   {searchResult.projects.content.map(project => (
                     <ProjectSearchResult project={project} />
                   ))}
-                </Box>
+                </Stack>
               </>
             )}
           </Box>
@@ -94,20 +112,23 @@ const SearchResultWrapper: React.FC<Props> = ({ searchResult, setPage }) => {
             ) : (
               <>
                 <Box display="flex" alignItems="center">
-                  <Typography fontSize={15} color="primary" fontWeight={500}>
+                  <Typography
+                    fontSize={15}
+                    color="primary"
+                    fontWeight={500}
+                    flexGrow={1}
+                  >
                     할 일
                   </Typography>
                   {!searchResult.tasks.last ? (
-                    <MoreButton size="small" onClick={setTaskSearchPage}>
-                      더보기
-                    </MoreButton>
+                    <MoreButton onClick={setTaskSearchPage} />
                   ) : null}
                 </Box>
-                <Box>
+                <Stack spacing={1 / 2}>
                   {searchResult.tasks.content.map(task => (
                     <TaskSearchResult task={task} />
                   ))}
-                </Box>
+                </Stack>
               </>
             )}
           </Box>

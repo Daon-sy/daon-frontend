@@ -20,6 +20,8 @@ interface ErrorMessage {
 
 const useEmailCheck = (email: string, code: string) => {
   const [isFetching, setIsFetching] = React.useState(false)
+  const [isSendEmailCodeFetching, setIsSendEmailCodeFetching] =
+    React.useState(false)
   const [error, setError] = React.useState<ErrorResponse>()
   const [codeSent, setCodeSent] = React.useState(false)
   const [checked, setChecked] = React.useState<
@@ -58,7 +60,7 @@ const useEmailCheck = (email: string, code: string) => {
     setErrorMessage({ ...errorMessage, emailCheckCode: undefined })
   }, [code])
 
-  const sendEmailCode = async () => {
+  const sendEmailCode = async (onInputValid: () => void) => {
     if (!validateEmail(email)) {
       // addError("올바르지 않은 이메일 양식입니다")
       setErrorMessage({
@@ -67,9 +69,10 @@ const useEmailCheck = (email: string, code: string) => {
       })
       return
     }
+    onInputValid()
 
     try {
-      setIsFetching(true)
+      setIsSendEmailCodeFetching(true)
       await sendVerificationEmailApi({ email })
       setCodeSent(true)
       setErrorMessage({})
@@ -88,7 +91,7 @@ const useEmailCheck = (email: string, code: string) => {
         }
       }
     } finally {
-      setIsFetching(false)
+      setIsSendEmailCodeFetching(false)
     }
   }
 
@@ -113,27 +116,22 @@ const useEmailCheck = (email: string, code: string) => {
 
     try {
       setIsFetching(true)
-      const { data: responseData } = await checkVerificationEmailApi({
+      await checkVerificationEmailApi({
         email,
         code,
       })
-      const { verified } = responseData
-      if (verified) {
-        addSuccess("이메일 인증에 성공했습니다")
-        setChecked("VALID")
-        setErrorMessage({})
-      } else {
-        // addError("인증번호가 일치하지 않습니다")
+      addSuccess("이메일 인증에 성공했습니다")
+      setChecked("VALID")
+      setErrorMessage({})
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        const { response } = e
+        setError(response?.data as ErrorResponse)
         setErrorMessage({
           ...errorMessage,
           emailCheckCode: "인증번호가 일치하지 않습니다",
         })
         setChecked("INVALID")
-      }
-    } catch (e) {
-      if (axios.isAxiosError(e)) {
-        const { response } = e
-        setError(response?.data as ErrorResponse)
       }
     } finally {
       setIsFetching(false)
@@ -151,6 +149,7 @@ const useEmailCheck = (email: string, code: string) => {
     setCodeSent,
     setChecked,
     errorMessage,
+    isSendEmailCodeFetching,
   }
 }
 

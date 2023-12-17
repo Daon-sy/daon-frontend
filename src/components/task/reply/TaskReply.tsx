@@ -4,16 +4,19 @@ import { getWorkspaceStore } from "store/userStore"
 import { TaskReplyDetail } from "_types/task"
 import { taskReplyListApi, modifyTaskReply } from "api/task"
 import { useAlert } from "hooks/useAlert"
+import NoData from "components/common/NoData"
 import TaskReplyItem from "./TaskReplyItem"
 import TaskReplyInput from "./TaskReplyInput"
 
 interface TaskReplyProps {
   projectId: number
+  boardId: number
   taskId: number
 }
 
 const TaskReply: React.FC<TaskReplyProps> = ({
   projectId,
+  boardId,
   taskId,
 }: TaskReplyProps) => {
   const { addSuccess } = useAlert()
@@ -29,6 +32,7 @@ const TaskReply: React.FC<TaskReplyProps> = ({
       const { data } = await taskReplyListApi(
         workspace.workspaceId,
         projectId,
+        boardId,
         taskId,
         { page, size },
       )
@@ -63,9 +67,16 @@ const TaskReply: React.FC<TaskReplyProps> = ({
     modifiedContent: string,
   ) => {
     if (workspace?.workspaceId) {
-      await modifyTaskReply(workspace.workspaceId, projectId, taskId, replyId, {
-        content: modifiedContent,
-      })
+      await modifyTaskReply(
+        workspace.workspaceId,
+        projectId,
+        boardId,
+        taskId,
+        replyId,
+        {
+          content: modifiedContent,
+        },
+      )
       const updatedReplies = replies.map(reply => {
         if (reply.replyId === replyId) {
           return {
@@ -86,19 +97,29 @@ const TaskReply: React.FC<TaskReplyProps> = ({
   }, [])
 
   return (
-    <Box component="section" sx={{ width: "100%" }}>
+    <Box component="section" sx={{ boxSizing: "border-box" }}>
       <TaskReplyInput
         workspaceId={workspace?.workspaceId}
         projectId={projectId}
+        boardId={boardId}
         taskId={taskId}
         onReplyAdded={handleReplyChanged}
       />
       <Box component="ul">
+        {replies.length === 0 && (
+          <NoData
+            content="댓글이 없습니다"
+            width="120px"
+            height="60px"
+            sx={{ height: "180px" }}
+          />
+        )}
         {replies.map(reply => (
           <TaskReplyItem
             key={reply.replyId}
             workspaceId={workspace?.workspaceId}
             projectId={projectId}
+            boardId={boardId}
             taskId={taskId}
             reply={reply}
             onReplyModified={(replyId: number, modifiedContent: string) =>

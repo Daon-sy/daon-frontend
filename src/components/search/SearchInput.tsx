@@ -136,6 +136,7 @@ const SearchInput: React.FC = () => {
             borderColor: "#e0e0e0",
             position: "relative",
             zIndex: 100,
+            width: 500,
           }}
         >
           <Box p={1} display="flex" alignItems="center">
@@ -168,6 +169,7 @@ const SearchInput: React.FC = () => {
                     onClick={() => {
                       searchKeyword()
                     }}
+                    sx={{ ml: 1 }}
                   >
                     검색
                   </Button>
@@ -185,7 +187,7 @@ const SearchInput: React.FC = () => {
                   <Box
                     sx={{
                       p: 1,
-                      maxHeight: 400,
+                      maxHeight: 450,
                       overflowX: "hidden",
                       overflowY: "auto",
                     }}

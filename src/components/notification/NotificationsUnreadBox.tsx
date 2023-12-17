@@ -16,6 +16,7 @@ import DeportatedWorkspace from "components/notification/card/DeportatedWorkspac
 import DeportatedProject from "components/notification/card/DeportatedProject"
 import NotifyOnOffIconButton from "components/notification/button/NotifyOnOffIconButton"
 import ReceivedMessage from "components/notification/card/ReceivedMessage"
+import NoData from "components/common/NoData"
 
 const renderNotification = (notification: Notification) => {
   switch (notification.type) {
@@ -109,35 +110,48 @@ const NotificationsUnreadBox: React.FC<Props> = ({
 }) => {
   return (
     <Box>
-      <Box display="flex" alignItems="center">
-        <Box flexGrow={1} display="flex" alignItems="center">
-          <Typography color="primary" fontSize={20} fontWeight={500}>
-            미확인 알림
-          </Typography>
-          <Chip
-            label={notifications.length > 99 ? "99+" : notifications.length}
+      <Box pt={2} position="sticky" top={0} bgcolor="white" zIndex={1}>
+        <Box display="flex" alignItems="center">
+          <Box flexGrow={1} display="flex" alignItems="center">
+            <Typography color="primary" fontSize={20} fontWeight={500}>
+              미확인 알림
+            </Typography>
+            <Chip
+              label={notifications.length > 99 ? "99+" : notifications.length}
+              size="small"
+              sx={{
+                fontSize: 12,
+                ml: 0.5,
+                height: 16,
+                minWidth: 16,
+                ".MuiChip-label": { p: 0.5 },
+              }}
+            />
+          </Box>
+          <NotifyOnOffIconButton />
+          <Button
             size="small"
+            variant="outlined"
+            onClick={onNotificationsReadButtonClick}
+          >
+            확인한 알림
+          </Button>
+        </Box>
+        <Divider sx={{ my: 1 }} />
+      </Box>
+      <Stack mt={2} spacing={1} height={500}>
+        {notifications.length <= 0 ? (
+          <NoData
+            content="미확인 알림이 없습니다"
+            width={200}
+            height={100}
             sx={{
-              fontSize: 12,
-              ml: 0.5,
-              height: 16,
-              minWidth: 16,
-              ".MuiChip-label": { p: 0.5 },
+              height: "90%",
             }}
           />
-        </Box>
-        <NotifyOnOffIconButton />
-        <Button
-          size="small"
-          variant="outlined"
-          onClick={onNotificationsReadButtonClick}
-        >
-          확인한 알림
-        </Button>
-      </Box>
-      <Divider sx={{ my: 1 }} />
-      <Stack mt={2} spacing={1}>
-        {notifications.map(notification => renderNotification(notification))}
+        ) : (
+          notifications.map(notification => renderNotification(notification))
+        )}
       </Stack>
     </Box>
   )

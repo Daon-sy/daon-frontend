@@ -2,8 +2,8 @@
 import React from "react"
 import { Box } from "@mui/material"
 import { getWorkspaceStore } from "store/userStore"
-import wsIcon from "assets/img/ws_icon.png"
-import pjIcon from "assets/img/pj_icon.png"
+import wsIcon from "assets/img/ws_icon.webp"
+import pjIcon from "assets/img/pj_icon.webp"
 import ColorAvatar from "components/common/ColorAvatar"
 import useFetchWorkspaceParticipants from "hooks/workspace/useFetchWorkspaceParticipants"
 
@@ -43,7 +43,7 @@ const WorkspaceParticipants: React.FC = () => {
       }}
     >
       {/* 구성원 Item */}
-      {workspaceParticipants?.map(participant => (
+      {workspaceParticipants?.map((participant, idx) => (
         <Box
           component="li"
           sx={{
@@ -55,6 +55,8 @@ const WorkspaceParticipants: React.FC = () => {
             alignItems: "center",
             justifyContent: "space-between",
             position: "relative",
+            borderBottom: "1px solid #b9b9b9",
+            borderTop: idx === 0 ? "1px solid #b9b9b9" : "none",
           }}
         >
           <ColorAvatar
@@ -77,6 +79,7 @@ const WorkspaceParticipants: React.FC = () => {
                 left: 30,
               }}
               src={wsIcon}
+              alt="사용자 역할 아이콘"
             />
           ) : participant.role === "PROJECT_ADMIN" ? (
             <Box
@@ -90,6 +93,7 @@ const WorkspaceParticipants: React.FC = () => {
                 left: 30,
               }}
               src={pjIcon}
+              alt="사용자 역할 아이콘"
             />
           ) : null}
           <Box

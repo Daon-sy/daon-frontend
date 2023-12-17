@@ -1,21 +1,20 @@
 import { createGlobalStyle } from "styled-components"
 import reset from "styled-reset"
-import Cafe24SsurroundRegular from "./assets/fonts/Cafe24SsurroundAir.woff"
-import Cafe24SsurroundBold from "./assets/fonts/Cafe24Ssurround.woff"
-import Cafe24SsurroundBoldTTF from "./assets/fonts/Cafe24Ssurround.ttf"
+import Cafe24SsurroundRegular2 from "./assets/fonts/Cafe24SsurroundAir.woff2"
+import Cafe24SsurroundBold2 from "./assets/fonts/Cafe24Ssurround.woff2"
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
   
 @font-face {
   font-family: 'Cafe24Ssurround';
-  src: url(${Cafe24SsurroundRegular}) format("woff");
+  src: url(${Cafe24SsurroundRegular2}) format("woff2");
   font-display: swap;
   font-weight: 400;
 }
 @font-face {
   font-family: 'Cafe24Ssurround';
-  src: url(${Cafe24SsurroundBold}) format("woff"), url(${Cafe24SsurroundBoldTTF}) format("truetype");
+  src: url(${Cafe24SsurroundBold2}) format("woof2");
   font-display: swap;
   font-weight: 500;
 }

@@ -6,9 +6,16 @@ import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 interface Props {
   bookmarked: boolean
   handleClick: () => void
+  fontSize?: string
+  padding?: number
 }
 
-const TaskBookmarkButton = ({ bookmarked, handleClick }: Props) => {
+const TaskBookmarkButton = ({
+  bookmarked,
+  handleClick,
+  fontSize,
+  padding = 0.5,
+}: Props) => {
   return (
     <Tooltip title="북마크" arrow>
       <ToggleButton
@@ -16,7 +23,7 @@ const TaskBookmarkButton = ({ bookmarked, handleClick }: Props) => {
         selected={false}
         size="small"
         sx={{
-          padding: 0.5,
+          padding,
           borderStyle: "none",
         }}
         onClick={e => {
@@ -25,9 +32,9 @@ const TaskBookmarkButton = ({ bookmarked, handleClick }: Props) => {
         }}
       >
         {bookmarked ? (
-          <BookmarkIcon sx={{ color: "secondary.main" }} />
+          <BookmarkIcon sx={{ color: "secondary.main", fontSize }} />
         ) : (
-          <BookmarkBorderIcon />
+          <BookmarkBorderIcon sx={{ fontSize }} />
         )}
       </ToggleButton>
     </Tooltip>

@@ -4,6 +4,7 @@ import SearchIcon from "@mui/icons-material/Search"
 import useFetchWorkspaceNoticeList from "hooks/workspace/useFetchWorkspaceNoticeList"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBullhorn } from "@fortawesome/free-solid-svg-icons"
+import { getWorkspaceNoticesStore } from "store/userStore"
 import WorkspaceNoticeCard from "./WorkspaceNoticeCard"
 
 interface Props {
@@ -15,8 +16,9 @@ const WorkspaceNoticeList: React.FC<Props> = ({
   workspaceId,
   onNoticeClick,
 }: Props) => {
-  const { workspaceNotices, paginationInfo, fetchWorkspaceNoticeList } =
+  const { workspaceNotices, fetchWorkspaceNoticeList } =
     useFetchWorkspaceNoticeList(workspaceId)
+  const { totalPage } = getWorkspaceNoticesStore()
   const [currentPage, setCurrentPage] = React.useState(1)
   const [searchKeyword, setSearchKeyword] = React.useState("")
   const [selectedNoticeId, setSelectedNoticeId] = React.useState<number | null>(
@@ -38,6 +40,12 @@ const WorkspaceNoticeList: React.FC<Props> = ({
   const handleNoticeClick = (noticeId: number) => {
     onNoticeClick(noticeId)
     setSelectedNoticeId(noticeId)
+  }
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleSearch()
+    }
   }
 
   return (
@@ -74,6 +82,7 @@ const WorkspaceNoticeList: React.FC<Props> = ({
           placeholder="공지사항 검색"
           value={searchKeyword}
           onChange={e => setSearchKeyword(e.target.value)}
+          onKeyDown={handleKeyDown}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -149,12 +158,13 @@ const WorkspaceNoticeList: React.FC<Props> = ({
           ))}
         </Box>
       )}
-
-      <Pagination
-        count={paginationInfo.totalPage}
-        page={currentPage}
-        onChange={handlePageChange}
-      />
+      {totalPage === 0 ? null : (
+        <Pagination
+          count={totalPage}
+          page={currentPage}
+          onChange={handlePageChange}
+        />
+      )}
     </Box>
   )
 }

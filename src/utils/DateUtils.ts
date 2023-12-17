@@ -19,7 +19,7 @@ export const getDateCount = ({ year, month }: YearMonth): number =>
 export const getDateCountArray = ({
   startDate,
   endDate,
-  monthRange = 3,
+  monthRange = 1,
 }: {
   startDate: Date
   endDate: Date

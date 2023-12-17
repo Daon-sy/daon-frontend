@@ -90,38 +90,60 @@ const SelectReceiverButton = ({
   }
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box>
       <Button
         sx={{
+          width: "309.41px",
           height: 40,
-          width: "100%",
           border: 1,
-          borderColor: "lightGray",
+          borderColor: "#c7c7c7",
           display: "flex",
           justifyContent: "start",
+          overflow: "hidden",
         }}
         onClick={handleClick}
       >
         {selectedReceiver ? (
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <ColorAvatar
-              sx={{ width: 27, height: 27 }}
-              src={selectedReceiver?.imageUrl}
-              id={selectedReceiver?.workspaceParticipantId}
-            />
-            <Typography
-              overflow="hidden"
-              whiteSpace="nowrap"
-              textOverflow="ellipsis"
-              sx={{ ml: 0.5 }}
-            >
-              {selectedReceiver?.name}
-            </Typography>
-          </Box>
+          //     <Box sx={{ display: "flex", alignItems: "center" }}>
+          //       <ColorAvatar
+          //         sx={{ width: 27, height: 27 }}
+          //         src={selectedReceiver?.imageUrl}
+          //         id={selectedReceiver?.workspaceParticipantId}
+          //       />
+          //       <Typography
+          //         overflow="hidden"
+          //         whiteSpace="nowrap"
+          //         textOverflow="ellipsis"
+          //         sx={{ ml: 0.5 }}
+          //       >
+          //         {selectedReceiver?.name}
+          //       </Typography>
+          //     </Box>
+          //   ) : null}
+          // </Button>
+          // <Menu
+          //   sx={{ width: 333.56, height: 400 }}
+          <Tooltip title={selectedReceiver.name} disableInteractive>
+            <Box sx={{ width: "100%", display: "flex", alignItems: "center" }}>
+              <ColorAvatar
+                sx={{ width: 27, height: 27 }}
+                src={selectedReceiver?.imageUrl}
+                id={selectedReceiver?.workspaceParticipantId}
+              />
+              <Typography
+                overflow="hidden"
+                whiteSpace="nowrap"
+                textOverflow="ellipsis"
+                sx={{ ml: 0.5 }}
+              >
+                {selectedReceiver?.name}
+              </Typography>
+            </Box>
+          </Tooltip>
         ) : null}
       </Button>
       <Menu
-        sx={{ width: 333.56, height: 400 }}
+        sx={{ width: "341.5px", height: 400 }}
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
@@ -164,7 +186,7 @@ const SelectReceiverButton = ({
                       id={receiver?.workspaceParticipantId}
                     />
                   </Box>
-                  <Box width="40%">
+                  <Box width="50%">
                     <Typography
                       sx={{ fontSize: 15 }}
                       overflow="hidden"
@@ -174,7 +196,7 @@ const SelectReceiverButton = ({
                       {receiver.name}
                     </Typography>
                   </Box>
-                  <Box width="45%">
+                  <Box width="35%">
                     <Typography
                       sx={{ pl: 0.5, fontSize: 14, color: "lightGray" }}
                       overflow="hidden"

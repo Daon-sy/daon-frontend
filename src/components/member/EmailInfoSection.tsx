@@ -7,6 +7,7 @@ import { ConfirmDialog } from "components/common/ConfirmDialog"
 import MailIcon from "@mui/icons-material/Mail"
 import DeleteIcon from "@mui/icons-material/Delete"
 import AddEmailModal from "./modal/AddEmailModal"
+import { ConfirmDeleteComponent } from "../common/confirm/ConfirmDelete"
 
 const EmailInfoSection: React.FC = () => {
   const { addSuccess } = useAlert()
@@ -101,7 +102,10 @@ const EmailInfoSection: React.FC = () => {
             handleClose={() => setRemoveEmailModalOpen(false)}
             handleConfirm={removeEmail}
           >
-            <Typography>이메일을 삭제하시겠습니까?</Typography>
+            <ConfirmDeleteComponent
+              title="해당 이메일을 삭제하시겠습니까"
+              contents="한번 삭제된 이메일은 복구가 불가능합니다"
+            />
           </ConfirmDialog>
         </Box>
       ))}

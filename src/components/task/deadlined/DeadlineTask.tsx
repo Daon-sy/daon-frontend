@@ -58,6 +58,7 @@ const DeadlineTask: React.FC<Props> = ({ task }) => {
         setTaskDetailParam({
           workspaceId: workspace?.workspaceId || 0,
           projectId: task.project.projectId,
+          boardId: task.board?.boardId || 0,
           taskId: task.taskId,
         })
       }

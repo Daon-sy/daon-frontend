@@ -11,6 +11,7 @@ import ReplyBtn from "./ReplyBtn"
 interface TaskReplyItemProps {
   workspaceId: number | undefined
   projectId: number
+  boardId: number
   taskId: number
   reply: TaskReplyDetail
   onReplyModified: (replyId: number, modifiedContent: string) => void
@@ -20,18 +21,21 @@ interface TaskReplyItemProps {
 const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
   workspaceId,
   projectId,
+  boardId,
   taskId,
   reply,
   onReplyModified,
   onReplyDeleted,
-}: TaskReplyItemProps): React.ReactNode => {
+}) => {
   const [isModify, setIsModify] = useState<boolean>(false)
+  const prevContent = reply.content
   const [content, setContent] = useState<string>(reply.content)
   const [confirmDialogOpen, setConfirmDialogOpen] = React.useState(false)
-  const { addSuccess } = useAlert()
+  const { addSuccess, addError } = useAlert()
 
   const handleToggle = () => {
     setIsModify(prevIsModify => !prevIsModify)
+    setContent(prevContent)
   }
 
   const openConfirmDialog = () => {
@@ -41,7 +45,7 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
   const handleRemoveClick = async (replyId: number) => {
     try {
       if (workspaceId) {
-        await removeTaskReply(workspaceId, projectId, taskId, replyId)
+        await removeTaskReply(workspaceId, projectId, boardId, taskId, replyId)
         onReplyDeleted()
         addSuccess("댓글이 삭제되었습니다.")
       }
@@ -51,6 +55,15 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
   }
 
   const handleModifyClick = async (replyId: number) => {
+    if (content.length === 0) {
+      addError("댓글 내용은 필수입력 값입니다")
+      return
+    }
+    if (content.length >= 500) {
+      addError("댓글 내용은 500자 미만으로 입력해주세요")
+      return
+    }
+
     setIsModify(false)
     onReplyModified(replyId, content)
   }
@@ -65,7 +78,8 @@ const TaskReplyItem: React.FC<TaskReplyItemProps> = ({
         borderRadius: "4px",
         mb: "8px",
         background: "#f6f7f9",
-        width: "495px",
+        // width: "495px",
+        width: "100%",
       }}
       key={reply.replyId}
     >

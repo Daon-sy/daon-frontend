@@ -109,7 +109,14 @@ const EditableTextBox = ({
         onKeyUp={handleKeyUp}
         onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
           if (enterComplete && handleUpdate && e.key === "Enter") {
-            handleUpdate(inputValue)
+            let textValue = ""
+            if (maxTextLength && inputValue.length > maxTextLength) {
+              textValue = inputValue.slice(0, maxTextLength)
+              setInputValue(textValue)
+            } else {
+              textValue = inputValue
+            }
+            handleUpdate(textValue)
             disableEdit(false)
           }
         }}

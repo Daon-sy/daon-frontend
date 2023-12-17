@@ -23,6 +23,7 @@ const CreateBtn = ({ handleClick, children }: CreateBtnProps) => {
         cursor: "pointer",
         zIndex: 10,
       }}
+      aria-label="생성버튼"
     >
       {children}
     </Box>

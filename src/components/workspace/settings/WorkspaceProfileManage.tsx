@@ -1,11 +1,12 @@
 import React from "react"
-import { useNavigate } from "react-router-dom"
 import { Button, Box } from "@mui/material"
-import { resetPersonalWorkspaceApi, withdrawWorkspaceApi } from "api/workspace"
-import { getMyWorkspaceIdStore, getWorkspaceStore } from "store/userStore"
+import { resetPersonalWorkspaceApi } from "api/workspace"
+import { getWorkspaceStore } from "store/userStore"
 import { useAlert } from "hooks/useAlert"
+import useWithdrawWorkspace from "hooks/workspace/useWithdrawWorkspace"
 import ConfirmDialog from "components/common/ConfirmDialog"
 import WorkspaceProfileModify from "components/workspace/WorkspaceProfileModify"
+import ConfirmWOrkspaceWithdrawalComponent from "components/common/confirm/withdrawal/ConfirmWorkspaceWithdrawal"
 
 interface Props {
   handleWithdraw?: () => void
@@ -13,26 +14,16 @@ interface Props {
 
 const WorkspaceProfileManage: React.FC<Props> = ({ handleWithdraw }) => {
   const { workspace, myProfile } = getWorkspaceStore()
-  const { myWorkspaceId } = getMyWorkspaceIdStore()
   const workspaceId = workspace?.workspaceId
   const { addSuccess } = useAlert()
-  const navigate = useNavigate()
   const [workspaceWithdrawModalOpen, setWorkspaceWithdrawModalOpen] =
     React.useState(false)
   const [resetPersonalWorkspaceModalOpen, setResetPersonalWorkspaceModalOpen] =
     React.useState(false)
 
-  if (!(workspace && myProfile)) return <Box />
+  const { fetch: withdrawWorkspace } = useWithdrawWorkspace()
 
-  const withdrawWorkspace = async () => {
-    if (workspaceId) {
-      await withdrawWorkspaceApi(workspaceId)
-      addSuccess("워크스페이스를 탈퇴하였습니다")
-      // 개인워크스페이스로 이동
-      if (handleWithdraw) handleWithdraw()
-      navigate(`/workspace/${myWorkspaceId}`)
-    }
-  }
+  if (!(workspace && myProfile)) return <Box />
 
   const resetPersonalWorkspace = async () => {
     if (workspaceId) {
@@ -82,12 +73,17 @@ const WorkspaceProfileManage: React.FC<Props> = ({ handleWithdraw }) => {
             <ConfirmDialog
               open={workspaceWithdrawModalOpen}
               maxWidth="xs"
-              handleConfirm={withdrawWorkspace}
+              handleConfirm={() =>
+                withdrawWorkspace(
+                  { workspaceId: workspace?.workspaceId || 0 },
+                  handleWithdraw,
+                )
+              }
               handleClose={() => {
                 setWorkspaceWithdrawModalOpen(false)
               }}
             >
-              정말로 이 워크스페이스를 탈퇴하시겠습니까?
+              <ConfirmWOrkspaceWithdrawalComponent />
             </ConfirmDialog>
           ) : null}
         </Box>

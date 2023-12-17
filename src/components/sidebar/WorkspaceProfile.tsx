@@ -4,8 +4,8 @@ import { getWorkspaceStore } from "store/userStore"
 import WorkspaceProfileModifyModal from "components/workspace/modal/WorkspaceProfileModifyModal"
 import EditIcon from "@mui/icons-material/Edit"
 import ColorAvatar from "components/common/ColorAvatar"
-import wsIcon from "assets/img/ws_icon.png"
-import pjIcon from "assets/img/pj_icon.png"
+import wsIcon from "assets/img/ws_icon.webp"
+import pjIcon from "assets/img/pj_icon.webp"
 import SubIconBtn from "./SubIconBtn"
 
 const WorkSpaceProfile: React.FC = () => {
@@ -70,6 +70,7 @@ const WorkSpaceProfile: React.FC = () => {
               bottom: 2,
               right: 0,
             }}
+            alt="사용자 역할 아이콘"
             src={icon}
           />
         ) : null}
