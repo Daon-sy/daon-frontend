@@ -1,6 +1,7 @@
 import React from "react"
 import { Box, Grid } from "@mui/material"
 import {
+  faObjectGroup,
   faPeopleGroup,
   faBullhorn,
   faFileCircleExclamation,
@@ -13,6 +14,7 @@ import WorkspaceDeadlineTaskWrapper from "components/workspace/main/WorkspaceDea
 import TaskTimelineView from "components/task/timeline/TaskTimelineView"
 import SectionTitleWrapper from "components/workspace/main/SectionTitleWrapper"
 import useFetchTaskList from "hooks/task/useFetchTaskList"
+import WorkspaceList from "components/workspace/main/WorkspaceList"
 
 const WorkspaceMain: React.FC = () => {
   const { workspace } = getWorkspaceStore()
@@ -51,7 +53,18 @@ const WorkspaceMain: React.FC = () => {
         {workspace.title}에 오신 것을 환영합니다.
       </Box>
       <Grid container spacing={2}>
-        {workspace.division === "PERSONAL" ? null : (
+        {workspace.division === "PERSONAL" ? (
+          <Grid item xs={12}>
+            <SectionTitleWrapper
+              width="100%"
+              color="#ec9f5d"
+              icon={faObjectGroup}
+              title="그룹 워크스페이스 목록"
+            >
+              <WorkspaceList />
+            </SectionTitleWrapper>
+          </Grid>
+        ) : (
           <>
             <Grid item xs={9.5}>
               <SectionTitleWrapper

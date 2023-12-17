@@ -54,9 +54,9 @@ const TaskReply: React.FC<TaskReplyProps> = ({
       })
     }
   }
-  const handleReplyChanged = React.useCallback(() => {
-    fetchReplyList()
-  }, [fetchReplyList])
+  const handleReplyChanged = React.useCallback(async () => {
+    await fetchReplyList()
+  }, [])
 
   const handleDeleteChanged = (replyId: number) => {
     setReplies(replies.filter(r => r.replyId !== replyId))
@@ -135,7 +135,7 @@ const TaskReply: React.FC<TaskReplyProps> = ({
           sx={{
             width: "100%",
             textAlign: "center",
-            ...(replySlice.last && { display: "none" }),
+            display: replies.length > 0 && !replySlice.last ? "block" : "none",
           }}
         >
           + 더보기
