@@ -50,7 +50,13 @@ const WorkspaceDetailRoutes = () => {
       </Route>
     </Routes>
   ) : (
-    <Box width="100%" height="100%">
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      width="100vw"
+      height="100vh"
+    >
       <CircularProgress color="primary" />
     </Box>
   )
