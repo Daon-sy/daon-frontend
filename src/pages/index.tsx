@@ -1,6 +1,6 @@
 import React from "react"
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
-import { Backdrop, CircularProgress } from "@mui/material"
+import { Backdrop, Box, CircularProgress } from "@mui/material"
 import AnonymousLayout from "layouts/AnonymousLayout"
 import Home from "pages/Home"
 import Landing from "pages/Landing"
@@ -12,6 +12,7 @@ import useFetchMyMemberDetail from "hooks/member/useFetchMyMemberDetail"
 import useFetchMySettings from "hooks/member/useFetchMySettings"
 import useReissue from "hooks/auth/useReissue"
 import useFetchWorkspaceList from "hooks/workspace/useFetchWorkspaceList"
+import NotFound from "components/common/NotFound"
 
 const MemberRoute = () => {
   const { myDetail, isFetching: isFetchingMyMemberDetail } =
@@ -41,6 +42,14 @@ const MemberRoute = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/workspace/*" element={<WorkspaceRoutes />} />
+      <Route
+        path="/*"
+        element={
+          <Box height="100vh">
+            <NotFound />
+          </Box>
+        }
+      />
     </Routes>
   )
 }
