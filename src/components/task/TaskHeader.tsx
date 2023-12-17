@@ -10,6 +10,7 @@ import {
   TextField,
   ToggleButton,
   ToggleButtonGroup,
+  Tooltip,
 } from "@mui/material"
 import TableChartIcon from "@mui/icons-material/TableChart"
 import SearchIcon from "@mui/icons-material/Search"
@@ -20,7 +21,6 @@ import useFetchBoardList from "hooks/project/useFetchBoardList"
 import Typography from "@mui/material/Typography"
 import { styled } from "@mui/material/styles"
 import TableRowsIcon from "@mui/icons-material/TableRows"
-import Tooltip from "@mui/material/Tooltip"
 
 const SelectItem = styled(MenuItem)({
   fontSize: 14,
@@ -38,6 +38,7 @@ const TaskHeader: React.FC<Props> = ({
   taskListApiParams,
 }: Props) => {
   const { filter, setFilter } = getTaskListFilterStore()
+  const { myProfile } = getWorkspaceStore()
   const { projectId } = filter
   const { workspace } = getWorkspaceStore()
   const { projects } = getProjectsStore()
@@ -82,8 +83,35 @@ const TaskHeader: React.FC<Props> = ({
         borderRadius: 1,
         p: 1,
         color: "primary.main",
+        position: "relative",
       }}
     >
+      {/* 관리자 모드 */}
+      {myProfile?.role === "WORKSPACE_ADMIN" ? (
+        <Box sx={{ position: "absolute", right: 0, top: -40 }}>
+          <Box ml={1} display="flex" alignItems="center">
+            <Checkbox
+              size="small"
+              color="secondary"
+              checked={filter.taskManager || false}
+              onChange={e => {
+                setFilter({ ...filter, taskManager: e.target.checked })
+              }}
+              sx={{ width: 30, height: 30 }}
+            />
+            <Tooltip
+              title="담당자가 할당되지 않은 할일 목록"
+              placement="top-end"
+              arrow
+            >
+              <Typography fontSize={16} color="yellow">
+                관리자 모드
+              </Typography>
+            </Tooltip>
+          </Box>
+        </Box>
+      ) : null}
+
       {/* 검색어 입력 */}
       <Box height="100%">
         <TextField
