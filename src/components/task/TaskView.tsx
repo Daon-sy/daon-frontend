@@ -1,5 +1,5 @@
 import React from "react"
-import { Box } from "@mui/material"
+import { Box, Button } from "@mui/material"
 import { getWorkspaceStore } from "store/userStore"
 import { getTaskDetailViewStore } from "store/taskStore"
 import { TaskListApiParams } from "api/task"
@@ -11,7 +11,9 @@ import useFetchTaskList from "hooks/task/useFetchTaskList"
 import Typography from "@mui/material/Typography"
 import IconBreadcrumbs from "components/common/IconBreadcrumbs"
 import { matchPath, useLocation } from "react-router-dom"
+import { useCreateTaskModal } from "components/task/CreateTask"
 import NoData from "components/common/NoData"
+import { AddCircle } from "@mui/icons-material"
 
 interface TaskViewProps {
   params?: TaskListApiParams
@@ -23,6 +25,7 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
   const [viewType, setViewType] = React.useState<string>("kanban")
   const { workspace } = getWorkspaceStore()
   const { taskDetailParam } = getTaskDetailViewStore()
+  const { CreateTaskModal, open: openCreateTaskModal } = useCreateTaskModal()
   const { tasks, fetchTaskList } = useFetchTaskList(
     {
       workspaceId: workspace?.workspaceId || 0,
@@ -83,9 +86,34 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
     <Box height="100%">
       <IconBreadcrumbs />
       {title ? (
-        <Typography mt={1} variant="h2" sx={{ fontSize: 24, fontWeight: 900 }}>
-          {title}
-        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography
+            mt={1}
+            variant="h2"
+            sx={{ fontSize: 24, fontWeight: 900 }}
+          >
+            {title}
+          </Typography>
+          <Button
+            color="yellow"
+            size="medium"
+            variant="contained"
+            onClick={openCreateTaskModal}
+            sx={{
+              borderRadius: 50,
+              position: "absolute",
+              bottom: 42,
+              right: 42,
+              zIndex: 10000,
+              display: "flex",
+              alignItems: "center",
+              fontSize: "16px",
+              lineHeight: "32px",
+            }}
+          >
+            <AddCircle sx={{ mr: 1 }} />할 일 추가
+          </Button>
+        </Box>
       ) : null}
       {tasks.length > 0 ? (
         <Box mt={2}>
@@ -133,6 +161,7 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
           </Box>
         )}
       </Box>
+      <CreateTaskModal />
     </Box>
   )
 }
