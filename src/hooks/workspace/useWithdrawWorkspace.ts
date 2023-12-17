@@ -26,9 +26,9 @@ const useWithdrawWorkspace = () => {
         ...workspaceList.filter(ws => ws.workspaceId !== workspaceId),
       ])
       addSuccess("워크스페이스에서 탈퇴하였습니다")
-      if (callback) callback()
       // 개인 워크스페이스로 이동
       navigate(`/workspace/${myWorkspaceId}`)
+      if (callback) callback()
     } catch (e) {
       if (axios.isAxiosError(e)) {
         const { response } = e
