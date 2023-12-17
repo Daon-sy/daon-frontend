@@ -40,10 +40,10 @@ const MessageListSection = ({
   onSendMessageClick,
   onReadMessageClick,
 }: MessageListSectionProps) => {
-  const { addSuccess, addError } = useAlert()
+  const { addSuccess } = useAlert()
 
   const [allMessages, setAllMessages] = React.useState<MessageSummary[]>([])
-  const [searchOption, setSearchOption] = React.useState<string>("none")
+  const [searchOption, setSearchOption] = React.useState<string>("title")
   const [searchText, setSearchText] = React.useState<string>("")
   const [totalPage, setTotalPage] = React.useState<number>(1)
   const [currentPage, setCurrentPage] = React.useState<number>(1)
@@ -81,11 +81,6 @@ const MessageListSection = ({
   }, [])
 
   const handleSearchClick = () => {
-    if (searchOption === "none") {
-      addError("검색 카테고리를 선택해 주세요.")
-      return
-    }
-
     fetchMessages()
   }
 
@@ -130,7 +125,15 @@ const MessageListSection = ({
 
   return (
     <Box>
-      <Box sx={{ height: 30, mb: 2, display: "flex", alignItems: "center" }}>
+      <Box
+        sx={{
+          height: 30,
+          mb: 2,
+          backgroundColor: "white",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
         <Typography variant="h6" sx={{ color: "#1F4838" }}>
           다온 쪽지
         </Typography>
@@ -160,7 +163,13 @@ const MessageListSection = ({
           }}
         >
           <Button
-            sx={{ pt: 2, fontSize: 12 }}
+            disableElevation
+            variant="contained"
+            color="primary"
+            sx={{
+              mr: 1,
+              border: 1,
+            }}
             onClick={() => setReadAllMessagesModalOpen(true)}
           >
             쪽지 모두 읽기
@@ -178,8 +187,6 @@ const MessageListSection = ({
             color="primary"
             sx={{
               border: 1,
-              backgroundColor: "#1F4838",
-              color: "white",
             }}
             onClick={onSendMessageClick}
           >
@@ -193,7 +200,7 @@ const MessageListSection = ({
               value={searchOption}
               onChange={e => setSearchOption(e.target.value as string)}
             >
-              <MenuItem value="none">없음</MenuItem>
+              <MenuItem value="none">선택</MenuItem>
               <MenuItem value="title">제목</MenuItem>
               <MenuItem value="sender">보낸이</MenuItem>
             </Select>
@@ -227,39 +234,46 @@ const MessageListSection = ({
           </Button>
         </Box>
         <Box mt={3}>
-          <Box height={370}>
-            {currentMessages.length === 0 ? (
-              <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <NoData
-                  content="검색 결과가 없어요"
-                  width="280px"
-                  height="140px"
+          {currentMessages.length === 0 ? (
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <NoData
+                content="검색 결과가 없어요"
+                width="280px"
+                height="140px"
+              />
+            </Box>
+          ) : (
+            <Box>
+              <Box height={370}>
+                <Stack spacing={1.5}>
+                  {currentMessages.map(message => (
+                    <MessageCard
+                      key={message.messageId}
+                      message={message}
+                      onDeleteMessageClick={() =>
+                        handleDeleteMessageClick(message.messageId)
+                      }
+                      onReadMessageClick={() =>
+                        handleReadMessageClick(message, workspace?.workspaceId)
+                      }
+                    />
+                  ))}
+                </Stack>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <Pagination
+                  count={totalPage}
+                  page={currentPage}
+                  onChange={handlePageChange}
                 />
               </Box>
-            ) : (
-              <Stack spacing={1.5}>
-                {currentMessages.map(message => (
-                  <MessageCard
-                    key={message.messageId}
-                    message={message}
-                    onDeleteMessageClick={() =>
-                      handleDeleteMessageClick(message.messageId)
-                    }
-                    onReadMessageClick={() =>
-                      handleReadMessageClick(message, workspace?.workspaceId)
-                    }
-                  />
-                ))}
-              </Stack>
-            )}
-          </Box>
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <Pagination
-              count={totalPage}
-              page={currentPage}
-              onChange={handlePageChange}
-            />
-          </Box>
+            </Box>
+          )}
         </Box>
       </Box>
     </Box>

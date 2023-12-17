@@ -1,6 +1,5 @@
 import React from "react"
 import {
-  Avatar,
   Box,
   Button,
   InputAdornment,
@@ -12,10 +11,10 @@ import {
 } from "@mui/material"
 import { MessageSender, WorkspaceParticipant } from "_types/workspace"
 import { workspaceParticipantListApi } from "api/workspace"
-import { TEST_IMAGE_URL } from "env"
 import SearchIcon from "@mui/icons-material/Search"
 import ColorAvatar from "components/common/ColorAvatar"
 import NoData from "components/common/NoData"
+import { getWorkspaceStore } from "store/userStore"
 
 interface SelectReceiverButtonProps {
   workspaceId: number | undefined
@@ -30,6 +29,7 @@ const SelectReceiverButton = ({
   messageReceiver,
   onReceiverClick,
 }: SelectReceiverButtonProps) => {
+  const { myProfile } = getWorkspaceStore()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const [receivers, setReceivers] = React.useState<Array<WorkspaceParticipant>>(
     [],
@@ -104,19 +104,24 @@ const SelectReceiverButton = ({
       >
         {selectedReceiver ? (
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Avatar
-              sx={{ width: 35, height: 35 }}
-              src={selectedReceiver?.imageUrl || TEST_IMAGE_URL}
+            <ColorAvatar
+              sx={{ width: 27, height: 27 }}
+              src={selectedReceiver?.imageUrl}
+              id={selectedReceiver?.workspaceParticipantId}
             />
-            <Typography sx={{ ml: 0.5 }}>{selectedReceiver?.name}</Typography>
-            <Typography sx={{ ml: 1, fontSize: 14, color: "lightGray" }}>
-              {selectedReceiver?.email}
+            <Typography
+              overflow="hidden"
+              whiteSpace="nowrap"
+              textOverflow="ellipsis"
+              sx={{ ml: 0.5 }}
+            >
+              {selectedReceiver?.name}
             </Typography>
           </Box>
         ) : null}
       </Button>
       <Menu
-        sx={{ height: 400 }}
+        sx={{ width: 333.56, height: 400 }}
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
@@ -139,8 +144,11 @@ const SelectReceiverButton = ({
         </Box>
         <Box>
           {receivers
-            .filter(receiver =>
-              receiver.name.toLowerCase().includes(searchValue.toLowerCase()),
+            .filter(
+              receiver =>
+                receiver.workspaceParticipantId !==
+                  myProfile?.workspaceParticipantId &&
+                receiver.name.toLowerCase().includes(searchValue.toLowerCase()),
             )
             .map(receiver => (
               <Tooltip title={receiver.name} disableInteractive>
@@ -184,7 +192,7 @@ const SelectReceiverButton = ({
           ).length === 0 && (
             <NoData
               content="검색 결과가 없어요"
-              width="286.75px"
+              width="333.56px"
               height="143.375px"
             />
           )}

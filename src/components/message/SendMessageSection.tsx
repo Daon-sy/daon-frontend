@@ -113,6 +113,9 @@ const SendMessageSection = ({
             fullWidth
             value={title}
             onChange={e => setTitle(e.target.value)}
+            inputProps={{
+              maxLength: 50,
+            }}
           />
         </Box>
         <Typography
@@ -136,6 +139,9 @@ const SendMessageSection = ({
             rows={10}
             value={content}
             onChange={e => setContent(e.target.value)}
+            inputProps={{
+              maxLength: 500,
+            }}
           />
           <Typography
             sx={{

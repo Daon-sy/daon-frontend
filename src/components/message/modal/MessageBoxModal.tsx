@@ -105,6 +105,7 @@ const MessageBoxModal = ({
 
   return (
     <TitleDialog
+      color="lightGray"
       maxWidth="xs"
       height={600}
       handleClose={handleClose}

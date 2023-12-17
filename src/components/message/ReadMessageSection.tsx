@@ -60,17 +60,29 @@ const ReadMessageSection = ({
       <Divider sx={{ mb: 2 }} />
       <Box sx={{ m: 2, my: 2, display: "flex", alignItems: "center" }}>
         <ColorAvatar
-          sx={{ width: 27, height: 27 }}
+          sx={{ width: 20, height: 20 }}
           src={message?.sender?.imageUrl}
           id={message?.sender?.workspaceParticipantId}
         />
-        <Typography>
+        <Typography sx={{ fontSize: 14 }}>
           {message?.sender ? message.sender.name : "탈퇴한 사용자"}
         </Typography>
       </Box>
-      <Typography sx={{ m: 2, pl: 1, fontSize: 18, fontWeight: "bold" }}>
-        {message?.title}
-      </Typography>
+      <Box sx={{ width: 355, display: "flex" }}>
+        <Typography
+          sx={{
+            width: "100%",
+            mx: 2,
+            my: 1,
+            fontSize: 17,
+            fontWeight: "bold",
+            wordWrap: "break-word",
+            overflowWrap: "break-word",
+          }}
+        >
+          {message?.title}
+        </Typography>
+      </Box>
       <Box
         sx={{
           border: 1,
@@ -83,7 +95,16 @@ const ReadMessageSection = ({
           backgroundColor: "#F6F7F9",
         }}
       >
-        <Typography sx={{ m: 1 }}>{message?.content}</Typography>
+        <Typography
+          sx={{
+            m: 1,
+            fontSize: 14,
+            wordWrap: "break-word",
+            overflowWrap: "break-word",
+          }}
+        >
+          {message?.content}
+        </Typography>
       </Box>
       <Typography
         sx={{
