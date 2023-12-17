@@ -104,6 +104,10 @@ const TaskKanbansWrapper: React.FC<TaskKanbansWrapperProps> = ({
           .filter(
             task =>
               task.progressStatus === item.progressStatus && task !== null,
+          )
+          // 관리자 필터링
+          .filter(task =>
+            filter.taskManager ? task.taskManager === null : true,
           )}
         renderProject={renderProject}
       />

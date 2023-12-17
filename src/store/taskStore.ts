@@ -26,6 +26,7 @@ interface TaskListFilter {
   boardId?: number
   my?: boolean
   emergency?: boolean
+  taskManager?: boolean
 }
 
 interface TaskListFilterStore {
@@ -41,6 +42,7 @@ export const getTaskListFilterStore = create<TaskListFilterStore>(set => ({
     boardId: undefined,
     my: false,
     emergency: false,
+    taskManager: false,
   },
   clear: () => {
     set({
@@ -50,6 +52,7 @@ export const getTaskListFilterStore = create<TaskListFilterStore>(set => ({
         boardId: undefined,
         my: false,
         emergency: false,
+        taskManager: false,
       },
     })
   },
