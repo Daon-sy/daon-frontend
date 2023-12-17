@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"
 import { Box, TextField, InputAdornment, Typography } from "@mui/material"
 import SettingsIcon from "@mui/icons-material/Settings"
 import SearchIcon from "@mui/icons-material/Search"
-import { getProjectsStore } from "store/userStore"
+import { getProjectsStore, getWorkspaceStore } from "store/userStore"
 import Menu from "components/common/Menu"
 import CreateBtn from "components/common/CreateBtn"
 import { useTitleDialog } from "components/common/TitleDialog"
@@ -14,6 +14,7 @@ import ProjectSettingsModal from "components/project/modal/ProjectSettingsModal"
 
 const SidebarMenu: React.FC = () => {
   const { workspaceId } = useParams()
+  const { myProfile } = getWorkspaceStore()
   const { projects } = getProjectsStore()
   const [projectManageModalOpenMap, setProjectManageModalOpenMap] =
     React.useState<Record<number, boolean>>({})
@@ -93,7 +94,11 @@ const SidebarMenu: React.FC = () => {
     >
       <Menu
         title="참여 중인 프로젝트"
-        btn={<CreateBtn handleClick={openCreateProjectDialog} />}
+        btn={
+          myProfile?.role === "BASIC_PARTICIPANT" ? null : (
+            <CreateBtn handleClick={openCreateProjectDialog} />
+          )
+        }
       >
         <Box width="88%" mb={1}>
           <TextField
