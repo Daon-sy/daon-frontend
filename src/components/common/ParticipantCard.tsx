@@ -13,12 +13,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCrown, faLeaf } from "@fortawesome/free-solid-svg-icons"
 import { WorkspaceParticipant } from "_types/workspace"
 import MessageBoxModal from "components/message/modal/MessageBoxModal"
+import { getWorkspaceStore } from "store/userStore"
 
 interface ParticipantItemProps {
   participant: WorkspaceParticipant
 }
 
 const ParticipantCard: React.FC<ParticipantItemProps> = ({ participant }) => {
+  const { myProfile } = getWorkspaceStore()
   const [anchorMenu, setAnchorMenu] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorMenu)
 
@@ -26,6 +28,11 @@ const ParticipantCard: React.FC<ParticipantItemProps> = ({ participant }) => {
     React.useState<boolean>(false)
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    if (
+      myProfile?.workspaceParticipantId === participant.workspaceParticipantId
+    ) {
+      return
+    }
     setAnchorMenu(event.currentTarget)
   }
 

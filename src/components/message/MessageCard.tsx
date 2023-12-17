@@ -1,6 +1,6 @@
 import React from "react"
 import { MessageSummary } from "_types/workspace"
-import { Box, Button, Typography } from "@mui/material"
+import { Box, Button, Tooltip, Typography } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
 import ColorAvatar from "components/common/ColorAvatar"
 import { ConfirmDialog } from "components/common/ConfirmDialog"
@@ -31,6 +31,7 @@ const MessageCard: React.FC<MessageCardProps> = ({
   return (
     <Box
       sx={{
+        width: 394,
         display: "flex",
         border: 1,
         borderRadius: 1,
@@ -40,25 +41,31 @@ const MessageCard: React.FC<MessageCardProps> = ({
         alignItems: "center",
       }}
     >
-      <Box sx={{ ml: 1, width: "10%" }}>
+      <Box sx={{ ml: 1, width: 39 }}>
         <ColorAvatar
           sx={{ width: 27, height: 27 }}
           src={message.sender?.imageUrl}
           id={message.sender?.workspaceParticipantId}
         />
       </Box>
-      <Box width="30%">
-        <Typography
-          overflow="hidden"
-          whiteSpace="nowrap"
-          textOverflow="ellipsis"
+      <Box>
+        <Tooltip
+          title={message.sender ? message.sender.name : "탈퇴한 사용자"}
+          disableInteractive
         >
-          {message.sender ? message.sender.name : "탈퇴한 사용자"}
-        </Typography>
+          <Typography
+            sx={{ ml: 0.5, width: 121 }}
+            overflow="hidden"
+            whiteSpace="nowrap"
+            textOverflow="ellipsis"
+          >
+            {message.sender ? message.sender.name : "탈퇴한 사용자"}
+          </Typography>
+        </Tooltip>
       </Box>
-      <Box width="50%">
+      <Box>
         <Typography
-          sx={{ cursor: "pointer" }}
+          sx={{ ml: 0.5, width: 181, cursor: "pointer" }}
           overflow="hidden"
           whiteSpace="nowrap"
           textOverflow="ellipsis"
@@ -67,7 +74,7 @@ const MessageCard: React.FC<MessageCardProps> = ({
           {message.title}
         </Typography>
       </Box>
-      <Box width="10%" sx={{ pr: 1.5 }}>
+      <Box>
         <Button onClick={() => setDeleteMessageModalOpen(true)}>
           <DeleteIcon sx={{ color: "lightGray" }} />
         </Button>

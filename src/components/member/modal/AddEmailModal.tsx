@@ -128,7 +128,7 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
         }, 500)
       }
     } catch (e) {
-      setError("인증번호 확인에 실패했습니다.")
+      setIsThrottledForCheck(false)
       setCheckCode(false)
     }
   }
@@ -259,7 +259,7 @@ const AddEmailModal = ({ open, handleClose, onSuccess }: Props) => {
               인증 시간이 초과되었습니다.
             </Typography>
           ) : null}
-          {checkCode !== null && timeLeft !== 0 && (
+          {checkCode !== null && (
             <Typography sx={{ mt: 0.5, fontSize: 14, color: "#787878" }}>
               {checkCode
                 ? "이메일 인증이 완료되었습니다."

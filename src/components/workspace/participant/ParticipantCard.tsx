@@ -6,19 +6,22 @@ import {
   CardContent,
   Menu,
   MenuItem,
+  Tooltip,
   Typography,
 } from "@mui/material"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCrown, faLeaf } from "@fortawesome/free-solid-svg-icons"
+import wsIcon from "assets/img/ws_icon.webp"
+import pjIcon from "assets/img/pj_icon.webp"
 import { WorkspaceParticipant } from "_types/workspace"
 import ColorAvatar from "components/common/ColorAvatar"
 import MessageBoxModal from "components/message/modal/MessageBoxModal"
+import { getWorkspaceStore } from "store/userStore"
 
 interface ParticipantItemProps {
   participant: WorkspaceParticipant
 }
 
 const ParticipantCard: React.FC<ParticipantItemProps> = ({ participant }) => {
+  const { myProfile } = getWorkspaceStore()
   const [anchorMenu, setAnchorMenu] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorMenu)
 
@@ -26,6 +29,12 @@ const ParticipantCard: React.FC<ParticipantItemProps> = ({ participant }) => {
     React.useState<boolean>(false)
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    if (
+      myProfile?.workspaceParticipantId === participant.workspaceParticipantId
+    ) {
+      setAnchorMenu(null)
+      return
+    }
     setAnchorMenu(event.currentTarget)
   }
 
@@ -36,9 +45,35 @@ const ParticipantCard: React.FC<ParticipantItemProps> = ({ participant }) => {
   const getRoleIcon = (role: string) => {
     switch (role) {
       case "WORKSPACE_ADMIN":
-        return <FontAwesomeIcon icon={faCrown} color="#FDD835" />
+        return (
+          <Box
+            component="img"
+            sx={{
+              position: "absolute",
+              width: "30px",
+              height: "30px",
+              zIndex: 10,
+              bottom: 70,
+              left: 70,
+            }}
+            src={wsIcon}
+          />
+        )
       case "PROJECT_ADMIN":
-        return <FontAwesomeIcon icon={faLeaf} color="#1F4838" />
+        return (
+          <Box
+            component="img"
+            sx={{
+              position: "absolute",
+              width: "30px",
+              height: "30px",
+              zIndex: 10,
+              bottom: 70,
+              left: 70,
+            }}
+            src={pjIcon}
+          />
+        )
       default:
         return null
     }
@@ -69,29 +104,50 @@ const ParticipantCard: React.FC<ParticipantItemProps> = ({ participant }) => {
             id={participant.workspaceParticipantId}
             src={participant.imageUrl}
             sx={{
+              mr: 0,
               width: 80,
               height: 80,
             }}
           />
+          {getRoleIcon(participant.role)}
         </Box>
         <CardContent>
           <Box
             sx={{
+              width: "100%",
               display: "flex",
-              justifyContent: "center",
               alignItems: "center",
             }}
           >
-            <Typography sx={{ fontSize: 15, pr: 0.5 }}>
-              {participant.name}
-            </Typography>
-            {getRoleIcon(participant.role)}
+            <Tooltip title={participant.name} disableInteractive>
+              <Typography
+                overflow="hidden"
+                whiteSpace="nowrap"
+                textOverflow="ellipsis"
+                sx={{ width: "100%", fontSize: 15 }}
+              >
+                {participant.name}
+              </Typography>
+            </Tooltip>
           </Box>
-          <Typography
-            sx={{ fontSize: 10, textAlign: "center", color: "lightGray" }}
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+            }}
           >
-            {participant.email}
-          </Typography>
+            <Tooltip title={participant.email} disableInteractive>
+              <Typography
+                overflow="hidden"
+                whiteSpace="nowrap"
+                textOverflow="ellipsis"
+                sx={{ fontSize: 10, textAlign: "center", color: "lightGray" }}
+              >
+                {participant.email}
+              </Typography>
+            </Tooltip>
+          </Box>
         </CardContent>
       </CardActionArea>
       <Menu
