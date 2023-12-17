@@ -85,7 +85,7 @@ const SidebarMenu: React.FC = () => {
   return (
     <Box
       sx={{
-        height: "calc(100vh - 195px)",
+        height: "calc(100vh - 320px)",
         display: "flex",
         flexDirection: "column",
         boxSizing: "border-box",
@@ -122,7 +122,7 @@ const SidebarMenu: React.FC = () => {
         </Box>
         <Box
           sx={{
-            height: "calc(100vh - 365px)",
+            height: "calc(100vh - 416px)",
             msOverflowStyle: "none",
             scrollbarWidth: "none",
             WebkitScrollSnapType: "none",

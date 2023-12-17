@@ -1,10 +1,13 @@
 import React from "react"
-import { Box } from "@mui/material"
+import { Box, Button } from "@mui/material"
+import WorkspaceSettingsModal from "components/workspace/modal/WorkspaceSettingsModal"
 import SidebarMenu from "./SidebarMenu"
 import WorkSpaceProfile from "./WorkspaceProfile"
 import IconBtnWrapper from "./IconBtnWrapper"
 
 const Sidebar: React.FC = () => {
+  const [workspaceManageModalOpen, setWorkspaceManageModalOpen] =
+    React.useState(false)
   return (
     <Box
       component="section"
@@ -37,6 +40,24 @@ const Sidebar: React.FC = () => {
       >
         <SidebarMenu />
       </Box>
+      <Box sx={{ mb: 1, mx: 2 }}>
+        <Button
+          fullWidth
+          size="medium"
+          variant="contained"
+          onClick={() => {
+            setWorkspaceManageModalOpen(true)
+          }}
+        >
+          워크스페이스 설정
+        </Button>
+      </Box>
+      {workspaceManageModalOpen ? (
+        <WorkspaceSettingsModal
+          open={workspaceManageModalOpen}
+          handleClose={() => setWorkspaceManageModalOpen(false)}
+        />
+      ) : null}
     </Box>
   )
 }
