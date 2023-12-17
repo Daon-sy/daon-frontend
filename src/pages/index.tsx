@@ -11,17 +11,22 @@ import WorkspaceRoutes from "pages/workspace"
 import { getBackdropStore } from "store/backdropStore"
 import useFetchMyMemberDetail from "hooks/member/useFetchMyMemberDetail"
 import useFetchMySettings from "hooks/member/useFetchMySettings"
+import useReissue from "hooks/auth/useReissue"
 
 const PageRoutes = () => {
-  const { token } = getTokenStore()
-  const { backdropOpen } = getBackdropStore()
+  const { fetch: reissue } = useReissue()
+  React.useEffect(() => {
+    reissue()
+  }, [])
+
+  const { token, isFetchingReissue } = getTokenStore()
   const {
     myDetail,
     fetch: fetchMyMemberDetail,
-    isFetching,
+    isFetching: isFetchingMyMemberDetail,
   } = useFetchMyMemberDetail()
-  const { fetch: fetchMySettings } = useFetchMySettings()
-
+  const { fetch: fetchMySettings, isFetching: isFetchingMySettings } =
+    useFetchMySettings()
   React.useEffect(() => {
     if (token) {
       fetchMyMemberDetail()
@@ -29,7 +34,20 @@ const PageRoutes = () => {
     }
   }, [token])
 
-  if (isFetching) return null
+  const { backdropOpen } = getBackdropStore()
+  if (
+    isFetchingReissue !== "FETCHED" ||
+    isFetchingMyMemberDetail ||
+    isFetchingMySettings
+  )
+    return (
+      <Backdrop
+        open
+        sx={{ color: "#fff", zIndex: theme => theme.zIndex.drawer + 1 }}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    )
 
   return (
     <BrowserRouter>

@@ -1,7 +1,6 @@
 import React from "react"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import PageRoutes from "pages"
-import RefreshComponent from "auth/RefreshComponent"
 import { AlertDialog } from "components/common/AlertDialog"
 import { getAlertStore } from "store/alertStore"
 
@@ -146,9 +145,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <RefreshComponent>
-        <PageRoutes />
-      </RefreshComponent>
+      <PageRoutes />
       {alertProps ? (
         <AlertDialog
           open={Boolean(alertProps)}
