@@ -39,11 +39,16 @@ const TaskReplyInput: React.FC<TaskReplyProps> = ({
       return
     }
 
-    addTaskReply(workspaceId, projectId, boardId, taskId, data).then(() => {
-      resetData()
-      onReplyAdded()
-      addSuccess("댓글이 등록 되었습니다")
-    })
+    addTaskReply(workspaceId, projectId, boardId, taskId, data)
+      .then(() => {
+        addSuccess("댓글이 등록 되었습니다")
+        resetData()
+        onReplyAdded()
+      })
+      .catch(error => {
+        addError("댓글 등록에 실패했습니다")
+        console.error(error)
+      })
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
