@@ -104,7 +104,7 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
               position: "absolute",
               bottom: 42,
               right: 42,
-              zIndex: 10000,
+              zIndex: 100,
               display: "flex",
               alignItems: "center",
               fontSize: "16px",
