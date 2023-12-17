@@ -1,6 +1,6 @@
 import React from "react"
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
-import { Backdrop, Box, CircularProgress } from "@mui/material"
+import { Backdrop, Box, Button, CircularProgress } from "@mui/material"
 import AnonymousLayout from "layouts/AnonymousLayout"
 import Home from "pages/Home"
 import Landing from "pages/Landing"
@@ -12,7 +12,8 @@ import useFetchMyMemberDetail from "hooks/member/useFetchMyMemberDetail"
 import useFetchMySettings from "hooks/member/useFetchMySettings"
 import useReissue from "hooks/auth/useReissue"
 import useFetchWorkspaceList from "hooks/workspace/useFetchWorkspaceList"
-import NotFound from "components/common/NotFound"
+import NoData from "components/common/NoData"
+import { getMyWorkspaceIdStore } from "store/userStore"
 
 const MemberRoute = () => {
   const { myDetail, isFetching: isFetchingMyMemberDetail } =
@@ -20,6 +21,7 @@ const MemberRoute = () => {
   const { mySettings, isFetching: isFetchingMySettings } = useFetchMySettings()
   const { workspaces: workspaceList, isFetching: isFetchingWorkspaceList } =
     useFetchWorkspaceList()
+  const { myWorkspaceId } = getMyWorkspaceIdStore()
 
   if (
     isFetchingMyMemberDetail ||
@@ -45,8 +47,28 @@ const MemberRoute = () => {
       <Route
         path="/*"
         element={
-          <Box height="100vh">
-            <NotFound />
+          <Box
+            width="100%"
+            height="90vh"
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <NoData
+              content="존재하지 않는 페이지 입니다"
+              width={300}
+              height={150}
+            />
+            <Button
+              variant="outlined"
+              onClick={() => {
+                location.href = `/workspace/${myWorkspaceId}`
+              }}
+              sx={{ mt: 3 }}
+            >
+              내 워크스페이로 이동
+            </Button>
           </Box>
         }
       />
