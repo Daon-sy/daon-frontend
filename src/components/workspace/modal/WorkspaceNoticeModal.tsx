@@ -23,12 +23,14 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
   const { workspaceId } = useParams()
   const [selectedNoticeId, setSelectedNoticeId] = useState<number | null>(null)
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
+  const [isManageMode, setManageMode] = useState<boolean>(false)
   const { fetchWorkspaceNoticeList } = useFetchWorkspaceNoticeList(
     Number(workspaceId),
   )
 
   const handleNoticeClick = (noticeId: number) => {
     setSelectedNoticeId(noticeId)
+    setManageMode(false)
   }
 
   const handleCreateNotice = () => {
@@ -72,7 +74,24 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
               +추가
             </Button>
           ) : null}
-          {workspaceId && (
+          {isManageMode && (
+            <Box sx={{ width: "35%", padding: 0 }}>
+              <Box
+                sx={{
+                  border: "2px solid #dcdcdc",
+                  height: "98%",
+                  borderRadius: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <NoData content="수정중입니다." />
+              </Box>
+            </Box>
+          )}
+          {workspaceId && !isManageMode && (
             <Box sx={{ width: "35%", padding: 0 }}>
               <WorkspaceNoticeList
                 workspaceId={+workspaceId}
@@ -87,6 +106,8 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
                 workspaceId={+workspaceId}
                 noticeId={selectedNoticeId}
                 onCancel={() => setSelectedNoticeId(null)}
+                onManageMode={() => setManageMode(true)}
+                offManageMode={() => setManageMode(false)}
               />
             ) : (
               <Box

@@ -16,12 +16,16 @@ interface Props {
   workspaceId: number
   noticeId: number
   onCancel: () => void
+  onManageMode: () => void
+  offManageMode: () => void
 }
 
 const WorkspaceNoticeDetailView: React.FC<Props> = ({
   workspaceId,
   noticeId,
   onCancel,
+  onManageMode,
+  offManageMode,
 }: Props) => {
   const { myProfile } = getWorkspaceStore()
   const { workspaceNotice, fetchWorkspaceNoticeDetail } =
@@ -41,6 +45,7 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
 
   const handleModifyNotice = () => {
     setIsModifyMode(true)
+    onManageMode()
   }
 
   useEffect(() => {
@@ -101,7 +106,10 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
               workspaceId={workspaceId}
               noticeId={noticeId}
               notice={workspaceNotice}
-              onCancel={() => setIsModifyMode(false)}
+              onCancel={() => {
+                setIsModifyMode(false)
+                offManageMode()
+              }}
             />
           ) : (
             workspaceNotice && (
