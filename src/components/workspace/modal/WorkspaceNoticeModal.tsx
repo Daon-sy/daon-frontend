@@ -13,13 +13,15 @@ import CreateWorkspaceNotice from "../notice/CreateWorkspaceNotice"
 interface Props {
   open: boolean
   handleClose: () => void
+  mainNoticeId?: number
 }
 
 const WorkspaceNoticeModal: React.FC<Props> = ({
   open,
   handleClose,
+  mainNoticeId,
 }: Props) => {
-  const { myProfile } = getWorkspaceStore()
+  const { myProfile, workspace } = getWorkspaceStore()
   const { workspaceId } = useParams()
   const [selectedNoticeId, setSelectedNoticeId] = useState<number | null>(null)
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
@@ -27,6 +29,12 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
   const { fetchWorkspaceNoticeList } = useFetchWorkspaceNoticeList(
     Number(workspaceId),
   )
+
+  React.useEffect(() => {
+    if (mainNoticeId && mainNoticeId !== selectedNoticeId) {
+      setSelectedNoticeId(mainNoticeId)
+    }
+  }, [mainNoticeId])
 
   const handleNoticeClick = (noticeId: number) => {
     setSelectedNoticeId(noticeId)
@@ -87,7 +95,7 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
                   justifyContent: "center",
                 }}
               >
-                <NoData content="수정중입니다." />
+                <NoData content="수정 및 삭제 중입니다." />
               </Box>
             </Box>
           )}
@@ -121,7 +129,11 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
                   justifyContent: "center",
                 }}
               >
-                <NoData content="공지사항을 선택해 주세요." />
+                {workspace?.division === "PERSONAL" ? (
+                  <NoData content="메모장을 선택해 주세요." />
+                ) : (
+                  <NoData content="공지사항을 선택해 주세요." />
+                )}
               </Box>
             )}
           </Container>

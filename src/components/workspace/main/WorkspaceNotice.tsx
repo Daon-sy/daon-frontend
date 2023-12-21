@@ -1,11 +1,25 @@
 import React from "react"
 import { Box } from "@mui/material"
-import { getWorkspaceNoticesStore } from "store/userStore"
+import { getWorkspaceNoticesStore, getWorkspaceStore } from "store/userStore"
 import MainEmpty from "components/common/MainEmpty"
-import { faBullhorn } from "@fortawesome/free-solid-svg-icons"
+import { faBullhorn, faNoteSticky } from "@fortawesome/free-solid-svg-icons"
+import NoticeCard from "./NoticeCard"
+import WorkspaceNoticeModal from "../modal/WorkspaceNoticeModal"
 
 const WorkspaceNotice: React.FC = () => {
+  const { workspace } = getWorkspaceStore()
   const { workspaceNotices } = getWorkspaceNoticesStore()
+  const [modalOpenMap, setModalOpenMap] = React.useState(
+    new Map<number, boolean>(),
+  )
+
+  const openWorkspaceNoticeModal = (noticeId: number) => {
+    setModalOpenMap(prevMap => new Map(prevMap.set(noticeId, true)))
+  }
+
+  const closeWorkspaceNoticeModal = (noticeId: number) => {
+    setModalOpenMap(prevMap => new Map(prevMap.set(noticeId, false)))
+  }
   return (
     <Box
       component="ul"
@@ -34,107 +48,65 @@ const WorkspaceNotice: React.FC = () => {
         },
       }}
     >
-      {workspaceNotices.length === 0 && (
-        <Box
-          component="li"
-          sx={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <MainEmpty
-            icon={faBullhorn}
-            content="입력된 공지사항이 없어요"
-            bgcolor="rgba(226,88,96,0.6)"
-          />
-        </Box>
-      )}
-      {workspaceNotices.map(workspaceNotice => (
-        <Box
-          key={workspaceNotice.noticeId}
-          component="li"
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-evenly",
-            borderRadius: "15px",
-            height: "calc(30vh - 104px)",
-            minHeight: "130px",
-            maxHeight: "165px",
-            width: "22%",
-            border: "2px solid #e3e3e3",
-            marginX: "6px",
-            paddingY: "1vh",
-            paddingX: "12px",
-          }}
-        >
-          <Box
-            component="div"
-            sx={{
-              height: "20px",
-              fontSize: "18px",
-              color: "#425f54",
-              fontWeight: "bold",
-              maxWidth: "200px",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-              wordBreak: "break-all",
-            }}
-          >
-            📌 {workspaceNotice.title}
-          </Box>
-          <Box
-            component="div"
-            sx={{
-              color: "#888888",
-              height: "60px",
-              lineHeight: "20px",
-              fontSize: "12px",
-              display: "-webkit-box",
-              WebkitLineClamp: "3",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              wordBreak: "break-all",
-              "-webkit-box-orient": "vertical",
-            }}
-          >
-            {workspaceNotice.content}
-          </Box>
-          <Box
-            component="div"
-            sx={{
-              display: "flex",
-              fontSize: "12px",
-              justifyContent: "space-between",
-              paddingX: "8px",
-            }}
-          >
+      {workspace?.division === "GROUP"
+        ? workspaceNotices.length === 0 && (
             <Box
-              component="div"
+              component="li"
               sx={{
-                color: "#3b5e51",
-                fontWeight: "bold",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-                width: "100px",
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
-              {workspaceNotice.writer.name}
+              <MainEmpty
+                icon={faBullhorn}
+                content="입력된 공지사항이 없어요"
+                bgcolor="rgba(226,88,96,0.6)"
+              />
             </Box>
+          )
+        : workspaceNotices.length === 0 && (
             <Box
-              component="div"
-              sx={{ color: "#888888", textAlign: "center", width: "88px" }}
+              component="li"
+              sx={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
             >
-              {workspaceNotice.createdAt}
+              <MainEmpty
+                icon={faNoteSticky}
+                content="입력된 메모장 없어요"
+                bgcolor="rgba(226,88,96,0.6)"
+              />
             </Box>
-          </Box>
-        </Box>
+          )}
+
+      {workspaceNotices.map(workspaceNotice => (
+        <NoticeCard
+          key={workspaceNotice.noticeId}
+          title={workspaceNotice.title}
+          content={workspaceNotice.content}
+          name={workspaceNotice.writer.name}
+          createdAt={workspaceNotice.createdAt}
+          onClick={() => openWorkspaceNoticeModal(workspaceNotice.noticeId)}
+        />
       ))}
+      {Array.from(modalOpenMap.entries()).map(
+        ([noticeId, isOpen]) =>
+          isOpen && (
+            <WorkspaceNoticeModal
+              key={noticeId}
+              open={isOpen}
+              handleClose={() => closeWorkspaceNoticeModal(noticeId)}
+              mainNoticeId={noticeId}
+            />
+          ),
+      )}
     </Box>
   )
 }

@@ -37,10 +37,12 @@ const WorkspaceNoticeDetailView: React.FC<Props> = ({
 
   const openConfirmDialog = () => {
     setConfirmDialogOpen(true)
+    onManageMode()
   }
   const handleRemoveNotice = () => {
     removeNotice()
     setIsNoData(true)
+    offManageMode()
   }
 
   const handleModifyNotice = () => {

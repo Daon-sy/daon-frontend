@@ -2,7 +2,11 @@ import React from "react"
 import { Link as RouterLink, useLocation, useParams } from "react-router-dom"
 import { Box, Button, Divider } from "@mui/material"
 import { Groups, AddCircle, Bookmark, EmojiEmotions } from "@mui/icons-material"
-import { faBullhorn, faComment } from "@fortawesome/free-solid-svg-icons"
+import {
+  faBullhorn,
+  faComment,
+  faNoteSticky,
+} from "@fortawesome/free-solid-svg-icons"
 import ParticipantsModal from "components/workspace/ParticipantsModal"
 import { useCreateTaskModal } from "components/task/CreateTask"
 import WorkspaceNoticeModal from "components/workspace/modal/WorkspaceNoticeModal"
@@ -74,6 +78,15 @@ const IconBtnWrapper: React.FC = () => {
           icon={<AddCircle fontSize="medium" />}
           onClick={openCreateTaskModal}
         />
+
+        {workspace?.division === "PERSONAL" && (
+          <IconBtn
+            component="button"
+            text="메모장"
+            icon={faNoteSticky}
+            onClick={openWorkspaceNoticeModal}
+          />
+        )}
       </Box>
       {workspace?.division === "PERSONAL" ? (
         <Box

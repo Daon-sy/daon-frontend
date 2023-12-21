@@ -1,7 +1,7 @@
 import React from "react"
 import { Box, Grid } from "@mui/material"
 import {
-  faObjectGroup,
+  faNoteSticky,
   faPeopleGroup,
   faBullhorn,
   faFileCircleExclamation,
@@ -14,7 +14,6 @@ import WorkspaceDeadlineTaskWrapper from "components/workspace/main/WorkspaceDea
 import TaskTimelineView from "components/task/timeline/TaskTimelineView"
 import SectionTitleWrapper from "components/workspace/main/SectionTitleWrapper"
 import useFetchTaskList from "hooks/task/useFetchTaskList"
-import WorkspaceList from "components/workspace/main/WorkspaceList"
 
 const WorkspaceMain: React.FC = () => {
   const { workspace } = getWorkspaceStore()
@@ -52,23 +51,13 @@ const WorkspaceMain: React.FC = () => {
       >
         {workspace.title}에 오신 것을 환영합니다.
       </Box>
-      <Grid container spacing={2}>
-        {workspace.division === "PERSONAL" ? (
-          <Grid item xs={12}>
-            <SectionTitleWrapper
-              width="100%"
-              color="#ec9f5d"
-              icon={faObjectGroup}
-              title="그룹 워크스페이스 목록"
-            >
-              <WorkspaceList />
-            </SectionTitleWrapper>
-          </Grid>
-        ) : (
+      <Grid container spacing={2} minWidth="780px">
+        {workspace.division === "GROUP" && (
           <>
             <Grid item xs={9.5}>
               <SectionTitleWrapper
                 width="100%"
+                minWidth="600px"
                 color="#E25860"
                 icon={faBullhorn}
                 title="공지사항"
@@ -92,6 +81,7 @@ const WorkspaceMain: React.FC = () => {
         <Grid item xs={9.5}>
           <SectionTitleWrapper
             width="100%"
+            minWidth="600px"
             color="#B96BC6"
             icon={faStopwatch}
             title="타임라인"
@@ -112,6 +102,19 @@ const WorkspaceMain: React.FC = () => {
             <WorkspaceDeadlineTaskWrapper tasks={tasks} />
           </SectionTitleWrapper>
         </Grid>
+
+        {workspace.division === "PERSONAL" && (
+          <Grid item xs={12} sx={{ position: "relative" }}>
+            <SectionTitleWrapper
+              width="100%"
+              color="#E25860"
+              icon={faNoteSticky}
+              title="메모장"
+            >
+              <WorkspaceNotice />
+            </SectionTitleWrapper>
+          </Grid>
+        )}
       </Grid>
     </Box>
   )
