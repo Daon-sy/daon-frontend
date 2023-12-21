@@ -37,8 +37,7 @@ const Page = styled.div`
   width: calc(100vw - 300px);
   height: calc(100vh - 90px);
   margin-left: 32px;
-  margin-right: 32px;
-  min-width: 1184px;
+  padding-right: 32px;
   background-color: #f6f7f9;
   box-sizing: border-box;
   padding-top: 12px;
