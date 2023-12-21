@@ -17,7 +17,7 @@ const useModifyTask = ({ workspaceId, projectId, boardId, taskId }: Props) => {
   const [error, setError] = React.useState<ErrorResponse>()
   const { addSuccess, addError } = useAlert()
 
-  const fetch = async (modifiedTask: TaskDetail) => {
+  const fetch = async (modifiedTask: TaskDetail, onSuccess?: () => void) => {
     if (!modifiedTask.title) {
       addError("제목을 입력해주세요")
       return
@@ -41,6 +41,7 @@ const useModifyTask = ({ workspaceId, projectId, boardId, taskId }: Props) => {
         progressStatus: modifiedTask.progressStatus,
       }
       await modifyTaskApi(workspaceId, projectId, boardId, taskId, request)
+      if (onSuccess) onSuccess()
       addSuccess("할 일을 수정했습니다.")
     } catch (e) {
       if (axios.isAxiosError(e)) {

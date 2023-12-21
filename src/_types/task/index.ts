@@ -5,23 +5,28 @@ export type TASK_STATUS = "TODO" | "PROCEEDING" | "COMPLETED" | "PENDING"
 export interface TaskStatus {
   value: TASK_STATUS
   description: string
+  color: string
 }
 
 const TODO: TaskStatus = {
   value: "TODO",
   description: "예정",
+  color: "primary.main",
 }
 const PROCEEDING: TaskStatus = {
   value: "PROCEEDING",
   description: "진행",
+  color: "secondary.main",
 }
 const COMPLETED: TaskStatus = {
   value: "COMPLETED",
   description: "완료",
+  color: "success.main",
 }
 const PENDING: TaskStatus = {
   value: "PENDING",
   description: "보류",
+  color: "error.main",
 }
 
 export const TASK_STATUS_SET: Array<TaskStatus> = [

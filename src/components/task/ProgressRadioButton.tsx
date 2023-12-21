@@ -9,6 +9,7 @@ import { TASK_STATUS, TASK_STATUS_SET } from "_types/task"
 interface Status {
   value: TASK_STATUS
   description: string
+  color: string
 }
 
 interface Props {
@@ -27,6 +28,7 @@ const ProgressRadioButton: React.FC<Props> = ({
         id: index + 1,
         description: status.description,
         value: status.value,
+        color: status.color,
       }) as Status,
   )
 
@@ -71,7 +73,7 @@ const ProgressRadioButton: React.FC<Props> = ({
               height: "32px",
               borderRadius: "15px",
               width: "95px",
-              bgcolor: selectedValue === list.value ? "#ffb83b" : "#eeeeee",
+              bgcolor: selectedValue === list.value ? list.color : "#eeeeee",
               color: selectedValue === list.value ? "#ffffff" : "#7f7f7f",
             }}
             value={list.value}
