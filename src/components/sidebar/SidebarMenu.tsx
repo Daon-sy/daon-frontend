@@ -50,11 +50,7 @@ const SidebarMenu: React.FC = () => {
       return filteredProjects.length > 0 ? (
         filteredProjects.map(list => (
           <Box key={list.projectId}>
-            <MenuItems
-              to={list.link}
-              listValue={list.listValue}
-              aria-label="설정"
-            >
+            <MenuItems to={list.link} listValue={list.listValue}>
               <SubIconBtn
                 aria-label="설정버튼"
                 color="darkgreen"

@@ -64,7 +64,7 @@ const NoticeCard: React.FC<Props> = ({
           overflow: "hidden",
           textOverflow: "ellipsis",
           wordBreak: "break-all",
-          "-webkit-box-orient": "vertical",
+          WebkitBoxOrient: "vertical",
         }}
       >
         {content}
