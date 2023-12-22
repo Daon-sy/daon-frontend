@@ -71,6 +71,7 @@ const useEmailCheck = (email: string, code: string) => {
     }
     onInputValid()
 
+    if (errorMessage.email) return
     try {
       setIsSendEmailCodeFetching(true)
       await sendVerificationEmailApi({ email })
@@ -84,14 +85,22 @@ const useEmailCheck = (email: string, code: string) => {
         const errorResponse = response?.data as ErrorResponse
         setError(errorResponse)
         if (errorResponse.errorCode === 2004) {
-          setErrorMessage({
-            ...errorMessage,
-            email: "이미 사용중인 이메일입니다",
-          })
+          setTimeout(
+            () =>
+              setErrorMessage({
+                ...errorMessage,
+                email: "이미 사용중인 이메일입니다",
+              }),
+            1000,
+          )
+          // setErrorMessage({
+          //   ...errorMessage,
+          //   email: "이미 사용중인 이메일입니다",
+          // })
         }
       }
     } finally {
-      setIsSendEmailCodeFetching(false)
+      setTimeout(() => setIsSendEmailCodeFetching(false), 1000)
     }
   }
 
