@@ -8,6 +8,8 @@ import NotificationCard from "components/notification/card/NotificationCard"
 import { useAlertDialog } from "components/common/AlertDialog"
 import useReadNotification from "hooks/notification/useReadNotification"
 import ConfirmOutMemberAlarmComponent from "components/common/confirm/ConfirmOutMemberAlarm"
+import useFetchProjectList from "hooks/project/useFetchProjectList"
+import { useParams } from "react-router-dom"
 
 interface Props {
   notification: Notification<DeportationProjectNotification & { time: string }>
@@ -23,6 +25,8 @@ const DeportatedProject: React.FC<Props> = ({
 
   const { fetch: read } = useReadNotification()
   const { AlertDialog, open: openAlertDialog } = useAlertDialog()
+  const { fetchProjectList } = useFetchProjectList(workspace.workspaceId, true)
+  const { workspaceId } = useParams()
 
   return (
     <>
@@ -61,7 +65,12 @@ const DeportatedProject: React.FC<Props> = ({
         </Box>
       </NotificationCard>
       <AlertDialog
-        handleConfirm={() => !notification.read && read(notificationId)}
+        handleConfirm={() => {
+          if (!notification.read) read(notificationId)
+          if (workspaceId && Number(workspaceId) === workspace.workspaceId) {
+            fetchProjectList()
+          }
+        }}
       >
         <ConfirmOutMemberAlarmComponent
           title="프로젝트"

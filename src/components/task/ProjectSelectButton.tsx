@@ -22,15 +22,19 @@ import useCreateProject from "hooks/project/useCreateProject"
 import useFetchProjectList from "hooks/project/useFetchProjectList"
 
 interface Props {
+  currentProjectId?: number
   handleProjectSelect: (project?: Project) => void
 }
 
 const ProjectSelectButton: React.FC<Props> = ({
   handleProjectSelect,
+  currentProjectId,
 }: Props) => {
   const { projects } = getProjectsStore()
 
-  const [selectedProject, setSelectedProject] = React.useState<Project>()
+  const [selectedProject, setSelectedProject] = React.useState<
+    Project | undefined
+  >(projects.find(p => p.projectId === currentProjectId))
   React.useEffect(() => {
     handleProjectSelect(selectedProject)
   }, [selectedProject])

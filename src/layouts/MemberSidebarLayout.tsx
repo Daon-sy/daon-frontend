@@ -1,5 +1,5 @@
 import React from "react"
-import { Outlet, useLocation } from "react-router-dom"
+import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import Sidebar from "components/sidebar/Sidebar"
 import styled from "styled-components"
 import TaskDetailModal from "components/task/modal/TaskDetailModal"
@@ -27,6 +27,7 @@ const Page = styled.div`
 `
 
 const MemberSidebarLayout = () => {
+  const navigate = useNavigate()
   const { taskDetailParam, setTaskDetailParam, clear } =
     getTaskDetailViewStore()
   const { state: locSate } = useLocation()
@@ -56,7 +57,10 @@ const MemberSidebarLayout = () => {
             boardId={taskDetailParam.boardId}
             taskId={taskDetailParam.taskId}
             open={!!taskDetailParam}
-            handleClose={clear}
+            handleClose={() => {
+              navigate(".", { state: undefined })
+              clear()
+            }}
           />
         ) : null}
       </Page>
