@@ -100,19 +100,36 @@ const MessageListSection = ({
     }
   }, [])
 
-  React.useEffect(() => {
-    fetchMessages()
-  }, [viewReceiveMessages])
+  // React.useEffect(() => {
+  //   fetchMessages()
+  // }, [viewReceiveMessages])
 
   const handleSearchClick = () => {
     fetchMessages()
   }
 
-  const handleReceiveViewClick = () => {
+  const handleReceiveViewClick = async () => {
+    const response = await findReceiveMessageListApi(
+      workspace?.workspaceId || 0,
+      searchOption,
+      searchText,
+    )
+
+    setAllMessages(response.data.content)
+    setTotalPage(response.data.totalPage)
+    setCurrentPage(1)
     setViewReceiveMessages(true)
   }
 
-  const handleSendViewClick = () => {
+  const handleSendViewClick = async () => {
+    const response = await findSendMessageListApi(
+      workspace?.workspaceId || 0,
+      searchOption,
+      searchText,
+    )
+    setAllMessages(response.data.content)
+    setTotalPage(response.data.totalPage)
+    setCurrentPage(1)
     setViewReceiveMessages(false)
   }
 
