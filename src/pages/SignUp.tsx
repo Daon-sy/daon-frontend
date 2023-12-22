@@ -11,8 +11,15 @@ import {
 } from "@mui/material"
 import signUpPageImage from "assets/img/sign_up.webp"
 import useSignUp from "hooks/member/useSignUp"
+import { useSnackbar } from "notistack"
+
+const validateUsername = (inputUsername: string) => {
+  const usernameRegex = /^[a-zA-Z0-9]{0,20}$/
+  return usernameRegex.test(inputUsername)
+}
 
 const SignUp = () => {
+  const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
 
   const {
@@ -36,12 +43,28 @@ const SignUp = () => {
   )
 
   const onUsernameChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSignUpForm({
-      ...signUpForm,
-      username: e.target.value,
+    if (validateUsername(e.target.value)) {
+      setSignUpForm({
+        ...signUpForm,
+        username: e.target.value,
+      })
+      return
+    }
+
+    enqueueSnackbar("영어, 숫자만으로 6~20자리의 아이디를 입력해주세요", {
+      variant: "error",
+      preventDuplicate: true,
+      autoHideDuration: 1500,
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "center",
+      },
     })
   }
+
+  const [openEmailCodeInput, setOpenEmailCodeInput] = React.useState(false)
   const onEmailChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (openEmailCodeInput) setOpenEmailCodeInput(false)
     setSignUpForm({
       ...signUpForm,
       email: e.target.value,
@@ -79,10 +102,8 @@ const SignUp = () => {
     })
   }
 
-  const [openEmailCodeInput, setOpenEmailCodeInput] = React.useState(false)
-
   const renderEmailCodeInput = () => {
-    if (openEmailCodeInput) {
+    if (openEmailCodeInput && !emailCheckErrorMessage.email) {
       if (isSendEmailCodeFetching)
         return (
           <Box

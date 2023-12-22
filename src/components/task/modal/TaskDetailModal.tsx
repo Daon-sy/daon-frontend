@@ -34,6 +34,7 @@ import EditableTextBox from "components/common/EditableTextBox"
 import TitleDialog from "components/common/TitleDialog"
 import ColorAvatar from "components/common/ColorAvatar"
 import NoData from "components/common/NoData"
+import { getTaskDetailViewStore } from "store/taskStore"
 import TaskReply from "../reply/TaskReply"
 import ProgressRadioButton from "../ProgressRadioButton"
 import { ConfirmDeleteComponent } from "../../common/confirm/ConfirmDelete"
@@ -75,6 +76,7 @@ const TaskDetailModal: React.FC<Props> = ({
   const { taskHistories, fetchHistories, fetchTopHistory, isLast } =
     useFetchTaskHistory(taskFullPath)
   const { fetch: modifyTask } = useModifyTask(taskFullPath)
+  const { taskDetailParam, setTaskDetailParam } = getTaskDetailViewStore()
   const { bookmarked: handleBookmarkResponse, handleBookmark } =
     useHandleBookmark(taskFullPath)
   const [bookmarked, setBookmarked] = React.useState(false)
@@ -220,15 +222,24 @@ const TaskDetailModal: React.FC<Props> = ({
                       projectId={projectId}
                       currentBoard={taskDetail.board}
                       handleBoardSelect={item => {
-                        modifyTask({
-                          ...taskDetail,
-                          board: item
-                            ? {
-                                boardId: item.boardId,
-                                title: item.title,
-                              }
-                            : undefined,
-                        })
+                        modifyTask(
+                          {
+                            ...taskDetail,
+                            board: item
+                              ? {
+                                  boardId: item.boardId,
+                                  title: item.title,
+                                }
+                              : undefined,
+                          },
+                          () =>
+                            setTaskDetailParam({
+                              taskId: taskDetailParam?.taskId || 0,
+                              boardId: item?.boardId || 0,
+                              projectId: taskDetailParam?.projectId || 0,
+                              workspaceId: taskDetailParam?.workspaceId || 0,
+                            }),
+                        )
                       }}
                     />
                   </Box>

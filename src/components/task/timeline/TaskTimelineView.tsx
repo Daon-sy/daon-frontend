@@ -25,7 +25,7 @@ interface YearMonthDateCount {
 const TaskTimelineView = ({
   tasks = [],
   height = 300,
-  taskWidthInit = 230,
+  taskWidthInit = 270,
 }: TaskViewProps) => {
   const [taskWidth] = React.useState(taskWidthInit)
 
@@ -288,6 +288,22 @@ const TaskTimelineView = ({
                     })
                   }
                 >
+                  {task.progressStatus === "COMPLETED" ? (
+                    <Chip
+                      label="완료"
+                      color="info"
+                      size="small"
+                      sx={{
+                        ml: 1,
+                        fontSize: 12,
+                        borderRadius: 1.5,
+                        fontWeight: 900,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        maxWidth: 80,
+                      }}
+                    />
+                  ) : null}
                   {task.emergency ? (
                     <Typography ml={1}>
                       <FontAwesomeIcon icon={faFire} color="red" />
@@ -309,11 +325,6 @@ const TaskTimelineView = ({
                   />
                   <Typography
                     sx={{
-                      // 완료됨 표시. 다른 아이콘 넣으면 좋을 것 같음
-                      textDecoration:
-                        task.progressStatus === "COMPLETED"
-                          ? "line-through"
-                          : undefined,
                       fontSize: 12,
                       lineHeight: `${taskHeight}px`,
                       paddingX: 0.5,

@@ -197,6 +197,9 @@ const MemberInfoSection: React.FC = () => {
               </Box>
             ) : (
               <Button
+                disableElevation
+                color="secondary"
+                variant="contained"
                 sx={{
                   display: "flex",
                   alignItems: "start",
