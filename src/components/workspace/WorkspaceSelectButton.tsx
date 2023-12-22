@@ -56,6 +56,7 @@ const WorkspaceSelectButton = () => {
             color="primary"
             onClick={handleOpenMenu}
             sx={{ my: 2, display: "block", minWidth: 250 }}
+            aria-labelledby="워크스페이스 메뉴 선택 버튼"
           >
             <Box display="flex" alignItems="center">
               {workspace ? (

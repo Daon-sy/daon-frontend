@@ -24,6 +24,7 @@ const SubIconBtn = ({
 }: SubIconBtnProps) => {
   return (
     <Box
+      aria-label="버튼"
       component="button"
       sx={{
         bgcolor: "transparent",
