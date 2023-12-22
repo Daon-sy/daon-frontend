@@ -14,6 +14,7 @@ import {
   ListItemText,
   Typography,
   Button,
+  CircularProgress,
 } from "@mui/material"
 import { ProjectParticipant } from "_types/project"
 import {
@@ -30,6 +31,7 @@ import {
 import ConfirmDialog from "components/common/ConfirmDialog"
 import SearchIcon from "@mui/icons-material/Search"
 import { TitleDialog } from "components/common/TitleDialog"
+import useDebounce from "hooks/useDebounce"
 import ConfirmOutMemberComponent from "components/common/confirm/ConfirmOutMember"
 import NoData from "components/common/NoData"
 import RoleButton from "../workspace/role/RoleButton"
@@ -72,6 +74,9 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
 
   const [myProjectProfile, setMyProjectProfile] =
     React.useState<ProjectParticipant>()
+
+  const { debouncedValue: debouncedFilterText, debouncing } =
+    useDebounce<string>(filterText, 500)
 
   React.useEffect(() => {
     const fetch = async () => {
@@ -249,91 +254,104 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
               borderRadius: 2,
             }}
           >
-            <List sx={{ paddingY: 0 }}>
-              {projectParticipants
-                .filter(participant =>
+            {debouncing ? (
+              <Box
+                sx={{
+                  minHeight: 250,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <CircularProgress />
+              </Box>
+            ) : (
+              <List sx={{ paddingY: 0 }}>
+                {projectParticipants
+                  .filter(participant =>
+                    participant[filter]
+                      .toUpperCase()
+                      .includes(debouncedFilterText.toUpperCase()),
+                  )
+                  .map((participant, index) => (
+                    <ListItem
+                      divider={index < projectParticipants.length - 1}
+                      secondaryAction={
+                        <Box display="flex" alignItems="center">
+                          <RoleButton
+                            colorRole={
+                              roles.find(r => r.role === participant?.role) ||
+                              roles[2]
+                            }
+                          />
+                          {allowedEdit.includes(myProfile?.role) ? (
+                            <Button
+                              color="error"
+                              size="small"
+                              sx={{ ml: 1, fontSize: 12 }}
+                              onClick={() =>
+                                setProjectParticipantToDrop(participant)
+                              }
+                            >
+                              내보내기
+                            </Button>
+                          ) : null}
+                        </Box>
+                      }
+                    >
+                      <ListItemAvatar>
+                        <ColorAvatar
+                          id={participant.projectParticipantId}
+                          src={participant.imageUrl}
+                          sx={{ width: 36, height: 36 }}
+                        />
+                      </ListItemAvatar>
+                      <ListItemText>
+                        <Box>
+                          <Typography
+                            fontSize={14}
+                            color="primary"
+                            fontWeight={600}
+                          >
+                            {participant.name}
+                          </Typography>
+                        </Box>
+                        <Box>
+                          <Typography fontSize={12} color="gray">
+                            {participant.email}
+                          </Typography>
+                        </Box>
+                      </ListItemText>
+                    </ListItem>
+                  ))}
+                {projectParticipants.length === 0 ? (
+                  <Typography fontSize={14} p={1}>
+                    <NoData
+                      content="참여자들이 존재하지 않습니다."
+                      width={200}
+                      height={100}
+                      sx={{ pb: 3 }}
+                    />
+                  </Typography>
+                ) : null}
+                {projectParticipants.length > 0 &&
+                filterText &&
+                projectParticipants.filter(participant =>
                   participant[filter]
                     .toUpperCase()
                     .includes(filterText.toUpperCase()),
-                )
-                .map((participant, index) => (
-                  <ListItem
-                    divider={index < projectParticipants.length - 1}
-                    secondaryAction={
-                      <Box display="flex" alignItems="center">
-                        <RoleButton
-                          colorRole={
-                            roles.find(r => r.role === participant?.role) ||
-                            roles[2]
-                          }
-                        />
-                        {allowedEdit.includes(myProfile?.role) ? (
-                          <Button
-                            color="error"
-                            size="small"
-                            sx={{ ml: 1, fontSize: 12 }}
-                            onClick={() =>
-                              setProjectParticipantToDrop(participant)
-                            }
-                          >
-                            내보내기
-                          </Button>
-                        ) : null}
-                      </Box>
-                    }
-                  >
-                    <ListItemAvatar>
-                      <ColorAvatar
-                        id={participant.projectParticipantId}
-                        src={participant.imageUrl}
-                        sx={{ width: 36, height: 36 }}
-                      />
-                    </ListItemAvatar>
-                    <ListItemText>
-                      <Box>
-                        <Typography
-                          fontSize={14}
-                          color="primary"
-                          fontWeight={600}
-                        >
-                          {participant.name}
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <Typography fontSize={12} color="gray">
-                          {participant.email}
-                        </Typography>
-                      </Box>
-                    </ListItemText>
-                  </ListItem>
-                ))}
-              {projectParticipants.length === 0 ? (
-                <Typography fontSize={14} p={1}>
-                  <NoData
-                    content="참여자들이 존재하지 않습니다."
-                    width={200}
-                    height={100}
-                    sx={{ pb: 3 }}
-                  />
-                </Typography>
-              ) : null}
-              {projectParticipants.length > 0 &&
-              filterText &&
-              projectParticipants.filter(participant =>
-                participant[filter]
-                  .toUpperCase()
-                  .includes(filterText.toUpperCase()),
-              ).length === 0 ? (
-                <Typography fontSize={14} p={1}>
-                  <NoData
-                    content="검색 결과가 없습니다."
-                    width={200}
-                    height={100}
-                    sx={{ pb: 3 }}
-                  />
-                </Typography>
-              ) : null}
-            </List>
+                ).length === 0 ? (
+                  <Typography fontSize={14} p={1}>
+                    <NoData
+                      content="검색 결과가 없습니다."
+                      width={200}
+                      height={100}
+                      sx={{ pb: 3 }}
+                    />
+                  </Typography>
+                ) : null}
+              </List>
+            )}
           </Box>
         </Box>
       </Stack>
