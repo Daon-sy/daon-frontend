@@ -16,9 +16,16 @@ const WorkspaceNoticeTitle: React.FC = () => {
       }}
     >
       <Stack direction="row">
-        <Typography fontSize={24} sx={{ fontWeight: 400, mr: 0.5 }}>
-          공지사항
-        </Typography>
+        {workspace?.division === "PERSONAL" ? (
+          <Typography fontSize={24} sx={{ fontWeight: 400, mr: 0.5 }}>
+            메모장
+          </Typography>
+        ) : (
+          <Typography fontSize={24} sx={{ fontWeight: 400, mr: 0.5 }}>
+            공지사항
+          </Typography>
+        )}
+
         <Chip
           size="small"
           sx={{
