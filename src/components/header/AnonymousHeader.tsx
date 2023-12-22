@@ -6,7 +6,15 @@ import Logo from "components/header/Logo"
 const AnonymousHeader = () => {
   return (
     <AppBar position="sticky" sx={{ top: 0, height: 70, bgcolor: "white" }}>
-      <Toolbar sx={{ height: 70, bgcolor: "white" }}>
+      <Toolbar
+        sx={{
+          height: 70,
+          bgcolor: "white",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         <Logo />
         <Box>
           <Stack spacing={2} direction="row">

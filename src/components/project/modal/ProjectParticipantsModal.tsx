@@ -124,8 +124,10 @@ const ProjectParticipantsModal = ({
               담당자 없음
             </Button>
             <Button
-              variant="outlined"
+              variant="contained"
+              color="yellow"
               size="small"
+              disableElevation
               onClick={() => {
                 handleItemClick(myProjectProfile)
                 handleClose()
