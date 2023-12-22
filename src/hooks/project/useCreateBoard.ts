@@ -23,7 +23,9 @@ const useCreateBoard = ({ workspaceId, projectId, boardTitle }: Props) => {
 
     try {
       setIsFetching(true)
-      await createProjectBoardApi(workspaceId, projectId, { title: boardTitle })
+      await createProjectBoardApi(workspaceId, projectId, {
+        title: boardTitle.length <= 20 ? boardTitle : boardTitle.slice(0, 20),
+      })
       addSuccess(`"${boardTitle}" 보드가 생성되었습니다`)
       if (callback) callback()
     } catch (e) {

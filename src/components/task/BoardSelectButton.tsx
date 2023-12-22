@@ -29,6 +29,7 @@ interface Props {
   handleBoardSelect: (board: Board | undefined) => void
   currentBoard?: Board
   skipFirst?: boolean
+  firstBoardAutoSet?: boolean
 }
 
 const BoardSelectButton: React.FC<Props> = ({
@@ -36,23 +37,17 @@ const BoardSelectButton: React.FC<Props> = ({
   handleBoardSelect,
   currentBoard,
   skipFirst = true,
+  firstBoardAutoSet = false,
 }: Props) => {
   const { myProfile } = getWorkspaceStore()
   const [skipHandleSelect, setSkipHandleSelect] = React.useState(skipFirst)
-  const [selectedBoard, setSelectedBoard] = React.useState<Board | undefined>(
-    currentBoard,
-  )
-  React.useEffect(() => {
-    if (skipHandleSelect) {
-      setSkipHandleSelect(false)
-      return
-    }
-    handleBoardSelect(selectedBoard)
-  }, [selectedBoard])
 
   const { workspace } = getWorkspaceStore()
   const { boards, fetchBoardList } = useFetchBoardList(
     workspace?.workspaceId || 0,
+  )
+  const [selectedBoard, setSelectedBoard] = React.useState<Board | undefined>(
+    currentBoard,
   )
   React.useEffect(() => {
     if (!currentBoard) setSelectedBoard(undefined)
@@ -60,6 +55,16 @@ const BoardSelectButton: React.FC<Props> = ({
       fetchBoardList(projectId)
     }
   }, [projectId])
+  React.useEffect(() => {
+    if (firstBoardAutoSet && boards.length > 0) setSelectedBoard(boards[0])
+  }, [boards])
+  React.useEffect(() => {
+    if (skipHandleSelect) {
+      setSkipHandleSelect(false)
+      return
+    }
+    handleBoardSelect(selectedBoard)
+  }, [selectedBoard])
 
   const bdSearchFilterRef = React.useRef<HTMLInputElement | null>(null)
   const [bdFilterKeyword, setBdFilterKeyword] = React.useState("")
@@ -112,6 +117,7 @@ const BoardSelectButton: React.FC<Props> = ({
               setBoardNameToAdd(e.target.value)
             }}
             InputProps={{
+              inputProps: { maxLength: 20 },
               style: { fontSize: 14 },
             }}
             onKeyDown={e => {
