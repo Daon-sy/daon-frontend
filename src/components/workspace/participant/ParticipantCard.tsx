@@ -9,8 +9,8 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material"
-import wsIcon from "assets/img/ws_icon.webp"
-import pjIcon from "assets/img/pj_icon.webp"
+import wsIcon from "assets/img/ws_icon30.webp"
+import pjIcon from "assets/img/pj_icon30.webp"
 import { WorkspaceParticipant } from "_types/workspace"
 import ColorAvatar from "components/common/ColorAvatar"
 import MessageBoxModal from "components/message/modal/MessageBoxModal"

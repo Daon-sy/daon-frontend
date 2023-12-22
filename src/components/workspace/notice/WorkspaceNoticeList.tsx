@@ -1,10 +1,16 @@
 import React from "react"
-import { Box, InputAdornment, TextField, Pagination } from "@mui/material"
+import {
+  Box,
+  InputAdornment,
+  TextField,
+  Pagination,
+  Typography,
+} from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
 import useFetchWorkspaceNoticeList from "hooks/workspace/useFetchWorkspaceNoticeList"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faBullhorn } from "@fortawesome/free-solid-svg-icons"
-import { getWorkspaceNoticesStore } from "store/userStore"
+import { faNoteSticky, faBullhorn } from "@fortawesome/free-solid-svg-icons"
+import { getWorkspaceNoticesStore, getWorkspaceStore } from "store/userStore"
 import WorkspaceNoticeCard from "./WorkspaceNoticeCard"
 
 interface Props {
@@ -16,6 +22,7 @@ const WorkspaceNoticeList: React.FC<Props> = ({
   workspaceId,
   onNoticeClick,
 }: Props) => {
+  const { workspace } = getWorkspaceStore()
   const { workspaceNotices, fetchWorkspaceNoticeList } =
     useFetchWorkspaceNoticeList(workspaceId)
   const { totalPage } = getWorkspaceNoticesStore()
@@ -120,23 +127,47 @@ const WorkspaceNoticeList: React.FC<Props> = ({
             justifyContent: "center",
           }}
         >
-          <Box
-            component="span"
-            sx={{
-              display: "inline-flex",
-              width: "58px",
-              height: "58px",
-              fontSize: "24px",
-              borderRadius: "50%",
-              backgroundColor: "rgba(226,88,96,0.6)",
-              alignItems: "center",
-              justifyContent: "center",
-              mb: 3,
-            }}
-          >
-            <FontAwesomeIcon icon={faBullhorn} color="#ffffff" />
-          </Box>
-          공지사항이 없습니다
+          {workspace?.division === "PERSONAL" ? (
+            <>
+              <Box
+                component="span"
+                sx={{
+                  display: "inline-flex",
+                  width: "58px",
+                  height: "58px",
+                  fontSize: "24px",
+                  borderRadius: "50%",
+                  backgroundColor: "rgba(226,88,96,0.6)",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  mb: 3,
+                }}
+              >
+                <FontAwesomeIcon icon={faNoteSticky} color="#ffffff" />
+              </Box>
+              <Typography>메모장이 없습니다</Typography>
+            </>
+          ) : (
+            <>
+              <Box
+                component="span"
+                sx={{
+                  display: "inline-flex",
+                  width: "58px",
+                  height: "58px",
+                  fontSize: "24px",
+                  borderRadius: "50%",
+                  backgroundColor: "rgba(226,88,96,0.6)",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  mb: 3,
+                }}
+              >
+                <FontAwesomeIcon icon={faBullhorn} color="#ffffff" />
+              </Box>
+              <Typography>공지사항이 없습니다</Typography>
+            </>
+          )}
         </Box>
       ) : (
         <Box

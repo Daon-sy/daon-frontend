@@ -114,17 +114,6 @@ const WorkspaceSelectButton = () => {
           }}
         >
           <Box position="sticky" top={0} bgcolor="white" zIndex={1}>
-            {/* <MenuItem */}
-            {/*  onClick={() => { */}
-            {/*    handleCloseMenu() */}
-            {/*    setWorkspaceManageModalOpen(true) */}
-            {/*  }} */}
-            {/*  sx={{ ".MuiDivider-root": { marginTop: 0 } }} */}
-            {/* > */}
-            {/*  <Typography variant="button" fontWeight={500} color="primary"> */}
-            {/*    워크스페이스 설정 */}
-            {/*  </Typography> */}
-            {/* </MenuItem> */}
             <Box p={1}>
               <Button
                 fullWidth
@@ -145,7 +134,6 @@ const WorkspaceSelectButton = () => {
                 autoComplete="off"
                 size="small"
                 sx={{
-                  // mx: 2,
                   fontSize: 14,
                   height: 40,
                 }}
@@ -169,9 +157,6 @@ const WorkspaceSelectButton = () => {
           <Box>
             {workspaces
               .filter(ws =>
-                workspace ? ws.workspaceId !== workspace.workspaceId : true,
-              )
-              .filter(ws =>
                 ws.title
                   .toUpperCase()
                   .includes(workspaceFilterKeyword.toUpperCase()),
@@ -180,7 +165,14 @@ const WorkspaceSelectButton = () => {
                 <Link
                   key={ws.workspaceId}
                   to={`/workspace/${ws.workspaceId}`}
-                  style={{ textDecoration: "none", color: "inherit" }}
+                  style={{
+                    textDecoration: "none",
+                    color: "inherit",
+                    cursor:
+                      ws.workspaceId === workspace?.workspaceId
+                        ? "default"
+                        : "pointer",
+                  }}
                 >
                   <Tooltip
                     arrow
@@ -194,7 +186,36 @@ const WorkspaceSelectButton = () => {
                       key={ws.workspaceId}
                       onClick={handleCloseMenu}
                       dense
-                      sx={{ px: 1 }}
+                      sx={{
+                        px: 1,
+                        borderBottom: ws.division === "PERSONAL" ? 1 : "none",
+                        borderColor:
+                          ws.division === "PERSONAL" ? "#eeeeee" : "none",
+                        mt: ws.division === "PERSONAL" ? 2 : "none",
+                        bgcolor:
+                          ws.workspaceId === workspace?.workspaceId
+                            ? "rgba(30,71,55, 0.3)"
+                            : "none",
+                        pointerEvents:
+                          ws.workspaceId === workspace?.workspaceId
+                            ? "none"
+                            : "auto",
+                        ...(ws.division === "PERSONAL"
+                          ? {
+                              "&::after": {
+                                content: '"개인 워크스페이스"',
+                                fontSize: 8,
+                                position: "absolute",
+                                top: -10,
+                                right: 0,
+                                bottom: 0,
+                                left: 8,
+                                pointerEvents: "none",
+                                bgcolor: "green",
+                              },
+                            }
+                          : {}),
+                      }}
                     >
                       <Box display="flex" alignItems="center" overflow="hidden">
                         <ColorAvatar
@@ -247,14 +268,6 @@ const WorkspaceSelectButton = () => {
             sx={{ pt: 0.3, position: "sticky", bottom: 0, bgcolor: "white" }}
           >
             <Divider />
-            {/* <MenuItem */}
-            {/*  onClick={() => { */}
-            {/*    handleCloseMenu() */}
-            {/*    openCreateWorkspaceDialog() */}
-            {/*  }} */}
-            {/* > */}
-            {/*  <Typography variant="button">워크스페이스 생성</Typography> */}
-            {/* </MenuItem> */}
             <Box p={1}>
               <Button
                 fullWidth

@@ -34,26 +34,8 @@ const useFetchWorkspaceNoticeList = (
         size,
         keyword: fetchKeyword,
       })
-      const {
-        first,
-        last,
-        pageSize,
-        pageNumber,
-        contentSize,
-        content,
-        totalPage,
-        totalCount,
-      } = data
-      setWorkspaceNotices(
-        first,
-        last,
-        pageSize,
-        pageNumber,
-        contentSize,
-        content,
-        totalPage,
-        totalCount,
-      )
+      const { first, last, pageNumber, content, totalPage, totalCount } = data
+      setWorkspaceNotices(content, totalPage, totalCount)
       setPaginationInfo({ first, last, pageNumber, totalPage, totalCount })
     } catch (e) {
       if (axios.isAxiosError(e)) {

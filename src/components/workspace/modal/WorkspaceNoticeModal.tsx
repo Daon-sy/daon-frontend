@@ -13,22 +13,32 @@ import CreateWorkspaceNotice from "../notice/CreateWorkspaceNotice"
 interface Props {
   open: boolean
   handleClose: () => void
+  mainNoticeId?: number
 }
 
 const WorkspaceNoticeModal: React.FC<Props> = ({
   open,
   handleClose,
+  mainNoticeId,
 }: Props) => {
-  const { myProfile } = getWorkspaceStore()
+  const { myProfile, workspace } = getWorkspaceStore()
   const { workspaceId } = useParams()
   const [selectedNoticeId, setSelectedNoticeId] = useState<number | null>(null)
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
+  const [isManageMode, setManageMode] = useState<boolean>(false)
   const { fetchWorkspaceNoticeList } = useFetchWorkspaceNoticeList(
     Number(workspaceId),
   )
 
+  React.useEffect(() => {
+    if (mainNoticeId && mainNoticeId !== selectedNoticeId) {
+      setSelectedNoticeId(mainNoticeId)
+    }
+  }, [mainNoticeId])
+
   const handleNoticeClick = (noticeId: number) => {
     setSelectedNoticeId(noticeId)
+    setManageMode(false)
   }
 
   const handleCreateNotice = () => {
@@ -72,7 +82,24 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
               +추가
             </Button>
           ) : null}
-          {workspaceId && (
+          {isManageMode && (
+            <Box sx={{ width: "35%", padding: 0 }}>
+              <Box
+                sx={{
+                  border: "2px solid #dcdcdc",
+                  height: "98%",
+                  borderRadius: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <NoData content="수정 및 삭제 중입니다." />
+              </Box>
+            </Box>
+          )}
+          {workspaceId && !isManageMode && (
             <Box sx={{ width: "35%", padding: 0 }}>
               <WorkspaceNoticeList
                 workspaceId={+workspaceId}
@@ -87,6 +114,8 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
                 workspaceId={+workspaceId}
                 noticeId={selectedNoticeId}
                 onCancel={() => setSelectedNoticeId(null)}
+                onManageMode={() => setManageMode(true)}
+                offManageMode={() => setManageMode(false)}
               />
             ) : (
               <Box
@@ -100,7 +129,11 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
                   justifyContent: "center",
                 }}
               >
-                <NoData content="공지사항을 선택해 주세요." />
+                {workspace?.division === "PERSONAL" ? (
+                  <NoData content="메모장을 선택해 주세요." />
+                ) : (
+                  <NoData content="공지사항을 선택해 주세요." />
+                )}
               </Box>
             )}
           </Container>

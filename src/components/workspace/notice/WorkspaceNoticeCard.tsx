@@ -50,7 +50,7 @@ const WorkspaceNoticeCard: React.FC<Props> = ({
           color: "#595959",
         }}
       >
-        📌 {workspaceNotice.title}
+        {workspaceNotice.title}
       </Box>
       <Box
         sx={{

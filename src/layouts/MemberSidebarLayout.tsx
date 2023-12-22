@@ -21,7 +21,6 @@ const Page = styled.div`
   height: calc(100vh - 90px);
   margin-left: 32px;
   margin-right: 32px;
-  min-width: 1184px;
   background-color: #f6f7f9;
   box-sizing: border-box;
   padding-top: 12px;
