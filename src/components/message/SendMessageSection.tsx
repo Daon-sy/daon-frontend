@@ -2,14 +2,17 @@ import React from "react"
 import { Box, Button, Divider, TextField, Typography } from "@mui/material"
 import { getWorkspaceStore } from "store/userStore"
 import { sendMessageApi } from "api/workspace"
-import { MessageSender, WorkspaceParticipant } from "_types/workspace"
+import {
+  MessageParticipantProfile,
+  WorkspaceParticipant,
+} from "_types/workspace"
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos"
 import { useAlert } from "hooks/useAlert"
 import SelectReceiverButton from "./SelectReceiverButton"
 
 interface SendMessageSectionProps {
   onBackButtonClick: () => void
-  messageSender: MessageSender | null
+  messageSender: MessageParticipantProfile | null
   messageReceiver: WorkspaceParticipant | undefined | null
 }
 

@@ -9,7 +9,10 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material"
-import { MessageSender, WorkspaceParticipant } from "_types/workspace"
+import {
+  MessageParticipantProfile,
+  WorkspaceParticipant,
+} from "_types/workspace"
 import { workspaceParticipantListApi } from "api/workspace"
 import SearchIcon from "@mui/icons-material/Search"
 import ColorAvatar from "components/common/ColorAvatar"
@@ -18,7 +21,7 @@ import { getWorkspaceStore } from "store/userStore"
 
 interface SelectReceiverButtonProps {
   workspaceId: number | undefined
-  messageSender: MessageSender | null
+  messageSender: MessageParticipantProfile | null
   messageReceiver: WorkspaceParticipant | undefined | null
   onReceiverClick: (workspaceParticipantId: number) => void
 }
