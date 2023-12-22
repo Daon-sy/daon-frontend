@@ -86,7 +86,7 @@ const WorkspaceNoticeList: React.FC<Props> = ({
               border: "none",
             },
           }}
-          placeholder="공지사항 검색"
+          placeholder="내용과 제목으로 검색"
           value={searchKeyword}
           onChange={e => setSearchKeyword(e.target.value)}
           onKeyDown={handleKeyDown}
