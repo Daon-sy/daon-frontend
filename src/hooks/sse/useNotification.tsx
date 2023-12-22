@@ -186,7 +186,6 @@ const useNotification = ({
 
     eventSource.onerror = e => {
       const { error } = e as ErrorEvent
-      console.error(e)
       eventSource?.close()
       if (error.message === "Failed to fetch") {
         addError("네트워크 오류가 발생하였습니다")
