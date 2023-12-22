@@ -1,6 +1,7 @@
 import React from "react"
 import {
   Box,
+  CircularProgress,
   FormControl,
   InputAdornment,
   MenuItem,
@@ -21,6 +22,7 @@ import { workspaceParticipantListApi } from "api/workspace"
 import ParticipantCard from "components/workspace/participant/ParticipantCard"
 import TitleDialog from "components/common/TitleDialog"
 import NoData from "components/common/NoData"
+import useDebounce from "hooks/useDebounce"
 
 type Filter = "name" | "email"
 
@@ -50,6 +52,8 @@ const ParticipantsModal = ({ open, handleClose }: Props) => {
   >("전체")
   const [filter, setFilter] = React.useState<Filter>("name")
   const [filterText, setFilterText] = React.useState("")
+  const { debouncedValue: debouncedFilterText, debouncing } =
+    useDebounce<string>(filterText, 500)
 
   const fetchParticipants = async () => {
     if (workspace) {
@@ -77,7 +81,9 @@ const ParticipantsModal = ({ open, handleClose }: Props) => {
 
     if (filterText.trim() !== "") {
       filteredParticipants = filteredParticipants.filter(participant =>
-        participant[filter].toUpperCase().includes(filterText.toUpperCase()),
+        participant[filter]
+          .toUpperCase()
+          .includes(debouncedFilterText.toUpperCase()),
       )
     }
 
@@ -171,24 +177,40 @@ const ParticipantsModal = ({ open, handleClose }: Props) => {
           </FormControl>
         </Box>
       </Box>
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          flexWrap: "wrap",
-        }}
-      >
-        {getFilteredParticipants().length > 0 ? (
-          getFilteredParticipants().map(participant => (
-            <ParticipantCard
-              key={participant.workspaceParticipantId}
-              participant={participant}
+      {debouncing ? (
+        <Box
+          sx={{
+            height: 300,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            flexWrap: "wrap",
+          }}
+        >
+          {getFilteredParticipants().length > 0 ? (
+            getFilteredParticipants().map(participant => (
+              <ParticipantCard
+                key={participant.workspaceParticipantId}
+                participant={participant}
+              />
+            ))
+          ) : (
+            <NoData
+              sx={{ mt: 10, mx: 18, width: 280, height: 140 }}
+              content="검색 결과가 없어요"
             />
-          ))
-        ) : (
-          <NoData content="검색 결과가 없어요" width="280px" height="140px" />
-        )}
-      </Box>
+          )}
+        </Box>
+      )}
     </TitleDialog>
   )
 }
