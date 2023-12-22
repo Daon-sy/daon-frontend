@@ -30,7 +30,7 @@ const MemberSidebarLayout = () => {
   const navigate = useNavigate()
   const { taskDetailParam, setTaskDetailParam, clear } =
     getTaskDetailViewStore()
-  const { state: locSate } = useLocation()
+  const { state: locSate, pathname } = useLocation()
   React.useLayoutEffect(() => {
     if (locSate && locSate.task) {
       const { workspaceId, projectId, boardId, taskId } = locSate.task
@@ -58,7 +58,7 @@ const MemberSidebarLayout = () => {
             taskId={taskDetailParam.taskId}
             open={!!taskDetailParam}
             handleClose={() => {
-              navigate(".", { state: undefined })
+              navigate(pathname, { state: undefined })
               clear()
             }}
           />
