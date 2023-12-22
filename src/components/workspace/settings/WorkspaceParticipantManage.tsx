@@ -35,6 +35,7 @@ import ConfirmOutMemberComponent from "components/common/confirm/ConfirmOutMembe
 import useFetchMyWorkspaceProfile from "hooks/workspace/useFetchMyWorkspaceProfile"
 import useFetchWorkspaceParticipants from "hooks/workspace/useFetchWorkspaceParticipants"
 import NoData from "components/common/NoData"
+import useDebounce from "hooks/useDebounce"
 
 type Filter = "name" | "email"
 
@@ -58,6 +59,8 @@ const WorkspaceParticipantManage = () => {
     React.useState<WorkspaceParticipant>()
   const [filter, setFilter] = React.useState<Filter>("name")
   const [filterText, setFilterText] = React.useState("")
+  const { debouncedValue: debouncedFilterText, debouncing } =
+    useDebounce<string>(filterText, 500)
   const { TitleDialog, open: openInviteMember } = useTitleDialog()
 
   const {
@@ -243,106 +246,120 @@ const WorkspaceParticipantManage = () => {
                 borderRadius: 2,
               }}
             >
-              <List sx={{ paddingY: 0 }}>
-                {workspaceParticipants
-                  ?.filter(participant =>
+              {debouncing ? (
+                <Box
+                  sx={{
+                    minHeight: 250,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <CircularProgress />
+                </Box>
+              ) : (
+                <List sx={{ paddingY: 0 }}>
+                  {workspaceParticipants
+                    ?.filter(participant =>
+                      participant[filter]
+                        .toUpperCase()
+                        .includes(filterText.toUpperCase()),
+                    )
+                    .map((participant, index) => (
+                      <ListItem
+                        divider={index < workspaceParticipants.length - 1}
+                        secondaryAction={
+                          <Box display="flex" alignItems="center">
+                            {myProfile?.role === "WORKSPACE_ADMIN" ? (
+                              <SelectRoleButton
+                                initValue={roles.findIndex(
+                                  r => r.role === participant.role,
+                                )}
+                                onChange={item => {
+                                  updateWorkspaceParticipantRole({
+                                    workspaceParticipantId:
+                                      participant.workspaceParticipantId,
+                                    role: item.role,
+                                  })
+                                }}
+                              />
+                            ) : (
+                              <RoleButton
+                                colorRole={
+                                  roles.find(
+                                    r => r.role === participant?.role,
+                                  ) || roles[2]
+                                }
+                              />
+                            )}
+                            {myProfile?.role === "WORKSPACE_ADMIN" ? (
+                              <Button
+                                color="error"
+                                size="small"
+                                sx={{ ml: 1, fontSize: 12 }}
+                                onClick={() =>
+                                  setWorkspaceParticipantToDrop(participant)
+                                }
+                              >
+                                내보내기
+                              </Button>
+                            ) : null}
+                          </Box>
+                        }
+                      >
+                        <ListItemAvatar>
+                          <ColorAvatar
+                            id={participant.workspaceParticipantId}
+                            src={participant.imageUrl}
+                            sx={{ width: 36, height: 36 }}
+                          />
+                        </ListItemAvatar>
+                        <ListItemText>
+                          <Box>
+                            <Typography
+                              fontSize={14}
+                              color="primary"
+                              fontWeight={600}
+                            >
+                              {participant.name}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography fontSize={12} color="gray">
+                              {participant.email}
+                            </Typography>
+                          </Box>
+                        </ListItemText>
+                      </ListItem>
+                    ))}
+                  {workspaceParticipants?.length === 0 ? (
+                    <Typography fontSize={14} p={1}>
+                      <NoData
+                        content="참여자들이 존재하지 않습니다."
+                        width={200}
+                        height={100}
+                        sx={{ pb: 3 }}
+                      />
+                    </Typography>
+                  ) : null}
+                  {(workspaceParticipants?.length || 0) > 0 &&
+                  filterText &&
+                  workspaceParticipants?.filter(participant =>
                     participant[filter]
                       .toUpperCase()
                       .includes(filterText.toUpperCase()),
-                  )
-                  .map((participant, index) => (
-                    <ListItem
-                      divider={index < workspaceParticipants.length - 1}
-                      secondaryAction={
-                        <Box display="flex" alignItems="center">
-                          {myProfile?.role === "WORKSPACE_ADMIN" ? (
-                            <SelectRoleButton
-                              initValue={roles.findIndex(
-                                r => r.role === participant.role,
-                              )}
-                              onChange={item => {
-                                updateWorkspaceParticipantRole({
-                                  workspaceParticipantId:
-                                    participant.workspaceParticipantId,
-                                  role: item.role,
-                                })
-                              }}
-                            />
-                          ) : (
-                            <RoleButton
-                              colorRole={
-                                roles.find(r => r.role === participant?.role) ||
-                                roles[2]
-                              }
-                            />
-                          )}
-                          {myProfile?.role === "WORKSPACE_ADMIN" ? (
-                            <Button
-                              color="error"
-                              size="small"
-                              sx={{ ml: 1, fontSize: 12 }}
-                              onClick={() =>
-                                setWorkspaceParticipantToDrop(participant)
-                              }
-                            >
-                              내보내기
-                            </Button>
-                          ) : null}
-                        </Box>
-                      }
-                    >
-                      <ListItemAvatar>
-                        <ColorAvatar
-                          id={participant.workspaceParticipantId}
-                          src={participant.imageUrl}
-                          sx={{ width: 36, height: 36 }}
-                        />
-                      </ListItemAvatar>
-                      <ListItemText>
-                        <Box>
-                          <Typography
-                            fontSize={14}
-                            color="primary"
-                            fontWeight={600}
-                          >
-                            {participant.name}
-                          </Typography>
-                        </Box>
-                        <Box>
-                          <Typography fontSize={12} color="gray">
-                            {participant.email}
-                          </Typography>
-                        </Box>
-                      </ListItemText>
-                    </ListItem>
-                  ))}
-                {workspaceParticipants?.length === 0 ? (
-                  <Typography fontSize={14} p={1}>
-                    <NoData
-                      content="참여자들이 존재하지 않습니다."
-                      width={200}
-                      height={100}
-                      sx={{ pb: 3 }}
-                    />
-                  </Typography>
-                ) : null}
-                {(workspaceParticipants?.length || 0) > 0 &&
-                filterText &&
-                workspaceParticipants?.filter(participant =>
-                  participant[filter]
-                    .toUpperCase()
-                    .includes(filterText.toUpperCase()),
-                ).length === 0 ? (
-                  <Typography fontSize={14} p={1}>
-                    <NoData
-                      content="검색 결과가 없습니다."
-                      width={200}
-                      height={100}
-                      sx={{ pb: 3 }}
-                    />
-                  </Typography>
-                ) : null}
-              </List>
+                  ).length === 0 ? (
+                    <Typography fontSize={14} p={1}>
+                      <NoData
+                        content="검색 결과가 없습니다."
+                        width={200}
+                        height={100}
+                        sx={{ pb: 3 }}
+                      />
+                    </Typography>
+                  ) : null}
+                </List>
+              )}
             </Box>
           )}
         </Box>
