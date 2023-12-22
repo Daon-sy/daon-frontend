@@ -1,7 +1,7 @@
 import React from "react"
 import TitleDialog from "components/common/TitleDialog"
 import {
-  MessageSender,
+  MessageParticipantProfile,
   MessageSummary,
   WorkspaceParticipant,
 } from "_types/workspace"
@@ -32,9 +32,10 @@ const MessageBoxModal = ({
     MESSAGE_LIST,
   )
   const [message, setMessage] = React.useState<MessageSummary | null>(null)
+  const [isSend, setIsSend] = React.useState<boolean>(false)
   const [fromReadSection, setFromReadSection] = React.useState<boolean>(false)
   const [messageSender, setMessageSender] =
-    React.useState<MessageSender | null>(null)
+    React.useState<MessageParticipantProfile | null>(null)
   const [messageReceiver, setMessageReceiver] = React.useState<
     WorkspaceParticipant | undefined | null
   >(receiver)
@@ -60,7 +61,7 @@ const MessageBoxModal = ({
     }
   }
 
-  const handleReadMessageReplyClick = (sender: MessageSender) => {
+  const handleReadMessageReplyClick = (sender: MessageParticipantProfile) => {
     if (sender) {
       setFromReadSection(true)
       setSectionCase(SEND_MESSAGE)
@@ -75,9 +76,10 @@ const MessageBoxModal = ({
           <MessageListSection
             workspace={workspace}
             onSendMessageClick={handleSendMessageClick}
-            onReadMessageClick={e => {
+            onReadMessageClick={(msg, send) => {
               setSectionCase(READ_MESSAGE)
-              setMessage(e)
+              setMessage(msg)
+              setIsSend(send)
             }}
           />
         )
@@ -94,6 +96,7 @@ const MessageBoxModal = ({
           <ReadMessageSection
             workspaceId={workspace?.workspaceId}
             message={message}
+            isSend={isSend}
             onBackButtonClick={handleBackButtonClick}
             onReplyClick={handleReadMessageReplyClick}
           />

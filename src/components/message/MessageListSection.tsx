@@ -17,7 +17,9 @@ import { MessageSummary, Workspace } from "_types/workspace"
 import {
   deleteMessageApi,
   findMessageApi,
-  findMessageListApi,
+  findReceiveMessageListApi,
+  findSendMessageApi,
+  findSendMessageListApi,
   readAllMessageListApi,
 } from "api/workspace"
 import { Stack } from "@mui/system"
@@ -32,6 +34,7 @@ interface MessageListSectionProps {
   onSendMessageClick: () => void
   onReadMessageClick: (
     message: MessageSummary,
+    isSend: boolean,
     workspaceId: number | undefined,
   ) => void
 }
@@ -50,28 +53,44 @@ const MessageListSection = ({
   const [currentPage, setCurrentPage] = React.useState<number>(1)
   const [readAllMessagesModalOpen, setReadAllMessagesModalOpen] =
     React.useState<boolean>(false)
+  const [viewReceiveMessages, setViewReceiveMessages] =
+    React.useState<boolean>(true)
 
   const [isThrottled, setIsThrottled] = React.useState<boolean>(false)
 
+  const pageSize = 7
+  const startIndex = (currentPage - 1) * pageSize
+  const endIndex = startIndex + pageSize
+  const currentMessages = allMessages.slice(startIndex, endIndex)
+
   const fetchMessages = async () => {
     if (workspace?.workspaceId !== undefined) {
-      if (isThrottled) {
-        return
-      }
+      if (isThrottled) return
       setIsThrottled(true)
 
-      const response = await findMessageListApi(
-        workspace?.workspaceId,
-        searchOption,
-        searchText,
-      )
-      const messages = response.data.content
-      setAllMessages(messages)
-      setTotalPage(response.data.totalPage)
+      if (viewReceiveMessages) {
+        const response = await findReceiveMessageListApi(
+          workspace?.workspaceId,
+          searchOption,
+          searchText,
+        )
+        setAllMessages(response.data.content)
+        setTotalPage(response.data.totalPage)
+        setCurrentPage(1)
+      } else {
+        const response = await findSendMessageListApi(
+          workspace?.workspaceId,
+          searchOption,
+          searchText,
+        )
+        setAllMessages(response.data.content)
+        setTotalPage(response.data.totalPage)
+        setCurrentPage(1)
+      }
 
       setTimeout(() => {
         setIsThrottled(false)
-      }, 500)
+      }, 100)
     }
   }
 
@@ -81,8 +100,20 @@ const MessageListSection = ({
     }
   }, [])
 
+  React.useEffect(() => {
+    fetchMessages()
+  }, [viewReceiveMessages])
+
   const handleSearchClick = () => {
     fetchMessages()
+  }
+
+  const handleReceiveViewClick = () => {
+    setViewReceiveMessages(true)
+  }
+
+  const handleSendViewClick = () => {
+    setViewReceiveMessages(false)
   }
 
   const handleDeleteMessageClick = async (messageId: number) => {
@@ -93,13 +124,23 @@ const MessageListSection = ({
     }
   }
 
-  const handleReadMessageClick = async (
+  const handleReadReceiveMessageClick = async (
     message: MessageSummary,
     workspaceId: number | undefined,
   ) => {
     if (workspaceId) {
       await findMessageApi(workspaceId, message.messageId)
-      onReadMessageClick(message, workspaceId)
+      onReadMessageClick(message, false, workspaceId)
+    }
+  }
+
+  const handleReadSendMessageClick = async (
+    message: MessageSummary,
+    workspaceId: number | undefined,
+  ) => {
+    if (workspaceId) {
+      await findSendMessageApi(workspaceId, message.messageId)
+      onReadMessageClick(message, true, workspaceId)
     }
   }
 
@@ -118,11 +159,6 @@ const MessageListSection = ({
   ) => {
     setCurrentPage(value)
   }
-
-  const pageSize = 7
-  const startIndex = (currentPage - 1) * pageSize
-  const endIndex = startIndex + pageSize
-  const currentMessages = allMessages.slice(startIndex, endIndex)
 
   return (
     <Box>
@@ -156,25 +192,26 @@ const MessageListSection = ({
       <Box>
         <Box
           sx={{
-            mt: 2,
-            mb: 1,
+            my: 0.5,
             display: "flex",
             justifyContent: "end",
             alignItems: "center",
           }}
         >
-          <Button
-            disableElevation
-            variant="contained"
-            color="primary"
-            sx={{
-              mr: 1,
-              border: 1,
-            }}
-            onClick={() => setReadAllMessagesModalOpen(true)}
-          >
-            쪽지 모두 읽기
-          </Button>
+          {viewReceiveMessages ? (
+            <Button
+              disableElevation
+              variant="contained"
+              color="secondary"
+              sx={{
+                mr: 1,
+                border: 1,
+              }}
+              onClick={() => setReadAllMessagesModalOpen(true)}
+            >
+              쪽지 모두 읽기
+            </Button>
+          ) : null}
           <ConfirmDialog
             open={readAllMessagesModalOpen}
             handleClose={() => setReadAllMessagesModalOpen(false)}
@@ -192,6 +229,23 @@ const MessageListSection = ({
             onClick={onSendMessageClick}
           >
             쪽지 보내기
+          </Button>
+        </Box>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Button
+            disableElevation
+            color={viewReceiveMessages ? "secondary" : "primary"}
+            onClick={handleReceiveViewClick}
+          >
+            받은 쪽지함
+          </Button>
+          <Divider orientation="vertical" variant="middle" flexItem />
+          <Button
+            disableElevation
+            color={viewReceiveMessages ? "primary" : "secondary"}
+            onClick={handleSendViewClick}
+          >
+            보낸 쪽지함
           </Button>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -246,20 +300,45 @@ const MessageListSection = ({
           ) : (
             <Box>
               <Box height={370}>
-                <Stack spacing={1.5}>
-                  {currentMessages.map(message => (
-                    <MessageCard
-                      key={message.messageId}
-                      message={message}
-                      onDeleteMessageClick={() =>
-                        handleDeleteMessageClick(message.messageId)
-                      }
-                      onReadMessageClick={() =>
-                        handleReadMessageClick(message, workspace?.workspaceId)
-                      }
-                    />
-                  ))}
-                </Stack>
+                {viewReceiveMessages ? (
+                  <Stack spacing={1.5}>
+                    {currentMessages.map(message => (
+                      <MessageCard
+                        key={message.messageId}
+                        message={message}
+                        isSend={false}
+                        onDeleteMessageClick={() =>
+                          handleDeleteMessageClick(message.messageId)
+                        }
+                        onReadMessageClick={() =>
+                          handleReadReceiveMessageClick(
+                            message,
+                            workspace?.workspaceId,
+                          )
+                        }
+                      />
+                    ))}
+                  </Stack>
+                ) : (
+                  <Stack spacing={1.5}>
+                    {currentMessages.map(message => (
+                      <MessageCard
+                        key={message.messageId}
+                        message={message}
+                        isSend
+                        onDeleteMessageClick={() =>
+                          handleDeleteMessageClick(message.messageId)
+                        }
+                        onReadMessageClick={() =>
+                          handleReadSendMessageClick(
+                            message,
+                            workspace?.workspaceId,
+                          )
+                        }
+                      />
+                    ))}
+                  </Stack>
+                )}
               </Box>
               <Box
                 sx={{
