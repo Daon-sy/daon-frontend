@@ -224,7 +224,7 @@ export const sendMessageApi = async (
   return authAxios.post(`/api/workspaces/${workspaceId}/messages`, requestBody)
 }
 
-// 쪽지 단건 조회
+// 받은 쪽지 단건 조회
 export const findMessageApi = async (
   workspaceId: number,
   messageId: number,
@@ -232,13 +232,37 @@ export const findMessageApi = async (
   return authAxios.get(`/api/workspaces/${workspaceId}/messages/${messageId}`)
 }
 
-// 쪽지 목록 조회
-export const findMessageListApi = async (
+// 받은 쪽지 단건 조회
+export const findSendMessageApi = async (
+  workspaceId: number,
+  messageId: number,
+): Promise<AxiosResponse<FindMessageResponseBody>> => {
+  return authAxios.get(
+    `/api/workspaces/${workspaceId}/send-messages/${messageId}`,
+  )
+}
+
+// 받은 쪽지 목록 조회
+export const findReceiveMessageListApi = async (
   workspaceId: number,
   target: string,
   keyword: string,
 ): Promise<AxiosResponse<FindMessageListResponseBody>> => {
   return authAxios.get(`/api/workspaces/${workspaceId}/messages`, {
+    params: {
+      target,
+      keyword,
+    },
+  })
+}
+
+// 보낸 쪽지 목록 조회
+export const findSendMessageListApi = async (
+  workspaceId: number,
+  target: string,
+  keyword: string,
+): Promise<AxiosResponse<FindMessageListResponseBody>> => {
+  return authAxios.get(`/api/workspaces/${workspaceId}/send-messages`, {
     params: {
       target,
       keyword,
