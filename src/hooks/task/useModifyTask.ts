@@ -31,7 +31,10 @@ const useModifyTask = ({ workspaceId, projectId, boardId, taskId }: Props) => {
     try {
       setIsFetching(true)
       const request: ModifyTaskRequestBody = {
-        title: modifiedTask.title,
+        title:
+          modifiedTask.title.length <= 20
+            ? modifiedTask.title
+            : modifiedTask.title.slice(0, 20),
         content: modifiedTask.content,
         boardId: modifiedTask.board.boardId,
         startDate: modifiedTask.startDate,

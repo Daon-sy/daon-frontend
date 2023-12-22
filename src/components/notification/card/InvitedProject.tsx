@@ -1,5 +1,10 @@
 import React from "react"
-import { matchPath, useLocation, useNavigate } from "react-router-dom"
+import {
+  matchPath,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom"
 import { Box, Chip } from "@mui/material"
 import { InviteProjectNotification, Notification } from "_types/notification"
 import NotificationCard from "components/notification/card/NotificationCard"
@@ -7,6 +12,7 @@ import { useConfirmDialog } from "components/common/ConfirmDialog"
 import ConfirmMovementComponent from "components/common/confirm/ConfirmMovement"
 import { useAlert } from "hooks/useAlert"
 import useReadNotification from "hooks/notification/useReadNotification"
+import useFetchProjectList from "hooks/project/useFetchProjectList"
 
 interface Props {
   notification: Notification<InviteProjectNotification & { time: string }>
@@ -20,16 +26,24 @@ const InvitedProject: React.FC<Props> = ({ notification, removeCallback }) => {
   const { ConfirmDialog, open: openConfirmDialog } = useConfirmDialog()
   const { addInfo } = useAlert()
   const location = useLocation()
+  const { projectId } = useParams()
   const isProjectDetailPath = () =>
-    matchPath("/workspace/:workspaceId/project/:projectId", location.pathname)
+    matchPath(
+      "/workspace/:workspaceId/project/:projectId",
+      location.pathname,
+    ) &&
+    projectId &&
+    Number(projectId) === project.projectId
   const navigate = useNavigate()
   const { fetch: read } = useReadNotification()
+  const { fetchProjectList } = useFetchProjectList(workspace.workspaceId, true)
   const handleConfirmClick = () => {
     if (!notification.read) read(notificationId)
     if (isProjectDetailPath()) {
       addInfo("현재 해당 프로젝트입니다")
       return
     }
+    fetchProjectList()
     navigate(`/workspace/${workspace.workspaceId}/project/${project.projectId}`)
   }
 

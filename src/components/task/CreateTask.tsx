@@ -24,15 +24,22 @@ import { useAlert } from "hooks/useAlert"
 import useCreateTask from "hooks/task/useCreateTask"
 import ColorAvatar from "components/common/ColorAvatar"
 
-interface Props {
-  handleClose: () => void
+interface CreateTaskModalProps {
+  projectIdInit?: number
 }
 
-const CreateTask: React.FC<Props> = ({ handleClose }: Props) => {
+interface Props {
+  handleClose: () => void
+  projectIdInit?: number
+}
+
+const CreateTask: React.FC<Props> = ({ handleClose, projectIdInit }: Props) => {
   const { workspace } = getWorkspaceStore()
   const { addError } = useAlert()
 
-  const [projectId, setProjectId] = React.useState<number>()
+  const [projectId, setProjectId] = React.useState<number | undefined>(
+    projectIdInit,
+  )
   const [boardId, setBoardId] = React.useState<number>()
   const [title, setTitle] = React.useState<string>("")
   const [content, setContent] = React.useState("")
@@ -62,10 +69,12 @@ const CreateTask: React.FC<Props> = ({ handleClose }: Props) => {
               setProjectId(project?.projectId)
               setBoardId(undefined)
             }}
+            currentProjectId={projectIdInit}
           />
           <BoardSelectButton
             projectId={projectId}
             handleBoardSelect={board => setBoardId(board?.boardId)}
+            firstBoardAutoSet={!!projectIdInit}
           />
         </Stack>
         <Box
@@ -95,6 +104,7 @@ const CreateTask: React.FC<Props> = ({ handleClose }: Props) => {
           <Box flexGrow={1}>
             <TextField
               required
+              autoFocus
               fullWidth
               label="제목"
               size="small"
@@ -106,6 +116,19 @@ const CreateTask: React.FC<Props> = ({ handleClose }: Props) => {
               }}
               sx={{
                 ".MuiFormLabel-root": { fontSize: 14 },
+              }}
+              onKeyDown={e => {
+                if (e.key === "Enter") {
+                  createTask(projectId || 0, {
+                    title,
+                    content,
+                    boardId: boardId || 0,
+                    startDate,
+                    endDate,
+                    taskManagerId,
+                    emergency,
+                  })
+                }
               }}
             />
             <FormHelperText
@@ -333,9 +356,9 @@ const CreateTask: React.FC<Props> = ({ handleClose }: Props) => {
 export const useCreateTaskModal = () => {
   const { TitleDialog, open, close } = useTitleDialog()
 
-  const CreateTaskModal = () => (
+  const CreateTaskModal = ({ projectIdInit }: CreateTaskModalProps) => (
     <TitleDialog title="할 일 생성" maxWidth="sm">
-      <CreateTask handleClose={close} />
+      <CreateTask handleClose={close} projectIdInit={projectIdInit} />
     </TitleDialog>
   )
 

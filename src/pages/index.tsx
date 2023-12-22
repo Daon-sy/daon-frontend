@@ -67,7 +67,7 @@ const MemberRoute = () => {
               }}
               sx={{ mt: 3 }}
             >
-              내 워크스페이로 이동
+              내 워크스페이스로 이동
             </Button>
           </Box>
         }

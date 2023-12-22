@@ -1,7 +1,6 @@
 import React from "react"
 import Typography from "@mui/material/Typography"
 import {
-  createProjectBoardApi,
   modifyProjectBoardApi,
   projectBoardListApi,
   projectDetailApi,
@@ -19,6 +18,8 @@ import EditableTextBox from "components/common/EditableTextBox"
 import useWithdrawProject from "hooks/project/useWithdrawProject"
 import useRemoveProject from "hooks/project/useRemoveProject"
 import useModifyProject from "hooks/project/useModifyProject"
+import useCreateBoard from "hooks/project/useCreateBoard"
+import useThrottling from "hooks/useThrottling"
 import { ConfirmDeleteComponent } from "../common/confirm/ConfirmDelete"
 import ConfirmProjectWithdrawalComponent from "../common/confirm/withdrawal/ConfirmProjectWithdrawal"
 import ConfirmProjectDeleteComponent from "../common/confirm/delete/ConfirmProjectDelete"
@@ -79,21 +80,24 @@ const ProjectGeneralSetting = ({
   const { fetch: removeProject } = useRemoveProject()
   const { fetch: withdrawProject } = useWithdrawProject()
   const { fetch: modifyProject } = useModifyProject()
+  const { fetch: createBoard } = useCreateBoard({
+    workspaceId: workspaceId || 0,
+    projectId: projectId || 0,
+    boardTitle: newBoardTitle,
+  })
+
+  const fetchThrottling = useThrottling(() => {
+    createBoard(fetchProjectBoards)
+    setNewBoardTitle("")
+  }, 500)
+  const handleAddBoard = async () => {
+    if (newBoardTitle) {
+      fetchThrottling()
+    }
+  }
 
   if (!(projectDetail && myProfile)) return <Box />
   const { title: projectTitle, description } = projectDetail
-
-  const handleAddBoard = async () => {
-    if (newBoardTitle) {
-      await createProjectBoardApi(workspaceId, projectId, {
-        title: newBoardTitle,
-      })
-
-      await fetchProjectBoards()
-      addSuccess("보드 추가 완료")
-      setNewBoardTitle("")
-    }
-  }
 
   const updateBoard = async (boardId: number, title: string) => {
     await modifyProjectBoardApi(workspaceId, projectId, boardId, { title })
@@ -209,7 +213,7 @@ const ProjectGeneralSetting = ({
                     placeholder="추가 할 보드의 이름을 입력하세요"
                     onChange={e => setNewBoardTitle(e.target.value)}
                     onKeyDown={handleNewBoardTitleEntered}
-                    inputProps={{ style: { fontSize: 14 } }}
+                    inputProps={{ style: { fontSize: 14 }, maxLength: 20 }}
                   />
                   <Box ml={1}>
                     <IconButton size="small" onClick={handleAddBoard}>

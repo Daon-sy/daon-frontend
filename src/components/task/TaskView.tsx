@@ -161,7 +161,7 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
           </Box>
         )}
       </Box>
-      <CreateTaskModal />
+      <CreateTaskModal projectIdInit={params?.projectId} />
     </Box>
   )
 }

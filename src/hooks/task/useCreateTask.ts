@@ -35,7 +35,10 @@ const useCreateTask = ({ workspaceId }: Props, callback?: () => void) => {
         workspaceId,
         projectId,
         data.boardId,
-        data,
+        {
+          ...data,
+          title: data.title.length <= 20 ? data.title : data.title.slice(0, 20),
+        },
       )
       const { taskId } = responseBody
       addSuccess(`할 일(#${taskId})이 생성되었습니다.`)
