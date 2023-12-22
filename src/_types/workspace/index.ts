@@ -52,7 +52,7 @@ export interface WorkspaceParticipant {
   role: WORKSPACE_PARTICIPANT_ROLE
 }
 
-export interface MessageSender {
+export interface MessageParticipantProfile {
   workspaceParticipantId: number
   name: string
   email: string
@@ -64,7 +64,7 @@ export interface MessageSummary {
   content: string
   createdAt: string
   readed: boolean
-  sender?: MessageSender
+  profile?: MessageParticipantProfile
 }
 
 export type ColorRole = { color: ColorOptions } & WorkspaceParticipantRoleDetail

@@ -1,6 +1,6 @@
 import React from "react"
 import { Box, Button, Divider, Typography } from "@mui/material"
-import { MessageSender, MessageSummary } from "_types/workspace"
+import { MessageParticipantProfile, MessageSummary } from "_types/workspace"
 import { deleteMessageApi } from "api/workspace"
 import { useAlert } from "hooks/useAlert"
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos"
@@ -11,13 +11,15 @@ import { ConfirmDeleteComponent } from "../common/confirm/ConfirmDelete"
 interface ReadMessageSectionProps {
   workspaceId: number | undefined
   message: MessageSummary | null
+  isSend: boolean
   onBackButtonClick: () => void
-  onReplyClick: (sender: MessageSender) => void
+  onReplyClick: (sender: MessageParticipantProfile) => void
 }
 
 const ReadMessageSection = ({
   workspaceId,
   message,
+  isSend,
   onBackButtonClick,
   onReplyClick,
 }: ReadMessageSectionProps) => {
@@ -28,11 +30,11 @@ const ReadMessageSection = ({
 
   const handleReplyClick = () => {
     if (message) {
-      if (!message.sender) {
+      if (!message.profile) {
         addError("탈퇴한 사용자에게 쪽지를 보낼 수 없습니다.")
         return
       }
-      onReplyClick(message.sender)
+      onReplyClick(message.profile)
     }
   }
 
@@ -55,27 +57,27 @@ const ReadMessageSection = ({
           <ArrowBackIosIcon sx={{ color: "#1F4838" }} />
         </Button>
         <Typography variant="h6" sx={{ color: "#1F4838" }}>
-          쪽지 확인
+          {isSend ? "보낸 쪽지 확인" : "받은 쪽지 확인"}
         </Typography>
       </Box>
       <Divider sx={{ mb: 2 }} />
-      <Box sx={{ m: 2, my: 2, display: "flex", alignItems: "center" }}>
+      <Box sx={{ m: 2, my: 1, display: "flex", alignItems: "center" }}>
         <ColorAvatar
           sx={{ width: 20, height: 20 }}
-          src={message?.sender?.imageUrl}
-          id={message?.sender?.workspaceParticipantId}
+          src={message?.profile?.imageUrl}
+          id={message?.profile?.workspaceParticipantId}
         />
         <Typography sx={{ fontSize: 14 }}>
-          {message?.sender ? message.sender.name : "탈퇴한 사용자"}
+          {message?.profile ? message.profile.name : "탈퇴한 사용자"}
         </Typography>
       </Box>
-      <Box sx={{ width: 355, display: "flex" }}>
+      <Box sx={{ width: 380, display: "flex" }}>
         <Typography
           sx={{
             width: "100%",
-            mx: 2,
-            my: 1,
-            fontSize: 17,
+            ml: 2,
+            mt: 1,
+            fontSize: 15,
             fontWeight: "bold",
             wordWrap: "break-word",
             overflowWrap: "break-word",
@@ -90,16 +92,16 @@ const ReadMessageSection = ({
           borderColor: "white",
           my: 1,
           mx: 2,
-          minHeight: 300,
-          maxHeight: 300,
+          minHeight: 350,
+          maxHeight: 350,
           borderRadius: 2,
           backgroundColor: "#F6F7F9",
         }}
       >
         <Typography
           sx={{
-            m: 1,
-            fontSize: 13.7,
+            m: 0.5,
+            fontSize: 12,
             wordWrap: "break-word",
             overflowWrap: "break-word",
           }}
@@ -118,25 +120,27 @@ const ReadMessageSection = ({
       >
         {message?.createdAt}
       </Typography>
-      <Box sx={{ mt: 7, display: "flex", justifyContent: "center" }}>
+      <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
+        {isSend ? null : (
+          <Button
+            disableElevation
+            variant="contained"
+            color="primary"
+            sx={{
+              m: 1.5,
+              color: "white",
+              backgroundColor: "#1F4838",
+              border: 1,
+              borderColor: "#1F4838",
+            }}
+            onClick={handleReplyClick}
+          >
+            답장하기
+          </Button>
+        )}
         <Button
           disableElevation
-          variant="contained"
-          color="primary"
-          sx={{
-            m: 1.5,
-            color: "white",
-            backgroundColor: "#1F4838",
-            border: 1,
-            borderColor: "#1F4838",
-          }}
-          onClick={handleReplyClick}
-        >
-          답장하기
-        </Button>
-        <Button
-          disableElevation
-          variant="outlined"
+          variant={isSend ? "contained" : "outlined"}
           color="primary"
           sx={{ m: 1.5 }}
           onClick={handleDeleteClick}
