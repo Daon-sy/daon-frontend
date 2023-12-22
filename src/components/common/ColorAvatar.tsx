@@ -52,6 +52,7 @@ interface Props {
 const ColorAvatar = ({ id, src, name, sx, onClick, icon }: Props) => (
   <Avatar
     src={src}
+    alt="사용자 프로필 이미지"
     sx={{
       width: 28,
       height: 28,
