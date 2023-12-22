@@ -45,6 +45,7 @@ const WorkspaceParticipants: React.FC = () => {
       {/* 구성원 Item */}
       {workspaceParticipants?.map((participant, idx) => (
         <Box
+          key={participant.workspaceParticipantId}
           component="li"
           sx={{
             width: "100%",
