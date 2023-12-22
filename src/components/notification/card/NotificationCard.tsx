@@ -5,6 +5,7 @@ import {
   Breadcrumbs,
   ButtonGroup,
   IconButton,
+  Tooltip,
 } from "@mui/material"
 import NavigateNextIcon from "@mui/icons-material/NavigateNext"
 import CheckIcon from "@mui/icons-material/Check"
@@ -56,17 +57,24 @@ const NotificationCard: React.FC<Props> = ({
           separator={<NavigateNextIcon sx={{ fontSize: 14 }} />}
           sx={{ flexGrow: 1, ".MuiBreadcrumbs-separator": { mx: 1 / 2 } }}
         >
-          {paths.map(path => (
-            <Typography
-              fontSize={12}
-              color="deepGray.main"
-              maxWidth={paths.length > 1 ? 100 : 200}
-              overflow="hidden"
-              whiteSpace="nowrap"
-              textOverflow="ellipsis"
+          {paths.map((path, index) => (
+            <Tooltip
+              title={
+                index === 0 ? `워크스페이스 : ${path}` : `프로젝트 : ${path}`
+              }
+              arrow
             >
-              {path}
-            </Typography>
+              <Typography
+                fontSize={12}
+                color="deepGray.main"
+                maxWidth={paths.length > 1 ? 120 : 240}
+                overflow="hidden"
+                whiteSpace="nowrap"
+                textOverflow="ellipsis"
+              >
+                {path}
+              </Typography>
+            </Tooltip>
           ))}
         </Breadcrumbs>
         <ButtonGroup

@@ -50,7 +50,8 @@ const ProjectSettingsModal = ({ projectId, open, handleClose }: Props) => {
     <MenuModal
       open={open}
       title="프로젝트 설정"
-      minWidth="900px"
+      minWidth={900}
+      maxWidth={1000}
       handleClose={handleClose}
       menuWithPageList={menuWithPageList}
       allowedEditRoles={allowedEdit}

@@ -1,6 +1,6 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import { Box, Chip } from "@mui/material"
+import { Box, Chip, Tooltip } from "@mui/material"
 import {
   Notification,
   RegisteredTaskManagerNotification,
@@ -74,16 +74,18 @@ const RegisteredTaskManager: React.FC<Props> = ({
         <Box mt={1 / 2} fontSize={14}>
           <Box display="flex" alignItems="center">
             <Box>할 일 [</Box>
-            <Box
-              fontSize={14}
-              fontWeight={500}
-              maxWidth={200}
-              overflow="hidden"
-              whiteSpace="nowrap"
-              textOverflow="ellipsis"
-            >
-              {task.taskTitle}
-            </Box>
+            <Tooltip title={task.taskTitle} arrow>
+              <Box
+                fontSize={14}
+                fontWeight={500}
+                maxWidth={200}
+                overflow="hidden"
+                whiteSpace="nowrap"
+                textOverflow="ellipsis"
+              >
+                {task.taskTitle}
+              </Box>
+            </Tooltip>
             <Box>]의</Box>
           </Box>
           <Box mt={1 / 4} display="flex" alignItems="center">
