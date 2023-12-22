@@ -124,6 +124,7 @@ const MenuModal = ({
           <DialogContent
             sx={{
               width: "100%",
+              minWidth: 600,
             }}
           >
             <Typography
