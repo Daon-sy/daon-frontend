@@ -21,11 +21,12 @@ export interface MenuWithPage {
 interface Props {
   open: boolean
   title: string
-  minWidth: string
+  minWidth: string | number
   handleClose: () => void
   menuWithPageList: MenuWithPage[]
   removeButton?: React.ReactNode
   allowedEditRoles?: WORKSPACE_PARTICIPANT_ROLE[]
+  maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false | number
 }
 
 const MenuModal = ({
@@ -36,6 +37,7 @@ const MenuModal = ({
   menuWithPageList = [],
   removeButton,
   allowedEditRoles = [],
+  maxWidth = undefined,
 }: Props) => {
   const [selectedPage, setSelectedPage] = React.useState<string | undefined>(
     menuWithPageList.length > 0 ? menuWithPageList[0].pageValue : undefined,
@@ -51,6 +53,7 @@ const MenuModal = ({
       height={560}
       color="#727272"
       right={20}
+      maxWidth={maxWidth}
     >
       <Box height="100%">
         <Stack direction="row" height="100%">
@@ -59,7 +62,7 @@ const MenuModal = ({
               pt: 10,
               pl: 4,
               bgcolor: "#1F4838",
-              width: 300,
+              width: 240,
               border: "none",
               overflowX: "hidden",
             }}
@@ -75,7 +78,7 @@ const MenuModal = ({
                     justifyContent: "right",
                     ".MuiRadio-root": {
                       visibility: "hidden",
-                      width: 40,
+                      width: 22,
                     },
                     ".MuiButtonBase-root.Mui-checked": {
                       boxShadow: "none",
@@ -115,7 +118,7 @@ const MenuModal = ({
               </Stack>
             </Box>
             {myProfile && allowedEditRoles?.includes(myProfile.role) ? (
-              <Box mt={1} sx={{ position: "absolute", bottom: 10, left: 120 }}>
+              <Box mt={1} sx={{ position: "absolute", bottom: 10, left: 90 }}>
                 {removeButton}
               </Box>
             ) : null}

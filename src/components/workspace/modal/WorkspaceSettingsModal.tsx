@@ -68,7 +68,8 @@ const WorkspaceSettingsModal = ({ open = false, handleClose }: Props) => {
 
   return (
     <MenuModal
-      minWidth="900px"
+      minWidth={900}
+      maxWidth={1000}
       open={open}
       title="워크스페이스 설정"
       handleClose={handleClose}

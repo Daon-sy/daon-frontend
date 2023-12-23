@@ -9,12 +9,15 @@ import useFetchWorkspaceParticipants from "hooks/workspace/useFetchWorkspacePart
 
 const WorkspaceParticipants: React.FC = () => {
   const { workspace, myProfile } = getWorkspaceStore()
-  const { fetch: fetchWorkspaceParticipants, workspaceParticipants } =
-    useFetchWorkspaceParticipants(workspace?.workspaceId || 0, true)
+  const {
+    fetch: fetchWorkspaceParticipants,
+    workspaceParticipants,
+    isFetching: isWorkspaceParticipantsFetching,
+  } = useFetchWorkspaceParticipants(workspace?.workspaceId || 0, true)
 
   React.useEffect(() => {
-    fetchWorkspaceParticipants()
-  }, [myProfile])
+    if (!isWorkspaceParticipantsFetching) fetchWorkspaceParticipants()
+  }, [workspace, myProfile])
 
   return (
     <Box

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import { Box, Typography, Chip } from "@mui/material"
+import { Box, Typography, Chip, Tooltip } from "@mui/material"
 import { Notification, ReceiveMessageNotification } from "_types/notification"
 import { getWorkspaceStore } from "store/userStore"
 import { useConfirmDialog } from "components/common/ConfirmDialog"
@@ -48,16 +48,18 @@ const ReceivedMessage: React.FC<Props> = ({ notification, removeCallback }) => {
         <Box mt={1 / 2} fontSize={14}>
           <Box display="flex" alignItems="center">
             <Box>참여자 [</Box>
-            <Box
-              fontSize={14}
-              fontWeight={500}
-              maxWidth={160}
-              overflow="hidden"
-              whiteSpace="nowrap"
-              textOverflow="ellipsis"
-            >
-              {sender.name}
-            </Box>
+            <Tooltip title={sender.name} arrow>
+              <Box
+                fontSize={14}
+                fontWeight={500}
+                maxWidth={160}
+                overflow="hidden"
+                whiteSpace="nowrap"
+                textOverflow="ellipsis"
+              >
+                {sender.name}
+              </Box>
+            </Tooltip>
             <Box>]님으로부터</Box>
           </Box>
           <Box mt={1 / 4} display="flex" alignItems="center">
