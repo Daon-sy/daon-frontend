@@ -1,6 +1,12 @@
 import React from "react"
 import { useParams } from "react-router-dom"
-import { Box, TextField, InputAdornment, Typography } from "@mui/material"
+import {
+  Box,
+  TextField,
+  InputAdornment,
+  Typography,
+  CircularProgress,
+} from "@mui/material"
 import SettingsIcon from "@mui/icons-material/Settings"
 import SearchIcon from "@mui/icons-material/Search"
 import { getProjectsStore, getWorkspaceStore } from "store/userStore"
@@ -11,6 +17,7 @@ import SubIconBtn from "components/sidebar/SubIconBtn"
 import MenuItems from "components/sidebar/MenuItems"
 import CreateProject from "components/project/CreateProject"
 import ProjectSettingsModal from "components/project/modal/ProjectSettingsModal"
+import useDebounce from "hooks/useDebounce"
 
 const SidebarMenu: React.FC = () => {
   const { workspaceId } = useParams()
@@ -19,6 +26,8 @@ const SidebarMenu: React.FC = () => {
   const [projectManageModalOpenMap, setProjectManageModalOpenMap] =
     React.useState<Record<number, boolean>>({})
   const [projectFilterKeyword, setProjectFilterKeyword] = React.useState("")
+  const { debouncedValue: debouncedFilterText, debouncing } =
+    useDebounce<string>(projectFilterKeyword, 500)
   const {
     TitleDialog,
     open: openCreateProjectDialog,
@@ -44,7 +53,7 @@ const SidebarMenu: React.FC = () => {
       const filteredProjects = myProjects.filter(project =>
         project.listValue
           .toUpperCase()
-          .includes(projectFilterKeyword.toUpperCase()),
+          .includes(debouncedFilterText.toUpperCase()),
       )
 
       return filteredProjects.length > 0 ? (
@@ -125,23 +134,36 @@ const SidebarMenu: React.FC = () => {
             }}
           />
         </Box>
-        <Box
-          sx={{
-            height: "calc(100vh - 416px)",
-            msOverflowStyle: "none",
-            scrollbarWidth: "none",
-            WebkitScrollSnapType: "none",
-            overflowY: "auto",
-            "&::-webkit-scrollbar": {
-              width: "0.2rem",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "#b2b2b2",
-            },
-          }}
-        >
-          {renderProjects()}
-        </Box>
+        {debouncing ? (
+          <Box
+            sx={{
+              height: 100,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              height: "calc(100vh - 416px)",
+              msOverflowStyle: "none",
+              scrollbarWidth: "none",
+              WebkitScrollSnapType: "none",
+              overflowY: "auto",
+              "&::-webkit-scrollbar": {
+                width: "0.2rem",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                backgroundColor: "#b2b2b2",
+              },
+            }}
+          >
+            {renderProjects()}
+          </Box>
+        )}
       </Menu>
       <TitleDialog title="프로젝트 생성" maxWidth="sm">
         <CreateProject

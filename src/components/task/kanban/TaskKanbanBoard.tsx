@@ -32,6 +32,7 @@ const TaskKanbanBoard: React.FC<Props> = ({
           {...droppableProvided.droppableProps}
           style={style}
           sx={{
+            minWidth: 250,
             backgroundColor: "#FFFFFF",
             boxShadow: "1px 1px 5px 1px rgba(0, 0, 0, 0.1)",
             borderRadius: 1,

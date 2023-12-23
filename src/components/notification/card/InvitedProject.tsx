@@ -5,7 +5,7 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom"
-import { Box, Chip } from "@mui/material"
+import { Box, Chip, Tooltip } from "@mui/material"
 import { InviteProjectNotification, Notification } from "_types/notification"
 import NotificationCard from "components/notification/card/NotificationCard"
 import { useConfirmDialog } from "components/common/ConfirmDialog"
@@ -60,16 +60,18 @@ const InvitedProject: React.FC<Props> = ({ notification, removeCallback }) => {
         <Box mt={1 / 2} fontSize={14}>
           <Box display="flex" alignItems="center">
             <Box>프로젝트 [</Box>
-            <Box
-              fontSize={14}
-              fontWeight={500}
-              maxWidth={180}
-              overflow="hidden"
-              whiteSpace="nowrap"
-              textOverflow="ellipsis"
-            >
-              {project.projectTitle}
-            </Box>
+            <Tooltip title={project.projectTitle} arrow>
+              <Box
+                fontSize={14}
+                fontWeight={500}
+                maxWidth={180}
+                overflow="hidden"
+                whiteSpace="nowrap"
+                textOverflow="ellipsis"
+              >
+                {project.projectTitle}
+              </Box>
+            </Tooltip>
             <Box>]에</Box>
           </Box>
           <Box mt={1 / 4} display="flex" alignItems="center">
