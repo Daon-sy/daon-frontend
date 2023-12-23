@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom"
 import { getTokenStore } from "store/tokenStore"
 
 import landingOne from "assets/img/landing1.webp"
-import landingTwo from "assets/img/landing2.webp"
 import landingThree from "assets/img/landing3.webp"
 import landingFour from "assets/img/landing4.webp"
 import arrow from "assets/img/arrow.webp"
@@ -74,7 +73,6 @@ function Landing() {
               </Button>
             </Box>
             <Box component="img" src={landingOne} style={{ width: "100%" }} />
-            <Box component="img" sx={{ width: "100%" }} src={landingTwo} />
           </Box>
         </Box>
       </Box>
