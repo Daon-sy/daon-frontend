@@ -263,7 +263,7 @@ const WorkspaceParticipantManage = () => {
                     ?.filter(participant =>
                       participant[filter]
                         .toUpperCase()
-                        .includes(filterText.toUpperCase()),
+                        .includes(debouncedFilterText.toUpperCase()),
                     )
                     .map((participant, index) => (
                       <ListItem
