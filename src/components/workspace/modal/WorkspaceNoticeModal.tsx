@@ -13,17 +13,18 @@ import CreateWorkspaceNotice from "../notice/CreateWorkspaceNotice"
 interface Props {
   open: boolean
   handleClose: () => void
-  mainNoticeId?: number
+  mainNoticeId?: number | null
 }
 
 const WorkspaceNoticeModal: React.FC<Props> = ({
   open,
   handleClose,
-  mainNoticeId,
+  mainNoticeId = null,
 }: Props) => {
   const { myProfile, workspace } = getWorkspaceStore()
   const { workspaceId } = useParams()
   const [selectedNoticeId, setSelectedNoticeId] = useState<number | null>(null)
+  const [mainId, setMainId] = useState<number | null>(mainNoticeId)
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
   const [isManageMode, setManageMode] = useState<boolean>(false)
   const { fetchWorkspaceNoticeList } = useFetchWorkspaceNoticeList(
@@ -31,10 +32,11 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
   )
 
   React.useEffect(() => {
-    if (mainNoticeId && mainNoticeId !== selectedNoticeId) {
-      setSelectedNoticeId(mainNoticeId)
+    if (mainId) {
+      setSelectedNoticeId(mainId)
     }
-  }, [mainNoticeId])
+    setMainId(null)
+  }, [mainId])
 
   const handleNoticeClick = (noticeId: number) => {
     setSelectedNoticeId(noticeId)
@@ -103,6 +105,7 @@ const WorkspaceNoticeModal: React.FC<Props> = ({
             <Box sx={{ width: "35%", padding: 0 }}>
               <WorkspaceNoticeList
                 workspaceId={+workspaceId}
+                mainId={mainId}
                 onNoticeClick={handleNoticeClick}
               />
             </Box>

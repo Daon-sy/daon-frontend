@@ -16,10 +16,12 @@ import WorkspaceNoticeCard from "./WorkspaceNoticeCard"
 interface Props {
   workspaceId: number
   onNoticeClick: (noticeId: number) => void
+  mainId: number | null
 }
 
 const WorkspaceNoticeList: React.FC<Props> = ({
   workspaceId,
+  mainId,
   onNoticeClick,
 }: Props) => {
   const { workspace } = getWorkspaceStore()
@@ -48,6 +50,13 @@ const WorkspaceNoticeList: React.FC<Props> = ({
     onNoticeClick(noticeId)
     setSelectedNoticeId(noticeId)
   }
+
+  React.useEffect(() => {
+    if (mainId !== null) {
+      setSelectedNoticeId(mainId)
+      onNoticeClick(mainId)
+    }
+  }, [mainId, onNoticeClick])
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
