@@ -354,7 +354,7 @@ const CreateTask: React.FC<Props> = ({ handleClose, projectIdInit }: Props) => {
 }
 
 export const useCreateTaskModal = () => {
-  const { TitleDialog, open, close } = useTitleDialog()
+  const { TitleDialog, open, close, isOpen } = useTitleDialog()
 
   const CreateTaskModal = ({ projectIdInit }: CreateTaskModalProps) => (
     <TitleDialog title="할 일 생성" maxWidth="sm">
@@ -366,6 +366,7 @@ export const useCreateTaskModal = () => {
     CreateTaskModal,
     open,
     close,
+    isOpen,
   }
 }
 

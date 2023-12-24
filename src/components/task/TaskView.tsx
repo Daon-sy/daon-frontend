@@ -11,9 +11,9 @@ import useFetchTaskList from "hooks/task/useFetchTaskList"
 import Typography from "@mui/material/Typography"
 import IconBreadcrumbs from "components/common/IconBreadcrumbs"
 import { matchPath, useLocation } from "react-router-dom"
-import { useCreateTaskModal } from "components/task/CreateTask"
 import NoData from "components/common/NoData"
 import { AddCircle } from "@mui/icons-material"
+import { getCreateTaskStore } from "store/createTaskStore"
 
 interface TaskViewProps {
   params?: TaskListApiParams
@@ -25,7 +25,6 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
   const [viewType, setViewType] = React.useState<string>("kanban")
   const { workspace } = getWorkspaceStore()
   const { taskDetailParam } = getTaskDetailViewStore()
-  const { CreateTaskModal, open: openCreateTaskModal } = useCreateTaskModal()
   const { tasks, fetchTaskList } = useFetchTaskList(
     {
       workspaceId: workspace?.workspaceId || 0,
@@ -33,6 +32,7 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
     },
     true,
   )
+  const { open } = getCreateTaskStore()
 
   const isBookmarkTasksLocation = () =>
     matchPath("/workspace/:workspaceId/task/bookmark", location.pathname)
@@ -60,6 +60,18 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
   }, [taskDetailParam])
 
   const renderView = () => {
+    if (tasks.length <= 0) {
+      return (
+        <Box height="100%" alignItems="center">
+          <NoData
+            content={getEmptySetContent()}
+            width={200}
+            height={100}
+            sx={{ height: "80%" }}
+          />
+        </Box>
+      )
+    }
     switch (viewType) {
       case "kanban":
         return (
@@ -98,7 +110,7 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
             color="yellow"
             size="medium"
             variant="contained"
-            onClick={openCreateTaskModal}
+            onClick={() => open(params?.projectId)}
             sx={{
               borderRadius: 50,
               position: "absolute",
@@ -148,20 +160,8 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
           },
         }}
       >
-        {tasks.length > 0 ? (
-          renderView()
-        ) : (
-          <Box height="100%" alignItems="center">
-            <NoData
-              content={getEmptySetContent()}
-              width={200}
-              height={100}
-              sx={{ height: "80%" }}
-            />
-          </Box>
-        )}
+        {renderView()}
       </Box>
-      <CreateTaskModal projectIdInit={params?.projectId} />
     </Box>
   )
 }

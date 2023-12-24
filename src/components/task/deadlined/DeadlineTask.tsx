@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Typography } from "@mui/material"
+import { Box, Tooltip, Typography } from "@mui/material"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFire } from "@fortawesome/free-solid-svg-icons"
 import { TaskSummary } from "_types/task"
@@ -88,32 +88,38 @@ const DeadlineTask: React.FC<Props> = ({ task }) => {
           overflow: "hidden",
         }}
       >
-        <Box fontSize={12} color="#858585">
-          {task.project.title}
-        </Box>
-        <Box>
-          {task.emergency ? (
-            <Typography mr={0.5} component="span">
-              <FontAwesomeIcon icon={faFire} color="red" />
-            </Typography>
-          ) : null}
-          <Typography
-            component="span"
-            sx={{
-              pr: 1,
-              color: "deepGray.main",
-              fontSize: "16px",
-              fontWeight: 600,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-              wordBreak: "break-all",
-            }}
+        <Tooltip title={`프로젝트:${task.project.title}`} arrow>
+          <Box
+            fontSize={12}
+            color="#858585"
+            overflow="hidden"
+            whiteSpace="nowrap"
+            textOverflow="ellipsis"
           >
-            {task.title}
-          </Typography>
-        </Box>
-        <Box color="#858585" fontSize={12} fontWeight={500}>
+            {task.project.title}
+          </Box>
+        </Tooltip>
+        <Tooltip title={`할 일:${task.title}`} arrow>
+          <Box overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis">
+            {task.emergency ? (
+              <Typography mr={0.5} component="span">
+                <FontAwesomeIcon icon={faFire} color="red" />
+              </Typography>
+            ) : null}
+            <Typography
+              component="span"
+              sx={{
+                pr: 1,
+                color: "deepGray.main",
+                fontSize: 14,
+                fontWeight: 600,
+              }}
+            >
+              {task.title}
+            </Typography>
+          </Box>
+        </Tooltip>
+        <Box color="#858585" fontSize={10} fontWeight={500}>
           {task.endDate}
         </Box>
       </Box>

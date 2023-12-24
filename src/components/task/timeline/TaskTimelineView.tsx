@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Chip, Typography } from "@mui/material"
+import { Box, Chip, Tooltip, Typography } from "@mui/material"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFire, faStopwatch } from "@fortawesome/free-solid-svg-icons"
 import { getWorkspaceStore } from "store/userStore"
@@ -298,9 +298,6 @@ const TaskTimelineView = ({
                         fontSize: 12,
                         borderRadius: 1.5,
                         fontWeight: 900,
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        maxWidth: 80,
                       }}
                     />
                   ) : null}
@@ -309,34 +306,38 @@ const TaskTimelineView = ({
                       <FontAwesomeIcon icon={faFire} color="red" />
                     </Typography>
                   ) : null}
-                  <Chip
-                    label={task.project.title}
-                    color="secondary"
-                    size="small"
-                    sx={{
-                      ml: 1,
-                      fontSize: 12,
-                      borderRadius: 1.5,
-                      fontWeight: 900,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      maxWidth: 80,
-                    }}
-                  />
-                  <Typography
-                    sx={{
-                      fontSize: 12,
-                      lineHeight: `${taskHeight}px`,
-                      paddingX: 0.5,
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      color: "deepGray.main",
-                      fontWeight: 600,
-                    }}
-                  >
-                    {task.title}
-                  </Typography>
+                  <Tooltip title={`프로젝트:${task.project.title}`} arrow>
+                    <Chip
+                      label={task.project.title}
+                      color="secondary"
+                      size="small"
+                      sx={{
+                        ml: 1,
+                        fontSize: 12,
+                        borderRadius: 1.5,
+                        fontWeight: 900,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        maxWidth: 80,
+                      }}
+                    />
+                  </Tooltip>
+                  <Tooltip title={`할 일:${task.title}`} arrow>
+                    <Typography
+                      sx={{
+                        fontSize: 12,
+                        lineHeight: `${taskHeight}px`,
+                        paddingX: 0.5,
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        color: "deepGray.main",
+                        fontWeight: 600,
+                      }}
+                    >
+                      {task.title}
+                    </Typography>
+                  </Tooltip>
                 </Box>
               ))}
             </Box>
