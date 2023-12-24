@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { Box, Typography, Chip, Tooltip } from "@mui/material"
 import { Notification, ReceiveMessageNotification } from "_types/notification"
 import { getWorkspaceStore } from "store/userStore"
@@ -31,6 +31,7 @@ const ReceivedMessage: React.FC<Props> = ({ notification, removeCallback }) => {
       state: { openMessage: true },
     })
   }
+  const { pathname } = useLocation()
 
   return (
     <>
@@ -41,7 +42,7 @@ const ReceivedMessage: React.FC<Props> = ({ notification, removeCallback }) => {
         time={time}
         onClick={() => {
           if (anotherWorkspace()) openConfirmDialog()
-          else navigate(".", { state: { openMessage: true } })
+          else navigate(pathname, { state: { openMessage: true } })
         }}
         removeCallback={removeCallback}
       >

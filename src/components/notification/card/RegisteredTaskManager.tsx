@@ -1,5 +1,5 @@
 import React from "react"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { Box, Chip, Tooltip } from "@mui/material"
 import {
   Notification,
@@ -47,6 +47,7 @@ const RegisteredTaskManager: React.FC<Props> = ({
       },
     )
   }
+  const { pathname } = useLocation()
 
   return (
     <>
@@ -58,7 +59,7 @@ const RegisteredTaskManager: React.FC<Props> = ({
         onClick={() => {
           if (anotherWorkspace()) openConfirmDialog()
           else
-            navigate(".", {
+            navigate(pathname, {
               state: {
                 task: {
                   taskId: task.taskId,
