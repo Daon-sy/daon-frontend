@@ -27,6 +27,7 @@ const ProjectDetailRoutes = () => {
   }
 
   React.useEffect(() => {
+    setIsProjectNotFound(false)
     fetchProjectDetail()
   }, [projectId])
 

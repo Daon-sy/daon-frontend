@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Button } from "@mui/material"
+import { Box, Button, CircularProgress } from "@mui/material"
 import { getWorkspaceStore } from "store/userStore"
 import { getTaskDetailViewStore } from "store/taskStore"
 import { TaskListApiParams } from "api/task"
@@ -14,6 +14,7 @@ import { matchPath, useLocation } from "react-router-dom"
 import NoData from "components/common/NoData"
 import { AddCircle } from "@mui/icons-material"
 import { getCreateTaskStore } from "store/createTaskStore"
+import { TaskSummary } from "../../_types/task"
 
 interface TaskViewProps {
   params?: TaskListApiParams
@@ -25,13 +26,21 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
   const [viewType, setViewType] = React.useState<string>("kanban")
   const { workspace } = getWorkspaceStore()
   const { taskDetailParam } = getTaskDetailViewStore()
-  const { tasks, fetchTaskList } = useFetchTaskList(
+  const [tasks, setTasks] = React.useState<TaskSummary[] | undefined>()
+  const {
+    tasks: taskSummaries,
+    fetchTaskList,
+    isFetching: isFetchingTaskList,
+  } = useFetchTaskList(
     {
       workspaceId: workspace?.workspaceId || 0,
       params,
     },
     true,
   )
+  React.useEffect(() => {
+    if (!isFetchingTaskList) setTasks(taskSummaries)
+  }, [taskSummaries, isFetchingTaskList])
   const { open } = getCreateTaskStore()
 
   const isBookmarkTasksLocation = () =>
@@ -58,6 +67,8 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
   React.useEffect(() => {
     if (!taskDetailParam) fetchTaskList()
   }, [taskDetailParam])
+
+  if (!tasks) return null
 
   const renderView = () => {
     if (tasks.length <= 0) {
@@ -95,7 +106,7 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
   }
 
   return (
-    <Box height="100%">
+    <Box height="100%" position="relative">
       <IconBreadcrumbs />
       {title ? (
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -134,6 +145,19 @@ const TaskView: React.FC<TaskViewProps> = ({ params, title }) => {
             setViewType={setViewType}
             taskListApiParams={params}
           />
+        </Box>
+      ) : null}
+      {isFetchingTaskList ? (
+        <Box
+          zIndex={99999}
+          display="flex"
+          position="absolute"
+          alignItems="center"
+          justifyContent="center"
+          width="100%"
+          height="70%"
+        >
+          <CircularProgress color="inherit" />
         </Box>
       ) : null}
       <Box

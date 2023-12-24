@@ -85,7 +85,7 @@ const useEventSource = ({ ssePath, onMessage, onEventRaised }: Props) => {
   React.useEffect(() => {
     subscribe()
     return () => eventSource?.close()
-  }, [])
+  }, [ssePath])
 
   React.useEffect(() => {
     if (eventRaised && onEventRaised) {

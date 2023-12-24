@@ -40,6 +40,7 @@ const TaskHeader: React.FC<Props> = ({
   const { filter, setFilter } = getTaskListFilterStore()
   const { myProfile } = getWorkspaceStore()
   const { projectId } = filter
+  const [projectIdState, setProjectIdState] = React.useState(projectId)
   const { workspace } = getWorkspaceStore()
   const { projects } = getProjectsStore()
   const { boards, fetchBoardList } = useFetchBoardList(
@@ -69,10 +70,15 @@ const TaskHeader: React.FC<Props> = ({
   }, [taskListApiParams?.projectId])
 
   React.useEffect(() => {
-    if (projectId) {
-      fetchBoardList(projectId)
+    if (projectId !== projectIdState) {
+      setProjectIdState(projectId)
     }
   }, [projectId])
+  React.useEffect(() => {
+    if (projectIdState) {
+      fetchBoardList(projectIdState)
+    }
+  }, [projectIdState])
 
   return (
     <Box

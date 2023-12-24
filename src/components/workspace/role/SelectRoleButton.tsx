@@ -19,6 +19,9 @@ const SelectRoleButton: React.FC<Props> = ({ initValue = 2, onChange }) => {
   const closeList = () => setAnchorEl(null)
 
   const [selectedIndex, setSelectedIndex] = React.useState(initValue)
+  React.useEffect(() => {
+    setSelectedIndex(initValue)
+  }, [initValue])
   const handleItemClick = (
     event: React.MouseEvent<HTMLElement>,
     index: number,

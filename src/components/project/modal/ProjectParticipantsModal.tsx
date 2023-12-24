@@ -74,11 +74,17 @@ const ProjectParticipantsModal = ({
         const { data } = await projectParticipantListApi(workspaceId, projectId)
         const { projectParticipants: participants } = data
         setProjectParticipants(
-          participants.filter(
-            p =>
-              p.projectParticipantId !==
-              myProjectParticipantDetail.projectParticipantId,
-          ),
+          participants
+            .filter(
+              p =>
+                p.projectParticipantId !==
+                myProjectParticipantDetail.projectParticipantId,
+            )
+            .sort((p1, p2) => {
+              if (p1.name < p2.name) return -1
+              if (p1.name > p2.name) return 1
+              return p1.projectParticipantId - p2.projectParticipantId
+            }),
         )
       }
       fetchData()
