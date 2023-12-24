@@ -80,21 +80,25 @@ const ProjectGeneralSetting = ({
   const { fetch: removeProject } = useRemoveProject()
   const { fetch: withdrawProject } = useWithdrawProject()
   const { fetch: modifyProject } = useModifyProject()
-  const { fetch: createBoard } = useCreateBoard({
-    workspaceId: workspaceId || 0,
-    projectId: projectId || 0,
-    boardTitle: newBoardTitle,
-  })
+  const { fetch: createBoard, isFetching: isCreateBoardFetching } =
+    useCreateBoard({
+      workspaceId: workspaceId || 0,
+      projectId: projectId || 0,
+      boardTitle: newBoardTitle,
+    })
 
   const fetchThrottling = useThrottling(() => {
     createBoard(fetchProjectBoards)
-    setNewBoardTitle("")
+    // setNewBoardTitle("")
   }, 500)
   const handleAddBoard = async () => {
     if (newBoardTitle) {
       fetchThrottling()
     }
   }
+  React.useEffect(() => {
+    if (!isCreateBoardFetching) setNewBoardTitle("")
+  }, [isCreateBoardFetching, boards])
 
   if (!(projectDetail && myProfile)) return <Box />
   const { title: projectTitle, description } = projectDetail

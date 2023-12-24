@@ -92,11 +92,17 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
   const fetchProjectParticipants = async () => {
     const { data } = await projectParticipantListApi(workspaceId, projectId)
     setProjectParticipants(
-      data.projectParticipants.filter(
-        participant =>
-          participant.projectParticipantId !==
-          myProjectProfile?.projectParticipantId,
-      ),
+      data.projectParticipants
+        .filter(
+          participant =>
+            participant.projectParticipantId !==
+            myProjectProfile?.projectParticipantId,
+        )
+        .sort((p1, p2) => {
+          if (p1.name < p2.name) return -1
+          if (p1.name > p2.name) return 1
+          return p1.projectParticipantId - p2.projectParticipantId
+        }),
     )
   }
 

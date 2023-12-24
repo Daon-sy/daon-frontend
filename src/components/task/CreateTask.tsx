@@ -23,6 +23,7 @@ import ProjectParticipantsModal from "components/project/modal/ProjectParticipan
 import { useAlert } from "hooks/useAlert"
 import useCreateTask from "hooks/task/useCreateTask"
 import ColorAvatar from "components/common/ColorAvatar"
+import useThrottling from "hooks/useThrottling"
 
 interface CreateTaskModalProps {
   projectIdInit?: number
@@ -53,10 +54,22 @@ const CreateTask: React.FC<Props> = ({ handleClose, projectIdInit }: Props) => {
   const [projectParticipantsModalOpen, setProjectParticipantsModalOpen] =
     React.useState<boolean>(false)
 
-  const { fetch: createTask } = useCreateTask(
+  const { fetch: createTaskFetch } = useCreateTask(
     { workspaceId: workspace?.workspaceId || 0 },
     handleClose,
   )
+
+  const createTask = useThrottling(() => {
+    createTaskFetch(projectId || 0, {
+      title,
+      content,
+      boardId: boardId || 0,
+      startDate,
+      endDate,
+      taskManagerId,
+      emergency,
+    })
+  }, 500)
 
   if (!workspace) return <Box />
 
@@ -119,15 +132,7 @@ const CreateTask: React.FC<Props> = ({ handleClose, projectIdInit }: Props) => {
               }}
               onKeyDown={e => {
                 if (e.key === "Enter") {
-                  createTask(projectId || 0, {
-                    title,
-                    content,
-                    boardId: boardId || 0,
-                    startDate,
-                    endDate,
-                    taskManagerId,
-                    emergency,
-                  })
+                  createTask()
                 }
               }}
             />
@@ -311,17 +316,7 @@ const CreateTask: React.FC<Props> = ({ handleClose, projectIdInit }: Props) => {
               fullWidth
               variant="contained"
               size="large"
-              onClick={() => {
-                createTask(projectId || 0, {
-                  title,
-                  content,
-                  boardId: boardId || 0,
-                  startDate,
-                  endDate,
-                  taskManagerId,
-                  emergency,
-                })
-              }}
+              onClick={createTask}
             >
               등록
             </Button>

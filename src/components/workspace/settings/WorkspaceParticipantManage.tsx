@@ -75,11 +75,17 @@ const WorkspaceParticipantManage = () => {
   React.useEffect(() => {
     if (fetchedParticipants) {
       setWorkspaceParticipants(
-        fetchedParticipants.filter(
-          participant =>
-            participant.workspaceParticipantId !==
-            myProfile?.workspaceParticipantId,
-        ),
+        fetchedParticipants
+          .filter(
+            participant =>
+              participant.workspaceParticipantId !==
+              myProfile?.workspaceParticipantId,
+          )
+          .sort((p1, p2) => {
+            if (p1.name < p2.name) return -1
+            if (p1.name > p2.name) return 1
+            return p1.workspaceParticipantId - p2.workspaceParticipantId
+          }),
       )
     }
   }, [fetchedParticipants])
