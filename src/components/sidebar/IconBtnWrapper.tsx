@@ -1,5 +1,10 @@
 import React from "react"
-import { Link as RouterLink, useLocation, useParams } from "react-router-dom"
+import {
+  Link as RouterLink,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom"
 import { Box, Button, Divider } from "@mui/material"
 import { Groups, AddCircle, Bookmark, EmojiEmotions } from "@mui/icons-material"
 import {
@@ -15,6 +20,7 @@ import { getWorkspaceStore } from "store/userStore"
 import { useTitleDialog } from "components/common/TitleDialog"
 import CreateWorkspace from "components/workspace/CreateWorkspace"
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd"
+import { getCreateTaskStore } from "store/createTaskStore"
 import IconBtn from "./IconBtn"
 
 const IconBtnWrapper: React.FC = () => {
@@ -24,7 +30,11 @@ const IconBtnWrapper: React.FC = () => {
     React.useState(false)
   const [workspaceNoticeModalOpen, setWorkspaceNoticeModalOpen] =
     React.useState(false)
-  const { CreateTaskModal, open: openCreateTaskModal } = useCreateTaskModal()
+  const {
+    CreateTaskModal,
+    open: openCreateTaskModal,
+    isOpen: isCreateTaskModalOpen,
+  } = useCreateTaskModal()
   const [sendMessageModalOpen, setSendMessageModalOpen] =
     React.useState<boolean>(false)
 
@@ -40,12 +50,27 @@ const IconBtnWrapper: React.FC = () => {
     setWorkspaceNoticeModalOpen(true)
   }
 
-  const { state: locState } = useLocation()
+  const navigate = useNavigate()
+  const { state: locState, pathname } = useLocation()
   React.useEffect(() => {
     if (locState && locState.openMessage) {
       setSendMessageModalOpen(true)
     }
   }, [locState])
+
+  const {
+    isOpen: isOpenCreateTaskModal,
+    close: closeCreateTaskModal,
+    projectIdInit,
+  } = getCreateTaskStore()
+  React.useEffect(() => {
+    if (isOpenCreateTaskModal) openCreateTaskModal()
+  }, [isOpenCreateTaskModal])
+  React.useEffect(() => {
+    if (!isCreateTaskModalOpen) {
+      closeCreateTaskModal()
+    }
+  }, [isCreateTaskModalOpen])
 
   return (
     <Box sx={{ width: "100%", height: "40%" }}>
@@ -161,10 +186,13 @@ const IconBtnWrapper: React.FC = () => {
         open={workspaceNoticeModalOpen}
         handleClose={() => setWorkspaceNoticeModalOpen(false)}
       />
-      <CreateTaskModal />
+      <CreateTaskModal projectIdInit={projectIdInit} />
       <MessageBoxModal
         open={sendMessageModalOpen}
-        handleClose={() => setSendMessageModalOpen(false)}
+        handleClose={() => {
+          navigate(pathname, { state: undefined })
+          setSendMessageModalOpen(false)
+        }}
         category="MessageList"
       />
       <TitleDialog title="워크스페이스 생성" maxWidth="sm">

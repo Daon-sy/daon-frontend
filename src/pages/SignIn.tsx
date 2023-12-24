@@ -1,7 +1,7 @@
 import React from "react"
 import Typography from "@mui/material/Typography"
 import { Box, Button, Stack, TextField } from "@mui/material"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { SignInRequestBody } from "api/auth"
 import InputLabel from "@mui/material/InputLabel"
 import useSignIn from "hooks/auth/useSignIn"
@@ -45,6 +45,7 @@ const SignIn: React.FC = () => {
         height: "100%",
         m: 0,
         display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         bgcolor: "white",
@@ -57,6 +58,7 @@ const SignIn: React.FC = () => {
           padding: 5,
           boxShadow: 1,
           borderWidth: 1,
+          position: "relative",
         }}
       >
         <Stack spacing={1}>
@@ -163,6 +165,29 @@ const SignIn: React.FC = () => {
             </Box>
           </Box>
         </Stack>
+        <Box display="flex" alignItems="center">
+          <Box>
+            <Link to="/sign-up">
+              <Button
+                disableElevation
+                color="primary"
+                sx={{
+                  p: 0,
+                  px: 1,
+                  minWidth: 0,
+                  textAlign: "right",
+                  fontWeight: 500,
+                  fontSize: 14,
+                  position: "absolute",
+                  bottom: 0,
+                  right: 0,
+                }}
+              >
+                회원가입
+              </Button>
+            </Link>
+          </Box>
+        </Box>
       </Box>
     </Box>
   )
