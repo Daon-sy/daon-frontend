@@ -97,7 +97,7 @@ export const withdrawProjectApi = async (
   )
 }
 
-// 프로젝트 참여자 목록 조회
+// 프로젝트 구성원 목록 조회
 export const projectParticipantListApi = async (
   workspaceId: number,
   projectId: number,
@@ -107,7 +107,7 @@ export const projectParticipantListApi = async (
   )
 }
 
-// 프로젝트 참여자 초대
+// 프로젝트 구성원 초대
 export const inviteProjectParticipantApi = async (
   workspaceId: number,
   projectId: number,
@@ -119,7 +119,7 @@ export const inviteProjectParticipantApi = async (
   )
 }
 
-// 프로젝트 참여자 강퇴
+// 프로젝트 구성원 강퇴
 export const deportationProjectParticipantApi = async (
   workspaceId: number,
   projectId: number,

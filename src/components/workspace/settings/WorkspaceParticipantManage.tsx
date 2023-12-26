@@ -97,7 +97,7 @@ const WorkspaceParticipantManage = () => {
       await modifyWorkspaceParticipantRoleApi(workspace.workspaceId, {
         ...data,
       })
-      addSuccess("참여자 권한 변경 완료")
+      addSuccess("구성원 권한 변경 완료")
       await fetchWorkspaceParticipants()
 
       if (data.workspaceParticipantId === myProfile?.workspaceParticipantId)
@@ -188,7 +188,7 @@ const WorkspaceParticipantManage = () => {
 
           <Box mt={3} display="flex" alignItems="center">
             <Typography fontSize={20} fontWeight={500} flexGrow={1}>
-              참여자 목록
+              구성원 목록
             </Typography>
             <Stack direction="row" spacing={0.5}>
               <FormControl sx={{ minWidth: 100 }} size="small">
@@ -216,7 +216,7 @@ const WorkspaceParticipantManage = () => {
                 fullWidth
                 autoComplete="off"
                 size="small"
-                placeholder="참여자 검색"
+                placeholder="구성원 검색"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setFilterText(e.target.value)
                 }
@@ -341,7 +341,7 @@ const WorkspaceParticipantManage = () => {
                   {workspaceParticipants?.length === 0 ? (
                     <Typography fontSize={14} p={1}>
                       <NoData
-                        content="참여자들이 존재하지 않습니다."
+                        content="구성원들이 존재하지 않습니다."
                         width={200}
                         height={100}
                         sx={{ pb: 3 }}

@@ -34,8 +34,8 @@ const UserInfo: React.FC = () => {
 
   // 각 메뉴 클릭에 해당하는 callback 함수 지정
   const settings = [
-    { name: "MyPage", onClick: onMyPageButtonClick },
-    { name: "Logout", onClick: () => logout(handleCloseUserMenu) },
+    { name: "마이페이지", onClick: onMyPageButtonClick },
+    { name: "로그아웃", onClick: () => logout(handleCloseUserMenu) },
   ]
 
   return (

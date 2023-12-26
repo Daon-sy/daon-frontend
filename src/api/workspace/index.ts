@@ -125,7 +125,7 @@ export const workspaceDetailApi = async (
   return authAxios.get(`${WORKSPACE_API_PREFIX}/${workspaceId}`)
 }
 
-// 워크스페이스 참여자 목록조회
+// 워크스페이스 구성원 목록조회
 export const workspaceParticipantListApi = async (
   workspaceId: number,
 ): Promise<AxiosResponse<WorkspaceParticipantListResponseBody>> => {
@@ -138,7 +138,7 @@ export const myWorkspaceParticipantDetailApi = async (
   return authAxios.get(`${WORKSPACE_API_PREFIX}/${workspaceId}/participants/me`)
 }
 
-// 내 워크스페이스 참여자 정보 변경
+// 내 워크스페이스 구성원 정보 변경
 export const modifyMyWorkspaceParticipantInfoApi = async (
   workspaceId: number,
   requestBody: ModifyMyWorkspaceParticipantInfoRequestBody,
@@ -158,7 +158,7 @@ export const withdrawWorkspaceApi = async (
   )
 }
 
-// 워크스페이스 참여자 권한 변경
+// 워크스페이스 구성원 권한 변경
 export const modifyWorkspaceParticipantRoleApi = async (
   workspaceId: number,
   requestBody: ModifyWorkspaceParticipantRoleRequestBody,
@@ -169,7 +169,7 @@ export const modifyWorkspaceParticipantRoleApi = async (
   )
 }
 
-// 워크스페이스 참여자 강퇴
+// 워크스페이스 구성원 강퇴
 export const deportationWorkspaceParticipantApi = async (
   workspaceId: number,
   requestBody: DeportationWorkspaceParticipantRequestBody,
@@ -180,7 +180,7 @@ export const deportationWorkspaceParticipantApi = async (
   )
 }
 
-// 워크스페이스 참여자 초대
+// 워크스페이스 구성원 초대
 export const inviteWorkspace = async (
   workspaceId: number,
   requestBody: InviteWorkspaceRequestBody,

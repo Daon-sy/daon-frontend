@@ -33,7 +33,7 @@ const ProjectSettingsModal = ({ projectId, open, handleClose }: Props) => {
       ),
     },
     {
-      pageName: "참여자 관리",
+      pageName: "구성원 관리",
       pageValue: "projectParticipant",
       pageComponent: (
         <ProjectParticipantsSetting
