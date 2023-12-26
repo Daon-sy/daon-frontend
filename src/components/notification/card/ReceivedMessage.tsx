@@ -48,7 +48,7 @@ const ReceivedMessage: React.FC<Props> = ({ notification, removeCallback }) => {
       >
         <Box mt={1 / 2} fontSize={14}>
           <Box display="flex" alignItems="center">
-            <Box>참여자 [</Box>
+            <Box>구성원 [</Box>
             <Tooltip title={sender.name} arrow>
               <Box
                 fontSize={14}

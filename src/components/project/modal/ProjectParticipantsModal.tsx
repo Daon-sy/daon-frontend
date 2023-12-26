@@ -48,7 +48,7 @@ interface Props {
 }
 
 const ProjectParticipantsModal = ({
-  title = "프로젝트 참여자 목록",
+  title = "프로젝트 구성원 목록",
   workspaceId,
   projectId,
   open,
@@ -247,13 +247,13 @@ const ProjectParticipantsModal = ({
                 ))}
               {projectParticipants?.length === 0 ? (
                 <NoData
-                  content="참여자들이 존재하지 않습니다"
+                  content="구성원들이 존재하지 않습니다"
                   width={200}
                   height={100}
                   sx={{ mb: 3 }}
                 />
               ) : // <Typography fontSize={14} p={1}>
-              //   참여자들이 존재하지 않습니다.
+              //   구성원들이 존재하지 않습니다.
               // </Typography>
               null}
               {projectParticipants &&

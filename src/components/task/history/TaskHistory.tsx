@@ -186,7 +186,7 @@ const TaskHistory = ({ taskHistory }: Props) => {
           <Box component="span" fontSize={12} fontWeight={600} mr={0.5}>
             {taskHistory.modifier.name}
           </Box>
-          참여자가
+          구성원이
           <Box
             component="span"
             fontSize={12}

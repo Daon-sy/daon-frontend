@@ -208,7 +208,7 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
 
           <Box mt={3} display="flex" alignItems="center">
             <Typography fontSize={20} fontWeight={500} flexGrow={1}>
-              참여자 목록
+              구성원 목록
             </Typography>
             <Stack direction="row" spacing={0.5}>
               <FormControl sx={{ minWidth: 100 }} size="small">
@@ -236,7 +236,7 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
                 fullWidth
                 autoComplete="off"
                 size="small"
-                placeholder="참여자 검색"
+                placeholder="구성원 검색"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setFilterText(e.target.value)
                 }
@@ -333,7 +333,7 @@ const ProjectParticipantsSetting = ({ workspaceId, projectId }: Props) => {
                 {projectParticipants.length === 0 ? (
                   <Typography fontSize={14} p={1}>
                     <NoData
-                      content="참여자들이 존재하지 않습니다."
+                      content="구성원들이 존재하지 않습니다."
                       width={200}
                       height={100}
                       sx={{ pb: 3 }}

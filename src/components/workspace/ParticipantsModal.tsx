@@ -98,119 +98,121 @@ const ParticipantsModal = ({ open, handleClose }: Props) => {
       maxWidth="sm"
       height="65vh"
     >
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          my: 1,
-        }}
-      >
-        <Box>
-          <Stack direction="row" spacing={0.5}>
-            <FormControl sx={{ minWidth: 100 }} size="small">
-              <Select
-                value={filter}
-                onChange={(e: SelectChangeEvent) =>
-                  setFilter(e.target.value as Filter)
-                }
+      <Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            my: 1,
+          }}
+        >
+          <Box>
+            <Stack direction="row" spacing={0.5}>
+              <FormControl sx={{ minWidth: 100 }} size="small">
+                <Select
+                  value={filter}
+                  onChange={(e: SelectChangeEvent) =>
+                    setFilter(e.target.value as Filter)
+                  }
+                  size="small"
+                  sx={{ fontSize: 14 }}
+                >
+                  {filters.map(item => (
+                    <MenuItem
+                      key={item.filter}
+                      value={item.filter}
+                      sx={{
+                        fontSize: 14,
+                      }}
+                    >
+                      {item.text}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <TextField
+                fullWidth
+                autoComplete="off"
                 size="small"
-                sx={{ fontSize: 14 }}
+                placeholder="구성원 검색"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setFilterText(e.target.value)
+                }
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon fontSize="small" />
+                    </InputAdornment>
+                  ),
+                  style: { fontSize: 14 },
+                }}
+              />
+            </Stack>
+          </Box>
+          <Box>
+            <FormControl>
+              <Select
+                sx={{ width: 180, fontSize: 14 }}
+                size="small"
+                value={selectedRole}
               >
-                {filters.map(item => (
+                <MenuItem
+                  value="전체"
+                  onClick={selectRoleClick("전체")}
+                  sx={{ fontSize: 14 }}
+                >
+                  전체 보기
+                </MenuItem>
+                {roles.map((roleDetail: WorkspaceParticipantRoleDetail) => (
                   <MenuItem
-                    key={item.filter}
-                    value={item.filter}
-                    sx={{
-                      fontSize: 14,
-                    }}
+                    key={roleDetail.role}
+                    value={roleDetail.role}
+                    onClick={selectRoleClick(roleDetail.role)}
+                    sx={{ fontSize: 14 }}
                   >
-                    {item.text}
+                    {roleDetail.description}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
-            <TextField
-              fullWidth
-              autoComplete="off"
-              size="small"
-              placeholder="참여자 검색"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setFilterText(e.target.value)
-              }
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon fontSize="small" />
-                  </InputAdornment>
-                ),
-                style: { fontSize: 14 },
-              }}
-            />
-          </Stack>
+          </Box>
         </Box>
-        <Box>
-          <FormControl>
-            <Select
-              sx={{ width: 180, fontSize: 14 }}
-              size="small"
-              value={selectedRole}
-            >
-              <MenuItem
-                value="전체"
-                onClick={selectRoleClick("전체")}
-                sx={{ fontSize: 14 }}
-              >
-                전체 보기
-              </MenuItem>
-              {roles.map((roleDetail: WorkspaceParticipantRoleDetail) => (
-                <MenuItem
-                  key={roleDetail.role}
-                  value={roleDetail.role}
-                  onClick={selectRoleClick(roleDetail.role)}
-                  sx={{ fontSize: 14 }}
-                >
-                  {roleDetail.description}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
-      </Box>
-      {debouncing ? (
-        <Box
-          sx={{
-            height: 300,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <CircularProgress />
-        </Box>
-      ) : (
-        <Box
-          sx={{
-            width: "100%",
-            display: "flex",
-            flexWrap: "wrap",
-          }}
-        >
-          {getFilteredParticipants().length > 0 ? (
-            getFilteredParticipants().map(participant => (
-              <ParticipantCard
-                key={participant.workspaceParticipantId}
-                participant={participant}
+        {debouncing ? (
+          <Box
+            sx={{
+              height: 300,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              flexWrap: "wrap",
+            }}
+          >
+            {getFilteredParticipants().length > 0 ? (
+              getFilteredParticipants().map(participant => (
+                <ParticipantCard
+                  key={participant.workspaceParticipantId}
+                  participant={participant}
+                />
+              ))
+            ) : (
+              <NoData
+                sx={{ mt: 10, mx: 18, width: 280, height: 140 }}
+                content="검색 결과가 없어요"
               />
-            ))
-          ) : (
-            <NoData
-              sx={{ mt: 10, mx: 18, width: 280, height: 140 }}
-              content="검색 결과가 없어요"
-            />
-          )}
-        </Box>
-      )}
+            )}
+          </Box>
+        )}
+      </Box>
     </TitleDialog>
   )
 }
