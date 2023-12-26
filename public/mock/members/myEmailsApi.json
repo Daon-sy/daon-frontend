@@ -1,0 +1,17 @@
+{
+  "totalCount": 3,
+  "memberEmails": [
+    {
+      "memberEmailId": 1,
+      "email": "email1@email.com"
+    },
+    {
+      "memberEmailId": 2,
+      "email": "email2@email.com"
+    },
+    {
+      "memberEmailId": 3,
+      "email": "email3@email.com"
+    }
+  ]
+}

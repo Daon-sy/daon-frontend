@@ -1,0 +1,31 @@
+{
+  "totalCount": 5,
+  "workspaceId": 1,
+  "projects": [
+    {
+      "projectId": 1,
+      "title": "더미 PJ-1",
+      "description": "더미 1번 프로젝트"
+    },
+    {
+      "projectId": 2,
+      "title": "PJ-2",
+      "description": "더미 2번 프로젝트"
+    },
+    {
+      "projectId": 3,
+      "title": "PJ-3",
+      "description": null
+    },
+    {
+      "projectId": 4,
+      "title": "PJ-4",
+      "description": null
+    },
+    {
+      "projectId": 5,
+      "title": "PJ-5",
+      "description": "더미 프로젝트 입니다."
+    }
+  ]
+}

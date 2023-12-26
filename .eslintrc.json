@@ -25,15 +25,46 @@
         "paths": ["src"],
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
-    }
+    },
+    "import/core-modules": [
+      "notistack",
+      "styled-reset",
+      "mem",
+      "styled-components",
+      "@mui/types",
+      "@mui/system",
+      "@mui/system/styleFunctionSx",
+      "@mui/x-date-pickers",
+      "@mui/x-date-pickers/AdapterDayjs",
+      "@mui/x-date-pickers/internals/demo",
+      "dayjs",
+      "event-source-polyfill",
+      "@fortawesome/react-fontawesome",
+      "@fortawesome/free-solid-svg-icons"
+    ]
   },
   "rules": {
+    "react-hooks/exhaustive-deps": "off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
     "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "react/jsx-filename-extension": [
       2,
-      { "extensions": [".js", ".jsx", ".ts", ".tsx", ".tsx"] }
+      { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
     ],
-
+    // 기명 함수 선언식 컴포넌트, 기명 화살표 함수 컴포넌트
+    "react/function-component-definition": [
+      2,
+      { "namedComponents": ["arrow-function", "function-declaration"] }
+    ],
     // var는 사용할 수 없다
     "no-var": ["error"],
     // 세미콜론은 사용하지 않겠다(타입스크립트 프로젝트에서 권장)
@@ -61,15 +92,6 @@
       "error",
       {
         "max": 3
-      }
-    ],
-    // return 문 이전에는 반드시 빈 줄이 있어야 한다
-    "padding-line-between-statements": [
-      "error",
-      {
-        "blankLine": "always",
-        "prev": "*",
-        "next": "return"
       }
     ],
     // 문자열 선언에는 쌍따옴표를 사용한다
@@ -102,6 +124,7 @@
     // 문자열 연결에는 템플릿 문자열을 사용해야 한다
     "prefer-template": ["error"],
     // 객체의 프로퍼티 이름은 필요할 때만 따옴표로 감싸야 한다
-    "quote-props": ["error", "as-needed"]
+    "quote-props": ["error", "as-needed"],
+    "react/require-default-props": "off"
   }
 }

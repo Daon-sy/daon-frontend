@@ -1,0 +1,40 @@
+{
+  "totalCount": 5,
+  "workspaces": [
+    {
+      "workspaceId": 1,
+      "title": "워크스페이스1",
+      "description": "테스트 워크스페이스",
+      "imageUrl": "https://daon-dev.s3.ap-northeast-2.amazonaws.com/image.jpeg",
+      "division": "PERSONAL"
+    },
+    {
+      "workspaceId": 2,
+      "title": "워크스페이스2",
+      "description": null,
+      "imageUrl": null,
+      "division": "GROUP"
+    },
+    {
+      "workspaceId": 3,
+      "title": "워크스페이스3",
+      "description": null,
+      "imageUrl": null,
+      "division": "GROUP"
+    },
+    {
+      "workspaceId": 4,
+      "title": "워크스페이스4",
+      "description": null,
+      "imageUrl": "https://daon-dev.s3.ap-northeast-2.amazonaws.com/image.jpeg",
+      "division": "GROUP"
+    },
+    {
+      "workspaceId": 5,
+      "title": "워크스페이스5",
+      "description": "더미 워크스페이스입니다~!",
+      "imageUrl": null,
+      "division": "GROUP"
+    }
+  ]
+}
